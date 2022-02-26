@@ -4,7 +4,9 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc"
+    "type-check": "tsc",
+    "format:check": "prettier --check './**/*.{js,ts,jsx,tsx,css}'",
+    "format": "prettier --write './**/*.{js,ts,jsx,tsx,css}'"
   },
   "dependencies": {
     "@emotion/react": "^11.8.1",
