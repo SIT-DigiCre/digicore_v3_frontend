@@ -11,12 +11,6 @@ export type AuthState = {
   token: string | undefined;
 };
 
-export const DEFAULT_AUTH_STATE: AuthState = {
-  isLogined: false,
-  isLoading: true,
-  user: undefined,
-  token: undefined,
-};
 type UseAuthState = () => {
   isLogined: boolean;
   isLoading: boolean;
@@ -36,6 +30,7 @@ export const useAuthState: UseAuthState = () => {
       })
       .then((rtn) => {
         const user = rtn.data as User;
+        console.log(user);
         setAuth({
           isLogined: true,
           isLoading: false,
