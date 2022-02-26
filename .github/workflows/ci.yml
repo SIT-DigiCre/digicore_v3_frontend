@@ -27,7 +27,8 @@ jobs:
       - uses: actions/checkout@v2
       - name: yarn install
         run: yarn install
-      - uses: EPMatt/reviewdog-action-tsc@v1
+      - name: tsc check
+        run: yarn tsc
   prettier:
     name: prettier
     runs-on: ubuntu-latest
