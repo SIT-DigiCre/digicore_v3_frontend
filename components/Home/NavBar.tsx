@@ -1,8 +1,9 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import { Apps } from "@mui/icons-material";
+import { useAuthState } from "../../hook/useAuthState";
 
 const NavBar = () => {
-  const logined = false;
+  const { isLogined, isLoading, user, token, onLogin } = useAuthState();
   return (
     <>
       <AppBar position="static">
@@ -19,7 +20,22 @@ const NavBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             デジコア v3.0
           </Typography>
-          {logined ? <></> : <Button color="inherit">Login</Button>}
+          {isLogined ? (
+            <>
+              <IconButton>
+                <Avatar src={user.iconUrl} />
+              </IconButton>
+            </>
+          ) : (
+            <Button
+              color="inherit"
+              onClick={() => {
+                onLogin("hoge"); //検証用　後で消す
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Toolbar>
       </AppBar>
     </>
