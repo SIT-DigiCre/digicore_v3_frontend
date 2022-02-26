@@ -14,8 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: yarn install
+        run: yarn install
       - uses: reviewdog/action-eslint@v1
         with:
+          eslint_flags: './**/*.{js,ts,jsx,tsx}'
           fail_on_error: true
   prettier:
     name: prettier
