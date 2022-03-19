@@ -1,16 +1,25 @@
-import { Grid, Button, Container } from "@mui/material";
+import { Grid, Button, Container, Box, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import { baseURL } from "../utils/common";
 const LoginPage = () => {
   return (
     <>
       <Container>
-        <Grid xs={12} justifyItems="center">
-          <Grid item xs={4}>
+        <Grid item xs={12} style={{ marginTop: "30px" }}>
+          <Box textAlign="center">
             <Button variant="contained" startIcon={<Google />} href={baseURL + "/google/oauth/url"}>
               Googleログイン
             </Button>
-          </Grid>
+          </Box>
+        </Grid>
+        <Grid item xs={12} style={{ marginTop: "10px" }}>
+          <Typography textAlign="center">
+            Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます
+          </Typography>
+          <Typography textAlign="center">
+            デジクリに入部希望の方は<a href="https://twitter.com/sitdigicre">公式Twitter</a>
+            にご相談下さい
+          </Typography>
         </Grid>
       </Container>
     </>
