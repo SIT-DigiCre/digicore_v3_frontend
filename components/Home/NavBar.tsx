@@ -1,9 +1,10 @@
 import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/material";
 import { Apps } from "@mui/icons-material";
 import { useAuthState } from "../../hook/useAuthState";
+import { baseURL } from "../../utils/common";
 
 const NavBar = () => {
-  const { isLogined, isLoading, user, token, onLogin } = useAuthState();
+  const { authState, onLogin } = useAuthState();
   return (
     <>
       <AppBar position="static">
@@ -20,19 +21,14 @@ const NavBar = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             デジコア v3.0
           </Typography>
-          {isLogined ? (
+          {authState.isLogined ? (
             <>
               <IconButton>
-                <Avatar src={user.iconUrl} />
+                <Avatar src={authState.user.iconUrl} />
               </IconButton>
             </>
           ) : (
-            <Button
-              color="inherit"
-              onClick={() => {
-                onLogin("hoge"); //検証用　後で消す
-              }}
-            >
+            <Button color="inherit" href={baseURL + "/google/oauth/url"}>
               Login
             </Button>
           )}
