@@ -8,73 +8,37 @@ export type AuthState = {
   isLogined: boolean;
   isLoading: boolean;
   user: User | undefined;
-  token: string | undefined;
 };
 
 type UseAuthState = () => {
-  isLogined: boolean;
-  isLoading: boolean;
-  user: User | undefined;
-  token: string | undefined;
-  onLogin: (token: string) => void;
+  authState: AuthState;
+  onLogin: () => void;
 };
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
-  const onLogin = (token: string) => {
+  const getUserInfo = () => {
     axios
-      .get("/auth/user", {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then((rtn) => {
-        const user = rtn.data as User;
-        console.log(user);
+      .get("/authcheck")
+      .then((res) => {
         setAuth({
           isLogined: true,
           isLoading: false,
-          user: user,
-          token: token,
+          user: undefined, //あとで変更する
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setAuth({ isLogined: false, isLoading: false, user: undefined });
+      });
+  };
+  const onLogin = () => {
+    getUserInfo();
   };
   useEffect(() => {
-    if (auth.token) {
-      axios
-        .get("/auth/checkauth", {
-          headers: {
-            Authorization: auth.token,
-          },
-        })
-        .then((rtn) => {
-          //user情報を取得する
-          onLogin(auth.token);
-        })
-        .catch((err) => {
-          //
-          setAuth({
-            isLogined: false,
-            isLoading: false,
-            user: auth.user,
-            token: undefined,
-          });
-        });
-    } else {
-      setAuth({
-        isLogined: false,
-        isLoading: false,
-        user: undefined,
-        token: undefined,
-      });
-    }
+    getUserInfo();
   }, []);
   return {
-    isLogined: auth.isLogined,
-    isLoading: auth.isLoading,
-    user: auth.user,
-    token: auth.token,
+    authState: auth,
     onLogin: onLogin,
   };
 };
