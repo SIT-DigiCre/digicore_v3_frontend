@@ -8,4 +8,5 @@ export const axios = axiosBase.create({
     "X-Requested-With": "XMLHttpRequest",
   },
   responseType: "json",
+  withCredentials: true,
 });
