@@ -19,7 +19,7 @@ export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
   const getUserInfo = () => {
     axios
-      .get("/authcheck")
+      .get("/user/my")
       .then((res) => {
         setAuth({
           isLogined: true,
