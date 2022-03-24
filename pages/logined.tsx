@@ -16,7 +16,7 @@ const LoginResultPage = ({ isLoginFailed }: Props) => {
   return (
     <>
       <Container>
-        <Grid xs={12} justifyItems="center">
+        <Grid item xs={12} justifyItems="center">
           {isLoginFailed ? <h2>ログイン失敗</h2> : <h2>ホームページに移動します</h2>}
         </Grid>
       </Container>
