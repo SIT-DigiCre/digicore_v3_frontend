@@ -1,12 +1,12 @@
 import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/material";
-import { Apps } from "@mui/icons-material";
+import { Apps, AccountCircle } from "@mui/icons-material";
 import { useAuthState } from "../../hook/useAuthState";
 
 const NavBar = () => {
   const { isLogined, isLoading, user, token, onLogin } = useAuthState();
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" color="primary">
         <Toolbar>
           <IconButton
             size="large"
@@ -28,6 +28,7 @@ const NavBar = () => {
             </>
           ) : (
             <Button
+              startIcon={<AccountCircle />}
               color="inherit"
               onClick={() => {
                 onLogin("hoge"); //検証用　後で消す
