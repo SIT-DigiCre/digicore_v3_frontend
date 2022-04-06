@@ -3,39 +3,48 @@ import { useRecoilState } from "recoil";
 import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
 import { axios } from "../utils/axios";
+import { UserProfileAPIDataResponse, convertUserFromUserProfile } from "../interfaces/api";
 
 export type AuthState = {
   isLogined: boolean;
   isLoading: boolean;
   user: User | undefined;
+  token: string | undefined;
 };
 
 type UseAuthState = () => {
   authState: AuthState;
-  onLogin: () => void;
+  onLogin: (token: string) => void;
 };
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
-  const getUserInfo = () => {
+  const getUserInfo = (token: string) => {
     axios
-      .get("/user/my")
+      .get("/user/my", {
+        headers: {
+          Authorization: "bearer " + token,
+        },
+      })
       .then((res) => {
+        const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
         setAuth({
           isLogined: true,
           isLoading: false,
-          user: undefined, //あとで変更する
+          user: convertUserFromUserProfile(userProfileAPIDataResponse),
+          token: token,
         });
       })
       .catch((err) => {
-        setAuth({ isLogined: false, isLoading: false, user: undefined });
+        setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
       });
   };
-  const onLogin = () => {
-    getUserInfo();
+  const onLogin = (token: string) => {
+    localStorage.setItem("jwt", token);
+    getUserInfo(token);
   };
   useEffect(() => {
-    getUserInfo();
+    getUserInfo(localStorage.getItem("jwt"));
   }, []);
   return {
     authState: auth,
