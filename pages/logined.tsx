@@ -5,12 +5,16 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import { GetServerSideProps } from "next";
+import { useAuthState } from "../hook/useAuthState";
 type Props = {
   isLoginFailed: boolean;
+  token: string;
 };
-const LoginResultPage = ({ isLoginFailed }: Props) => {
+const LoginResultPage = ({ isLoginFailed, token }: Props) => {
   const router = useRouter();
+  const { authState, onLogin } = useAuthState();
   useEffect(() => {
+    onLogin(token);
     if (!isLoginFailed) router.push("/");
   }, []);
   return (
@@ -26,8 +30,9 @@ const LoginResultPage = ({ isLoginFailed }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { session } = context.query;
-  if (typeof session === "string") setCookie(context, "session", session);
-  const props: Props = { isLoginFailed: !(typeof session === "string") };
+  let token = "";
+  if (typeof session === "string") token = session;
+  const props: Props = { isLoginFailed: !(typeof session === "string"), token: token };
   return {
     props: props,
   };
