@@ -1,5 +1,5 @@
 import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/material";
-import { Apps } from "@mui/icons-material";
+import { Apps, AccountCircle } from "@mui/icons-material";
 import { useAuthState } from "../../hook/useAuthState";
 import { baseURL } from "../../utils/common";
 
@@ -7,7 +7,7 @@ const NavBar = () => {
   const { authState, onLogin } = useAuthState();
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" color="primary">
         <Toolbar>
           <IconButton
             size="large"
@@ -28,7 +28,11 @@ const NavBar = () => {
               </IconButton>
             </>
           ) : (
-            <Button color="inherit" href={baseURL + "/google/oauth/url"}>
+            <Button
+              startIcon={<AccountCircle />}
+              color="inherit"
+              href={baseURL + "/google/oauth/url"}
+            >
               Login
             </Button>
           )}
