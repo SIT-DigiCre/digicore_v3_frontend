@@ -6,8 +6,8 @@ export type User = {
   iconUrl: string;
   discordUserId: string;
   activeLimit: Date;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   firstNameKana?: string;
   lastNameKana?: string;
   phoneNumber?: string;

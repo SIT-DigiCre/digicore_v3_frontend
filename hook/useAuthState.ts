@@ -3,6 +3,7 @@ import { useRecoilState } from "recoil";
 import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
 import { axios } from "../utils/axios";
+import { UserProfileAPIDataResponse, convertUserFromUserProfile } from "../interfaces/api";
 
 export type AuthState = {
   isLogined: boolean;
@@ -12,69 +13,41 @@ export type AuthState = {
 };
 
 type UseAuthState = () => {
-  isLogined: boolean;
-  isLoading: boolean;
-  user: User | undefined;
-  token: string | undefined;
+  authState: AuthState;
   onLogin: (token: string) => void;
 };
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
-  const onLogin = (token: string) => {
+  const getUserInfo = (token: string) => {
     axios
-      .get("/auth/user", {
+      .get("/user/my", {
         headers: {
-          Authorization: token,
+          Authorization: "bearer " + token,
         },
       })
-      .then((rtn) => {
-        const user = rtn.data as User;
-        console.log(user);
+      .then((res) => {
+        const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
         setAuth({
           isLogined: true,
           isLoading: false,
-          user: user,
+          user: convertUserFromUserProfile(userProfileAPIDataResponse),
           token: token,
         });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
+      });
+  };
+  const onLogin = (token: string) => {
+    localStorage.setItem("jwt", token);
+    getUserInfo(token);
   };
   useEffect(() => {
-    if (auth.token) {
-      axios
-        .get("/auth/checkauth", {
-          headers: {
-            Authorization: auth.token,
-          },
-        })
-        .then((rtn) => {
-          //user情報を取得する
-          onLogin(auth.token);
-        })
-        .catch((err) => {
-          //
-          setAuth({
-            isLogined: false,
-            isLoading: false,
-            user: auth.user,
-            token: undefined,
-          });
-        });
-    } else {
-      setAuth({
-        isLogined: false,
-        isLoading: false,
-        user: undefined,
-        token: undefined,
-      });
-    }
+    getUserInfo(localStorage.getItem("jwt"));
   }, []);
   return {
-    isLogined: auth.isLogined,
-    isLoading: auth.isLoading,
-    user: auth.user,
-    token: auth.token,
+    authState: auth,
     onLogin: onLogin,
   };
 };
