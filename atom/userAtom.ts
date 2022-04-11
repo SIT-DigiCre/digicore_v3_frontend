@@ -5,6 +5,7 @@ const DEFAULT_AUTH_STATE: AuthState = {
   isLogined: false,
   isLoading: true,
   user: undefined,
+  token: undefined,
 };
 export const authState = atom<AuthState>({
   key: "user/auth",
