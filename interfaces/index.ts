@@ -1,10 +1,10 @@
 export type User = {
-  id: string;
+  id?: string;
   username: string;
   studentNumber: string;
   schoolGrade: number;
   iconUrl: string;
-  discordUserId: string;
+  discordUserId?: string;
   activeLimit: Date;
   firstName?: string;
   lastName?: string;
