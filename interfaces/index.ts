@@ -5,7 +5,7 @@ export type User = {
   schoolGrade: number;
   iconUrl: string;
   discordUserId?: string;
-  activeLimit: Date;
+  activeLimit?: Date;
   firstName?: string;
   lastName?: string;
   firstNameKana?: string;
