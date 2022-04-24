@@ -2,6 +2,7 @@ import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/ma
 import { Apps, AccountCircle } from "@mui/icons-material";
 import { useAuthState } from "../../hook/useAuthState";
 import { baseURL } from "../../utils/common";
+import AccountMenu from "./AccountMenu";
 
 const NavBar = () => {
   const { authState, onLogin } = useAuthState();
@@ -24,7 +25,7 @@ const NavBar = () => {
           {authState.isLogined ? (
             <>
               <IconButton>
-                <Avatar src={authState.user.iconUrl} />
+                <AccountMenu />
               </IconButton>
             </>
           ) : (
