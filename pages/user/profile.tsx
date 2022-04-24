@@ -1,16 +1,20 @@
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import NameInput from "../../components/Profile/NameInput";
 import PhoneInput from "../../components/Profile/PhoneInput";
 import { useAuthState } from "../../hook/useAuthState";
 import { User } from "../../interfaces";
+import { convertUserPrivateFromUser, convertUserProfileFromUser } from "../../interfaces/api";
+import { axios } from "../../utils/axios";
 import { baseURL } from "../../utils/common";
 
 type Props = {
   registerMode: boolean;
 };
 const ProfilePage = ({ registerMode }: Props) => {
+  const router = useRouter();
   const { authState } = useAuthState();
   const [user, setUser] = useState<User>({
     username: "",
@@ -22,6 +26,12 @@ const ProfilePage = ({ registerMode }: Props) => {
     if (!authState.isLogined) return;
     setUser(authState.user);
   }, [authState]);
+  useEffect(() => {
+    const value = sessionStorage.getItem("register");
+    if (value === null) return;
+    sessionStorage.removeItem("register");
+    router.push("/user/joined");
+  }, []);
   const onChangeUserName: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUser((state) => ({ ...state, username: e.target.value }));
   };
@@ -54,6 +64,26 @@ const ProfilePage = ({ registerMode }: Props) => {
   };
   const onClickSameAddress = () => {
     setUser((state) => ({ ...state, parentAddress: user.address }));
+  };
+  const onClickSigninDiscord = () => {
+    axios
+      .put("/user/my/", convertUserProfileFromUser(user), {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      })
+      .then((res) => {
+        axios
+          .put("/user/my/private/", convertUserPrivateFromUser(user), {
+            headers: { Authorization: "bearer " + authState.token },
+          })
+          .then((res1) => {
+            sessionStorage.setItem("register", "true");
+            window.location.href = baseURL + "/discord/oauth/url";
+          })
+          .catch((err) => {});
+      })
+      .catch((err) => {});
   };
   return (
     <>
@@ -180,7 +210,7 @@ const ProfilePage = ({ registerMode }: Props) => {
                   Discordのアカウント作成を行いましょう（大学のメールアドレスで作る必要はありません!）
                 </Typography>
               </Grid>
-              <Button href={baseURL + "/discord/oauth/url"} variant="contained">
+              <Button onClick={onClickSigninDiscord} variant="contained">
                 {authState.user.discordUserId == "" ? "Discord連携" : "Discord再連携"}
               </Button>
             </>
