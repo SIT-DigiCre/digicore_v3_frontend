@@ -3,6 +3,7 @@ import { Apps, AccountCircle } from "@mui/icons-material";
 import { useAuthState } from "../../hook/useAuthState";
 import { baseURL } from "../../utils/common";
 import AccountMenu from "./AccountMenu";
+import AppMenu from "./AppMenu";
 
 const NavBar = () => {
   const { authState, onLogin } = useAuthState();
@@ -10,15 +11,7 @@ const NavBar = () => {
     <>
       <AppBar position="static" color="primary">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="app-menu"
-            sx={{ mr: 2 }}
-          >
-            <Apps />
-          </IconButton>
+          <AppMenu />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             デジコア v3.0
           </Typography>
