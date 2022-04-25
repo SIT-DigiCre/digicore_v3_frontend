@@ -1,4 +1,4 @@
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Button, Container, Grid, TextField, Typography, Alert } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -194,6 +194,9 @@ const ProfilePage = ({ registerMode }: Props) => {
                     <Button variant="contained" onClick={onClickSameAddress}>
                       本人住所と同じにする
                     </Button>
+                    <Alert severity="warning">
+                      以上のフォームの必須（*）科目を済ませないと Discord連携へは進めません。
+                    </Alert>
                   </Grid>
                 </Grid>
               </Grid>
