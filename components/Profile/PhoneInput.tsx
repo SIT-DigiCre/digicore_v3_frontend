@@ -21,7 +21,7 @@ const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
         type="number"
         value={num}
         onWheel={(e) => {
-          e.target.blur(); // なんかVSCodeでblurというTypeが存在しないとエラーが出るけど動くのでヨシ！
+          (e.target as any).blur(); // なんかVSCodeでblurというTypeが存在しないとエラーが出るけど動くのでヨシ！
         }}
         onChange={(e) => {
           setNum(e.target.value);
