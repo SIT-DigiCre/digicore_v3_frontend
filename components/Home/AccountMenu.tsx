@@ -63,7 +63,7 @@ const AccountMenu = () => {
           transformOrigin={{ horizontal: "right", vertical: "top" }}
           anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         >
-          <MenuItem>
+          {/* <MenuItem>
             <Avatar /> プロフィール編集
           </MenuItem>
           <Divider />
@@ -72,7 +72,7 @@ const AccountMenu = () => {
               <Settings fontSize="small" />
             </ListItemIcon>
             設定
-          </MenuItem>
+          </MenuItem> */}
           <MenuItem onClick={logout}>
             <ListItemIcon>
               <Logout fontSize="small" />
