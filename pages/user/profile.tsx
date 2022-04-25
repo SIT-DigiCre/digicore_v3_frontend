@@ -1,4 +1,4 @@
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import { Button, Container, Grid, TextField, Typography, Alert } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -90,10 +90,10 @@ const ProfilePage = ({ registerMode }: Props) => {
       {authState.isLoading ? (
         <p>Loading...</p>
       ) : (
-        <Container>
+        <Container sx={{ mx: 5, my: 3 }}>
           {registerMode ? (
             <>
-              <Grid>
+              <Grid sx={{ mb: 3 }}>
                 <h2>Step.1 基本情報の登録</h2>
                 <Grid>
                   <h3>公開情報（他の部員も見れる情報）</h3>
@@ -194,10 +194,13 @@ const ProfilePage = ({ registerMode }: Props) => {
                     <Button variant="contained" onClick={onClickSameAddress}>
                       本人住所と同じにする
                     </Button>
+                    <Alert severity="warning">
+                      以上のフォームの必須（*）科目を済ませないと Discord連携へは進めません。
+                    </Alert>
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid>
+              <Grid sx={{ mb: 1 }}>
                 <h2>Step.2 Discord連携</h2>
                 <Typography>
                   デジクリではDiscordサーバーを所有しています。正規の部員のみがDiscordサーバーに入れるようにアカウントと連携が必要です。
