@@ -69,3 +69,10 @@ export const convertUserPrivateFromUser: (user: User) => UserPrivateAPIData = (u
   };
   return userPrivate;
 };
+
+//招待用URL取得時の型
+
+export type EnvJoinAPIData = {
+  slack_url: string;
+  discord_url: string;
+};
