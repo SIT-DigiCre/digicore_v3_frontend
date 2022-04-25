@@ -18,7 +18,7 @@ const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
         variant="outlined"
         required={required}
         margin="normal"
-        type="number"
+        type="string"
         value={num}
         onChange={(e) => {
           setNum(e.target.value);
