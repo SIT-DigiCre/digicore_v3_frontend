@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Menu, MenuItem, Divider, Tooltip, IconButton, Avatar, ListItemIcon } from "@mui/material";
-import { PersonAdd, Settings, Logout } from "@mui/icons-material";
+import { Settings, Logout } from "@mui/icons-material";
 import { useAuthState } from "../../hook/useAuthState";
-import { baseURL } from "../../utils/common";
 
-export default function AccountMenu() {
-  const { authState, onLogin } = useAuthState();
+const AccountMenu = () => {
+  const { authState, logout } = useAuthState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -15,7 +14,7 @@ export default function AccountMenu() {
     setAnchorEl(null);
   };
   return (
-    <React.Fragment>
+    <>
       <Tooltip title="Account settings">
         <IconButton
           onClick={handleClick}
@@ -28,7 +27,7 @@ export default function AccountMenu() {
           <Avatar src={authState.user.iconUrl} />
         </IconButton>
       </Tooltip>
-      <React.Fragment>
+      <>
         <Menu
           anchorEl={anchorEl}
           id="account-menu"
@@ -74,14 +73,16 @@ export default function AccountMenu() {
             </ListItemIcon>
             設定
           </MenuItem>
-          <MenuItem>
+          <MenuItem onClick={logout}>
             <ListItemIcon>
               <Logout fontSize="small" />
             </ListItemIcon>
             ログアウト
           </MenuItem>
         </Menu>
-      </React.Fragment>
-    </React.Fragment>
+      </>
+    </>
   );
-}
+};
+
+export default AccountMenu;

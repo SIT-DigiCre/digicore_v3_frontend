@@ -15,6 +15,7 @@ export type AuthState = {
 type UseAuthState = () => {
   authState: AuthState;
   onLogin: (token: string) => void;
+  logout: () => void;
 };
 
 export const useAuthState: UseAuthState = () => {
@@ -39,6 +40,17 @@ export const useAuthState: UseAuthState = () => {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
       });
   };
+  // ローカルストレージを削除する関数
+  const logout = () => {
+    setAuth({
+      isLogined: false,
+      isLoading: false,
+      user: undefined,
+      token: undefined,
+    });
+    localStorage.removeItem("jwt");
+  };
+
   const onLogin = (token: string) => {
     localStorage.setItem("jwt", token);
     getUserInfo(token);
@@ -49,5 +61,6 @@ export const useAuthState: UseAuthState = () => {
   return {
     authState: auth,
     onLogin: onLogin,
+    logout: logout,
   };
 };
