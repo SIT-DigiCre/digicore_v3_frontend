@@ -81,9 +81,13 @@ const ProfilePage = ({ registerMode }: Props) => {
             sessionStorage.setItem("register", "true");
             window.location.href = baseURL + "/discord/oauth/url";
           })
-          .catch((err) => {});
+          .catch((err) => {
+            window.alert("非公開情報の登録に失敗しました。全て記入しているか確認してください");
+          });
       })
-      .catch((err) => {});
+      .catch((err) => {
+        window.alert("公開情報の登録に失敗しました。全て記入しているか確認してください");
+      });
   };
   return (
     <>
