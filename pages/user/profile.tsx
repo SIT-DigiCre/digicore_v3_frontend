@@ -159,6 +159,7 @@ const ProfilePage = ({ registerMode }: Props) => {
                       margin="normal"
                       onChange={onChangeAddress}
                       value={user.address}
+                      helperText="郵便番号無しで入力してください"
                     />
                   </Grid>
                   <h4>緊急連絡先（親の連絡先）</h4>
@@ -194,6 +195,7 @@ const ProfilePage = ({ registerMode }: Props) => {
                       margin="normal"
                       onChange={onChangeParentAddress}
                       value={user.parentAddress}
+                      helperText="郵便番号無しで入力してください"
                     />
                     <Button variant="contained" onClick={onClickSameAddress}>
                       本人住所と同じにする

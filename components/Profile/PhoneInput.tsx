@@ -27,6 +27,7 @@ const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
           setNum(e.target.value);
           onChange(e.target.value);
         }}
+        helperText="ハイフン(-)無しで入力してください"
       />
     </>
   );
