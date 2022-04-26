@@ -1,0 +1,10 @@
+version: "3"
+services:
+  core3:
+    build: .
+    restart: always
+    networks:
+      - https_network
+networks:
+  https_network:
+    external: true
