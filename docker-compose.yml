@@ -1,7 +1,7 @@
 version: "3"
 services:
   core3:
-    build: .
+    image: ghcr.io/sit-digicre/digicore_v3_frontend:master
     restart: always
     networks:
       - https_network
