@@ -10,14 +10,22 @@ const JoinedPage = () => {
   useEffect(() => {
     if (authState.isLoading || !authState.isLogined) return;
     axios
-      .get("/env/join", {
+      .get("/user/my/private/", {
         headers: {
           Authorization: "bearer " + authState.token,
         },
       })
-      .then((res) => {
-        const envJoinAPIData: EnvJoinAPIData = res.data;
-        setJoinData(envJoinAPIData);
+      .then((res1) => {
+        axios
+          .get("/env/join", {
+            headers: {
+              Authorization: "bearer " + authState.token,
+            },
+          })
+          .then((res) => {
+            const envJoinAPIData: EnvJoinAPIData = res.data;
+            setJoinData(envJoinAPIData);
+          });
       });
   }, [authState]);
   if (authState.isLoading || !authState.isLogined || !joinData) return <p>Loading...</p>;
