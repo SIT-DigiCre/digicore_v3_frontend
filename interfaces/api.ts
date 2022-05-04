@@ -76,3 +76,12 @@ export type EnvJoinAPIData = {
   slack_url: string;
   discord_url: string;
 };
+
+//部費支払い情報取得時の型
+export type PaymentAPIData = {
+  year: number;
+  TransferName: string;
+  Checked: boolean;
+  CreatedAt: string; // must convert to time
+  UpdatedAt: string; // must convert to time
+};
