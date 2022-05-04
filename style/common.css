@@ -31,6 +31,12 @@
 .markdown-area ul {
   padding-left: 2rem;
 }
+.markdown-area ol {
+  padding-left: 2rem;
+}
+.markdown-area p {
+  padding: 0.2rem 0;
+}
 .markdown-area h2 {
   padding-top: 1rem;
 }
