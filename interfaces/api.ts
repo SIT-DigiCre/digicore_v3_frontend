@@ -82,6 +82,6 @@ export type PaymentAPIData = {
   year: number;
   TransferName: string;
   Checked: boolean;
-  CreatedAt: string; // must convert to time
-  UpdatedAt: string; // must convert to time
+  CreatedAt: Date;
+  UpdatedAt: Date;
 };
