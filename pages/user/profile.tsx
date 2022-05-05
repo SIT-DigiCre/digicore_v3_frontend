@@ -183,7 +183,7 @@ const ProfilePage = ({ registerMode }: Props) => {
                   <Grid>
                     <PhoneInput
                       onChange={onChangeParentHomePhone}
-                      title="固定電話番号（非所持の方は無記入）"
+                      title="固定電話番号（ある場合のみ記入）"
                       initPhoneNumber={user.parentHomePhoneNumber}
                     />
                   </Grid>
