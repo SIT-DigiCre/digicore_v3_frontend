@@ -6,6 +6,21 @@ type MarkdownEditorProps = {
   value: string;
   onChange: (value: string) => void;
 };
+type MarkdownEditorActionBtn = {
+  title: string;
+  text: string;
+  rtnAdd?: boolean;
+};
+const markdownEditorActionBtns: MarkdownEditorActionBtn[] = [
+  { title: "H2", text: "## 見出し", rtnAdd: true },
+  { title: "H3", text: "## 小見出し", rtnAdd: true },
+  { title: "H4", text: "## めっちゃ小見出し", rtnAdd: true },
+  { title: "B", text: "**強調**" },
+  { title: "I", text: "*Italic*" },
+  { title: "・", text: "- 箇条書き", rtnAdd: true },
+  { title: "1.", text: "1. 番号付きリスト", rtnAdd: true },
+  { title: "LINK", text: "[Google](https://google.co.jp)", rtnAdd: true },
+];
 
 const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   const textFieldElement = useRef<HTMLTextAreaElement>(null);
@@ -19,15 +34,28 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
       (mdPreviewDivElement.current.scrollHeight * textFieldElement.current.scrollTop) /
       (textFieldElement.current.scrollHeight - textFieldElement.current.clientHeight);
   };
+  const [selectStart, setSelectStart] = useState(0);
+  const insertText = (text: string, rtnAdd?: boolean) => {
+    const midText = (rtnAdd ? "\n" : "") + text;
+    const newText = md.substring(0, selectStart) + midText + md.substring(selectStart);
+    setMd(newText);
+    setSelectStart(selectStart + midText.length);
+  };
   return (
     <>
       <Grid container>
+        <Grid item xs={12} sx={{ marginBottom: "0.5rem" }}>
+          {markdownEditorActionBtns.map((btn) => (
+            <Button
+              onClick={() => insertText(btn.text, btn.rtnAdd)}
+              variant="contained"
+              sx={{ marginRight: "0.5rem" }}
+            >
+              {btn.title}
+            </Button>
+          ))}
+        </Grid>
         <Grid item xs={6}>
-          <Grid height={50}>
-            <Button>H2</Button>
-            <Button>H3</Button>
-            <Button>H4</Button>
-          </Grid>
           <Grid>
             <textarea
               rows={20}
@@ -36,11 +64,16 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               ref={textFieldElement}
               onScroll={onScrollTextField}
               style={{ height: 500, width: "100%", fontSize: 18 }}
+              onClick={() => {
+                setSelectStart(textFieldElement.current.selectionStart);
+              }}
+              onKeyDown={() => {
+                setSelectStart(textFieldElement.current.selectionStart);
+              }}
             />
           </Grid>
         </Grid>
         <Grid item xs={6}>
-          <Grid height={50}></Grid>
           <Grid
             sx={{
               overflowY: "auto",
