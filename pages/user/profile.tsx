@@ -2,7 +2,6 @@ import { Button, Container, Grid, TextField, Typography, Alert } from "@mui/mate
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ChangeEventHandler, useEffect, useState } from "react";
-import GenerationSelect from "../../components/Profile/GenerationSelect";
 import NameInput from "../../components/Profile/NameInput";
 import PhoneInput from "../../components/Profile/PhoneInput";
 import { useAuthState } from "../../hook/useAuthState";
@@ -10,7 +9,6 @@ import { User } from "../../interfaces";
 import { convertUserPrivateFromUser, convertUserProfileFromUser } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
 import { baseURL } from "../../utils/common";
-import { getLatestGeneration, postLatestGeneration } from "../../utils/generation";
 
 type Props = {
   registerMode: boolean;
@@ -91,9 +89,6 @@ const ProfilePage = ({ registerMode }: Props) => {
           .then((res1) => {
             sessionStorage.setItem("register", "true");
             window.location.href = baseURL + "/discord/oauth/url";
-            if (!isExistMember) {
-              postLatestGeneration(authState);
-            }
           })
           .catch((err) => {
             window.alert("非公開情報の登録に失敗しました。全て記入しているか確認してください");
@@ -134,7 +129,6 @@ const ProfilePage = ({ registerMode }: Props) => {
                     onChange={onChangeShortSelfIntroduction}
                     value={user.shortSelfIntroduction}
                   />
-                  {isExistMember ? <GenerationSelect /> : <></>}
                   <h3>非公開情報（大学へ提出する名簿に使用する情報）</h3>
                   <h4>本人情報</h4>
 
