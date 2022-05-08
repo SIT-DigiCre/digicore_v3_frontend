@@ -22,16 +22,12 @@ const ProfilePage = ({ registerMode }: Props) => {
     schoolGrade: 0,
     iconUrl: "",
   });
-  const [isExistMember, setIsExistMember] = useState<boolean>();
   useEffect(() => {
-    const existMemberFlag = sessionStorage.getItem("exist-member") !== null;
-    setIsExistMember(existMemberFlag);
     if (!authState.isLogined) return;
     setUser(authState.user);
   }, [authState]);
   useEffect(() => {
     const existMemberFlag = sessionStorage.getItem("exist-member") !== null;
-    setIsExistMember(existMemberFlag);
     const value = sessionStorage.getItem("register");
     if (value === null) return;
     sessionStorage.removeItem("register");
