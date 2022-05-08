@@ -2,6 +2,7 @@ import { Button, Container, Grid, TextField, Typography, Alert } from "@mui/mate
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { ChangeEventHandler, useEffect, useState } from "react";
+import GenerationSelect from "../../components/Profile/GenerationSelect";
 import NameInput from "../../components/Profile/NameInput";
 import PhoneInput from "../../components/Profile/PhoneInput";
 import { useAuthState } from "../../hook/useAuthState";
@@ -9,6 +10,7 @@ import { User } from "../../interfaces";
 import { convertUserPrivateFromUser, convertUserProfileFromUser } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
 import { baseURL } from "../../utils/common";
+import { getLatestGeneration, postLatestGeneration } from "../../utils/generation";
 
 type Props = {
   registerMode: boolean;
@@ -22,15 +24,24 @@ const ProfilePage = ({ registerMode }: Props) => {
     schoolGrade: 0,
     iconUrl: "",
   });
+  const [isExistMember, setIsExistMember] = useState<boolean>();
   useEffect(() => {
+    const existMemberFlag = sessionStorage.getItem("exist-member") !== null;
+    setIsExistMember(existMemberFlag);
     if (!authState.isLogined) return;
     setUser(authState.user);
   }, [authState]);
   useEffect(() => {
+    const existMemberFlag = sessionStorage.getItem("exist-member") !== null;
+    setIsExistMember(existMemberFlag);
     const value = sessionStorage.getItem("register");
     if (value === null) return;
     sessionStorage.removeItem("register");
-    router.push("/user/joined");
+    if (existMemberFlag) {
+      router.push("/user/continued");
+    } else {
+      router.push("/user/joined");
+    }
   }, []);
   const onChangeUserName: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUser((state) => ({ ...state, username: e.target.value }));
@@ -80,6 +91,9 @@ const ProfilePage = ({ registerMode }: Props) => {
           .then((res1) => {
             sessionStorage.setItem("register", "true");
             window.location.href = baseURL + "/discord/oauth/url";
+            if (!isExistMember) {
+              postLatestGeneration(authState);
+            }
           })
           .catch((err) => {
             window.alert("非公開情報の登録に失敗しました。全て記入しているか確認してください");
@@ -91,7 +105,7 @@ const ProfilePage = ({ registerMode }: Props) => {
   };
   return (
     <>
-      {authState.isLoading ? (
+      {authState.isLoading || !authState.isLogined ? (
         <p>Loading...</p>
       ) : (
         <Container sx={{ mx: 5, my: 3 }}>
@@ -120,6 +134,7 @@ const ProfilePage = ({ registerMode }: Props) => {
                     onChange={onChangeShortSelfIntroduction}
                     value={user.shortSelfIntroduction}
                   />
+                  {isExistMember ? <GenerationSelect /> : <></>}
                   <h3>非公開情報（大学へ提出する名簿に使用する情報）</h3>
                   <h4>本人情報</h4>
 
