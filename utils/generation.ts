@@ -18,7 +18,7 @@ export const getLatestGeneration = async (authState: AuthState) => {
 };
 
 export const postLatestGeneration = async (authState: AuthState) => {
-  const targetId = await (await getLatestGeneration(authState)).id;
+  const targetId = (await getLatestGeneration(authState)).id;
   return axios.post(
     `/group/${targetId}`,
     {},
