@@ -1,33 +1,51 @@
 import { axios } from "../utils/axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { PaymentAPIData } from "../interfaces/api";
+import { GetPaymentAPIData, GetPaymentHistoryAPIData, PaymentAPIData } from "../interfaces/api";
 import { useAuthState } from "./useAuthState";
 
 type UsePaymentState = () => {
   isLoading: boolean;
-  payment: PaymentAPIData;
-  setPayment: Dispatch<SetStateAction<PaymentAPIData>>;
-  updatePayment: () => Promise<boolean>;
+  latestPayment: PaymentAPIData;
+  paymentHistory: PaymentAPIData[];
+  setLatestPayment: Dispatch<SetStateAction<PaymentAPIData>>;
+  updateLatestPayment: () => Promise<boolean>;
 };
 
 export const usePaymentState: UsePaymentState = () => {
-  const [payment, setPayment] = useState<PaymentAPIData>();
+  const [latestPayment, setLatestPayment] = useState<PaymentAPIData>();
+  const [paymentHistory, setPaymentHistory] = useState<PaymentAPIData[]>();
   const { authState } = useAuthState();
   useEffect(() => {
-    if (authState.isLoading) return;
-    axios
-      .get("user/my/payment", {
+    if (authState.isLoading || !authState.isLogined) return;
+    const getData = async () => {
+      const historyRes = await axios.get("user/my/payment/history", {
         headers: {
           Authorization: "bearer " + authState.token,
         },
-      })
-      .then((res) => {
-        const apiData: PaymentAPIData = res.data;
-        setPayment(apiData);
       });
+      const history: GetPaymentHistoryAPIData = historyRes.data;
+      if (historyRes.status !== 200) return;
+      setPaymentHistory(history.payments);
+      try {
+        const res = await axios.get("user/my/payment", {
+          headers: {
+            Authorization: "bearer " + authState.token,
+          },
+        });
+        const payment: GetPaymentAPIData = res.data;
+        if (res.status === 200) setLatestPayment(payment.payment);
+      } catch (e) {
+        setLatestPayment({
+          year: new Date().getFullYear(),
+          transfer_name: "",
+          checked: false,
+        });
+      }
+    };
+    getData();
   }, [authState]);
   const updatePayment = async () => {
-    const res = await axios.put("user/my/payment", payment, {
+    const res = await axios.put("user/my/payment", latestPayment, {
       headers: {
         Authorization: "bearer " + authState.token,
       },
@@ -36,9 +54,10 @@ export const usePaymentState: UsePaymentState = () => {
     return false;
   };
   return {
-    isLoading: !payment,
-    payment: payment,
-    setPayment: setPayment,
-    updatePayment: updatePayment,
+    isLoading: !latestPayment,
+    latestPayment: latestPayment,
+    paymentHistory: paymentHistory,
+    setLatestPayment: setLatestPayment,
+    updateLatestPayment: updatePayment,
   };
 };
