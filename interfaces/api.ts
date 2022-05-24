@@ -80,8 +80,8 @@ export type EnvJoinAPIData = {
 //部費支払い情報取得時の型
 export type PaymentAPIData = {
   year: number;
-  TransferName: string;
-  Checked: boolean;
-  CreatedAt: Date;
-  UpdatedAt: Date;
+  transfer_name: string;
+  checked: boolean;
+  created_at: Date;
+  updated_at: Date;
 };
