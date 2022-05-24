@@ -27,10 +27,15 @@ const ProfilePage = ({ registerMode }: Props) => {
     setUser(authState.user);
   }, [authState]);
   useEffect(() => {
+    const existMemberFlag = sessionStorage.getItem("exist-member") !== null;
     const value = sessionStorage.getItem("register");
     if (value === null) return;
     sessionStorage.removeItem("register");
-    router.push("/user/joined");
+    if (existMemberFlag) {
+      router.push("/user/continued");
+    } else {
+      router.push("/user/joined");
+    }
   }, []);
   const onChangeUserName: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUser((state) => ({ ...state, username: e.target.value }));
@@ -91,7 +96,7 @@ const ProfilePage = ({ registerMode }: Props) => {
   };
   return (
     <>
-      {authState.isLoading ? (
+      {authState.isLoading || !authState.isLogined ? (
         <p>Loading...</p>
       ) : (
         <Container sx={{ mx: 5, my: 3 }}>
@@ -183,7 +188,7 @@ const ProfilePage = ({ registerMode }: Props) => {
                   <Grid>
                     <PhoneInput
                       onChange={onChangeParentHomePhone}
-                      title="固定電話番号"
+                      title="固定電話番号（ある場合のみ記入）"
                       initPhoneNumber={user.parentHomePhoneNumber}
                     />
                   </Grid>

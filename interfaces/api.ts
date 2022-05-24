@@ -95,3 +95,16 @@ export type GetPaymentHistoryAPIData = {
   payments: PaymentAPIData[];
   error: string;
 };
+
+export type GroupAPIData = {
+  id: string;
+  name: string;
+  description: string;
+  join: boolean;
+  joined: boolean;
+};
+
+export type GroupsAPIData = {
+  groups: GroupAPIData[];
+  error?: string;
+};
