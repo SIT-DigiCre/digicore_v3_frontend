@@ -1,4 +1,5 @@
 import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuthState } from "../../hook/useAuthState";
 import { EnvJoinAPIData } from "../../interfaces/api";
@@ -64,7 +65,9 @@ const JoinedPage = () => {
             に、下記の口座に振り込んでください。デジクリの口座はゆうちょ銀行です。
           </Typography>
           <Typography>
-            部費の振込が完了した際はデジコア上のユーザー設定画面の振込情報から振込完了報告をする必要があります（現在はアクセスできません。アクセスできるようになったらメールにてお知らせいたします）
+            部費の振込が完了した際はデジコア上の
+            <Link href="/user/form/payment">部費振込報告フォーム</Link>
+            から振込完了報告をする必要があります
           </Typography>
           <Typography>
             期限を過ぎても振込完了報告がされない場合、メールにて会計から確認の連絡が届きます。それらに反応が無い場合、デジコアやSlack、Discordのアカウント制限がかかります。
