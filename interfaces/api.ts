@@ -77,6 +77,25 @@ export type EnvJoinAPIData = {
   discord_url: string;
 };
 
+//部費支払い情報取得時の型
+export type PaymentAPIData = {
+  year: number;
+  transfer_name: string;
+  checked: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+};
+
+export type GetPaymentAPIData = {
+  payment: PaymentAPIData;
+  error: string;
+};
+
+export type GetPaymentHistoryAPIData = {
+  payments: PaymentAPIData[];
+  error: string;
+};
+
 export type GroupAPIData = {
   id: string;
   name: string;
