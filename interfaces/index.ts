@@ -19,3 +19,7 @@ export type User = {
   self_introduction?: string;
   shortSelfIntroduction?: string;
 };
+
+export type ErrorState = {
+  message: string;
+};
