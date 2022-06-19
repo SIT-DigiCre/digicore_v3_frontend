@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DigicreEvent } from "../../interfaces/event";
+import { DigicreEvent, EventListAPIData } from "../../interfaces/event";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 
@@ -14,15 +14,20 @@ export const useEventList: UseEventList = () => {
   useEffect(() => {
     if (authState.isLoading || !authState.isLogined) return;
     const getData = async () => {
-      const res = await axios.get("", {
-        headers: {
-          Authorization: "bearer " + authState.token,
-        },
-      });
-      const eventsTmp: DigicreEvent = res.data;
+      try {
+        const res = await axios.get("/event", {
+          headers: {
+            Authorization: "bearer " + authState.token,
+          },
+        });
+        const eventRes: EventListAPIData = res.data;
+        setEvents(eventRes.event);
+      } catch (err) {
+        console.log(err);
+      }
     };
     getData();
-  }, []);
+  }, [authState]);
   return {
     isLoading: !events,
     events: events,
