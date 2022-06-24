@@ -63,7 +63,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               onChange={onChangeMd}
               ref={textFieldElement}
               onScroll={onScrollTextField}
-              style={{ height: 500, width: "100%", fontSize: 18 }}
+              style={{ height: 500, width: "100%", fontSize: 18, paddingLeft: "2px" }}
               onClick={() => {
                 setSelectStart(textFieldElement.current.selectionStart);
               }}
@@ -80,6 +80,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               overflowWrap: "break-word",
               marginLeft: "0.5rem",
               border: "black 1px solid",
+              background: "rgba(0,0,0,0.1)",
             }}
             height={500}
             component="div"
