@@ -8,3 +8,7 @@ export type DigicreEvent = {
   description: string;
   reservated: boolean;
 };
+export type DigicreEventDetail = DigicreEvent & {
+  full: boolean;
+  reservated: boolean;
+};
