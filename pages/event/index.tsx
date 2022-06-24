@@ -1,3 +1,4 @@
+import EventListItem from "../../components/Event/EventListItem";
 import { useEventList } from "../../hook/event/useEventList";
 
 const EventIndexPage = () => {
@@ -5,8 +6,9 @@ const EventIndexPage = () => {
   if (isLoading) return <p>Loading..</p>;
   return (
     <>
+      <h1>イベント一覧</h1>
       {events.map((event) => (
-        <p>{event.name}</p>
+        <EventListItem event={event} />
       ))}
     </>
   );
