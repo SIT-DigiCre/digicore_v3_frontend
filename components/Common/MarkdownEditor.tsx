@@ -13,8 +13,8 @@ type MarkdownEditorActionBtn = {
 };
 const markdownEditorActionBtns: MarkdownEditorActionBtn[] = [
   { title: "H2", text: "## 見出し", rtnAdd: true },
-  { title: "H3", text: "## 小見出し", rtnAdd: true },
-  { title: "H4", text: "## めっちゃ小見出し", rtnAdd: true },
+  { title: "H3", text: "### 小見出し", rtnAdd: true },
+  { title: "H4", text: "#### めっちゃ小見出し", rtnAdd: true },
   { title: "B", text: "**強調**" },
   { title: "I", text: "*Italic*" },
   { title: "・", text: "- 箇条書き", rtnAdd: true },
@@ -79,6 +79,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               overflowY: "auto",
               overflowWrap: "break-word",
               marginLeft: "0.5rem",
+              border: "black 1px solid",
             }}
             height={500}
             component="div"
