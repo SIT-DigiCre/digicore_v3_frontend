@@ -21,7 +21,7 @@ export const useEventList: UseEventList = () => {
           },
         });
         const eventRes: EventListAPIData = res.data;
-        setEvents(eventRes.event);
+        setEvents(eventRes.events);
       } catch (err) {
         console.log(err);
       }
