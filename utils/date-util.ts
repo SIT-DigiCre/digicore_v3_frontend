@@ -12,19 +12,19 @@ export const getDayText = (date: Date) => {
 export const getTimeSpanText = (start: Date, end: Date) => {
   start = new Date(start);
   end = new Date(end);
-  if (start.getMonth() === end.getMonth()) {
+  if (start.getMonth() + 1 === end.getMonth() + 1) {
     if (start.getDate() === end.getDate()) {
-      return `${start.getFullYear()}/${start.getMonth()}/${start.getDate()}(${getDayText(
+      return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()}(${getDayText(
         start,
       )}) ${getTimeText(start)}~${getTimeText(end)}`;
     }
-    return `${start.getFullYear()}/${start.getMonth()}/${start.getDate()}(${getDayText(
+    return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()}(${getDayText(
       start,
     )}) ${getTimeText(start)} ~ ${end.getDate()}(${getDayText(end)}) ${getTimeText(end)}`;
   }
-  return `${start.getFullYear()}/${start.getMonth()}/${start.getDate()}(${getDayText(
+  return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()}(${getDayText(
     start,
-  )}) ${getTimeText(start)} ~ ${end.getMonth()}/${end.getDate()}(${getDayText(end)}) ${getTimeText(
+  )}) ${getTimeText(start)} ~ ${end.getMonth() + 1}/${end.getDate()}(${getDayText(
     end,
-  )}`;
+  )}) ${getTimeText(end)}`;
 };
