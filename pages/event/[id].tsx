@@ -1,4 +1,5 @@
 import { GetServerSideProps } from "next";
+import MarkdownView from "../../components/Common/MarkdownView";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
 import useEventDetail from "../../hook/event/useEventDetail";
 
@@ -13,17 +14,22 @@ const EventPage = ({ id, errors }: EventPageProps) => {
   return (
     <>
       <h1>{eventDetail.name}イベント予約フォーム</h1>
-      <p>{eventDetail.description}</p>
+      <MarkdownView md={eventDetail.description} />
       {eventDetail.reservated ? <p style={{ color: "red" }}>既にあなたは予約済みです</p> : <></>}
       <hr />
-      {eventDetail.reservation_frames.map((frame) => (
-        <EventReservationFrame
-          eventId={id}
-          eventReservationFrame={frame}
-          reservation={reservation}
-          cancelReservation={cancelReservation}
-        />
-      ))}
+      {eventDetail.reservation_frames
+        .sort((a, b) =>
+          new Date(a.start_date).getTime() > new Date(b.start_date).getTime() ? 1 : -1,
+        )
+        .map((frame) => (
+          <EventReservationFrame
+            key={frame.id!}
+            eventId={id}
+            eventReservationFrame={frame}
+            reservation={reservation}
+            cancelReservation={cancelReservation}
+          />
+        ))}
     </>
   );
 };

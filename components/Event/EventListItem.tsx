@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { DigicreEvent } from "../../interfaces/event";
+import MarkdownView from "../Common/MarkdownView";
 
 type Props = {
   event: DigicreEvent;
@@ -12,7 +13,7 @@ const EventListItem = ({ event }: Props) => {
   return (
     <div onClick={onClick}>
       <h3>{event.name}</h3>
-      <p>{event.description}</p>
+      <MarkdownView md={event.description} />
     </div>
   );
 };

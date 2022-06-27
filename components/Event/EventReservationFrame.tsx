@@ -71,7 +71,7 @@ const EventReservationFrame = ({
           ) : (
             <div style={{ display: "inline-block" }}>
               {userReservations.map((userReser) => (
-                <Box style={{ border: "black 1px solid", borderRadius: "10%" }}>
+                <Box key={userReser.id!} style={{ border: "black 1px solid", borderRadius: "10%" }}>
                   <h5>{userReser.name!}</h5>
                   {userReser.comment === "" ? <></> : <p>{userReser.comment}</p>}
                   {userReser.url === "" ? <></> : <a href={userReser.url}>{userReser.url}</a>}
