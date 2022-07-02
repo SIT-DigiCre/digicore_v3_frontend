@@ -21,7 +21,7 @@ type UseAuthState = () => {
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
-  const { setNewError } = useErrorState();
+  const { setNewError, removeError } = useErrorState();
   const getUserInfo = (token: string) => {
     axios
       .get("/user/my", {
@@ -37,10 +37,11 @@ export const useAuthState: UseAuthState = () => {
           user: convertUserFromUserProfile(userProfileAPIDataResponse),
           token: token,
         });
+        removeError("autologin-fail");
       })
       .catch((err) => {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
-        setNewError({ name: "login-fail", message: "ログインしてください" });
+        setNewError({ name: "autologin-fail", message: "ログインしてください" });
       });
   };
   // ローカルストレージを削除する関数
