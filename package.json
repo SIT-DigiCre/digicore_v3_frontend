@@ -12,14 +12,20 @@
     "@mui/icons-material": "^5.4.2",
     "@mui/material": "^5.4.3",
     "@types/axios": "^0.14.0",
+    "@types/highlightjs": "^9.12.2",
+    "@types/marked": "^4.0.3",
     "@types/nookies": "^2.0.3",
     "@types/recoil": "^0.0.9",
     "axios": "^0.26.0",
+    "highlightjs": "^9.16.2",
+    "isomorphic-dompurify": "^0.18.0",
+    "marked": "^4.0.15",
     "next": "latest",
     "nookies": "^2.5.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "recoil": "^0.6.1"
+    "recoil": "^0.6.1",
+    "swr": "^1.3.0"
   },
   "devDependencies": {
     "@types/node": "^12.12.21",
