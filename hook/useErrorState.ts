@@ -5,6 +5,7 @@ type UseErrorState = () => {
   errors: ErrorState[];
   setNewError: (error: ErrorState) => void;
   resetError: () => void;
+  removeError: (errorName: string) => void;
 };
 
 export const useErrorState: UseErrorState = () => {
@@ -26,9 +27,14 @@ export const useErrorState: UseErrorState = () => {
     setErrors([]);
   };
 
+  const removeError = (errorName: string) => {
+    setErrors(errors.filter((e) => e.name !== errorName));
+  };
+
   return {
     errors: errors,
     setNewError: setNewError,
     resetError: resetError,
+    removeError: removeError,
   };
 };
