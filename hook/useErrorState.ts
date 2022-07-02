@@ -13,6 +13,7 @@ export const useErrorState: UseErrorState = () => {
   const setNewError = (error: ErrorState) => {
     if (errors.find((e) => e.name === error.name) === undefined) {
       //新規エラー
+      error.count = 0;
       setErrors([...errors, error]);
     } else {
       //既存エラー

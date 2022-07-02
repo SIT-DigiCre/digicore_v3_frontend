@@ -22,6 +22,6 @@ export type User = {
 
 export type ErrorState = {
   name: string;
-  count: number;
+  count?: number;
   message: string;
 };
