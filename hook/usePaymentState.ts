@@ -2,6 +2,7 @@ import { axios } from "../utils/axios";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { GetPaymentAPIData, GetPaymentHistoryAPIData, PaymentAPIData } from "../interfaces/api";
 import { useAuthState } from "./useAuthState";
+import { useErrorState } from "./useErrorState";
 
 type UsePaymentState = () => {
   isLoading: boolean;
@@ -15,6 +16,7 @@ export const usePaymentState: UsePaymentState = () => {
   const [latestPayment, setLatestPayment] = useState<PaymentAPIData>();
   const [paymentHistory, setPaymentHistory] = useState<PaymentAPIData[]>();
   const { authState } = useAuthState();
+  const { setNewError } = useErrorState();
   useEffect(() => {
     if (authState.isLoading || !authState.isLogined) return;
     const getData = async () => {
@@ -24,7 +26,10 @@ export const usePaymentState: UsePaymentState = () => {
         },
       });
       const history: GetPaymentHistoryAPIData = historyRes.data;
-      if (historyRes.status !== 200) return;
+      if (historyRes.status !== 200) {
+        setNewError({ name: "payment-get", message: "部費支払い情報の取得に失敗しました" });
+        return;
+      }
       setPaymentHistory(history.payments);
       try {
         const res = await axios.get("user/my/payment", {
@@ -51,6 +56,7 @@ export const usePaymentState: UsePaymentState = () => {
       },
     });
     if (res.status === 200) return true;
+    setNewError({ name: "payment-update", message: "部費支払い情報の更新に失敗しました" });
     return false;
   };
   return {

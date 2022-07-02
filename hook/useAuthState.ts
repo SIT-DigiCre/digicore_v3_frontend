@@ -4,6 +4,7 @@ import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
 import { axios } from "../utils/axios";
 import { UserProfileAPIDataResponse, convertUserFromUserProfile } from "../interfaces/api";
+import { useErrorState } from "./useErrorState";
 
 export type AuthState = {
   isLogined: boolean;
@@ -20,6 +21,7 @@ type UseAuthState = () => {
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
+  const { setNewError } = useErrorState();
   const getUserInfo = (token: string) => {
     axios
       .get("/user/my", {
@@ -38,6 +40,7 @@ export const useAuthState: UseAuthState = () => {
       })
       .catch((err) => {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
+        setNewError({ name: "login-fail", message: "ログインしてください" });
       });
   };
   // ローカルストレージを削除する関数
