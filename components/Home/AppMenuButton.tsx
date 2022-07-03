@@ -18,6 +18,7 @@ const AppMenuButton = ({ icon, name, onClick }: Props) => {
         borderRadius: "5px",
         padding: "2px",
       }}
+      className="clickable-gray"
     >
       {icon}
       <p>{name}</p>
