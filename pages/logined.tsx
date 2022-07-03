@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import { GetServerSideProps } from "next";
 import { useAuthState } from "../hook/useAuthState";
+import { useErrorState } from "../hook/useErrorState";
 type Props = {
   isLoginFailed: boolean;
   token: string;
@@ -13,9 +14,15 @@ type Props = {
 const LoginResultPage = ({ isLoginFailed, token }: Props) => {
   const router = useRouter();
   const { authState, onLogin } = useAuthState();
+  const { setNewError, resetError, removeError } = useErrorState();
   useEffect(() => {
+    resetError();
     onLogin(token);
-    if (!isLoginFailed) router.push("/");
+    if (!isLoginFailed) {
+      removeError("login-fail");
+      router.push("/");
+    }
+    setNewError({ name: "login-fail", message: "ログインに失敗しました" });
   }, []);
   return (
     <>
