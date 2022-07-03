@@ -66,3 +66,10 @@ blockquote cite {
   color: darkgray;
   text-align: right;
 }
+
+.clickable-gray {
+  cursor: pointer;
+}
+.clickable-gray:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
