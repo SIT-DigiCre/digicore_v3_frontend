@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useProfile } from "../../hook/profile/useProfile";
 import { UserProfileAPIData } from "../../interfaces/api";
 import { baseURL, objectEquals } from "../../utils/common";
+import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
   const [userProfile, updateProfile] = useProfile();
@@ -53,9 +54,7 @@ const ProfileEditor = () => {
         </Grid>
         <Grid sx={{ mb: 3 }}>
           <h2>非公開情報</h2>
-          <details>
-            <summary>個人情報</summary>
-          </details>
+          <PrivateProfileEditor />
         </Grid>
         <Grid sx={{ mb: 3 }}>
           <h2>Discord連携</h2>
