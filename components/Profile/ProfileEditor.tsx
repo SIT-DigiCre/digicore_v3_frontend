@@ -14,7 +14,7 @@ const ProfileEditor = () => {
   if (!userProfile || !editUserProfile) return <p>isLoading...</p>;
 
   return (
-    <Container sx={{ mx: 5, my: 3 }}>
+    <>
       <Grid sx={{ mb: 3 }}>
         <h1>プロファイル編集</h1>
         <Grid sx={{ mb: 3 }}>
@@ -63,7 +63,7 @@ const ProfileEditor = () => {
           </Button>
         </Grid>
       </Grid>
-    </Container>
+    </>
   );
 };
 

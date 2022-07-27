@@ -17,7 +17,7 @@ const ProfilePage = ({ registerMode }: Props) => {
       {authState.isLoading || !authState.isLogined ? (
         <p>Loading...</p>
       ) : (
-        <Container sx={{ mx: 5, my: 3 }}>
+        <Container>
           {registerMode ? <ProfileRegister registerMode={registerMode} /> : <ProfileEditor />}
         </Container>
       )}
