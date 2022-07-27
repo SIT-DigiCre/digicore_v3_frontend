@@ -54,6 +54,11 @@ export type UserPrivateAPIData = {
   parent_name: string;
   phone_number: string;
 };
+
+export type UserPrivateAPIDataResponse = {
+  privateProfile: UserPrivateAPIData;
+  error: string;
+};
 export const convertUserPrivateFromUser: (user: User) => UserPrivateAPIData = (user) => {
   const userPrivate: UserPrivateAPIData = {
     address: user.address,
