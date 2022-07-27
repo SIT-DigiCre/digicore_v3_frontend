@@ -56,7 +56,7 @@ export type UserPrivateAPIData = {
 };
 
 export type UserPrivateAPIDataResponse = {
-  privateProfile: UserPrivateAPIData;
+  private_profile: UserPrivateAPIData;
   error: string;
 };
 export const convertUserPrivateFromUser: (user: User) => UserPrivateAPIData = (user) => {
