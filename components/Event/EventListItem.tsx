@@ -11,7 +11,7 @@ const EventListItem = ({ event }: Props) => {
     router.push(`/event/${event.id!}`);
   };
   return (
-    <div onClick={onClick}>
+    <div onClick={onClick} className="clickable">
       <h3>{event.name}</h3>
       <MarkdownView md={event.description} />
     </div>
