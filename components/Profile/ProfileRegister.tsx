@@ -25,12 +25,6 @@ const ProfileRegister = ({ registerMode }: Props) => {
     if (!authState.isLogined) return;
     setUser(authState.user);
   }, [authState]);
-  useEffect(() => {
-    const value = sessionStorage.getItem("register");
-    if (value === null) return;
-    sessionStorage.removeItem("register");
-    router.push("/user/joined");
-  }, []);
   const onChangeUserName: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUser((state) => ({ ...state, username: e.target.value }));
   };
