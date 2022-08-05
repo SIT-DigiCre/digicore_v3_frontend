@@ -30,6 +30,7 @@ export const useAuthState: UseAuthState = () => {
         },
       })
       .then((res) => {
+        if (auth.isLogined) return;
         const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
         setAuth({
           isLogined: true,

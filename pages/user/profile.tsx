@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import { useEffect } from "react";
 import ProfileEditor from "../../components/Profile/ProfileEditor";
 import ProfileRegister from "../../components/Profile/ProfileRegister";
 import { useAuthState } from "../../hook/useAuthState";
@@ -12,7 +13,12 @@ type Props = {
 const ProfilePage = ({ registerMode }: Props) => {
   const router = useRouter();
   const { authState } = useAuthState();
-
+  useEffect(() => {
+    const value = sessionStorage.getItem("register");
+    if (value === null) return;
+    sessionStorage.removeItem("register");
+    router.push("/user/joined");
+  }, []);
   return (
     <>
       {authState.isLoading || !authState.isLogined ? (
