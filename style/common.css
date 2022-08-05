@@ -75,3 +75,10 @@ blockquote cite {
 .clickable-gray:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
+.breadcrumbs-link {
+  color: gray;
+  cursor: pointer;
+}
+.breadcrumbs-link:hover {
+  text-decoration: underline;
+}
