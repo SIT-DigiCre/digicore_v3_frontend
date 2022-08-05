@@ -1,6 +1,7 @@
 import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
 import { EnvJoinAPIData } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
@@ -32,6 +33,7 @@ const JoinedPage = () => {
   if (authState.isLoading || !authState.isLogined || !joinData) return <p>Loading...</p>;
   return (
     <>
+      <PageHead title="デジクリへようこそ" />
       <Container>
         <Grid>
           <h2>デジクリへようこそ</h2>

@@ -1,5 +1,6 @@
 import { GetServerSideProps } from "next";
 import MarkdownView from "../../components/Common/MarkdownView";
+import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
 import useEventDetail from "../../hook/event/useEventDetail";
 
@@ -13,6 +14,7 @@ const EventPage = ({ id, errors }: EventPageProps) => {
   if (isLoading) return <p>Loading...</p>;
   return (
     <>
+      <PageHead title={eventDetail.name} />
       <h1>{eventDetail.name}イベント予約フォーム</h1>
       <MarkdownView md={eventDetail.description} />
       {eventDetail.reservated ? <p style={{ color: "red" }}>既にあなたは予約済みです</p> : <></>}

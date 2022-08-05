@@ -2,11 +2,13 @@ import { useAuthState } from "../hook/useAuthState";
 import { Grid, Button, Container, Typography } from "@mui/material";
 import { baseURL } from "../utils/common";
 import { Google } from "@mui/icons-material";
+import PageHead from "../components/Common/PageHead";
 
 const RegisterPage = () => {
   const { authState } = useAuthState();
   return (
     <>
+      <PageHead title="登録" />
       <Container>
         <Grid>
           <h2>デジコア登録ページ</h2>

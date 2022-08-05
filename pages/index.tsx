@@ -1,11 +1,13 @@
 import { Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
+import PageHead from "../components/Common/PageHead";
 import { useAuthState } from "../hook/useAuthState";
 
 const IndexPage = () => {
   const { authState } = useAuthState();
   return (
     <Container>
+      <PageHead title="Home" />
       <Grid>
         <h1>ようこそ、デジコア3.0へ</h1>
         <p>デジコア3.0は開発途上のアプリケーションです。優しい気持ちで接してみてください</p>

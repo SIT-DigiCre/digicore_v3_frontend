@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import PageHead from "../../components/Common/PageHead";
 import ProfileEditor from "../../components/Profile/ProfileEditor";
 import ProfileRegister from "../../components/Profile/ProfileRegister";
 import { useAuthState } from "../../hook/useAuthState";
@@ -20,6 +21,7 @@ const ProfilePage = ({ registerMode }: Props) => {
   }, []);
   return (
     <>
+      <PageHead title="Profile編集" />
       {authState.isLoading || !authState.isLogined ? (
         <p>Loading...</p>
       ) : (

@@ -1,6 +1,7 @@
 import { Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
 
 const ContinuedPage = () => {
@@ -10,6 +11,7 @@ const ContinuedPage = () => {
   if (!authState.isLogined) router.push("/login");
   return (
     <>
+      <PageHead title="継続完了" />
       <Container>
         <Grid>
           <h2>継続処理完了</h2>

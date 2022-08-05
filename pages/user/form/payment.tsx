@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { ChangeEventHandler, useState } from "react";
+import PageHead from "../../../components/Common/PageHead";
 import { useAuthState } from "../../../hook/useAuthState";
 import { usePaymentState } from "../../../hook/usePaymentState";
 const PaymentPage = () => {
@@ -49,6 +50,7 @@ const PaymentPage = () => {
   };
   return (
     <>
+      <PageHead title="部費振込完了報告" />
       <Container>
         <Grid>
           <h2>部費振り込み完了報告フォーム</h2>
