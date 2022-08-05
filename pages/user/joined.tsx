@@ -1,6 +1,7 @@
 import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { useAuthState } from "../../hook/useAuthState";
 import { EnvJoinAPIData } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
@@ -33,6 +34,7 @@ const JoinedPage = () => {
   return (
     <>
       <Container>
+        <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Joined" }]} />
         <Grid>
           <h2>デジクリへようこそ</h2>
           <Typography>

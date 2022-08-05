@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ProfileEditor from "../../components/Profile/ProfileEditor";
 import ProfileRegister from "../../components/Profile/ProfileRegister";
 import { useAuthState } from "../../hook/useAuthState";
@@ -18,6 +19,7 @@ const ProfilePage = ({ registerMode }: Props) => {
         <p>Loading...</p>
       ) : (
         <Container>
+          <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Profile" }]} />
           {registerMode ? <ProfileRegister registerMode={registerMode} /> : <ProfileEditor />}
         </Container>
       )}
