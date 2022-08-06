@@ -2,6 +2,7 @@ import { Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
 
 const ContinuedPage = () => {
@@ -11,6 +12,7 @@ const ContinuedPage = () => {
   if (!authState.isLogined) router.push("/login");
   return (
     <>
+      <PageHead title="継続完了" />
       <Container>
         <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Continued" }]} />
         <Grid>

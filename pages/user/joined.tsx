@@ -2,6 +2,7 @@ import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/mate
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
 import { EnvJoinAPIData } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
@@ -33,6 +34,7 @@ const JoinedPage = () => {
   if (authState.isLoading || !authState.isLogined || !joinData) return <p>Loading...</p>;
   return (
     <>
+      <PageHead title="デジクリへようこそ" />
       <Container>
         <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Joined" }]} />
         <Grid>

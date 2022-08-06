@@ -2,6 +2,7 @@ import { Container, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
+import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
 import useEventDetail from "../../hook/event/useEventDetail";
 
@@ -15,6 +16,7 @@ const EventPage = ({ id, errors }: EventPageProps) => {
   if (isLoading) return <p>Loading...</p>;
   return (
     <Container>
+      <PageHead title={eventDetail.name} />
       <Breadcrumbs
         links={[
           { text: "Home", href: "/" },
