@@ -1,3 +1,4 @@
+import PageHead from "../../components/Common/PageHead";
 import EventListItem from "../../components/Event/EventListItem";
 import { useEventList } from "../../hook/event/useEventList";
 
@@ -6,6 +7,7 @@ const EventIndexPage = () => {
   if (isLoading) return <p>Loading..</p>;
   return (
     <>
+      <PageHead title="イベント一覧" />
       <h1>イベント一覧</h1>
       {events.map((event) => (
         <EventListItem event={event} />
