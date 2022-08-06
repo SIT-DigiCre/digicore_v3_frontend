@@ -1,4 +1,6 @@
+import { Container, Typography } from "@mui/material";
 import { GetServerSideProps } from "next";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
@@ -13,8 +15,15 @@ const EventPage = ({ id, errors }: EventPageProps) => {
   if (notFound) return <p>指定されたイベントが見つかりませんでした</p>;
   if (isLoading) return <p>Loading...</p>;
   return (
-    <>
+    <Container>
       <PageHead title={eventDetail.name} />
+      <Breadcrumbs
+        links={[
+          { text: "Home", href: "/" },
+          { text: "Event", href: "/event" },
+          { text: eventDetail.name },
+        ]}
+      />
       <h1>{eventDetail.name}イベント予約フォーム</h1>
       <MarkdownView md={eventDetail.description} />
       {eventDetail.reservated ? <p style={{ color: "red" }}>既にあなたは予約済みです</p> : <></>}
@@ -32,7 +41,7 @@ const EventPage = ({ id, errors }: EventPageProps) => {
             cancelReservation={cancelReservation}
           />
         ))}
-    </>
+    </Container>
   );
 };
 

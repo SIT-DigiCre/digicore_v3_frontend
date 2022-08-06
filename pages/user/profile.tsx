@@ -1,6 +1,7 @@
 import { Container } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { useEffect } from "react";
 import PageHead from "../../components/Common/PageHead";
 import ProfileEditor from "../../components/Profile/ProfileEditor";
@@ -26,6 +27,7 @@ const ProfilePage = ({ registerMode }: Props) => {
         <p>Loading...</p>
       ) : (
         <Container>
+          <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Profile" }]} />
           {registerMode ? <ProfileRegister registerMode={registerMode} /> : <ProfileEditor />}
         </Container>
       )}

@@ -52,9 +52,24 @@ const EventReservationFrame = ({
   const onChangeUrlText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrlText(e.target.value);
   };
+  const getBackgroudColor = () => {
+    const finishDate = new Date(eventReservationFrame.finish_date);
+    const now = new Date(Date.now());
+    if (finishDate.getTime() < now.getTime()) return "darkgray";
+    if (
+      finishDate.getDate() === now.getDate() &&
+      finishDate.getMonth() === now.getMonth() &&
+      finishDate.getFullYear() === now.getFullYear()
+    )
+      return "lightgreen";
+    return "white";
+  };
   return (
     <>
-      <Card sx={{ minWidth: 275, margin: "3px" }} variant="outlined">
+      <Card
+        sx={{ minWidth: 275, margin: "3px", backgroundColor: getBackgroudColor() }}
+        variant="outlined"
+      >
         <CardContent>
           <Typography variant="h5">{eventReservationFrame.name}</Typography>
           <Typography>{eventReservationFrame.description}</Typography>
@@ -71,7 +86,10 @@ const EventReservationFrame = ({
           ) : (
             <div style={{ display: "inline-block" }}>
               {userReservations.map((userReser) => (
-                <Box key={userReser.id!} style={{ border: "black 1px solid", borderRadius: "10%" }}>
+                <Box
+                  key={userReser.id!}
+                  style={{ border: "black 1px solid", borderRadius: "5px", padding: "3px" }}
+                >
                   <h5>{userReser.name!}</h5>
                   {userReser.comment === "" ? <></> : <p>{userReser.comment}</p>}
                   {userReser.url === "" ? <></> : <a href={userReser.url}>{userReser.url}</a>}
@@ -89,6 +107,7 @@ const EventReservationFrame = ({
             <Button
               size="small"
               color="error"
+              variant="contained"
               onClick={() => {
                 cancelReservation(eventReservationFrame.id).then((res) => {
                   router.reload();
@@ -100,6 +119,7 @@ const EventReservationFrame = ({
           ) : (
             <Button
               size="small"
+              variant="contained"
               disabled={!eventReservationFrame.reservable}
               onClick={() => setShowModal(true)}
             >
