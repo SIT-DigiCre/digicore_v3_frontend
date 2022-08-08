@@ -1,66 +1,23 @@
-import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
+import { Container, Grid, Typography } from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
-import { EnvJoinAPIData } from "../../interfaces/api";
-import { axios } from "../../utils/axios";
-const JoinedPage = () => {
-  const { authState } = useAuthState();
 
-  const [joinData, setJoinData] = useState<EnvJoinAPIData>();
-  useEffect(() => {
-    if (authState.isLoading || !authState.isLogined) return;
-    axios
-      .get("/user/my/private/", {
-        headers: {
-          Authorization: "bearer " + authState.token,
-        },
-      })
-      .then((res1) => {
-        axios
-          .get("/env/join", {
-            headers: {
-              Authorization: "bearer " + authState.token,
-            },
-          })
-          .then((res) => {
-            const envJoinAPIData: EnvJoinAPIData = res.data;
-            setJoinData(envJoinAPIData);
-          });
-      });
-  }, [authState]);
-  if (authState.isLoading || !authState.isLogined || !joinData) return <p>Loading...</p>;
+const ContinuedPage = () => {
+  const { authState } = useAuthState();
+  const router = useRouter();
+  if (authState.isLoading) return <p>Loading...</p>;
+  if (!authState.isLogined) router.push("/login");
   return (
     <>
-      <PageHead title="デジクリへようこそ" />
+      <PageHead title="継続完了" />
       <Container>
-        <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Joined" }]} />
+        <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Continued" }]} />
         <Grid>
-          <h2>デジクリへようこそ</h2>
-          <Typography>
-            これで入部処理は完了です。続いてデジクリで使っているSNSの登録を行いましょう
-          </Typography>
-        </Grid>
-        <Grid>
-          <h3>Slack</h3>
-          <Typography>
-            ※かならず大学のメールアドレス（shibaura-it.ac.jp）で登録してください
-          </Typography>
-          <Button href={joinData.slack_url} variant="contained" target="_blank">
-            Slackの招待URLを開く
-          </Button>
-        </Grid>
-        <Grid>
-          <h3>Discord</h3>
-          <Typography>※かならず先ほど登録したアカウントで登録してください</Typography>
-          <Button href={joinData.discord_url} variant="contained" target="_blank">
-            Discordの招待URLを開く
-          </Button>
-          <Typography>
-            本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
-          </Typography>
+          <h2>継続処理完了</h2>
+          <Typography>これで継続処理は完了です。</Typography>
         </Grid>
         <Grid>
           <h3>部費の振込について</h3>
@@ -133,4 +90,4 @@ const JoinedPage = () => {
   );
 };
 
-export default JoinedPage;
+export default ContinuedPage;

@@ -1,9 +1,11 @@
 import { Grid, Button, Container, Box, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import { baseURL } from "../utils/common";
+import PageHead from "../components/Common/PageHead";
 const LoginPage = () => {
   return (
     <>
+      <PageHead title="Login" />
       <Container>
         <Grid item xs={12} style={{ marginTop: "30px" }}>
           <Box textAlign="center">

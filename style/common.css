@@ -2,6 +2,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Noto Sans JP";
 }
 .index_calender {
   position: relative;
@@ -65,4 +66,20 @@ blockquote cite {
   font-size: 0.8rem;
   color: darkgray;
   text-align: right;
+}
+.clickable {
+  cursor: pointer;
+}
+.clickable-gray {
+  cursor: pointer;
+}
+.clickable-gray:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+.breadcrumbs-link {
+  color: gray;
+  cursor: pointer;
+}
+.breadcrumbs-link:hover {
+  text-decoration: underline;
 }

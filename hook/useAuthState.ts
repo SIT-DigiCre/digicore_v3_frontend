@@ -4,6 +4,7 @@ import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
 import { axios } from "../utils/axios";
 import { UserProfileAPIDataResponse, convertUserFromUserProfile } from "../interfaces/api";
+import { useErrorState } from "./useErrorState";
 
 export type AuthState = {
   isLogined: boolean;
@@ -20,6 +21,7 @@ type UseAuthState = () => {
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
+  const { setNewError, removeError } = useErrorState();
   const getUserInfo = (token: string) => {
     axios
       .get("/user/my", {
@@ -28,6 +30,7 @@ export const useAuthState: UseAuthState = () => {
         },
       })
       .then((res) => {
+        if (auth.isLogined) return;
         const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
         setAuth({
           isLogined: true,
@@ -35,9 +38,11 @@ export const useAuthState: UseAuthState = () => {
           user: convertUserFromUserProfile(userProfileAPIDataResponse),
           token: token,
         });
+        removeError("autologin-fail");
       })
       .catch((err) => {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
+        setNewError({ name: "autologin-fail", message: "ログインしてください" });
       });
   };
   // ローカルストレージを削除する関数

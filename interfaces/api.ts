@@ -54,6 +54,11 @@ export type UserPrivateAPIData = {
   parent_name: string;
   phone_number: string;
 };
+
+export type UserPrivateAPIDataResponse = {
+  private_profile: UserPrivateAPIData;
+  error: string;
+};
 export const convertUserPrivateFromUser: (user: User) => UserPrivateAPIData = (user) => {
   const userPrivate: UserPrivateAPIData = {
     address: user.address,
@@ -75,4 +80,36 @@ export const convertUserPrivateFromUser: (user: User) => UserPrivateAPIData = (u
 export type EnvJoinAPIData = {
   slack_url: string;
   discord_url: string;
+};
+
+//部費支払い情報取得時の型
+export type PaymentAPIData = {
+  year: number;
+  transfer_name: string;
+  checked: boolean;
+  created_at?: Date;
+  updated_at?: Date;
+};
+
+export type GetPaymentAPIData = {
+  payment: PaymentAPIData;
+  error: string;
+};
+
+export type GetPaymentHistoryAPIData = {
+  payments: PaymentAPIData[];
+  error: string;
+};
+
+export type GroupAPIData = {
+  id: string;
+  name: string;
+  description: string;
+  join: boolean;
+  joined: boolean;
+};
+
+export type GroupsAPIData = {
+  groups: GroupAPIData[];
+  error?: string;
 };

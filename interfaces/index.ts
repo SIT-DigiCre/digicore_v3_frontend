@@ -19,3 +19,9 @@ export type User = {
   self_introduction?: string;
   shortSelfIntroduction?: string;
 };
+
+export type ErrorState = {
+  name: string;
+  count?: number;
+  message: string;
+};
