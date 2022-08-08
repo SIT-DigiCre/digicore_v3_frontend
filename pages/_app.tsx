@@ -10,16 +10,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useDarkMode } from "../hook/useDarkMode";
 
 const App = ({ Component, pageProps }) => {
-  const { isDarkMode } = useDarkMode();
-  const theme = useMemo(
-    () =>
-      createTheme({
-        palette: {
-          mode: isDarkMode ? "dark" : "light",
-        },
-      }),
-    [isDarkMode],
-  );
   return (
     <RecoilRoot>
       <Head>
@@ -31,14 +21,29 @@ const App = ({ Component, pageProps }) => {
           rel="stylesheet"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <NavBar />
-        <ErrorView />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <AppRoot Component={Component} pageProps={pageProps} />
     </RecoilRoot>
   );
 };
 
+const AppRoot = ({ Component, pageProps }) => {
+  const { isDarkMode } = useDarkMode();
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: isDarkMode ? "dark" : "light",
+        },
+      }),
+    [isDarkMode],
+  );
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <NavBar />
+      <ErrorView />
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
+};
 export default App;

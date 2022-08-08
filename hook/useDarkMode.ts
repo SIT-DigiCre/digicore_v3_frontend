@@ -1,6 +1,6 @@
 import { KeyboardReturnOutlined } from "@mui/icons-material";
 import { useMediaQuery } from "@mui/material";
-import { useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
 import { darkModeState } from "../atom/userAtom";
 import { DarkMode } from "../interfaces";
@@ -8,22 +8,26 @@ import { DarkMode } from "../interfaces";
 type UseDarkMode = () => {
   isDarkMode: boolean;
   setDarkMode: (mode: DarkMode) => void;
+  currentMode: DarkMode;
 };
 export const useDarkMode: UseDarkMode = () => {
   const [darkModeValue, setDarkModeValue] = useRecoilState(darkModeState);
   useEffect(() => {
-    const localMode = localStorage.getItem("darkmode");
-    if (!localMode) return;
-    setDarkModeValue(localMode as DarkMode);
+    try {
+      const localMode = localStorage.getItem("darkmode");
+      if (localMode == null || localMode === "") return;
+      setDarkModeValue(localMode as DarkMode);
+    } catch (err: any) {}
   }, []);
   const setDarkMode = (mode: DarkMode) => {
-    setDarkMode(mode);
+    if (mode == darkModeValue) return;
+    setDarkModeValue(mode);
     localStorage.setItem("darkmode", mode);
   };
+  const osSetting = useMediaQuery("(prefers-color-scheme: dark)");
   return {
-    isDarkMode:
-      (darkModeValue === "os" ? useMediaQuery("(prefers-color-scheme: dark)") : darkModeValue) ===
-      "dark",
+    isDarkMode: darkModeValue === "os" ? osSetting : darkModeValue === "dark",
     setDarkMode: setDarkMode,
+    currentMode: darkModeValue,
   };
 };
