@@ -5,6 +5,7 @@ import Link from "next/link";
 import EventIcon from "@mui/icons-material/Event";
 import HomeIcon from "@mui/icons-material/Home";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import SettingsIcon from "@mui/icons-material/Settings";
 import { useRouter } from "next/router";
 import AppMenuButton from "./AppMenuButton";
 import { useAuthState } from "../../hook/useAuthState";
@@ -72,6 +73,13 @@ export default function AppMenu() {
                 name="Event"
                 onClick={() => {
                   onClickMenuApp("/event");
+                }}
+              />
+              <AppMenuButton
+                icon={<SettingsIcon />}
+                name="Setting"
+                onClick={() => {
+                  onClickMenuApp("/setting");
                 }}
               />
             </>
