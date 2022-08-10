@@ -1,5 +1,5 @@
 import { Grid, Button, TextField } from "@mui/material";
-import { ChangeEventHandler, useState, useRef } from "react";
+import { ChangeEventHandler, useState, useRef, useEffect } from "react";
 import MarkdownView from "./MarkdownView";
 
 type MarkdownEditorProps = {
@@ -25,9 +25,13 @@ const markdownEditorActionBtns: MarkdownEditorActionBtn[] = [
 const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   const textFieldElement = useRef<HTMLTextAreaElement>(null);
   const mdPreviewDivElement = useRef<HTMLDivElement>(null);
-  const [md, setMd] = useState(value);
+  const [md, setMd] = useState("");
+  useEffect(() => {
+    setMd(value);
+  }, [value]);
   const onChangeMd: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setMd(e.target.value);
+    onChange(e.target.value);
   };
   const onScrollTextField = () => {
     mdPreviewDivElement.current.scrollTop =

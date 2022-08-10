@@ -1,8 +1,10 @@
 import { Button, Container, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useProfile } from "../../hook/profile/useProfile";
 import { UserProfileAPIData } from "../../interfaces/api";
 import { baseURL, objectEquals } from "../../utils/common";
+import MarkdownEditor from "../Common/MarkdownEditor";
 import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
@@ -11,8 +13,12 @@ const ProfileEditor = () => {
   useEffect(() => {
     setEditUserProfile(userProfile);
   }, [userProfile]);
-  if (!userProfile || !editUserProfile) return <p>isLoading...</p>;
-
+  const [userIntro, updateIntro] = useMyIntroduction();
+  const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
+  useEffect(() => {
+    setEditUserIntro({ md: (" " + userIntro).slice(1) });
+  }, [userIntro]);
+  if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
   return (
     <>
       <Grid sx={{ mb: 3 }}>
@@ -60,6 +66,24 @@ const ProfileEditor = () => {
           <h2>Discord連携</h2>
           <Button href={baseURL + "/discord/oauth/url"} variant="contained">
             {userProfile.discord_userid == "" ? "Discord連携" : "Discord再連携"}
+          </Button>
+        </Grid>
+        <Grid>
+          <h2>自己紹介ページ文章</h2>
+          <MarkdownEditor
+            value={editUserIntro.md}
+            onChange={(e) => {
+              setEditUserIntro({ md: e });
+            }}
+          />
+          <Button
+            variant="contained"
+            disabled={userIntro === editUserIntro.md}
+            onClick={() => {
+              updateIntro(editUserIntro.md);
+            }}
+          >
+            保存
           </Button>
         </Grid>
       </Grid>

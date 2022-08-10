@@ -16,7 +16,6 @@ export const usePrivateProfile: UsePrivateProfile = () => {
   useEffect(() => {
     (async () => {
       if (!authState.isLogined) return;
-      console.log("@@!!");
       try {
         const res = await axios.get(`/user/my/private/`, {
           headers: {
@@ -24,9 +23,7 @@ export const usePrivateProfile: UsePrivateProfile = () => {
           },
         });
         const userProfileAPIDataResponse: UserPrivateAPIDataResponse = res.data;
-        console.log(userProfileAPIDataResponse);
         setProfile(userProfileAPIDataResponse.private_profile);
-        console.log("SET!");
         removeError("privateprofile-get-fail");
       } catch (err: any) {
         setNewError({
@@ -54,7 +51,5 @@ export const usePrivateProfile: UsePrivateProfile = () => {
       return false;
     }
   };
-  console.log("hook update!");
-  console.log(profile);
   return [profile, update];
 };
