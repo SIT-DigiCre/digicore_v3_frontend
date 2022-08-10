@@ -25,3 +25,5 @@ export type ErrorState = {
   count?: number;
   message: string;
 };
+
+export type DarkMode = "dark" | "light" | "os";

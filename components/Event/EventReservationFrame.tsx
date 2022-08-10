@@ -11,6 +11,7 @@ import {
 import { useRouter } from "next/router";
 import { ChangeEventHandler, useState } from "react";
 import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
+import { useDarkMode } from "../../hook/useDarkMode";
 import { DigicreEventReservationFrame } from "../../interfaces/event";
 import { getTimeSpanText } from "../../utils/date-util";
 
@@ -52,6 +53,7 @@ const EventReservationFrame = ({
   const onChangeUrlText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrlText(e.target.value);
   };
+  const { isDarkMode } = useDarkMode();
   const getBackgroudColor = () => {
     const finishDate = new Date(eventReservationFrame.finish_date);
     const now = new Date(Date.now());
@@ -61,8 +63,8 @@ const EventReservationFrame = ({
       finishDate.getMonth() === now.getMonth() &&
       finishDate.getFullYear() === now.getFullYear()
     )
-      return "lightgreen";
-    return "white";
+      return isDarkMode ? "green" : "lightgreen";
+    return "none";
   };
   return (
     <>
