@@ -14,12 +14,11 @@ const ProfileEditor = () => {
     setEditUserProfile(userProfile);
   }, [userProfile]);
   const [userIntro, updateIntro] = useMyIntroduction();
-  const [editUserIntro, setEditUserIntro] = useState(userIntro);
+  const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
   useEffect(() => {
-    setEditUserIntro(userIntro);
+    setEditUserIntro({ md: (" " + userIntro).slice(1) });
   }, [userIntro]);
-  if (!userProfile || !editUserProfile || !userIntro || !editUserIntro) return <p>isLoading...</p>;
-
+  if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
   return (
     <>
       <Grid sx={{ mb: 3 }}>
@@ -72,16 +71,16 @@ const ProfileEditor = () => {
         <Grid>
           <h2>自己紹介ページ文章</h2>
           <MarkdownEditor
-            value={editUserIntro}
+            value={editUserIntro.md}
             onChange={(e) => {
-              setEditUserIntro(e);
+              setEditUserIntro({ md: e });
             }}
           />
           <Button
             variant="contained"
-            disabled={userIntro === editUserIntro}
+            disabled={userIntro === editUserIntro.md}
             onClick={() => {
-              updateIntro(editUserIntro);
+              updateIntro(editUserIntro.md);
             }}
           >
             保存

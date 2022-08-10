@@ -8,7 +8,7 @@ type UseMyIntroduction = () => [
   updateIntroduction: (md: string) => Promise<boolean>,
 ];
 export const useMyIntroduction: UseMyIntroduction = () => {
-  const [md, setMd] = useState<string>();
+  const [md, setMd] = useState<string>("");
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   useEffect(() => {
