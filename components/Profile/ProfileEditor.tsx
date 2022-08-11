@@ -1,14 +1,14 @@
 import { Button, Container, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
-import { useProfile } from "../../hook/profile/useProfile";
+import { useMyProfile } from "../../hook/profile/useProfile";
 import { UserProfileAPIData } from "../../interfaces/api";
 import { baseURL, objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
 import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
-  const [userProfile, updateProfile] = useProfile();
+  const [userProfile, updateProfile] = useMyProfile();
   const [editUserProfile, setEditUserProfile] = useState<UserProfileAPIData>(userProfile);
   useEffect(() => {
     setEditUserProfile(userProfile);

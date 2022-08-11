@@ -4,9 +4,9 @@ import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 import { axios } from "../../utils/axios";
 
-type UseProfile = () => [UserProfileAPIData, (profile: UserProfileAPIData) => Promise<boolean>];
+type UseMyProfile = () => [UserProfileAPIData, (profile: UserProfileAPIData) => Promise<boolean>];
 
-export const useProfile: UseProfile = () => {
+export const useMyProfile: UseMyProfile = () => {
   const [profile, setProfile] = useState<UserProfileAPIData>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
