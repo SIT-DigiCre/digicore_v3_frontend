@@ -44,3 +44,29 @@ export const useMyProfile: UseMyProfile = () => {
   };
   return [profile, update];
 };
+
+type UseProfile = (id: string) => UserProfileAPIData;
+
+export const useProfile: UseProfile = (id: string) => {
+  const [profile, setProfile] = useState<UserProfileAPIData>();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  useEffect(() => {
+    (async () => {
+      if (!authState.isLogined) return;
+      try {
+        const res = await axios.get(`/user/${id}`, {
+          headers: {
+            Authorization: "bearer " + authState.token,
+          },
+        });
+        const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
+        setProfile(userProfileAPIDataResponse.profile);
+        removeError("profile-get-fail");
+      } catch (err: any) {
+        setNewError({ name: "profile-get-fail", message: "ユーザー情報の取得に失敗しました" });
+      }
+    })();
+  }, [authState]);
+  return profile;
+};
