@@ -81,3 +81,10 @@ GitHub の`Reviewers`の歯車ボタンをクリックしてレビュ依頼を�
 ![レビュワー指定](./doc/pic/pr-reviewer.png)
 
 ### Slack で報告
+
+GitHub の通知だけでは気づきにくいので、Slack の`#digicore-develop`チャンネルにてメンション付きでレビュー依頼を PR の URL 付きで送りましょう。
+
+### Approve されたら
+
+Approve されたら PR 内の Merge ボタンを押し、Merge を実行します。Merge されたら Delete branch ボタンで対象のブランチを削除しましょう。
+これで一連の作業は終わりです。
