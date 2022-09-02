@@ -83,3 +83,6 @@ blockquote cite {
 .breadcrumbs-link:hover {
   text-decoration: underline;
 }
+a {
+  color: rgb(117, 201, 230);
+}
