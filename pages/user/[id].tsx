@@ -31,13 +31,13 @@ const UserProfilePage = ({ id, error }: Props) => {
           />
         </div>
         <div style={{ display: "inline-block", width: "70%", textAlign: "center" }}>
-          <div>
+          <div style={{ margin: "20px" }}>
             <h1>{profile.username}</h1>
           </div>
-          <div>
+          <div style={{ margin: "20px" }}>
             <p>{profile.short_self_introduction}</p>
           </div>
-          <div>
+          <div style={{ margin: "20px" }}>
             <p>学年: {profile.school_grade}</p>
           </div>
         </div>
