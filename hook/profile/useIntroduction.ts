@@ -59,3 +59,36 @@ export const useMyIntroduction: UseMyIntroduction = () => {
   };
   return [md, update];
 };
+
+type UseIntroduction = (userId: string) => string;
+
+export const useIntroduction: UseIntroduction = (userId) => {
+  const [md, setMd] = useState<string>("");
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  useEffect(() => {
+    (async () => {
+      if (!authState.isLogined) return;
+      try {
+        const res = await axios.get(`/user/${userId}/introduction`, {
+          headers: {
+            Authorization: "bearer " + authState.token,
+          },
+        });
+        const userIntroductionAPIDataResponse: {
+          self_introduction?: { self_introduction: string };
+          error?: string;
+        } = res.data;
+        if (userIntroductionAPIDataResponse.self_introduction) {
+          setMd(userIntroductionAPIDataResponse.self_introduction.self_introduction);
+          removeError("introduction-get-fail");
+        } else {
+          throw "API Error";
+        }
+      } catch (err: any) {
+        setNewError({ name: "introduction-get-fail", message: "自己紹介情報の取得に失敗しました" });
+      }
+    })();
+  }, [authState]);
+  return md;
+};

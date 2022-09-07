@@ -4,9 +4,9 @@ import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 import { axios } from "../../utils/axios";
 
-type UseProfile = () => [UserProfileAPIData, (profile: UserProfileAPIData) => Promise<boolean>];
+type UseMyProfile = () => [UserProfileAPIData, (profile: UserProfileAPIData) => Promise<boolean>];
 
-export const useProfile: UseProfile = () => {
+export const useMyProfile: UseMyProfile = () => {
   const [profile, setProfile] = useState<UserProfileAPIData>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
@@ -43,4 +43,30 @@ export const useProfile: UseProfile = () => {
     }
   };
   return [profile, update];
+};
+
+type UseProfile = (id: string) => UserProfileAPIData;
+
+export const useProfile: UseProfile = (id: string) => {
+  const [profile, setProfile] = useState<UserProfileAPIData>();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  useEffect(() => {
+    (async () => {
+      if (!authState.isLogined) return;
+      try {
+        const res = await axios.get(`/user/${id}`, {
+          headers: {
+            Authorization: "bearer " + authState.token,
+          },
+        });
+        const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
+        setProfile(userProfileAPIDataResponse.profile);
+        removeError("profile-get-fail");
+      } catch (err: any) {
+        setNewError({ name: "profile-get-fail", message: "ユーザー情報の取得に失敗しました" });
+      }
+    })();
+  }, [authState]);
+  return profile;
 };
