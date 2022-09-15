@@ -1,5 +1,7 @@
 import { Grid, Button, TextField } from "@mui/material";
 import { ChangeEventHandler, useState, useRef, useEffect } from "react";
+import { FileObject } from "../../interfaces/file";
+import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownView from "./MarkdownView";
 
 type MarkdownEditorProps = {
@@ -45,6 +47,12 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
     setMd(newText);
     setSelectStart(selectStart + midText.length);
   };
+  const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
+  const onFileSelected = (file: FileObject) => {
+    console.log(file);
+    setIsOpenFileBrowser(false);
+    insertText(`![${file.name}](${file.url})`, true);
+  };
   return (
     <>
       <Grid container>
@@ -58,6 +66,22 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               {btn.title}
             </Button>
           ))}
+          <Button
+            onClick={() => {
+              setIsOpenFileBrowser(true);
+            }}
+            variant="contained"
+            sx={{ marginRight: "0.5rem" }}
+          >
+            画像
+          </Button>
+          <FileBrowserModal
+            open={isOpenFileBrowser}
+            onCancel={() => {
+              setIsOpenFileBrowser(false);
+            }}
+            onSelected={onFileSelected}
+          />
         </Grid>
         <Grid item xs={6}>
           <Grid>

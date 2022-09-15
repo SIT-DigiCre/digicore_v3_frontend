@@ -45,7 +45,7 @@ export const FileUploader = ({ open, onCancel, onUploaded }: FileUploaderProps) 
     (async () => {
       const file = e.target.files[0];
       const fileName = file.name;
-      const base64 = await getBase64(file);
+      const base64 = (await getBase64(file)).split(",")[1];
       const fileObject = await uploadFile({ name: fileName, file: base64, is_public: true });
       onUploaded(fileObject);
       setIsOpen(false);

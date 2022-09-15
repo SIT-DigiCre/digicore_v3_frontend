@@ -30,6 +30,7 @@ export const FileBrowserModal = ({ open, onCancel, onSelected }: FileBrowserModa
     onCancel();
   };
   const onClickListItem = (file: FileObject) => {
+    if (!file) return;
     onSelected(file);
     setIsOpen(false);
   };
@@ -43,11 +44,15 @@ export const FileBrowserModal = ({ open, onCancel, onSelected }: FileBrowserModa
         <Box sx={style}>
           <h2>ファイルを選択</h2>
           <div style={{ overflowY: "auto", height: "400px" }}>
-            <List>
-              {myFileIds.map((fId) => (
-                <FileListItem fileId={fId} onClick={onClickListItem} key={fId} />
-              ))}
-            </List>
+            {myFileIds ? (
+              <List>
+                {myFileIds.map((fId) => (
+                  <FileListItem fileId={fId} onClick={onClickListItem} key={fId} />
+                ))}
+              </List>
+            ) : (
+              <p>Loading...</p>
+            )}
           </div>
           <div>
             <Button variant="contained" color="error" onClick={onClickCancel}>
