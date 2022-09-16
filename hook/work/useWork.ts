@@ -71,10 +71,11 @@ export const useWorks: UseWorks = () => {
         },
       });
       removeError("work-post-fail");
+      return res.data.id;
     } catch (e: any) {
       setNewError({ name: "work-post-fail", message: "Workの投稿に失敗しました" });
+      return "error";
     }
-    return "";
   };
   return {
     works: works,
