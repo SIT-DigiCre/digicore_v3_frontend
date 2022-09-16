@@ -1,8 +1,9 @@
-import { Button, Card, CardHeader, Container, Fab, Grid } from "@mui/material";
+import { Button, Card, CardContent, CardHeader, Container, Fab, Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import { useWorks } from "../../hook/work/useWork";
 import AddIcon from "@mui/icons-material/Add";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import ChipList from "../../components/Common/ChipList";
 
 const WorkIndexPage = () => {
   const { works, loadMore } = useWorks();
@@ -21,10 +22,13 @@ const WorkIndexPage = () => {
             onClick={() => {
               router.push(`/work/${w.id}`);
             }}
-            className="clickable"
+            className="clickable-gray"
             key={w.id}
           >
             <CardHeader title={w.name}></CardHeader>
+            <CardContent>
+              <ChipList chipList={w.tags.map((t) => t.name)} />
+            </CardContent>
           </Card>
         ))}
       </Grid>
