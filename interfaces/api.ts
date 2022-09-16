@@ -124,3 +124,23 @@ export type UsersAPIData = {
   profiles: UserProfileLite[];
   error?: string;
 };
+
+// file
+
+export type FileGetResponse = {
+  id: string;
+  user_id: string;
+  name: string;
+  k_size: string;
+  extension: string;
+  is_public: boolean;
+  created_at: string;
+  update_at: string;
+  url: string;
+};
+
+export type UploadFile = {
+  name: string;
+  file: string;
+  is_public: boolean;
+};
