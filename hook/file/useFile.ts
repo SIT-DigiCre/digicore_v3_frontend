@@ -34,7 +34,7 @@ export const useFile: UseFile = (fileId) => {
 
 type UseMyFiles = () => {
   myFileIds: string[];
-  uploadFile: (file: UploadFile) => Promise<FileObject | undefined>;
+  uploadFile: (file: UploadFile) => Promise<FileObject | string>;
 };
 
 export const useMyFiles: UseMyFiles = () => {
@@ -61,7 +61,7 @@ export const useMyFiles: UseMyFiles = () => {
       }
     })();
   }, [authState]);
-  const upload = async (file: UploadFile): Promise<FileObject | undefined> => {
+  const upload = async (file: UploadFile): Promise<FileObject | string> => {
     try {
       const res = await axios.post(`/storage`, file, {
         headers: {
@@ -83,7 +83,7 @@ export const useMyFiles: UseMyFiles = () => {
         name: "myfileobject-post-fail",
         message: "ファイルのアップロードに失敗しました",
       });
-      return undefined;
+      return e.response.data.error || e.message;
     }
   };
 
