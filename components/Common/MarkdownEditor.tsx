@@ -81,6 +81,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               setIsOpenFileBrowser(false);
             }}
             onSelected={onFileSelected}
+            onlyFileKind="image"
           />
         </Grid>
         <Grid item xs={6}>

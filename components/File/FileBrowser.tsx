@@ -10,13 +10,14 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useFile, useMyFiles } from "../../hook/file/useFile";
-import { FileObject, getFileKind } from "../../interfaces/file";
+import { FileKind, FileObject, getFileKind } from "../../interfaces/file";
 import FileKindIcon from "./FileKindIcon";
 import { FileUploader } from "./FileUploader";
 type FileBrowserModalProps = {
   open: boolean;
   onCancel: () => void;
   onSelected: (file: FileObject) => void;
+  onlyFileKind?: FileKind;
 };
 const style = {
   position: "absolute" as "absolute",
@@ -29,20 +30,29 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-export const FileBrowserModal = ({ open, onCancel, onSelected }: FileBrowserModalProps) => {
+export const FileBrowserModal = ({
+  open,
+  onCancel,
+  onSelected,
+  onlyFileKind,
+}: FileBrowserModalProps) => {
   const [isOpen, setIsOpen] = useState(open);
   useEffect(() => {
     setIsOpen(open);
+    reloadMyFileIds();
   }, [open]);
-  const { myFileIds } = useMyFiles();
+  const { myFileIds, reloadMyFileIds } = useMyFiles();
   const onClickCancel = () => {
     setIsOpen(false);
     onCancel();
   };
   const onClickListItem = (file: FileObject) => {
     if (!file) return;
+    if (getFileKind(file.extension) !== onlyFileKind) return;
     onSelected(file);
     setIsOpen(false);
+    setIsUploadModalOpen(false);
+    reloadMyFileIds();
   };
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const onClickUpload = () => {
@@ -57,7 +67,12 @@ export const FileBrowserModal = ({ open, onCancel, onSelected }: FileBrowserModa
             {myFileIds ? (
               <List>
                 {myFileIds.map((fId) => (
-                  <FileListItem fileId={fId} onClick={onClickListItem} key={fId} />
+                  <FileListItem
+                    fileId={fId}
+                    onClick={onClickListItem}
+                    onlyFileKind={onlyFileKind}
+                    key={fId}
+                  />
                 ))}
               </List>
             ) : (
@@ -86,16 +101,22 @@ export const FileBrowserModal = ({ open, onCancel, onSelected }: FileBrowserModa
 };
 type FileListItemProps = {
   fileId: string;
+  onlyFileKind: FileKind;
   onClick: (file: FileObject) => void;
 };
-const FileListItem = ({ fileId, onClick }: FileListItemProps) => {
+const FileListItem = ({ fileId, onClick, onlyFileKind }: FileListItemProps) => {
   const file = useFile(fileId);
+  const getDisable = (fk: FileKind, fo: FileObject) => {
+    if (!fk) return false;
+    return fo ? getFileKind(fo.extension) !== onlyFileKind : true;
+  };
   return (
     <ListItemButton
       onClick={() => {
         if (!file) return;
         onClick(file);
       }}
+      disabled={getDisable(onlyFileKind, file)}
     >
       {file ? (
         <>
