@@ -46,10 +46,10 @@ const AppRoot = ({ Component, pageProps }) => {
       <footer style={{ textAlign: "center" }}>
         <Typography>
           <a href="https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-licensing-agreement-for-icons8">
-            Icon8 License
+            Icons8 License
           </a>
         </Typography>
-        <Typography>©デジクリ/2022</Typography>
+        <Typography>&copy;デジクリ/2022</Typography>
       </footer>
     </ThemeProvider>
   );
