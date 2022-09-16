@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Work, WorkDetail } from "../../interfaces/work";
+import { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
@@ -13,7 +13,7 @@ export const useWork: UseWork = (workId) => {
     (async () => {
       if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/work/${workId}`, {
+        const res = await axios.get(`/work/work/${workId}`, {
           headers: {
             Authorization: "bearer " + authState.token,
           },
@@ -32,31 +32,48 @@ export const useWork: UseWork = (workId) => {
 type UseWorks = () => {
   works: Work[];
   loadMore: () => void;
-  createWork: () => Promise<string>;
+  createWork: (workRequest: WorkRequest) => Promise<string>;
 };
 
 export const useWorks: UseWorks = () => {
-  const [works, setWorks] = useState<Work[]>();
+  const [works, setWorks] = useState<Work[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+  const [pageNum, setPageNum] = useState(0);
+  const loadWork = async (n: number) => {
+    if (!authState.isLogined) return;
+    try {
+      const res = await axios.get(`/work/work?pages=${n}`, {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      });
+      const newWorks: Work[] = res.data.works;
+      setWorks(works.concat(newWorks));
+      removeError("works-get-fail");
+      setPageNum(n);
+    } catch (e: any) {
+      setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
+    }
+  };
   useEffect(() => {
-    (async () => {
-      if (!authState.isLogined) return;
-      try {
-        const res = await axios.get(`/work`, {
-          headers: {
-            Authorization: "bearer " + authState.token,
-          },
-        });
-        const workDetail: WorkDetail = res.data;
-        removeError("workdetail-get-fail");
-      } catch (e: any) {
-        setNewError({ name: "workdetail-get-fail", message: "ファイルの取得に失敗しました" });
-      }
-    })();
+    loadWork(pageNum + 1);
   }, [authState]);
-  const loadMore = () => {};
-  const createWork = async (): Promise<string> => {
+  const loadMore = () => {
+    loadWork(pageNum + 1);
+  };
+  const createWork = async (workRequest: WorkRequest): Promise<string> => {
+    if (!authState.isLogined) return "ログインしてください";
+    try {
+      const res = await axios.post(`/work/work`, workRequest, {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      });
+      removeError("work-post-fail");
+    } catch (e: any) {
+      setNewError({ name: "work-post-fail", message: "Workの投稿に失敗しました" });
+    }
     return "";
   };
   return {

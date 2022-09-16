@@ -22,3 +22,10 @@ export type WorkDetail = Work & {
   files: WorkFile[];
 };
 export type WorkTagDetail = WorkTag & {};
+export type WorkRequest = {
+  name: string;
+  description: string;
+  authers: string[];
+  tags: string[];
+  files: string[];
+};
