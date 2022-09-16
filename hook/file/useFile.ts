@@ -35,31 +35,33 @@ export const useFile: UseFile = (fileId) => {
 type UseMyFiles = () => {
   myFileIds: string[];
   uploadFile: (file: UploadFile) => Promise<FileObject | string>;
+  reloadMyFileIds: () => Promise<void>;
 };
 
 export const useMyFiles: UseMyFiles = () => {
   const [fileIds, setFileIds] = useState<string[]>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+  const loadFiles = async () => {
+    if (!authState.isLogined) return;
+    try {
+      const res = await axios.get(`/storage`, {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      });
+      const fileRes: { file_ids: string[] } = res.data;
+      setFileIds(fileRes.file_ids);
+      removeError("myfileobjects-get-fail");
+    } catch (e: any) {
+      setNewError({
+        name: "myfileobjects-get-fail",
+        message: "個人ファイル一覧の取得に失敗しました",
+      });
+    }
+  };
   useEffect(() => {
-    (async () => {
-      if (!authState.isLogined) return;
-      try {
-        const res = await axios.get(`/storage`, {
-          headers: {
-            Authorization: "bearer " + authState.token,
-          },
-        });
-        const fileRes: { file_ids: string[] } = res.data;
-        setFileIds(fileRes.file_ids);
-        removeError("myfileobjects-get-fail");
-      } catch (e: any) {
-        setNewError({
-          name: "myfileobjects-get-fail",
-          message: "個人ファイル一覧の取得に失敗しました",
-        });
-      }
-    })();
+    loadFiles();
   }, [authState]);
   const upload = async (file: UploadFile): Promise<FileObject | string> => {
     try {
@@ -90,5 +92,6 @@ export const useMyFiles: UseMyFiles = () => {
   return {
     myFileIds: fileIds,
     uploadFile: upload,
+    reloadMyFileIds: loadFiles,
   };
 };
