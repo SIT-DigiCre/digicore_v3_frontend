@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import AppMenuButton from "./AppMenuButton";
 import { useAuthState } from "../../hook/useAuthState";
 import LoginIcon from "@mui/icons-material/Login";
-import WorkIcon from "@mui/icons-material/Work";
+import InventoryIcon from "@mui/icons-material/Inventory";
 
 const appMenuStyle = {
   position: "absolute" as "absolute",
@@ -92,7 +92,7 @@ export default function AppMenu() {
                 }}
               />
               <AppMenuButton
-                icon={<WorkIcon />}
+                icon={<InventoryIcon />}
                 name="Works"
                 onClick={() => {
                   onClickMenuApp("/work");
