@@ -1,7 +1,17 @@
-import { Modal, Box, Button, List, ListItem, ListItemText, ListItemButton } from "@mui/material";
+import {
+  Modal,
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemButton,
+  ListItemIcon,
+} from "@mui/material";
 import { useEffect, useState } from "react";
 import { useFile, useMyFiles } from "../../hook/file/useFile";
-import { FileObject } from "../../interfaces/file";
+import { FileObject, getFileKind } from "../../interfaces/file";
+import FileKindIcon from "./FileKindIcon";
 import { FileUploader } from "./FileUploader";
 type FileBrowserModalProps = {
   open: boolean;
@@ -87,7 +97,21 @@ const FileListItem = ({ fileId, onClick }: FileListItemProps) => {
         onClick(file);
       }}
     >
-      <ListItemText>{file ? file.name + file.extension : "Loading..."}</ListItemText>
+      {file ? (
+        <>
+          {getFileKind(file.extension) === "image" ? (
+            <img src={file.url} alt="" style={{ height: "100px" }} />
+          ) : (
+            <ListItemIcon>
+              <FileKindIcon kind={getFileKind(file.extension)} />
+            </ListItemIcon>
+          )}
+        </>
+      ) : (
+        <></>
+      )}
+
+      <ListItemText>{file ? file.name : "Loading..."}</ListItemText>
     </ListItemButton>
   );
 };
