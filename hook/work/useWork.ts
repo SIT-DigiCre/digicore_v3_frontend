@@ -1,4 +1,4 @@
-import axios from "axios";
+import { axios } from "../../utils/axios";
 import { useEffect, useState } from "react";
 import { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 import { useAuthState } from "../useAuthState";
@@ -43,7 +43,7 @@ export const useWorks: UseWorks = () => {
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
     try {
-      const res = await axios.get(`/work/work?pages=${n}`, {
+      const res = await axios.get(`/work/work/?pages=${n}`, {
         headers: {
           Authorization: "bearer " + authState.token,
         },
@@ -57,10 +57,10 @@ export const useWorks: UseWorks = () => {
     }
   };
   useEffect(() => {
-    loadWork(pageNum + 1);
+    loadWork(0);
   }, [authState]);
   const loadMore = () => {
-    loadWork(pageNum + 1);
+    loadWork(pageNum + 100);
   };
   const createWork = async (workRequest: WorkRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
