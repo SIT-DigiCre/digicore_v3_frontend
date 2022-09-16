@@ -48,7 +48,7 @@ export const FileBrowserModal = ({
   };
   const onClickListItem = (file: FileObject) => {
     if (!file) return;
-    if (getFileKind(file.extension) !== onlyFileKind) return;
+    if (onlyFileKind && getFileKind(file.extension) !== onlyFileKind) return;
     onSelected(file);
     setIsOpen(false);
     setIsUploadModalOpen(false);
