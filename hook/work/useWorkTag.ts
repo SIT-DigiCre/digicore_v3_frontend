@@ -31,6 +31,10 @@ export const useWorkTags = () => {
     })();
   }, [authState, tagUpdate]);
   const createTag = (name: string, description: string) => {
+    if (name.length === 0) {
+      setNewError({ name: "work-tag-create-fail", message: "タグ名を入力してください" });
+      return;
+    }
     (async () => {
       try {
         await axios.post("/work/tag", { name: name, description: description }, {
