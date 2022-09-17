@@ -7,7 +7,7 @@ import { WorkTagUpdate } from "../../../interfaces/work";
 const WorkTagIndexPage = () => {
   const [createModal, setCreateModal] = useState(false);
   const [newTag, setNewTag] = useState<WorkTagUpdate>({ name: "", description: "" });
-  const { workTags, createWorkTag } = useWorkTags();
+  const { workTags, createWorkTag, deleteWorkTag } = useWorkTags();
   const editTag = () => {};
 
   return (
@@ -20,10 +20,11 @@ const WorkTagIndexPage = () => {
         </div>
         <div>
           {workTags.map((WorkTag) => (
-            <TagRow tagId={WorkTag.id} />
+            <TagRow tagId={WorkTag.id} deleteWorkTag={deleteWorkTag} />
           ))}
         </div>
       </div>
+
       <Modal open={createModal}>
         <Box style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
           <Box sx={{bgcolor: "background.paper", p: 4}}>

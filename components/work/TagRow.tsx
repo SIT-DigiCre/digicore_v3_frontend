@@ -4,9 +4,10 @@ import { useWorkTagDetail } from "../../hook/work/useWorkTag";
 
 type Props = {
   tagId: string;
+  deleteWorkTag: (tagId: string) => void;
 };
 
-const TagRow = ({ tagId }: Props) => {
+const TagRow = ({ tagId, deleteWorkTag }: Props) => {
   const tagDetail = useWorkTagDetail(tagId);
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const theme = useTheme();
@@ -29,9 +30,9 @@ const TagRow = ({ tagId }: Props) => {
       <Modal open={deleteModal}>
         <Box style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
           <Box sx={{bgcolor: "background.paper", p: 4}}>
-            本当に削除してよろしいですか？
+            本当にタグ {tagDetail.name} を削除してよろしいですか？
             <Button type="submit" variant="contained" color="error" style={{ margin: "1rem" }} onClick={() => {
-              // TODO: タグの削除
+              deleteWorkTag(tagId);
               setDeleteModal(false);
             }}>
               削除
