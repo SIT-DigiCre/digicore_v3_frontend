@@ -4,7 +4,6 @@ import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 import { axios } from "../../utils/axios";
 import { WorkTag, WorkTagDetail } from "../../interfaces/work";
-import { workTagDetailCacheState } from "../../atom/userAtom";
 
 type WorkTagsResponse = {
   tags: WorkTag[];
