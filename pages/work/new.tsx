@@ -20,6 +20,7 @@ import { WorkRequest } from "../../interfaces/work";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { FileBrowserModal } from "../../components/File/FileBrowser";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import TagMultiSelect from "../../components/work/TagMultiSelect";
 
 const WorkCreatePage = () => {
   const router = useRouter();
@@ -133,26 +134,8 @@ const WorkCreatePage = () => {
       </Grid>
       <Grid sx={{ marginTop: 3 }}>
         <h3>タグ</h3>
-        {/* 後で岡本さんがどうにかしてくれる */}
-        <ul>
-          {tags.map((t) => (
-            <li>{t}</li>
-          ))}
-        </ul>
-        <input
-          type="text"
-          value={tagInput}
-          onChange={(e) => {
-            setTagInput(e.target.value);
-          }}
-        />
-        <button
-          onClick={() => {
-            setTags([...tags, tagInput]);
-          }}
-        >
-          ADD
-        </button>
+        {/* 後で岡本さんがどうにかしてくれる → そうか？ */}
+        <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
       </Grid>
       <Grid sx={{ textAlign: "center" }}>
         <Button variant="contained" onClick={onClickSave}>

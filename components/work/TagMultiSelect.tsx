@@ -12,15 +12,17 @@ import { useWorkTags } from "../../hook/work/useWorkTag";
 import { WorkTag } from "../../interfaces/work";
 
 type Props = {
-  selectedTags: WorkTag[];
-  onChange: (tags: WorkTag[]) => void;
+  selectedTags: string[];
+  onChange: (tagIds: string[]) => void;
 };
 
 const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
   const { workTags } = useWorkTags();
-  const handleOnChange = (e: SelectChangeEvent<WorkTag[]>) => {
+  const handleOnChange = (e: SelectChangeEvent<string[]>) => {
     const value = e.target.value;
-    if (typeof value !== "string") {
+    if (typeof value === "string") {
+      onChange([value]);
+    } else {
       onChange(value);
     }
   };
@@ -35,9 +37,10 @@ const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
         input={<OutlinedInput label="タグ" />}
         renderValue={(selected) => (
           <Stack direction="row" spacing={1}>
-            {selected.map((value) => (
-              <Chip key={value.id} label={value.name} />
-            ))}
+            {selected.map((value) => {
+              const workTag = workTags.filter((workTag) => workTag.id === value)[0];
+              return <Chip key={value} label={workTag.name} />;
+            })}
           </Stack>
         )}
       >
