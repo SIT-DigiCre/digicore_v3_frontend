@@ -12,27 +12,31 @@ type Props = {
   error?: string;
 };
 const WorkDetailPage = ({ id, error }: Props) => {
-  const work = useWork(id);
+  const { workDetail, updateWork, deleteWork } = useWork(id);
 
-  if (!work) return <p>Loading...</p>;
+  if (!workDetail) return <p>Loading...</p>;
   return (
     <Container>
       <Breadcrumbs
-        links={[{ text: "Home", href: "/" }, { text: "Work", href: "/work" }, { text: work.name }]}
+        links={[
+          { text: "Home", href: "/" },
+          { text: "Work", href: "/work" },
+          { text: workDetail.name },
+        ]}
       />
       <Grid>
-        <h1>{work.name}</h1>
-        {work.authers.map((a) => (
+        <h1>{workDetail.name}</h1>
+        {workDetail.authers.map((a) => (
           <Avatar src={a.icon_url} />
         ))}
-        <ChipList chipList={work.tags.map((t) => t.name)} />
+        <ChipList chipList={workDetail.tags.map((t) => t.name)} />
         <hr />
       </Grid>
       <Grid sx={{ marginTop: 3 }}>
-        <MarkdownView md={work.description} />
+        <MarkdownView md={workDetail.description} />
       </Grid>
       <Grid sx={{ marginTop: 3 }}>
-        {work.files.map((f) => (
+        {workDetail.files.map((f) => (
           <WorkFileView fileId={f.id} />
         ))}
       </Grid>

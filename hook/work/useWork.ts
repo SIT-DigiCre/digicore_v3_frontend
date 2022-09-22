@@ -4,7 +4,11 @@ import { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
-type UseWork = (workId: string) => WorkDetail;
+type UseWork = (workId: string) => {
+  workDetail: WorkDetail;
+  updateWork: (workRequest: WorkRequest) => Promise<boolean>;
+  deleteWork: () => Promise<boolean>;
+};
 export const useWork: UseWork = (workId) => {
   const [work, setWork] = useState<WorkDetail>();
   const { authState } = useAuthState();
@@ -26,7 +30,13 @@ export const useWork: UseWork = (workId) => {
       }
     })();
   }, [authState]);
-  return work;
+  const updateWork = async (workRequest: WorkRequest): Promise<boolean> => {
+    return true;
+  };
+  const deleteWork = async (): Promise<boolean> => {
+    return true;
+  };
+  return { workDetail: work, updateWork, deleteWork };
 };
 
 type UseWorks = () => {
