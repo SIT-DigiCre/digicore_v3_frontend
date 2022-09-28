@@ -86,3 +86,7 @@ blockquote cite {
 a {
   color: rgb(117, 201, 230);
 }
+
+.d-inlineblock {
+  display: inline-block;
+}
