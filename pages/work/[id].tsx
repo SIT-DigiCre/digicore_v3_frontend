@@ -4,6 +4,7 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
 import MarkdownView from "../../components/Common/MarkdownView";
 import FileView from "../../components/File/FileView";
+import { WorkFileView } from "../../components/work/WorkFileView";
 import { useFile } from "../../hook/file/useFile";
 import { useWork } from "../../hook/work/useWork";
 
@@ -51,12 +52,4 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   } catch (error) {
     return { props: { errors: error.message } };
   }
-};
-type WorkFileViewProps = {
-  fileId: string;
-};
-const WorkFileView = ({ fileId }: WorkFileViewProps) => {
-  const file = useFile(fileId);
-  if (!file) return <p>Loading...</p>;
-  return <FileView file={file} />;
 };
