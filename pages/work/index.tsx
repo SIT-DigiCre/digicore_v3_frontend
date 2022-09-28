@@ -12,8 +12,33 @@ const WorkIndexPage = () => {
     <Container>
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Work" }]} />
       <Grid>
-        <h1>Work一覧</h1>
-        <hr />
+        <div>
+          <h1 className="d-inlineblock">Work一覧</h1>
+          <div style={{ float: "right" }}>
+            <Button
+              variant="contained"
+              sx={{ margin: "0.1rem" }}
+              onClick={() => {
+                router.push(`/work/new`);
+              }}
+            >
+              新規Work
+            </Button>
+            <Button variant="contained" sx={{ margin: "0.1rem" }}>
+              My Work
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ margin: "0.1rem" }}
+              onClick={() => {
+                router.push(`/work/tag`);
+              }}
+            >
+              WorkTag一覧
+            </Button>
+          </div>
+        </div>
+        <hr style={{ clear: "both" }} />
       </Grid>
       <Grid>
         {works.map((w) => (
