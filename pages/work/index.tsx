@@ -25,7 +25,13 @@ const WorkIndexPage = () => {
             >
               新規Work
             </Button>
-            <Button variant="contained" sx={{ margin: "0.1rem" }}>
+            <Button
+              variant="contained"
+              sx={{ margin: "0.1rem" }}
+              onClick={() => {
+                router.push(`/work/mywork`);
+              }}
+            >
               My Work
             </Button>
             <Button
