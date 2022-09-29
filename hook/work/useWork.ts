@@ -38,8 +38,10 @@ export const useWork: UseWork = (workId) => {
   };
   return { workDetail: work, updateWork, deleteWork };
 };
-
-type UseWorks = (autherId?: string) => {
+// autherIdを指定すると指定したユーザーIDのWorkを取得する
+// autherIdに"my"を指定すると自ユーザーのWorkを取得する
+// autherIdに何も入れないと全ユーザーのWorkを取得する
+type UseWorks = (autherId?: string | "my") => {
   works: Work[];
   loadMore: () => void;
   createWork: (workRequest: WorkRequest) => Promise<string>;
@@ -54,7 +56,13 @@ export const useWorks: UseWorks = (autherId) => {
     if (!authState.isLogined) return;
     try {
       const res = await axios.get(
-        `/work/work/?pages=${n}${autherId ? `&auther_id=${autherId}` : ""}`,
+        `/work/work/?pages=${n}${
+          autherId
+            ? autherId === "my"
+              ? `&auther_id=${authState.user.id!}`
+              : `&auther_id=${autherId}`
+            : ""
+        }`,
         {
           headers: {
             Authorization: "bearer " + authState.token,
