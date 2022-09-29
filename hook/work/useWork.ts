@@ -39,13 +39,13 @@ export const useWork: UseWork = (workId) => {
   return { workDetail: work, updateWork, deleteWork };
 };
 
-type UseWorks = () => {
+type UseWorks = (autherId?: string) => {
   works: Work[];
   loadMore: () => void;
   createWork: (workRequest: WorkRequest) => Promise<string>;
 };
 
-export const useWorks: UseWorks = () => {
+export const useWorks: UseWorks = (autherId) => {
   const [works, setWorks] = useState<Work[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
@@ -53,11 +53,14 @@ export const useWorks: UseWorks = () => {
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
     try {
-      const res = await axios.get(`/work/work/?pages=${n}`, {
-        headers: {
-          Authorization: "bearer " + authState.token,
+      const res = await axios.get(
+        `/work/work/?pages=${n}${autherId ? `&auther_id=${autherId}` : ""}`,
+        {
+          headers: {
+            Authorization: "bearer " + authState.token,
+          },
         },
-      });
+      );
       const newWorks: Work[] = res.data.works;
       setWorks(works.concat(newWorks));
       removeError("works-get-fail");
