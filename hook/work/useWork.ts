@@ -31,10 +31,32 @@ export const useWork: UseWork = (workId) => {
     })();
   }, [authState]);
   const updateWork = async (workRequest: WorkRequest): Promise<boolean> => {
-    return true;
+    try {
+      const res = await axios.put(`/work/work/${workId}`, workRequest, {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      });
+      removeError("work-put-fail");
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "work-put-fail", message: "Workの更新に失敗しました" });
+      return false;
+    }
   };
   const deleteWork = async (): Promise<boolean> => {
-    return true;
+    try {
+      const res = await axios.delete(`/work/work/${workId}`, {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      });
+      removeError("work-delete-fail");
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
+      return false;
+    }
   };
   return { workDetail: work, updateWork, deleteWork };
 };
