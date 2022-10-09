@@ -67,6 +67,7 @@ type UseWorks = (autherId?: string | "my") => {
   works: Work[];
   loadMore: () => void;
   createWork: (workRequest: WorkRequest) => Promise<string>;
+  deleteWork: (id: string) => Promise<boolean>;
 };
 
 export const useWorks: UseWorks = (autherId) => {
@@ -120,9 +121,24 @@ export const useWorks: UseWorks = (autherId) => {
       return "error";
     }
   };
+  const deleteWork = async (id: string): Promise<boolean> => {
+    try {
+      const res = await axios.delete(`/work/work/${id}`, {
+        headers: {
+          Authorization: "bearer " + authState.token,
+        },
+      });
+      removeError("work-delete-fail");
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
+      return false;
+    }
+  };
   return {
     works: works,
     loadMore: loadMore,
     createWork: createWork,
+    deleteWork: deleteWork,
   };
 };
