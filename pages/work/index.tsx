@@ -49,9 +49,9 @@ const WorkIndexPage = () => {
       </Grid>
       <Grid container>
         {works.map((w) => (
-          <Grid item md={4} sm={6} xs={12}>
+          <Grid item md={4} sm={6} xs={12} sx={{ padding: 0.5 }}>
             <Card
-              sx={{ width: "100%", display: "inline-block", m: 0.5 }}
+              sx={{ width: "100%", display: "inline-block", m: 0.5, height: "100%" }}
               onClick={() => {
                 router.push(`/work/${w.id}`);
               }}
