@@ -21,6 +21,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
   const [tags, setTags] = useState<string[]>([]);
   const [files, setFiles] = useState<string[]>([]);
   useEffect(() => {
+    if (!initWork) return;
     setName(initWork.name);
     setDescription(initWork.description);
     setTags(initWork.tags.map((t) => t.id));
