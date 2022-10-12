@@ -63,14 +63,14 @@ export const useWork: UseWork = (workId) => {
 // autherIdを指定すると指定したユーザーIDのWorkを取得する
 // autherIdに"my"を指定すると自ユーザーのWorkを取得する
 // autherIdに何も入れないと全ユーザーのWorkを取得する
-type UseWorks = (autherId?: string | "my") => {
+type UseWorks = (authorId?: string | "my") => {
   works: Work[];
   loadMore: () => void;
   createWork: (workRequest: WorkRequest) => Promise<string>;
   deleteWork: (id: string) => Promise<boolean>;
 };
 
-export const useWorks: UseWorks = (autherId) => {
+export const useWorks: UseWorks = (authorId) => {
   const [works, setWorks] = useState<Work[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
@@ -80,10 +80,10 @@ export const useWorks: UseWorks = (autherId) => {
     try {
       const res = await axios.get(
         `/work/work/?pages=${n}${
-          autherId
-            ? autherId === "my"
+          authorId
+            ? authorId === "my"
               ? `&auther_id=${authState.user.id!}`
-              : `&auther_id=${autherId}`
+              : `&auther_id=${authorId}`
             : ""
         }`,
         {
