@@ -48,24 +48,30 @@ const WorkIndexPage = () => {
         <hr style={{ clear: "both" }} />
       </Grid>
       <Grid container>
-        {works.map((w) => (
-          <Grid item md={4} sm={6} xs={12} sx={{ padding: 0.5 }}>
-            <Card
-              sx={{ width: "100%", display: "inline-block", m: 0.5, height: "100%" }}
-              onClick={() => {
-                router.push(`/work/${w.id}`);
-              }}
-              className="clickable-gray"
-              key={w.id}
-            >
-              <CardHeader title={w.name}></CardHeader>
-              <CardContent>
-                <WorkCardPreview id={w.id} />
-                <ChipList chipList={w.tags.map((t) => t.name)} />
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+        {works ? (
+          <>
+            {works.map((w) => (
+              <Grid item md={4} sm={6} xs={12} sx={{ padding: 0.5 }}>
+                <Card
+                  sx={{ width: "100%", display: "inline-block", m: 0.5, height: "100%" }}
+                  onClick={() => {
+                    router.push(`/work/${w.id}`);
+                  }}
+                  className="clickable-gray"
+                  key={w.id}
+                >
+                  <CardHeader title={w.name}></CardHeader>
+                  <CardContent>
+                    <WorkCardPreview id={w.id} />
+                    <ChipList chipList={w.tags.map((t) => t.name)} />
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </>
+        ) : (
+          <p>Workがねぇ...</p>
+        )}
       </Grid>
       <Grid sx={{ textAlign: "center" }}>
         <Button

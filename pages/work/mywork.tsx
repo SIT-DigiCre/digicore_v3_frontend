@@ -51,20 +51,22 @@ const MyWorkPage = () => {
       </Grid>
       <Grid>
         <List sx={{ bgcolor: "background.paper", width: "100%" }} disablePadding>
-          {works.map((w) => (
-            <ListItem
-              secondaryAction={
-                <>
-                  <IconButton
-                    edge="end"
-                    aria-label="comments"
-                    onClick={() => {
-                      router.push(`/work/${w.id}?mode=edit`);
-                    }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  {/* <IconButton
+          {works ? (
+            <>
+              {works.map((w) => (
+                <ListItem
+                  secondaryAction={
+                    <>
+                      <IconButton
+                        edge="end"
+                        aria-label="comments"
+                        onClick={() => {
+                          router.push(`/work/${w.id}?mode=edit`);
+                        }}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      {/* <IconButton
                     edge="end"
                     aria-label="comments"
                     onClick={() => {
@@ -79,18 +81,26 @@ const MyWorkPage = () => {
                   >
                     <Delete />
                   </IconButton> */}
-                </>
-              }
-            >
-              <ListItemButton
-                onClick={() => {
-                  router.push(`/work/${w.id}`);
-                }}
-              >
-                <ListItemText primary={w.name} />
-              </ListItemButton>
+                    </>
+                  }
+                >
+                  <ListItemButton
+                    onClick={() => {
+                      router.push(`/work/${w.id}`);
+                    }}
+                  >
+                    <ListItemText primary={w.name} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </>
+          ) : (
+            <ListItem>
+              <ListItemText>
+                まだあなたのWorkはありません。作品を作ってどんどん登録していこう!!
+              </ListItemText>
             </ListItem>
-          ))}
+          )}
         </List>
       </Grid>
     </Container>
