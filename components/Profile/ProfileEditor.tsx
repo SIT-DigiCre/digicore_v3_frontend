@@ -22,7 +22,7 @@ const ProfileEditor = () => {
   }, [userIntro]);
   const [openFileModal, setOpenFileModal] = useState(false);
   if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
-  const onAvaterImageSelected = (file: FileObject) => {
+  const onAvatarImageSelected = (file: FileObject) => {
     setEditUserProfile({ ...editUserProfile, icon_url: file.url });
     setOpenFileModal(false);
   };
@@ -50,7 +50,7 @@ const ProfileEditor = () => {
             onCancel={() => {
               setOpenFileModal(false);
             }}
-            onSelected={onAvaterImageSelected}
+            onSelected={onAvatarImageSelected}
             onlyFileKind="image"
           />
           <TextField
