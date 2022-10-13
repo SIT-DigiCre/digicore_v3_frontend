@@ -1,10 +1,12 @@
-import { Button, Container, Grid, TextField } from "@mui/material";
+import { Avatar, Button, Container, Grid, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useMyProfile } from "../../hook/profile/useProfile";
 import { UserProfileAPIData } from "../../interfaces/api";
+import { FileObject } from "../../interfaces/file";
 import { baseURL, objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
+import { FileBrowserModal } from "../File/FileBrowser";
 import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
@@ -18,13 +20,39 @@ const ProfileEditor = () => {
   useEffect(() => {
     setEditUserIntro({ md: (" " + userIntro).slice(1) });
   }, [userIntro]);
+  const [openFileModal, setOpenFileModal] = useState(false);
   if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
+  const onAvaterImageSelected = (file: FileObject) => {
+    setEditUserProfile({ ...editUserProfile, icon_url: file.url });
+    setOpenFileModal(false);
+  };
   return (
     <>
       <Grid sx={{ mb: 3 }}>
         <h1>プロファイル編集</h1>
         <Grid sx={{ mb: 3 }}>
           <h2>公開情報（他の部員も見れる情報）</h2>
+          {userProfile.icon_url === "" ? (
+            <></>
+          ) : (
+            <Avatar src={editUserProfile.icon_url} sx={{ margin: 1 }} />
+          )}
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpenFileModal(true);
+            }}
+          >
+            アイコン設定
+          </Button>
+          <FileBrowserModal
+            open={openFileModal}
+            onCancel={() => {
+              setOpenFileModal(false);
+            }}
+            onSelected={onAvaterImageSelected}
+            onlyFileKind="image"
+          />
           <TextField
             label="ユーザー名"
             variant="outlined"
