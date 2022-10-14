@@ -1,58 +1,83 @@
 import { Avatar, Container, Grid } from "@mui/material";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
 import MarkdownView from "../../components/Common/MarkdownView";
-import FileView from "../../components/File/FileView";
-import { useFile } from "../../hook/file/useFile";
+import PageHead from "../../components/Common/PageHead";
+import WorkEditor from "../../components/work/WorkEditor";
+import { WorkFileView } from "../../components/work/WorkFileView";
 import { useWork } from "../../hook/work/useWork";
+import { WorkRequest } from "../../interfaces/work";
 
 type Props = {
   id: string;
+  modeStr?: string;
   error?: string;
 };
-const WorkDetailPage = ({ id, error }: Props) => {
-  const work = useWork(id);
+const WorkDetailPage = ({ id, modeStr, error }: Props) => {
+  const { workDetail, updateWork, deleteWork } = useWork(id);
+  const router = useRouter();
+  const onSubmit = (workRequest: WorkRequest) => {
+    updateWork(workRequest).then((result) => {
+      if (!result) return;
+      router.push(`/work/${id}`);
+    });
+  };
 
-  if (!work) return <p>Loading...</p>;
+  if (!workDetail) return <p>Loading...</p>;
   return (
     <Container>
+      <PageHead title={workDetail.name} />
       <Breadcrumbs
-        links={[{ text: "Home", href: "/" }, { text: "Work", href: "/work" }, { text: work.name }]}
+        links={[
+          { text: "Home", href: "/" },
+          { text: "Work", href: "/work" },
+          { text: workDetail.name },
+        ]}
       />
-      <Grid>
-        <h1>{work.name}</h1>
-        {work.authers.map((a) => (
-          <Avatar src={a.icon_url} />
-        ))}
-        <ChipList chipList={work.tags.map((t) => t.name)} />
-        <hr />
-      </Grid>
-      <Grid sx={{ marginTop: 3 }}>
-        <MarkdownView md={work.description} />
-      </Grid>
-      <Grid sx={{ marginTop: 3 }}>
-        {work.files.map((f) => (
-          <WorkFileView fileId={f.id} />
-        ))}
-      </Grid>
+      {modeStr === "edit" ? (
+        <>
+          <WorkEditor onSubmit={onSubmit} initWork={workDetail} />
+        </>
+      ) : (
+        <>
+          <Grid>
+            <h1>{workDetail.name}</h1>
+            {workDetail.authers.map((a) => (
+              <div
+                onClick={() => {
+                  router.push(`/user/${a.id}`);
+                }}
+                className="clickable d-inlineblock"
+              >
+                <Avatar src={a.icon_url} className="d-inlineblock" />
+              </div>
+            ))}
+            <ChipList chipList={workDetail.tags.map((t) => t.name)} />
+            <hr />
+          </Grid>
+          <Grid sx={{ marginTop: 3 }}>
+            <MarkdownView md={workDetail.description} />
+          </Grid>
+          <Grid sx={{ marginTop: 3 }}>
+            {workDetail.files.map((f) => (
+              <WorkFileView fileId={f.id} />
+            ))}
+          </Grid>
+        </>
+      )}
     </Container>
   );
 };
 export default WorkDetailPage;
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   try {
     const id = params?.id;
-    return { props: { id } };
+    const { mode } = query;
+    const modeStr = typeof mode === "string" ? mode : null;
+    return { props: { id, modeStr } };
   } catch (error) {
     return { props: { errors: error.message } };
   }
-};
-type WorkFileViewProps = {
-  fileId: string;
-};
-const WorkFileView = ({ fileId }: WorkFileViewProps) => {
-  const file = useFile(fileId);
-  if (!file) return <p>Loading...</p>;
-  return <FileView file={file} />;
 };
