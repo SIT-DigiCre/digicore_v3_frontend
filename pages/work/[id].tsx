@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
 import MarkdownView from "../../components/Common/MarkdownView";
+import PageHead from "../../components/Common/PageHead";
 import WorkEditor from "../../components/work/WorkEditor";
 import { WorkFileView } from "../../components/work/WorkFileView";
 import { useWork } from "../../hook/work/useWork";
@@ -27,6 +28,7 @@ const WorkDetailPage = ({ id, modeStr, error }: Props) => {
   if (!workDetail) return <p>Loading...</p>;
   return (
     <Container>
+      <PageHead title={workDetail.name} />
       <Breadcrumbs
         links={[
           { text: "Home", href: "/" },
@@ -43,7 +45,14 @@ const WorkDetailPage = ({ id, modeStr, error }: Props) => {
           <Grid>
             <h1>{workDetail.name}</h1>
             {workDetail.authers.map((a) => (
-              <Avatar src={a.icon_url} />
+              <div
+                onClick={() => {
+                  router.push(`/user/${a.id}`);
+                }}
+                className="clickable d-inlineblock"
+              >
+                <Avatar src={a.icon_url} className="d-inlineblock" />
+              </div>
             ))}
             <ChipList chipList={workDetail.tags.map((t) => t.name)} />
             <hr />
