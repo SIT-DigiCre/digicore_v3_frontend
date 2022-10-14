@@ -1,4 +1,14 @@
-import { Button, Card, CardContent, CardHeader, Container, Fab, Grid } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Container,
+  Fab,
+  Grid,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import { useWorks } from "../../hook/work/useWork";
 import AddIcon from "@mui/icons-material/Add";
@@ -60,7 +70,16 @@ const WorkIndexPage = () => {
                   className="clickable-gray"
                   key={w.id}
                 >
-                  <CardHeader title={w.name}></CardHeader>
+                  <CardHeader
+                    title={w.name}
+                    avatar={
+                      <AvatarGroup>
+                        {w.authers.map((a) => (
+                          <Avatar src={a.icon_url} alt={a.name} />
+                        ))}
+                      </AvatarGroup>
+                    }
+                  ></CardHeader>
                   <CardContent>
                     <WorkCardPreview id={w.id} />
                     <ChipList chipList={w.tags.map((t) => t.name)} />
