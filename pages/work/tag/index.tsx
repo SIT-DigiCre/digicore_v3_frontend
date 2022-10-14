@@ -3,6 +3,7 @@ import { Container, Modal, Stack, Box, Button, TextField } from "@mui/material";
 import { useWorkTags } from "../../../hook/work/useWorkTag";
 import TagRow from "../../../components/work/TagRow";
 import { WorkTagUpdate } from "../../../interfaces/work";
+import PageHead from "../../../components/Common/PageHead";
 
 const WorkTagIndexPage = () => {
   const [createModal, setCreateModal] = useState(false);
@@ -12,6 +13,7 @@ const WorkTagIndexPage = () => {
 
   return (
     <Container>
+      <PageHead title="WorkTag一覧" />
       <div>
         <div>
           <Button variant="contained" onClick={() => setCreateModal(true)}>
@@ -27,7 +29,7 @@ const WorkTagIndexPage = () => {
 
       <Modal open={createModal}>
         <Box style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
-          <Box sx={{bgcolor: "background.paper", p: 4}}>
+          <Box sx={{ bgcolor: "background.paper", p: 4 }}>
             <TextField
               label="タグ名"
               variant="outlined"
@@ -50,10 +52,15 @@ const WorkTagIndexPage = () => {
                 setNewTag({ ...newTag, description: e.target.value });
               }}
             />
-            <Button type="submit" variant="contained" style={{ margin: "1rem" }} onClick={() => {
-              createWorkTag(newTag.name, newTag.description);
-              setCreateModal(false);
-            }}>
+            <Button
+              type="submit"
+              variant="contained"
+              style={{ margin: "1rem" }}
+              onClick={() => {
+                createWorkTag(newTag.name, newTag.description);
+                setCreateModal(false);
+              }}
+            >
               作成
             </Button>
             <Button

@@ -15,12 +15,14 @@ import AddIcon from "@mui/icons-material/Add";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
 import { WorkCardPreview } from "../../components/work/WorkCardPreview";
+import PageHead from "../../components/Common/PageHead";
 
 const WorkIndexPage = () => {
   const { works, loadMore } = useWorks();
   const router = useRouter();
   return (
     <Container>
+      <PageHead title="Work一覧" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Work" }]} />
       <Grid>
         <div>

@@ -4,6 +4,7 @@ import { useWorks } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import WorkEditor from "../../components/work/WorkEditor";
+import PageHead from "../../components/Common/PageHead";
 
 const WorkCreatePage = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const WorkCreatePage = () => {
   };
   return (
     <Container>
+      <PageHead title="Work新規作成" />
       <Breadcrumbs
         links={[{ text: "Home", href: "/" }, { text: "User", href: "/work" }, { text: "新規作成" }]}
       />

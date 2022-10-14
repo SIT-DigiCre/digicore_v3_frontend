@@ -14,12 +14,14 @@ import { useWorks } from "../../hook/work/useWork";
 import EditIcon from "@mui/icons-material/Edit";
 import { useState } from "react";
 import { Delete } from "@mui/icons-material";
+import PageHead from "../../components/Common/PageHead";
 
 const MyWorkPage = () => {
   const router = useRouter();
   const { works, deleteWork } = useWorks("my");
   return (
     <Container>
+      <PageHead title="MyWork" />
       <Breadcrumbs
         links={[{ text: "Home", href: "/" }, { text: "Work", href: "/work" }, { text: "MyWork" }]}
       />
