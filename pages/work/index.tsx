@@ -46,7 +46,7 @@ const WorkIndexPage = () => {
             >
               My Work
             </Button>
-            <Button
+            {/*<Button
               variant="contained"
               sx={{ margin: "0.1rem" }}
               onClick={() => {
@@ -54,7 +54,7 @@ const WorkIndexPage = () => {
               }}
             >
               WorkTag一覧
-            </Button>
+            </Button>*/}
           </div>
         </div>
         <hr style={{ clear: "both" }} />
