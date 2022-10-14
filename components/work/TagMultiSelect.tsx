@@ -26,6 +26,7 @@ const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
       onChange(value);
     }
   };
+  if (workTags.length === 0) return <></>;
   return (
     <FormControl>
       <InputLabel id="multiple-tag-label">タグ</InputLabel>
