@@ -144,3 +144,10 @@ export type UploadFile = {
   file: string;
   is_public: boolean;
 };
+
+// Mattermost
+export type MattermostRegistrationRequest = {
+  username: string;
+  password: string;
+  nickname: string;
+};
