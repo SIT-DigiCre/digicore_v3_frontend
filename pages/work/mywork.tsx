@@ -38,7 +38,7 @@ const MyWorkPage = () => {
             >
               新規Work
             </Button>
-            <Button
+            {/* <Button
               variant="contained"
               sx={{ margin: "0.1rem" }}
               onClick={() => {
@@ -46,7 +46,7 @@ const MyWorkPage = () => {
               }}
             >
               WorkTag一覧
-            </Button>
+            </Button> */}
           </div>
         </div>
         <hr style={{ clear: "both" }} />
