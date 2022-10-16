@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
-import { MattermostAgreement } from "../../components/Mattermost/agreement";
-import { MattermostRegister } from "../../components/Mattermost/register";
-import { MattermostRegisterComplete } from "../../components/Mattermost/register_complete";
+import { MattermostAgreement } from "../../components/Mattermost/Agreement";
+import { MattermostRegister } from "../../components/Mattermost/Register";
+import { MattermostRegisterComplete } from "../../components/Mattermost/RegisterComplete";
 
 const MatatermostIndex = () => {
   const [displayPage, setDisplayPage] = useState<MattermostDisplayPage>("agreement");
