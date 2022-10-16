@@ -29,6 +29,11 @@ const RegisterComplete = () => {
             Mattermost ログインページ
           </a>
         </Typography>
+        <Typography align="center">
+          <a href="https://mattermost.com/apps/" target="_blank" rel="noreferrer">
+            アプリの取得はこちらから
+          </a>
+        </Typography>
       </Grid>
     </Container>
   );
