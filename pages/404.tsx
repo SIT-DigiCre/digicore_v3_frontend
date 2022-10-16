@@ -6,7 +6,13 @@ const NotFoundPage = () => {
     <>
       <PageHead title="ページが見つかりません" />
 
-      <Grid container direction="column" alignItems="center" spacing={8}>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ minHeight: "100vh" }}
+      >
         <Grid item xs={12} textAlign="center">
           <Typography variant="h2" component="h1">
             404
