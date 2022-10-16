@@ -17,8 +17,6 @@ const NotFoundPage = () => {
             Home へ戻る
           </Button>
         </Grid>
-
-        {/* TODO: デジコのイラストをランダムで表示する */}
       </Grid>
     </>
   );
