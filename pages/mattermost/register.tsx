@@ -229,10 +229,17 @@ const MattermkstRegisterPage = () => {
       </Grid>
       <Grid>
         <Typography align="center" m={2}>
-          <strong>アカウント登録にお困りの際は インフラ までご相談を</strong>
-        </Typography>
-        <Typography align="center" m={2}>
-          <strong>Slack: 最上土川、みるお、えくと、Yuki Okamoto</strong>
+          <strong>
+            アカウント登録にお困りの際は{" "}
+            <a
+              href="https://docs.google.com/forms/d/e/1FAIpQLSfu4AwLvNg5me5Exymbpb6ZA8Liutt0u8Z0vWPJ2TRl575chQ/viewform?usp=sf_link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              こちらのフォームから
+            </a>{" "}
+            ご相談を
+          </strong>
         </Typography>
       </Grid>
     </Container>
