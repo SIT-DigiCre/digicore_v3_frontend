@@ -8,7 +8,7 @@ const Breadcrumbs = ({ links }: Props) => {
   return (
     <MBC>
       {links.map((link) => (
-        <div key={link.href}>
+        <div key={link.text}>
           {link.href ? (
             <Link href={link.href}>
               <p className="breadcrumbs-link">{link.text}</p>
