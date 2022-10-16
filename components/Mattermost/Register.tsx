@@ -17,11 +17,11 @@ import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegist
 import { MattermostRegistrationRequest } from "../../interfaces/api";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 
-export const MattermostRegister = ({
-  displayPageSetter,
-}: {
+type Props = {
   displayPageSetter: (page: MattermostDisplayPage) => void;
-}) => {
+};
+
+export const MattermostRegister = ({ displayPageSetter }: Props) => {
   const { authState } = useAuthState();
   const userProfile = authState.user;
   const { register } = useMattermostRegister();

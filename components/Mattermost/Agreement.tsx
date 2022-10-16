@@ -16,11 +16,11 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 import { User } from "../../interfaces";
 
-export const MattermostAgreement = ({
-  displayPageSetter,
-}: {
+type Props = {
   displayPageSetter: (page: MattermostDisplayPage) => void;
-}) => {
+};
+
+export const MattermostAgreement = ({ displayPageSetter }: Props) => {
   const [agree, setAgree] = useState(false);
   const { authState } = useAuthState();
   const userProfile = authState.user;
