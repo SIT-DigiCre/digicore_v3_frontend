@@ -1,5 +1,4 @@
 import { useEffect, useState, FormEvent } from "react";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import {
   Box,
@@ -11,15 +10,20 @@ import {
   FormControl,
   FormHelperText,
 } from "@mui/material";
+import { useAuthState } from "../../hook/useAuthState";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
-import { useMyProfile } from "../../hook/profile/useProfile";
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
 import { MattermostRegistrationRequest } from "../../interfaces/api";
+import { MattermostDisplayPage } from "../../interfaces/mattermost";
 
-const MattermkstRegisterPage = () => {
-  const router = useRouter();
-  const [userProfile] = useMyProfile();
+export const MattermostRegister = ({
+  displayPageSetter,
+}: {
+  displayPageSetter: (page: MattermostDisplayPage) => void;
+}) => {
+  const { authState } = useAuthState();
+  const userProfile = authState.user;
   const { register } = useMattermostRegister();
   const [registrationForm, setRegistrationForm] = useState<MattermostRegistrationRequest>({
     username: "",
@@ -65,7 +69,7 @@ const MattermkstRegisterPage = () => {
       const res = await register(registrationForm);
       setSending(false);
       if (res) {
-        router.push("/mattermost/register_complete");
+        displayPageSetter("complete");
       }
     })();
   };
@@ -73,7 +77,7 @@ const MattermkstRegisterPage = () => {
     if (userProfile) {
       setRegistrationForm({
         ...registrationForm,
-        username: userProfile.student_number,
+        username: userProfile.studentNumber,
         nickname: userProfile.username,
       });
     }
@@ -81,13 +85,7 @@ const MattermkstRegisterPage = () => {
   return (
     <Container>
       <PageHead title="Mattermost アカウント登録" />
-      <Breadcrumbs
-        links={[
-          { text: "Home", href: "/" },
-          { text: "Mattermost", href: "/mattermost" },
-          { text: "Account Registration" },
-        ]}
-      />
+      <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Mattermost" }]} />
       <Grid margin={2}>
         <Typography variant="h4" align="center" noWrap={true}>
           Mattermost
@@ -117,17 +115,6 @@ const MattermkstRegisterPage = () => {
       </Grid>
       <Grid margin={2}>
         <Box component="form" onSubmit={onRegister}>
-          <FormControl fullWidth>
-            <TextField
-              label="メールアドレス"
-              variant="outlined"
-              disabled
-              helperText="大学のメールアドレスで登録します"
-              margin="normal"
-              fullWidth
-              value={`${userProfile ? userProfile.student_number : ""}@shibaura-it.ac.jp`}
-            />
-          </FormControl>
           <FormControl fullWidth error={0 < usernameError.length}>
             <TextField
               label="ユーザーID"
@@ -245,5 +232,3 @@ const MattermkstRegisterPage = () => {
     </Container>
   );
 };
-
-export default MattermkstRegisterPage;
