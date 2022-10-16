@@ -1,4 +1,4 @@
-import { Box, Button, Modal, Typography } from "@mui/material";
+import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { useMyFiles } from "../../hook/file/useFile";
 import { FileObject } from "../../interfaces/file";
@@ -44,6 +44,7 @@ export const FileUploader = ({ open, onCancel, onUploaded }: FileUploaderProps) 
   };
   const [errorMsg, setErrorMsg] = useState<string>();
   const onChangeFileInput: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setUploading(true);
     (async () => {
       const file = e.target.files[0];
       const fileName = file.name;
@@ -55,15 +56,18 @@ export const FileUploader = ({ open, onCancel, onUploaded }: FileUploaderProps) 
       }
       onUploaded(fileObject);
       setIsOpen(false);
+      setUploading(false);
     })();
   };
+  const [uploading, setUploading] = useState(false);
   return (
     <Modal open={isOpen}>
       <Box sx={style}>
         <h2>ファイルアップロード</h2>
         <input type="file" onChange={onChangeFileInput} />
         {errorMsg ? <Typography color="error">{errorMsg}</Typography> : <></>}
-        <Button variant="contained" color="error" onClick={onClickCancel}>
+        {uploading ? <LinearProgress color="success" sx={{ marginTop: 1 }} /> : <></>}
+        <Button variant="contained" color="error" onClick={onClickCancel} sx={{ marginTop: 1 }}>
           キャンセル
         </Button>
       </Box>
