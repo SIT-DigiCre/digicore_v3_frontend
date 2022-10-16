@@ -7,17 +7,20 @@ type Props = {
 const Breadcrumbs = ({ links }: Props) => {
   return (
     <MBC>
-      {links.map((link) => (
-        <div key={link.text}>
-          {link.href ? (
-            <Link href={link.href}>
+      {links.map((link) => {
+        if (link.href)
+          return (
+            <Link href={link.href} key={link.text}>
               <p className="breadcrumbs-link">{link.text}</p>
             </Link>
-          ) : (
-            <Typography color="text.primary">{link.text}</Typography>
-          )}
-        </div>
-      ))}
+          );
+        else
+          return (
+            <Typography color="text.primary" key={link.text}>
+              {link.text}
+            </Typography>
+          );
+      })}
     </MBC>
   );
 };
