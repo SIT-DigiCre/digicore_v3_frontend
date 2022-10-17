@@ -31,7 +31,7 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
         <Container>
           <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Profile" }]} />
           {registerMode ? <ProfileRegister registerMode={registerMode} /> : <ProfileEditor />}
-          <FloatingWindow to={backtoUrl} text={"Mattermostの登録に戻る"} />
+          {backtoUrl ? <FloatingWindow to={backtoUrl} text={"Mattermostの登録に戻る"} /> : <></>}
         </Container>
       )}
     </>
