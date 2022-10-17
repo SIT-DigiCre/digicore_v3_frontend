@@ -1,4 +1,5 @@
-import { Avatar, Button, Container, Grid, TextField } from "@mui/material";
+import { Alert, Avatar, Button, Container, Grid, TextField } from "@mui/material";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useMyProfile } from "../../hook/profile/useProfile";
@@ -21,6 +22,7 @@ const ProfileEditor = () => {
     setEditUserIntro({ md: (" " + userIntro).slice(1) });
   }, [userIntro]);
   const [openFileModal, setOpenFileModal] = useState(false);
+  const router = useRouter();
   if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
   const onAvatarImageSelected = (file: FileObject) => {
     setEditUserProfile({ ...editUserProfile, icon_url: file.url });
@@ -32,6 +34,11 @@ const ProfileEditor = () => {
         <h1>プロファイル編集</h1>
         <Grid sx={{ mb: 3 }}>
           <h2>公開情報（他の部員も見れる情報）</h2>
+          {userProfile.student_number === userProfile.username ? (
+            <Alert severity="warning">アイコンを設定しましょう!</Alert>
+          ) : (
+            <></>
+          )}
           {userProfile.icon_url === "" ? (
             <></>
           ) : (
@@ -53,6 +60,11 @@ const ProfileEditor = () => {
             onSelected={onAvatarImageSelected}
             onlyFileKind="image"
           />
+          {userProfile.student_number === userProfile.username ? (
+            <Alert severity="warning">ユーザー名を学番以外で設定しましょう!</Alert>
+          ) : (
+            <></>
+          )}
           <TextField
             label="ユーザー名"
             variant="outlined"
@@ -80,7 +92,9 @@ const ProfileEditor = () => {
             variant="contained"
             disabled={objectEquals(userProfile, editUserProfile)}
             onClick={() => {
-              updateProfile(editUserProfile);
+              updateProfile(editUserProfile).then(() => {
+                router.reload();
+              });
             }}
           >
             保存
