@@ -15,6 +15,7 @@ import PageHead from "../../components/Common/PageHead";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 import { User } from "../../interfaces";
+import { useRouter } from "next/router";
 
 type Props = {
   displayPageSetter: (page: MattermostDisplayPage) => void;
@@ -24,6 +25,7 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
   const [agree, setAgree] = useState(false);
   const { authState } = useAuthState();
   const userProfile = authState.user;
+  const router = useRouter();
   const checkProfile = (userProfile: User): string | boolean => {
     if (userProfile.iconUrl.length === 0) {
       return "アイコンが設定されていません。";
@@ -152,9 +154,11 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
                 profileWarning !== true &&
                 confirm(profileWarning + "プロフィール編集画面に移動しますか？")
               ) {
-                window.open("/user/profile", "_blank");
+                //window.open("/user/profile", "_blank");
+                router.push(`/user/profile?backto=/mattermost`);
+              } else {
+                displayPageSetter("register");
               }
-              displayPageSetter("register");
             }}
           >
             Mattermost への登録を開始

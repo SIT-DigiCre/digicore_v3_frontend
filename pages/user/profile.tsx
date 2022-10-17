@@ -7,11 +7,13 @@ import PageHead from "../../components/Common/PageHead";
 import ProfileEditor from "../../components/Profile/ProfileEditor";
 import ProfileRegister from "../../components/Profile/ProfileRegister";
 import { useAuthState } from "../../hook/useAuthState";
+import FloatingWindow from "../../components/Common/FloatingWindow";
 
 type Props = {
   registerMode: boolean;
+  backtoUrl?: string;
 };
-const ProfilePage = ({ registerMode }: Props) => {
+const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
   const router = useRouter();
   const { authState } = useAuthState();
   useEffect(() => {
@@ -29,6 +31,7 @@ const ProfilePage = ({ registerMode }: Props) => {
         <Container>
           <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Profile" }]} />
           {registerMode ? <ProfileRegister registerMode={registerMode} /> : <ProfileEditor />}
+          <FloatingWindow to={backtoUrl} text={"Mattermostの登録に戻る"} />
         </Container>
       )}
     </>
@@ -36,10 +39,12 @@ const ProfilePage = ({ registerMode }: Props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const { register } = context.query;
+  const { register, backto } = context.query;
   let registerMode = false;
+  let backtoUrl: string | undefined = undefined;
   if (typeof register === "string") registerMode = register === "true";
-  const props: Props = { registerMode: registerMode };
+  if (typeof backto === "string") backtoUrl = backto;
+  const props: Props = { registerMode: registerMode, backtoUrl: backtoUrl };
   return {
     props: props,
   };
