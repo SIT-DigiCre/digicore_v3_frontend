@@ -34,7 +34,7 @@ const ProfileEditor = () => {
         <h1>プロファイル編集</h1>
         <Grid sx={{ mb: 3 }}>
           <h2>公開情報（他の部員も見れる情報）</h2>
-          {userProfile.student_number === userProfile.username ? (
+          {userProfile.icon_url === "" ? (
             <Alert severity="warning">アイコンを設定しましょう!</Alert>
           ) : (
             <></>
