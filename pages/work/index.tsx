@@ -110,7 +110,7 @@ const WorkIndexPage = () => {
         onClick={() => {
           router.push(`/work/new`);
         }}
-        sx={{ position: "absolute", bottom: 16, right: 16 }}
+        sx={{ position: "fixed", bottom: 24, right: 24 }}
       >
         <AddIcon />
       </Fab>
