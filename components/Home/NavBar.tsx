@@ -22,11 +22,7 @@ const NavBar = () => {
               </IconButton>
             </>
           ) : (
-            <Button
-              startIcon={<AccountCircle />}
-              color="inherit"
-              href={baseURL + "/google/oauth/url"}
-            >
+            <Button startIcon={<AccountCircle />} color="inherit" href={"/login"}>
               Login
             </Button>
           )}

@@ -3,7 +3,7 @@ import { useRecoilState } from "recoil";
 import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
 import { axios } from "../utils/axios";
-import { UserProfileAPIDataResponse, convertUserFromUserProfile } from "../interfaces/api";
+import { convertUserFromUserProfile, UserProfileAPIData } from "../interfaces/api";
 import { useErrorState } from "./useErrorState";
 
 export type AuthState = {
@@ -24,18 +24,18 @@ export const useAuthState: UseAuthState = () => {
   const { setNewError, removeError } = useErrorState();
   const getUserInfo = (token: string) => {
     axios
-      .get("/user/my", {
+      .get("/user/me", {
         headers: {
-          Authorization: "bearer " + token,
+          Authorization: "Bearer " + token,
         },
       })
       .then((res) => {
         if (auth.isLogined) return;
-        const userProfileAPIDataResponse: UserProfileAPIDataResponse = res.data;
+        const userProfileAPIData: UserProfileAPIData = res.data;
         setAuth({
           isLogined: true,
           isLoading: false,
-          user: convertUserFromUserProfile(userProfileAPIDataResponse),
+          user: convertUserFromUserProfile(userProfileAPIData),
           token: token,
         });
         removeError("autologin-fail");

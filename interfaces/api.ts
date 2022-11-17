@@ -1,44 +1,37 @@
 import { User } from "./index";
 
 export type UserProfileAPIData = {
-  id?: string;
-  student_number: string;
+  userId?: string;
   username: string;
-  school_grade: number;
-  icon_url: string;
-  discord_userid: string;
-  active_limit?: string;
-  short_self_introduction: string;
+  studentNumber: string;
+  iconUrl: string;
+  schoolGrade: number;
+  discordUserId: string;
+  shortSelfIntroduction: string;
+  activeLimit?: string;
 };
 
-export type UserProfileAPIDataResponse = {
-  profile: UserProfileAPIData;
-  error: string;
-};
-
-export const convertUserFromUserProfile: (
-  userProfileResponse: UserProfileAPIDataResponse,
-) => User = (userProfileResponse) => {
+export const convertUserFromUserProfile = (userProfile: UserProfileAPIData): User => {
   const user: User = {
-    id: userProfileResponse.profile.id,
-    studentNumber: userProfileResponse.profile.student_number,
-    username: userProfileResponse.profile.username,
-    schoolGrade: userProfileResponse.profile.school_grade,
-    iconUrl: userProfileResponse.profile.icon_url,
-    discordUserId: userProfileResponse.profile.discord_userid,
-    activeLimit: new Date(userProfileResponse.profile.active_limit),
-    shortSelfIntroduction: userProfileResponse.profile.short_self_introduction,
+    id: userProfile.userId,
+    studentNumber: userProfile.studentNumber,
+    username: userProfile.username,
+    schoolGrade: userProfile.schoolGrade,
+    iconUrl: userProfile.iconUrl,
+    discordUserId: userProfile.discordUserId,
+    activeLimit: new Date(userProfile.activeLimit),
+    shortSelfIntroduction: userProfile.shortSelfIntroduction,
   };
   return user;
 };
-export const convertUserProfileFromUser: (user: User) => UserProfileAPIData = (user) => {
+export const convertUserProfileFromUser = (user: User): UserProfileAPIData => {
   const userProfile: UserProfileAPIData = {
-    student_number: user.studentNumber,
+    studentNumber: user.studentNumber,
     username: user.username,
-    school_grade: user.schoolGrade,
-    icon_url: user.iconUrl,
-    discord_userid: user.discordUserId,
-    short_self_introduction: user.shortSelfIntroduction,
+    schoolGrade: user.schoolGrade,
+    iconUrl: user.iconUrl,
+    discordUserId: user.discordUserId,
+    shortSelfIntroduction: user.shortSelfIntroduction,
   };
   return userProfile;
 };
