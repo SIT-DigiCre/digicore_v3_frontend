@@ -11,7 +11,7 @@ import FloatingWindow from "../../components/Common/FloatingWindow";
 
 type Props = {
   registerMode: boolean;
-  backtoUrl?: string;
+  backtoUrl: string | null;
 };
 const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
   const router = useRouter();
@@ -41,7 +41,7 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { register, backto } = context.query;
   let registerMode = false;
-  let backtoUrl: string | undefined = undefined;
+  let backtoUrl: string | null = null;
   if (typeof register === "string") registerMode = register === "true";
   if (typeof backto === "string") backtoUrl = backto;
   const props: Props = { registerMode: registerMode, backtoUrl: backtoUrl };
