@@ -1,10 +1,9 @@
-import { User } from "../interfaces";
 import { useRecoilState } from "recoil";
 import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
 import { axios } from "../utils/axios";
-import { convertUserFromUserProfile, UserProfileAPIData } from "../interfaces/api";
 import { useErrorState } from "./useErrorState";
+import { User } from "../interfaces/user";
 
 export type AuthState = {
   isLogined: boolean;
@@ -31,11 +30,11 @@ export const useAuthState: UseAuthState = () => {
       })
       .then((res) => {
         if (auth.isLogined) return;
-        const userProfileAPIData: UserProfileAPIData = res.data;
+        const user: User = res.data;
         setAuth({
           isLogined: true,
           isLoading: false,
-          user: convertUserFromUserProfile(userProfileAPIData),
+          user: user,
           token: token,
         });
         removeError("autologin-fail");

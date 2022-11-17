@@ -3,8 +3,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useMyProfile } from "../../hook/profile/useProfile";
-import { UserProfileAPIData } from "../../interfaces/api";
 import { FileObject } from "../../interfaces/file";
+import { User } from "../../interfaces/user";
 import { baseURL, objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
 import { FileBrowserModal } from "../File/FileBrowser";
@@ -12,7 +12,7 @@ import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
   const [userProfile, updateProfile] = useMyProfile();
-  const [editUserProfile, setEditUserProfile] = useState<UserProfileAPIData>(userProfile);
+  const [editUserProfile, setEditUserProfile] = useState<User>(userProfile);
   useEffect(() => {
     setEditUserProfile(userProfile);
   }, [userProfile]);
@@ -25,7 +25,7 @@ const ProfileEditor = () => {
   const router = useRouter();
   if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
   const onAvatarImageSelected = (file: FileObject) => {
-    setEditUserProfile({ ...editUserProfile, icon_url: file.url });
+    setEditUserProfile({ ...editUserProfile, iconUrl: file.url });
     setOpenFileModal(false);
   };
   return (
@@ -34,15 +34,15 @@ const ProfileEditor = () => {
         <h1>プロファイル編集</h1>
         <Grid sx={{ mb: 3 }}>
           <h2>公開情報（他の部員も見れる情報）</h2>
-          {userProfile.icon_url === "" ? (
+          {userProfile.iconUrl === "" ? (
             <Alert severity="warning">アイコンを設定しましょう!</Alert>
           ) : (
             <></>
           )}
-          {userProfile.icon_url === "" ? (
+          {userProfile.iconUrl === "" ? (
             <></>
           ) : (
-            <Avatar src={editUserProfile.icon_url} sx={{ margin: 1 }} />
+            <Avatar src={editUserProfile.iconUrl} sx={{ margin: 1 }} />
           )}
           <Button
             variant="contained"
@@ -60,7 +60,7 @@ const ProfileEditor = () => {
             onSelected={onAvatarImageSelected}
             onlyFileKind="image"
           />
-          {userProfile.student_number === userProfile.username ? (
+          {userProfile.studentNumber === userProfile.username ? (
             <Alert severity="warning">ユーザー名を学番以外で設定しましょう!</Alert>
           ) : (
             <></>
@@ -84,9 +84,9 @@ const ProfileEditor = () => {
             margin="normal"
             fullWidth
             onChange={(e) => {
-              setEditUserProfile({ ...editUserProfile, short_self_introduction: e.target.value });
+              setEditUserProfile({ ...editUserProfile, shortSelfIntroduction: e.target.value });
             }}
-            value={editUserProfile.short_self_introduction}
+            value={editUserProfile.shortSelfIntroduction}
           />
           <Button
             variant="contained"
@@ -107,7 +107,7 @@ const ProfileEditor = () => {
         <Grid sx={{ mb: 3 }}>
           <h2>Discord連携</h2>
           <Button href={baseURL + "/discord/oauth/url"} variant="contained">
-            {userProfile.discord_userid == "" ? "Discord連携" : "Discord再連携"}
+            {userProfile.discordUserId == "" ? "Discord連携" : "Discord再連携"}
           </Button>
         </Grid>
         <Grid>
