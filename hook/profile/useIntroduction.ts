@@ -72,18 +72,18 @@ export const useIntroduction: UseIntroduction = (userId) => {
             Authorization: "Bearer " + authState.token,
           },
         });
-        const userIntroductionAPIDataResponse: {
-          self_introduction?: { self_introduction: string };
-          error?: string;
-        } = res.data;
-        if (userIntroductionAPIDataResponse.self_introduction) {
-          setMd(userIntroductionAPIDataResponse.self_introduction.self_introduction);
+        const userIntroduction: string = res.data.introduction;
+        if (userIntroduction) {
+          setMd(userIntroduction);
           removeError("introduction-get-fail");
         } else {
           throw "API Error";
         }
       } catch (err: any) {
-        setNewError({ name: "introduction-get-fail", message: "自己紹介情報の取得に失敗しました" });
+        setNewError({
+          name: "introduction-get-fail",
+          message: "自己紹介情報の取得に失敗しました" + err.toString(),
+        });
       }
     })();
   }, [authState]);

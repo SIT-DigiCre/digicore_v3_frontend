@@ -16,15 +16,15 @@ const UserIndexPage = () => {
           <Card
             sx={{ width: "32%", display: "inline-block", m: 0.5 }}
             onClick={() => {
-              router.push(`/user/${userProfile.id}`);
+              router.push(`/user/${userProfile.userId}`);
             }}
             className="clickable"
-            key={userProfile.id}
+            key={userProfile.userId}
           >
             <CardHeader
-              avatar={<Avatar src={userProfile.icon_url} />}
+              avatar={<Avatar src={userProfile.iconUrl} />}
               title={userProfile.username}
-              subheader={userProfile.short_self_introduction}
+              subheader={userProfile.shortSelfIntroduction}
             ></CardHeader>
           </Card>
         ))}

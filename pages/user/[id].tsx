@@ -25,7 +25,7 @@ const UserProfilePage = ({ id, error }: Props) => {
       <div style={{ marginTop: "10px" }}>
         <div style={{ display: "inline-block", textAlign: "center", width: "30%" }}>
           <img
-            src={profile.icon_url}
+            src={profile.iconUrl}
             alt={profile.username + "のアイコン"}
             style={{ maxWidth: "100%", borderRadius: "50%" }}
           />
@@ -35,10 +35,10 @@ const UserProfilePage = ({ id, error }: Props) => {
             <h1>{profile.username}</h1>
           </div>
           <div style={{ margin: "20px" }}>
-            <p>{profile.short_self_introduction}</p>
+            <p>{profile.shortSelfIntroduction}</p>
           </div>
           <div style={{ margin: "20px" }}>
-            <p>学年: {profile.school_grade}</p>
+            <p>学年: {profile.schoolGrade}</p>
           </div>
         </div>
       </div>

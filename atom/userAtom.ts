@@ -22,3 +22,8 @@ export const darkModeState = atom<DarkMode>({
   key: "sys/darkmode",
   default: "os",
 });
+
+export const userListSeed = atom<number>({
+  key: "seed/userList",
+  default: Math.floor(Math.random() * 100),
+});
