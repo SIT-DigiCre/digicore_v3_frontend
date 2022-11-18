@@ -27,7 +27,7 @@ export const useUserProfiles: UseUserProfiles = () => {
           Authorization: "Bearer " + authState.token,
         },
       });
-      const resUsers: User[] = res.data.user;
+      const resUsers: User[] = res.data.users;
       if (resUsers.length === 0) setIsOver(true);
       setUsers(users.concat(resUsers));
       removeError("userprofiles-get-fail");

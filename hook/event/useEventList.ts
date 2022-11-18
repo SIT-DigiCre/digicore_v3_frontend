@@ -22,7 +22,7 @@ export const useEventList: UseEventList = () => {
             Authorization: "Bearer " + authState.token,
           },
         });
-        const eventRes: DigicreEvent[] = res.data.event;
+        const eventRes: DigicreEvent[] = res.data.events;
         setEvents(eventRes);
         removeError("eventlist-get-fail");
       } catch (err) {

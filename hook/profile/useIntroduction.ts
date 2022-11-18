@@ -73,16 +73,12 @@ export const useIntroduction: UseIntroduction = (userId) => {
           },
         });
         const userIntroduction: string = res.data.introduction;
-        if (userIntroduction) {
-          setMd(userIntroduction);
-          removeError("introduction-get-fail");
-        } else {
-          throw "API Error";
-        }
+        setMd(userIntroduction);
+        removeError("introduction-get-fail");
       } catch (err: any) {
         setNewError({
           name: "introduction-get-fail",
-          message: "自己紹介情報の取得に失敗しました" + err.toString(),
+          message: "自己紹介情報の取得に失敗しました",
         });
       }
     })();

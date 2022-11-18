@@ -22,7 +22,7 @@ export type DigicreEventReservation = {
   reservated: boolean;
 };
 export type DigicreEventDetail = DigicreEvent & {
-  reservation: DigicreEventReservation[];
+  reservations: DigicreEventReservation[];
 };
 
 export type DigicreEventUserReservation = {

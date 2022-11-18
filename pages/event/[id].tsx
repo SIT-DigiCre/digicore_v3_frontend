@@ -28,9 +28,9 @@ const EventPage = ({ id, errors }: EventPageProps) => {
       <MarkdownView md={eventDetail.description} />
       {eventDetail.reservated ? <p style={{ color: "red" }}>既にあなたは予約済みです</p> : <></>}
       <hr />
-      {eventDetail.reservation ? (
+      {eventDetail.reservations ? (
         <>
-          {eventDetail.reservation
+          {eventDetail.reservations
             .sort((a, b) =>
               new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
             )
