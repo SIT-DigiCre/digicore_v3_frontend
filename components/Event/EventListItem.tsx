@@ -9,14 +9,14 @@ type Props = {
 const EventListItem = ({ event }: Props) => {
   const router = useRouter();
   const onClick = () => {
-    router.push(`/event/${event.id!}`);
+    router.push(`/event/${event.eventId!}`);
   };
   return (
     <>
       <Card sx={{ margin: "3px" }} variant="outlined" onClick={onClick} className="clickable-gray">
         <CardContent>
           <h3>{event.name}</h3>
-          <MarkdownView md={event.description} />
+          <MarkdownView md={event.description ? event.description : ""} />
         </CardContent>
       </Card>
     </>

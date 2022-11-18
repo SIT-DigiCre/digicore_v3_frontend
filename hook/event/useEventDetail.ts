@@ -22,7 +22,7 @@ const useEventDetail: UseEventDetail = (id) => {
       try {
         const res = await axios.get(`/event/${id}`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
 
@@ -40,15 +40,15 @@ const useEventDetail: UseEventDetail = (id) => {
 
   const reservation = async (frameId: string, commentText: string, urlText: string) => {
     try {
-      const res = await axios.post(
-        `/event/${id}/${frameId}`,
+      const _ = await axios.put(
+        `/event/${id}/${frameId}/me`,
         {
           comment: commentText,
           url: urlText,
         },
         {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         },
       );
@@ -63,9 +63,9 @@ const useEventDetail: UseEventDetail = (id) => {
   };
   const cancelReservation = async (frameId: string) => {
     try {
-      const res = await axios.delete(`/event/${id}/${frameId}`, {
+      const _ = await axios.delete(`/event/${id}/${frameId}/me`, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
       removeError("eventdetailreservation-delete-fail");

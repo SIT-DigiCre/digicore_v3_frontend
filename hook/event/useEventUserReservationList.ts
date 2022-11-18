@@ -1,33 +1,30 @@
 import { useEffect, useState } from "react";
-import {
-  DigicreEventUserReservation,
-  DigicreEventUserReservationUsersAPIData,
-} from "../../interfaces/event";
+import { DigicreEventUserReservation } from "../../interfaces/event";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 
 type UseEventUserReservation = (
   eventId: string,
-  frameId: string,
+  reservationId: string,
 ) => {
   isLoading: boolean;
   userReservations: DigicreEventUserReservation[];
 };
 
-const useEventUserReservationList: UseEventUserReservation = (eventId, frameId) => {
+const useEventUserReservationList: UseEventUserReservation = (eventId, reservationId) => {
   const [userReservations, setUserReservations] = useState<DigicreEventUserReservation[]>();
   const { authState } = useAuthState();
   useEffect(() => {
     if (!authState) return;
     const getFunc = async () => {
       try {
-        const res = await axios.get(`/event/${eventId}/${frameId}`, {
+        const res = await axios.get(`/event/${eventId}/${reservationId}`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
-        const deuru: DigicreEventUserReservationUsersAPIData = res.data;
-        setUserReservations(deuru.reservation_users);
+        const userReservationRes: DigicreEventUserReservation[] = res.data.user;
+        setUserReservations(userReservationRes);
       } catch (err) {
         console.log(err);
       }
