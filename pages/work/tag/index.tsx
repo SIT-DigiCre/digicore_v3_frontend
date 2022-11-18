@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Modal, Stack, Box, Button, TextField } from "@mui/material";
 import { useWorkTags } from "../../../hook/work/useWorkTag";
-import TagRow from "../../../components/work/TagRow";
+import TagRow from "../../../components/Work/TagRow";
 import { WorkTagUpdate } from "../../../interfaces/work";
 import PageHead from "../../../components/Common/PageHead";
 
@@ -22,7 +22,7 @@ const WorkTagIndexPage = () => {
         </div>
         <div>
           {workTags.map((WorkTag) => (
-            <TagRow tagId={WorkTag.id} deleteWorkTag={deleteWorkTag} />
+            <TagRow tagId={WorkTag.tagId} deleteWorkTag={deleteWorkTag} />
           ))}
         </div>
       </div>

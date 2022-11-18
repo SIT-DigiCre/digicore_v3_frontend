@@ -1,15 +1,16 @@
 import { Grid, Button, Container, Box, Typography } from "@mui/material";
 import { Google } from "@mui/icons-material";
-import { baseURL } from "../utils/common";
-import PageHead from "../components/Common/PageHead";
+import PageHead from "../../components/Common/PageHead";
+import { useLoginData } from "../../hook/useLoginData";
 const LoginPage = () => {
+  const { loginUrl } = useLoginData();
   return (
     <>
       <PageHead title="Login" />
       <Container>
         <Grid item xs={12} style={{ marginTop: "30px" }}>
           <Box textAlign="center">
-            <Button variant="contained" startIcon={<Google />} href={baseURL + "/google/oauth/url"}>
+            <Button variant="contained" startIcon={<Google />} href={loginUrl}>
               Googleログイン
             </Button>
           </Box>

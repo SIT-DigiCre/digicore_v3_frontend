@@ -12,12 +12,12 @@ import { useRouter } from "next/router";
 import { ChangeEventHandler, useState } from "react";
 import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
 import { useDarkMode } from "../../hook/useDarkMode";
-import { DigicreEventReservationFrame } from "../../interfaces/event";
+import { DigicreEventReservation } from "../../interfaces/event";
 import { getTimeSpanText } from "../../utils/date-util";
 
 type Props = {
   eventId: string;
-  eventReservationFrame: DigicreEventReservationFrame;
+  eventReservation: DigicreEventReservation;
   reservation: (id: string, commentText: string, urlText: string) => Promise<boolean>;
   cancelReservation: (id: string) => Promise<boolean>;
 };
@@ -35,7 +35,7 @@ const modalStyle = {
 
 const EventReservationFrame = ({
   eventId,
-  eventReservationFrame,
+  eventReservation,
   reservation,
   cancelReservation,
 }: Props) => {
@@ -45,7 +45,7 @@ const EventReservationFrame = ({
   const [urlText, setUrlText] = useState("");
   const { isLoading, userReservations } = useEventUserReservationList(
     eventId,
-    eventReservationFrame.id!,
+    eventReservation.reservationId!,
   );
   const onChangeCommnetText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCommentText(e.target.value);
@@ -55,7 +55,7 @@ const EventReservationFrame = ({
   };
   const { isDarkMode } = useDarkMode();
   const getBackgroudColor = () => {
-    const finishDate = new Date(eventReservationFrame.finish_date);
+    const finishDate = new Date(eventReservation.finishDate);
     const now = new Date(Date.now());
     if (finishDate.getTime() < now.getTime()) return "darkgray";
     if (
@@ -73,45 +73,49 @@ const EventReservationFrame = ({
         variant="outlined"
       >
         <CardContent>
-          <Typography variant="h5">{eventReservationFrame.name}</Typography>
-          <Typography>{eventReservationFrame.description}</Typography>
+          <Typography variant="h5">{eventReservation.name}</Typography>
+          <Typography>{eventReservation.description}</Typography>
           <Typography>{`実施期間: ${getTimeSpanText(
-            eventReservationFrame.start_date,
-            eventReservationFrame.finish_date,
+            eventReservation.startDate,
+            eventReservation.finishDate,
           )}`}</Typography>
           <Typography>{`予約実行可能期間: ${getTimeSpanText(
-            eventReservationFrame.reservation_start_date,
-            eventReservationFrame.reservation_finish_date,
+            eventReservation.reservationStartDate,
+            eventReservation.reservationFinishDate,
           )}`}</Typography>
           {isLoading ? (
             <></>
           ) : (
             <div style={{ display: "inline-block" }}>
-              {userReservations.map((userReser) => (
+              {userReservations.map((userReservation) => (
                 <Box
-                  key={userReser.id!}
+                  key={userReservation.userId!}
                   style={{ border: "black 1px solid", borderRadius: "5px", padding: "3px" }}
                 >
-                  <h5>{userReser.name!}</h5>
-                  {userReser.comment === "" ? <></> : <p>{userReser.comment}</p>}
-                  {userReser.url === "" ? <></> : <a href={userReser.url}>{userReser.url}</a>}
+                  <h5>{userReservation.name!}</h5>
+                  {userReservation.comment === "" ? <></> : <p>{userReservation.comment}</p>}
+                  {userReservation.url === "" ? (
+                    <></>
+                  ) : (
+                    <a href={userReservation.url}>{userReservation.url}</a>
+                  )}
                 </Box>
               ))}
             </div>
           )}
 
           <Typography>
-            残り予約数: {eventReservationFrame.free_capacity}/{eventReservationFrame.capacity}
+            残り予約数: {eventReservation.freeCapacity}/{eventReservation.capacity}
           </Typography>
         </CardContent>
         <CardActions>
-          {eventReservationFrame.reservated ? (
+          {eventReservation.reservated ? (
             <Button
               size="small"
               color="error"
               variant="contained"
               onClick={() => {
-                cancelReservation(eventReservationFrame.id).then((res) => {
+                cancelReservation(eventReservation.reservationId).then((res) => {
                   router.reload();
                 });
               }}
@@ -122,7 +126,7 @@ const EventReservationFrame = ({
             <Button
               size="small"
               variant="contained"
-              disabled={!eventReservationFrame.reservable}
+              disabled={!eventReservation.reservable}
               onClick={() => setShowModal(true)}
             >
               この枠を予約
@@ -136,10 +140,7 @@ const EventReservationFrame = ({
           setShowModal(false);
         }}
         aria-labelledby="イベント枠予約"
-        aria-describedby={getTimeSpanText(
-          eventReservationFrame.start_date,
-          eventReservationFrame.finish_date,
-        )}
+        aria-describedby={getTimeSpanText(eventReservation.startDate, eventReservation.finishDate)}
       >
         <Box sx={modalStyle}>
           <TextField onChange={onChangeCommnetText} value={commentText} label="コメント" />
@@ -147,7 +148,7 @@ const EventReservationFrame = ({
           <br />
           <Button
             onClick={() => {
-              reservation(eventReservationFrame.id!, commentText, urlText).then((res) => {
+              reservation(eventReservation.reservationId!, commentText, urlText).then((res) => {
                 router.reload();
               });
             }}

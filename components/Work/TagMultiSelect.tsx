@@ -39,14 +39,14 @@ const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
         renderValue={(selected) => (
           <Stack direction="row" spacing={1}>
             {selected.map((value) => {
-              const workTag = workTags.filter((workTag) => workTag.id === value)[0];
+              const workTag = workTags.filter((workTag) => workTag.tagId === value)[0];
               return <Chip key={value} label={workTag.name} />;
             })}
           </Stack>
         )}
       >
         {workTags.map((value) => (
-          <MenuItem key={value.id} value={value.id}>
+          <MenuItem key={value.tagId} value={value.tagId}>
             <span>{value.name}</span>
           </MenuItem>
         ))}

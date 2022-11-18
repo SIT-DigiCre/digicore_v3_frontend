@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
-import { UserPrivateAPIData, UserPrivateAPIDataResponse } from "../../interfaces/api";
+import { UserPrivateProfile } from "../../interfaces/user";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
 type UsePrivateProfile = () => [
-  UserPrivateAPIData,
-  (privateProfile: UserPrivateAPIData) => Promise<boolean>,
+  UserPrivateProfile,
+  (privateProfile: UserPrivateProfile) => Promise<boolean>,
 ];
 
 export const usePrivateProfile: UsePrivateProfile = () => {
-  const [profile, setProfile] = useState<UserPrivateAPIData>();
+  const [profile, setProfile] = useState<UserPrivateProfile>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   useEffect(() => {
     (async () => {
       if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/user/my/private/`, {
+        const res = await axios.get(`/user/me/private`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
-        const userProfileAPIDataResponse: UserPrivateAPIDataResponse = res.data;
-        setProfile(userProfileAPIDataResponse.private_profile);
+        const userPrivateProfile: UserPrivateProfile = res.data;
+        setProfile(userPrivateProfile);
         removeError("privateprofile-get-fail");
       } catch (err: any) {
         setNewError({
@@ -33,11 +33,11 @@ export const usePrivateProfile: UsePrivateProfile = () => {
       }
     })();
   }, [authState]);
-  const update = async (profile: UserPrivateAPIData) => {
+  const update = async (profile: UserPrivateProfile) => {
     try {
-      const res = await axios.put(`/user/my/private/`, profile, {
+      const res = await axios.put(`/user/me/private`, profile, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
       setProfile(profile);

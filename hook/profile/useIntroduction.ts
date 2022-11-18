@@ -15,17 +15,14 @@ export const useMyIntroduction: UseMyIntroduction = () => {
     (async () => {
       if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/user/my/introduction`, {
+        const res = await axios.get(`/user/me/introduction`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
-        const userIntroductionAPIDataResponse: {
-          self_introduction?: { self_introduction: string };
-          error?: string;
-        } = res.data;
-        if (userIntroductionAPIDataResponse.self_introduction) {
-          setMd(userIntroductionAPIDataResponse.self_introduction.self_introduction);
+        const intro: string = res.data.introduction;
+        if (intro) {
+          setMd(intro);
           removeError("introduction-get-fail");
         } else {
           throw "API Error";
@@ -38,11 +35,11 @@ export const useMyIntroduction: UseMyIntroduction = () => {
   const update = async (newMd: string) => {
     try {
       const res = await axios.put(
-        `/user/my/introduction`,
-        { self_introduction: newMd },
+        `/user/me/introduction`,
+        { introduction: newMd },
         {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         },
       );
@@ -72,21 +69,17 @@ export const useIntroduction: UseIntroduction = (userId) => {
       try {
         const res = await axios.get(`/user/${userId}/introduction`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
-        const userIntroductionAPIDataResponse: {
-          self_introduction?: { self_introduction: string };
-          error?: string;
-        } = res.data;
-        if (userIntroductionAPIDataResponse.self_introduction) {
-          setMd(userIntroductionAPIDataResponse.self_introduction.self_introduction);
-          removeError("introduction-get-fail");
-        } else {
-          throw "API Error";
-        }
+        const userIntroduction: string = res.data.introduction;
+        setMd(userIntroduction);
+        removeError("introduction-get-fail");
       } catch (err: any) {
-        setNewError({ name: "introduction-get-fail", message: "自己紹介情報の取得に失敗しました" });
+        setNewError({
+          name: "introduction-get-fail",
+          message: "自己紹介情報の取得に失敗しました",
+        });
       }
     })();
   }, [authState]);

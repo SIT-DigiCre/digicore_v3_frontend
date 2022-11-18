@@ -19,7 +19,7 @@ export const useWork: UseWork = (workId) => {
       try {
         const res = await axios.get(`/work/work/${workId}`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
         const workDetail: WorkDetail = res.data;
@@ -34,7 +34,7 @@ export const useWork: UseWork = (workId) => {
     try {
       const res = await axios.put(`/work/work/${workId}`, workRequest, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
       removeError("work-put-fail");
@@ -74,28 +74,28 @@ export const useWorks: UseWorks = (authorId) => {
   const [works, setWorks] = useState<Work[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [pageNum, setPageNum] = useState(0);
+  const [offsetNum, setOffsetNum] = useState(0);
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
     try {
       const res = await axios.get(
-        `/work/work/?pages=${n}${
+        `/work/work?offset=${n}${
           authorId
             ? authorId === "my"
-              ? `&auther_id=${authState.user.id!}`
-              : `&auther_id=${authorId}`
+              ? `&authorId=${authState.user.userId!}`
+              : `&authorId=${authorId}`
             : ""
         }`,
         {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         },
       );
       const newWorks: Work[] = res.data.works;
       setWorks(works.concat(newWorks));
       removeError("works-get-fail");
-      setPageNum(n);
+      setOffsetNum(n);
     } catch (e: any) {
       setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
     }
@@ -104,18 +104,18 @@ export const useWorks: UseWorks = (authorId) => {
     loadWork(0);
   }, [authState]);
   const loadMore = () => {
-    loadWork(pageNum + 100);
+    loadWork(offsetNum + 100);
   };
   const createWork = async (workRequest: WorkRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
     try {
       const res = await axios.post(`/work/work`, workRequest, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
       removeError("work-post-fail");
-      return res.data.id;
+      return res.data.workId;
     } catch (e: any) {
       setNewError({ name: "work-post-fail", message: "Workの投稿に失敗しました" });
       return "error";
@@ -125,7 +125,7 @@ export const useWorks: UseWorks = (authorId) => {
     try {
       const res = await axios.delete(`/work/work/${id}`, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
       removeError("work-delete-fail");

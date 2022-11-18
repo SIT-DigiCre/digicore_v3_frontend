@@ -28,19 +28,25 @@ const EventPage = ({ id, errors }: EventPageProps) => {
       <MarkdownView md={eventDetail.description} />
       {eventDetail.reservated ? <p style={{ color: "red" }}>既にあなたは予約済みです</p> : <></>}
       <hr />
-      {eventDetail.reservation_frames
-        .sort((a, b) =>
-          new Date(a.start_date).getTime() > new Date(b.start_date).getTime() ? 1 : -1,
-        )
-        .map((frame) => (
-          <EventReservationFrame
-            key={frame.id!}
-            eventId={id}
-            eventReservationFrame={frame}
-            reservation={reservation}
-            cancelReservation={cancelReservation}
-          />
-        ))}
+      {eventDetail.reservations ? (
+        <>
+          {eventDetail.reservations
+            .sort((a, b) =>
+              new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
+            )
+            .map((frame) => (
+              <EventReservationFrame
+                key={frame.reservationId!}
+                eventId={id}
+                eventReservation={frame}
+                reservation={reservation}
+                cancelReservation={cancelReservation}
+              />
+            ))}
+        </>
+      ) : (
+        <p>枠はありません</p>
+      )}
     </Container>
   );
 };

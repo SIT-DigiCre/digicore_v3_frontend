@@ -13,16 +13,16 @@ const JoinedPage = () => {
   useEffect(() => {
     if (authState.isLoading || !authState.isLogined) return;
     axios
-      .get("/user/my/private/", {
+      .get("/user/me/private", {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       })
       .then((res1) => {
         axios
-          .get("/env/join", {
+          .get("/tool", {
             headers: {
-              Authorization: "bearer " + authState.token,
+              Authorization: "Bearer " + authState.token,
             },
           })
           .then((res) => {
@@ -44,18 +44,9 @@ const JoinedPage = () => {
           </Typography>
         </Grid>
         <Grid>
-          <h3>Slack</h3>
-          <Typography>
-            ※かならず大学のメールアドレス（shibaura-it.ac.jp）で登録してください
-          </Typography>
-          <Button href={joinData.slack_url} variant="contained" target="_blank">
-            Slackの招待URLを開く
-          </Button>
-        </Grid>
-        <Grid>
           <h3>Discord</h3>
           <Typography>※かならず先ほど登録したアカウントで登録してください</Typography>
-          <Button href={joinData.discord_url} variant="contained" target="_blank">
+          <Button href={joinData.discordUrl} variant="contained" target="_blank">
             Discordの招待URLを開く
           </Button>
           <Typography>

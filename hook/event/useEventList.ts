@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { DigicreEvent, EventListAPIData } from "../../interfaces/event";
+import { DigicreEvent } from "../../interfaces/event";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
@@ -19,11 +19,11 @@ export const useEventList: UseEventList = () => {
       try {
         const res = await axios.get("/event", {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
-        const eventRes: EventListAPIData = res.data;
-        setEvents(eventRes.events);
+        const eventRes: DigicreEvent[] = res.data.events;
+        setEvents(eventRes);
         removeError("eventlist-get-fail");
       } catch (err) {
         console.log(err);

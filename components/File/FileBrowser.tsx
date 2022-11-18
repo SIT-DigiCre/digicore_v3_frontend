@@ -41,7 +41,7 @@ export const FileBrowserModal = ({
     setIsOpen(open);
     reloadMyFileIds();
   }, [open]);
-  const { myFileIds, reloadMyFileIds } = useMyFiles();
+  const { myFileInfos, reloadMyFileIds } = useMyFiles();
   const onClickCancel = () => {
     setIsOpen(false);
     onCancel();
@@ -64,14 +64,14 @@ export const FileBrowserModal = ({
         <Box sx={style}>
           <h2>ファイルを選択</h2>
           <div style={{ overflowY: "auto", height: "400px" }}>
-            {myFileIds ? (
+            {myFileInfos ? (
               <List>
-                {myFileIds.map((fId) => (
+                {myFileInfos.map((info) => (
                   <FileListItem
-                    fileId={fId}
+                    fileId={info.fileId}
                     onClick={onClickListItem}
                     onlyFileKind={onlyFileKind}
-                    key={fId}
+                    key={info.fileId}
                   />
                 ))}
               </List>
