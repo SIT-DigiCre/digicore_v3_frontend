@@ -1,6 +1,7 @@
 import { Alert, Avatar, Button, Container, Grid, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useMyProfile } from "../../hook/profile/useProfile";
 import { FileObject } from "../../interfaces/file";
@@ -23,6 +24,7 @@ const ProfileEditor = () => {
   }, [userIntro]);
   const [openFileModal, setOpenFileModal] = useState(false);
   const router = useRouter();
+  const discordLogin = useDiscordLogin();
   if (!userProfile || !editUserProfile || !editUserIntro) return <p>isLoading...</p>;
   const onAvatarImageSelected = (file: FileObject) => {
     setEditUserProfile({ ...editUserProfile, iconUrl: file.url });
@@ -106,7 +108,7 @@ const ProfileEditor = () => {
         </Grid>
         <Grid sx={{ mb: 3 }}>
           <h2>Discord連携</h2>
-          <Button href={baseURL + "/discord/oauth/url"} variant="contained">
+          <Button href={discordLogin.loginUrl} variant="contained">
             {userProfile.discordUserId == "" ? "Discord連携" : "Discord再連携"}
           </Button>
         </Grid>
