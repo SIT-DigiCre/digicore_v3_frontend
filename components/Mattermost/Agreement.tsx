@@ -14,7 +14,7 @@ import { useAuthState } from "../../hook/useAuthState";
 import PageHead from "../../components/Common/PageHead";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
-import { User } from "../../interfaces";
+import { User } from "../../interfaces/user";
 import { useRouter } from "next/router";
 
 type Props = {
