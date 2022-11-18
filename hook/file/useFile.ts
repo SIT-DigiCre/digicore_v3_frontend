@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FileGetResponse, UploadFile } from "../../interfaces/api";
-import { convertToFileObject, FileObject } from "../../interfaces/file";
+import { UploadFile } from "../../interfaces/api";
+import { FileInfo, FileObject } from "../../interfaces/file";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
@@ -17,11 +17,10 @@ export const useFile: UseFile = (fileId) => {
       try {
         const res = await axios.get(`/storage/${fileId}`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
-        const fileRes: FileGetResponse = res.data;
-        const fileObject: FileObject = convertToFileObject(fileRes);
+        const fileObject: FileObject = res.data;
         setFile(fileObject);
         removeError("fileobject-get-fail");
       } catch (e: any) {
@@ -33,25 +32,25 @@ export const useFile: UseFile = (fileId) => {
 };
 
 type UseMyFiles = () => {
-  myFileIds: string[];
+  myFileInfos: FileInfo[];
   uploadFile: (file: UploadFile) => Promise<FileObject | string>;
   reloadMyFileIds: () => Promise<void>;
 };
 
 export const useMyFiles: UseMyFiles = () => {
-  const [fileIds, setFileIds] = useState<string[]>();
+  const [fileInfos, setFileInfos] = useState<FileInfo[]>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const loadFiles = async () => {
     if (!authState.isLogined) return;
     try {
-      const res = await axios.get(`/storage`, {
+      const res = await axios.get(`/storage/myfile`, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
-      const fileRes: { file_ids: string[] } = res.data;
-      setFileIds(fileRes.file_ids);
+      const filesRes: FileInfo[] = res.data.files;
+      setFileInfos(filesRes);
       removeError("myfileobjects-get-fail");
     } catch (e: any) {
       setNewError({
@@ -65,19 +64,12 @@ export const useMyFiles: UseMyFiles = () => {
   }, [authState]);
   const upload = async (file: UploadFile): Promise<FileObject | string> => {
     try {
-      const res = await axios.post(`/storage`, file, {
+      const res = await axios.post(`/storage/myfile`, file, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
-      const fileId: string = res.data.id;
-      const getRes = await axios.get(`/storage/${fileId}`, {
-        headers: {
-          Authorization: "bearer " + authState.token,
-        },
-      });
-      const fileRes: FileGetResponse = getRes.data;
-      const fileObject: FileObject = convertToFileObject(fileRes);
+      const fileObject: FileObject = res.data;
       removeError("myfileobject-post-fail");
       return fileObject;
     } catch (e: any) {
@@ -90,7 +82,7 @@ export const useMyFiles: UseMyFiles = () => {
   };
 
   return {
-    myFileIds: fileIds,
+    myFileInfos: fileInfos,
     uploadFile: upload,
     reloadMyFileIds: loadFiles,
   };

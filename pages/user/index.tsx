@@ -11,22 +11,23 @@ const UserIndexPage = () => {
         <h1>ユーザー一覧</h1>
         <hr />
       </Grid>
-      <Grid>
+      <Grid container>
         {userProfiles.map((userProfile) => (
-          <Card
-            sx={{ width: "32%", display: "inline-block", m: 0.5 }}
-            onClick={() => {
-              router.push(`/user/${userProfile.userId}`);
-            }}
-            className="clickable"
-            key={userProfile.userId}
-          >
-            <CardHeader
-              avatar={<Avatar src={userProfile.iconUrl} />}
-              title={userProfile.username}
-              subheader={userProfile.shortSelfIntroduction}
-            ></CardHeader>
-          </Card>
+          <Grid item md={4} sm={6} xs={12} sx={{ padding: 0.5 }}>
+            <Card
+              onClick={() => {
+                router.push(`/user/${userProfile.userId}`);
+              }}
+              className="clickable"
+              key={userProfile.userId}
+            >
+              <CardHeader
+                avatar={<Avatar src={userProfile.iconUrl} />}
+                title={userProfile.username}
+                subheader={userProfile.shortIntroduction}
+              ></CardHeader>
+            </Card>
+          </Grid>
         ))}
       </Grid>
       <Grid sx={{ textAlign: "center" }}>

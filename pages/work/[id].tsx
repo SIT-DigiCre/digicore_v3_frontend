@@ -5,8 +5,8 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
 import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
-import WorkEditor from "../../components/work/WorkEditor";
-import { WorkFileView } from "../../components/work/WorkFileView";
+import WorkEditor from "../../components/Work/WorkEditor";
+import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
 
@@ -44,26 +44,29 @@ const WorkDetailPage = ({ id, modeStr, error }: Props) => {
         <>
           <Grid>
             <h1>{workDetail.name}</h1>
-            {workDetail.authers.map((a) => (
-              <div
-                onClick={() => {
-                  router.push(`/user/${a.id}`);
-                }}
-                className="clickable d-inlineblock"
-              >
-                <Avatar src={a.icon_url} className="d-inlineblock" />
-              </div>
-            ))}
-            <ChipList chipList={workDetail.tags.map((t) => t.name)} />
+            {workDetail.authors
+              ? workDetail.authors.map((a) => (
+                  <div
+                    onClick={() => {
+                      router.push(`/user/${a.userId}`);
+                    }}
+                    className="clickable d-inlineblock"
+                  >
+                    <Avatar src={a.iconUrl} className="d-inlineblock" />
+                  </div>
+                ))
+              : ""}
+            {workDetail.tags ? <ChipList chipList={workDetail.tags.map((t) => t.name)} /> : ""}
+
             <hr />
           </Grid>
           <Grid sx={{ marginTop: 3 }}>
             <MarkdownView md={workDetail.description} />
           </Grid>
           <Grid sx={{ marginTop: 3 }}>
-            {workDetail.files.map((f) => (
-              <WorkFileView fileId={f.id} />
-            ))}
+            {workDetail.files
+              ? workDetail.files.map((f) => <WorkFileView fileId={f.fileId} />)
+              : ""}
           </Grid>
         </>
       )}

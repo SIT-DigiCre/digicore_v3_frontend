@@ -14,7 +14,7 @@ import { useWorks } from "../../hook/work/useWork";
 import AddIcon from "@mui/icons-material/Add";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
-import { WorkCardPreview } from "../../components/work/WorkCardPreview";
+import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
 import PageHead from "../../components/Common/PageHead";
 
 const WorkIndexPage = () => {
@@ -67,24 +67,30 @@ const WorkIndexPage = () => {
                 <Card
                   sx={{ width: "100%", display: "inline-block", m: 0.5, height: "100%" }}
                   onClick={() => {
-                    router.push(`/work/${w.id}`);
+                    router.push(`/work/${w.workId}`);
                   }}
                   className="clickable-gray"
-                  key={w.id}
+                  key={w.workId}
                 >
                   <CardHeader
                     title={w.name}
                     avatar={
                       <AvatarGroup>
-                        {w.authers.map((a) => (
-                          <Avatar src={a.icon_url} alt={a.name} />
-                        ))}
+                        {w.authors ? (
+                          <>
+                            {w.authors.map((a) => (
+                              <Avatar src={a.iconUrl} alt={a.name} />
+                            ))}
+                          </>
+                        ) : (
+                          ""
+                        )}
                       </AvatarGroup>
                     }
                   ></CardHeader>
                   <CardContent>
-                    <WorkCardPreview id={w.id} />
-                    <ChipList chipList={w.tags.map((t) => t.name)} />
+                    <WorkCardPreview id={w.workId} />
+                    {w.tags ? <ChipList chipList={w.tags.map((t) => t.name)} /> : ""}
                   </CardContent>
                 </Card>
               </Grid>

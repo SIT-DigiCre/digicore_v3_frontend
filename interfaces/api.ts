@@ -1,8 +1,7 @@
 //招待用URL取得時の型
 
 export type EnvJoinAPIData = {
-  slack_url: string;
-  discord_url: string;
+  discordUrl: string;
 };
 
 //部費支払い情報取得時の型
@@ -50,22 +49,10 @@ export type UsersAPIData = {
 
 // file
 
-export type FileGetResponse = {
-  id: string;
-  user_id: string;
-  name: string;
-  k_size: string;
-  extension: string;
-  is_public: boolean;
-  created_at: string;
-  update_at: string;
-  url: string;
-};
-
 export type UploadFile = {
   name: string;
   file: string;
-  is_public: boolean;
+  isPublic: boolean;
 };
 
 // Mattermost

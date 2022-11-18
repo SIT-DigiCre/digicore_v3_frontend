@@ -63,32 +63,32 @@ const MyWorkPage = () => {
                         edge="end"
                         aria-label="comments"
                         onClick={() => {
-                          router.push(`/work/${w.id}?mode=edit`);
+                          router.push(`/work/${w.workId}?mode=edit`);
                         }}
                       >
                         <EditIcon />
                       </IconButton>
-                      {/* <IconButton
-                    edge="end"
-                    aria-label="comments"
-                    onClick={() => {
-                      const res = confirm(`${w.name}を本当に削除しますか？`);
-                      if (res)
-                        deleteWork(w.id).then((res) => {
-                          if (!res) return;
-                          router.reload();
-                        });
-                    }}
-                    sx={{ marginLeft: 2 }}
-                  >
-                    <Delete />
-                  </IconButton> */}
+                      <IconButton
+                        edge="end"
+                        aria-label="comments"
+                        onClick={() => {
+                          const res = confirm(`${w.name}を本当に削除しますか？`);
+                          if (res)
+                            deleteWork(w.workId).then((res) => {
+                              if (!res) return;
+                              router.reload();
+                            });
+                        }}
+                        sx={{ marginLeft: 2 }}
+                      >
+                        <Delete />
+                      </IconButton>
                     </>
                   }
                 >
                   <ListItemButton
                     onClick={() => {
-                      router.push(`/work/${w.id}`);
+                      router.push(`/work/${w.workId}`);
                     }}
                   >
                     <ListItemText primary={w.name} />

@@ -35,7 +35,7 @@ const UserProfilePage = ({ id, error }: Props) => {
             <h1>{profile.username}</h1>
           </div>
           <div style={{ margin: "20px" }}>
-            <p>{profile.shortSelfIntroduction}</p>
+            <p>{profile.shortIntroduction}</p>
           </div>
           <div style={{ margin: "20px" }}>
             <p>学年: {profile.schoolGrade}</p>

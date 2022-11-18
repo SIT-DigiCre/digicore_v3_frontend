@@ -20,7 +20,7 @@ export const useWorkTags = () => {
       try {
         const res = await axios.get<WorkTagsResponse>("/work/tag", {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
         setWorkTags(res.data.tags);
@@ -37,11 +37,15 @@ export const useWorkTags = () => {
     }
     (async () => {
       try {
-        await axios.post("/work/tag", { name: name, description: description }, {
-          headers: {
-            Authorization: "bearer " + authState.token,
+        await axios.post(
+          "/work/tag",
+          { name: name, description: description },
+          {
+            headers: {
+              Authorization: "Bearer " + authState.token,
+            },
           },
-        });
+        );
         removeError("work-tag-create-fail");
         setTagUpdate(tagUpdate + 1);
       } catch (err: any) {
@@ -54,7 +58,7 @@ export const useWorkTags = () => {
       try {
         await axios.delete(`/work/tag/${tagId}`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
         removeError("work-tag-delete-fail");
@@ -77,7 +81,7 @@ export const useWorkTagDetail = (tagId: string) => {
       try {
         const res = await axios.get<WorkTagDetail>(`/work/tag/${tagId}`, {
           headers: {
-            Authorization: "bearer " + authState.token,
+            Authorization: "Bearer " + authState.token,
           },
         });
         setWorkTag(res.data);

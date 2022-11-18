@@ -86,9 +86,9 @@ const ProfileEditor = () => {
             margin="normal"
             fullWidth
             onChange={(e) => {
-              setEditUserProfile({ ...editUserProfile, shortSelfIntroduction: e.target.value });
+              setEditUserProfile({ ...editUserProfile, shortIntroduction: e.target.value });
             }}
-            value={editUserProfile.shortSelfIntroduction}
+            value={editUserProfile.shortIntroduction}
           />
           <Button
             variant="contained"

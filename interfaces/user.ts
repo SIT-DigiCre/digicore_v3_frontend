@@ -5,7 +5,7 @@ export type User = {
   iconUrl: string;
   schoolGrade: number;
   discordUserId: string;
-  shortSelfIntroduction: string;
+  shortIntroduction: string;
   activeLimit?: string;
 };
 export type UserPrivateProfile = {

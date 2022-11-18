@@ -24,8 +24,8 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
     if (!initWork) return;
     setName(initWork.name);
     setDescription(initWork.description);
-    setTags(initWork.tags.map((t) => t.id));
-    setFiles(initWork.files.map((f) => f.id));
+    setTags(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
+    setFiles(initWork.files ? initWork.files.map((f) => f.fileId) : []);
   }, [initWork]);
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
 
@@ -35,13 +35,13 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
   const onFileSelected = (f: FileObject) => {
     console.log("selected");
     setIsOpenFileBrowser(false);
-    setFiles([...files, f.id]);
+    setFiles([...files, f.fileId]);
   };
   const onClickSave = () => {
     const workRequest: WorkRequest = {
       name: name,
       description: description,
-      authers: [authState.user.id!],
+      authors: [authState.user.userId!],
       tags: tags,
       files: files,
     };
@@ -111,7 +111,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
         <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
       </Grid>
       <Grid sx={{ textAlign: "center" }}>
-        <Button variant="contained" onClick={onClickSave}>
+        <Button variant="contained" onClick={onClickSave} disabled={!description || !name}>
           save
         </Button>
       </Grid>

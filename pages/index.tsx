@@ -30,10 +30,6 @@ const IndexPage = () => {
               <Link href="/user/joined">入部完了ページ</Link>
               ：部費の入金先やSlack、Discordへの参加リンクがあります
             </Typography>
-            <Typography>
-              <Link href="/user/form/payment">部費入金報告フォーム</Link>
-              ：部費入金報告フォームがあります
-            </Typography>
           </>
         ) : (
           <>

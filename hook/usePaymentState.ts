@@ -15,44 +15,31 @@ type UsePaymentState = () => {
 export const usePaymentState: UsePaymentState = () => {
   const [latestPayment, setLatestPayment] = useState<PaymentAPIData>();
   const [paymentHistory, setPaymentHistory] = useState<PaymentAPIData[]>();
+  const [isLoading, setIsLoading] = useState(true);
   const { authState } = useAuthState();
   const { setNewError } = useErrorState();
   useEffect(() => {
     if (authState.isLoading || !authState.isLogined) return;
     const getData = async () => {
-      const historyRes = await axios.get("user/my/payment/history", {
+      const historyRes = await axios.get("user/me/payment", {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
-      const history: GetPaymentHistoryAPIData = historyRes.data;
+      const history: GetPaymentHistoryAPIData = historyRes.data.histories;
       if (historyRes.status !== 200) {
         setNewError({ name: "payment-get", message: "部費支払い情報の取得に失敗しました" });
         return;
       }
       setPaymentHistory(history.payments);
-      try {
-        const res = await axios.get("user/my/payment", {
-          headers: {
-            Authorization: "bearer " + authState.token,
-          },
-        });
-        const payment: GetPaymentAPIData = res.data;
-        if (res.status === 200) setLatestPayment(payment.payment);
-      } catch (e) {
-        setLatestPayment({
-          year: new Date().getFullYear(),
-          transfer_name: "",
-          checked: false,
-        });
-      }
+      setIsLoading(true);
     };
     getData();
   }, [authState]);
   const updatePayment = async () => {
     const res = await axios.put("user/my/payment", latestPayment, {
       headers: {
-        Authorization: "bearer " + authState.token,
+        Authorization: "Bearer " + authState.token,
       },
     });
     if (res.status === 200) return true;
@@ -60,7 +47,7 @@ export const usePaymentState: UsePaymentState = () => {
     return false;
   };
   return {
-    isLoading: !latestPayment,
+    isLoading: isLoading,
     latestPayment: latestPayment,
     paymentHistory: paymentHistory,
     setLatestPayment: setLatestPayment,
