@@ -34,7 +34,7 @@ export const useDiscordLogin: UseDiscordLogin = () => {
   }, [authState]);
   const setCallbackCode = async (code: string): Promise<boolean> => {
     try {
-      const _ = await axios.post(
+      const _ = await axios.put(
         "/user/me/discord/callback",
         { code: code },
         {
