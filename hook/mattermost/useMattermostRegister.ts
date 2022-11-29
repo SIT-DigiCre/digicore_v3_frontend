@@ -12,7 +12,7 @@ export const useMattermostRegister = (): {
     try {
       const res = await axios.post("/mattermost/create_user", f, {
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: "Bearer " + authState.token,
         },
       });
       removeError("mattermost-registration-error");
