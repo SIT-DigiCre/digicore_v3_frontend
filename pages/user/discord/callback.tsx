@@ -10,7 +10,11 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   const router = useRouter();
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
   setCallbackCode(code).then((res) => {
-    router.push("/user/profile");
+    if (localStorage.getItem("reg_discord")) {
+      router.push("/user/profile?register=true");
+    } else {
+      router.push("/user/profile");
+    }
   });
   return <></>;
 };
