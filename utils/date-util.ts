@@ -28,3 +28,7 @@ export const getTimeSpanText = (start: Date, end: Date) => {
     end,
   )}) ${getTimeText(end)}`;
 };
+
+//年度を計算する
+export const getFiscalYear = (date: Date): number =>
+  date.getMonth() < 3 ? date.getFullYear() - 1 : date.getFullYear();
