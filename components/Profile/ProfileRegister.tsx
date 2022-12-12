@@ -33,6 +33,7 @@ const ProfileRegister = ({ registerMode }: Props) => {
   const { authState } = useAuthState();
   const [step, setStep] = useState(0);
   useEffect(() => {
+    if (!authState.isLogined) return;
     if (localStorage.getItem("reg_discord")) {
       localStorage.removeItem("reg_discord");
       if (authState.user.discordUserId) {
@@ -41,7 +42,7 @@ const ProfileRegister = ({ registerMode }: Props) => {
         setStep(2);
       }
     }
-  }, []);
+  }, [authState]);
   return (
     <>
       {authState.isLoading || !authState.isLogined ? (
