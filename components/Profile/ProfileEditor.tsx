@@ -26,6 +26,7 @@ const ProfileEditor = () => {
         <h1>プロファイル編集</h1>
         <Grid sx={{ mb: 3 }}>
           <h2>公開情報（他の部員も見れる情報）</h2>
+          <PublicProfileEditor />
         </Grid>
         <Grid sx={{ mb: 3 }}>
           <h2>非公開情報</h2>

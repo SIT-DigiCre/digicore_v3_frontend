@@ -16,10 +16,14 @@ import PhoneInput from "./PhoneInput";
 
 type PrivatePersonalProfileEditorProps = {
   onSave?: () => void;
+  isRegisterMode?: boolean;
 };
 
-export const PrivatePersonalProfileEditor = ({ onSave }: PrivatePersonalProfileEditorProps) => {
-  const [privateProfile, updateProfile] = usePrivateProfile();
+export const PrivatePersonalProfileEditor = ({
+  onSave,
+  isRegisterMode,
+}: PrivatePersonalProfileEditorProps) => {
+  const [privateProfile, updateProfile] = usePrivateProfile(isRegisterMode);
   const [editPrivateProfile, setEditPrivateProfile] = useState<UserPrivateProfile>(privateProfile);
   useEffect(() => {
     setEditPrivateProfile(privateProfile);
@@ -107,9 +111,13 @@ export const PrivatePersonalProfileEditor = ({ onSave }: PrivatePersonalProfileE
 
 type PrivateParentProfileEditorProps = {
   onSave?: () => void;
+  isRegisterMode?: boolean;
 };
-export const PrivateParentProfileEditor = ({ onSave }: PrivateParentProfileEditorProps) => {
-  const [privateProfile, updateProfile] = usePrivateProfile();
+export const PrivateParentProfileEditor = ({
+  onSave,
+  isRegisterMode,
+}: PrivateParentProfileEditorProps) => {
+  const [privateProfile, updateProfile] = usePrivateProfile(isRegisterMode);
   const [editPrivateProfile, setEditPrivateProfile] = useState<UserPrivateProfile>(privateProfile);
   useEffect(() => {
     setEditPrivateProfile(privateProfile);
