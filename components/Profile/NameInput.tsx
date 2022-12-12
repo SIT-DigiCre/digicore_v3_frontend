@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   title: string;
@@ -19,6 +19,10 @@ const NameInput = ({
 }: Props) => {
   const [firstName, setFirstName] = useState(initFirstName ? initFirstName : "");
   const [lastName, setLastName] = useState(initLastName ? initLastName : "");
+  useEffect(() => {
+    setFirstName(initFirstName);
+    setLastName(initLastName);
+  }, [initFirstName, initLastName]);
 
   return (
     <>
