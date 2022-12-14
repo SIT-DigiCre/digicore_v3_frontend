@@ -25,6 +25,7 @@ import PhoneInput from "./PhoneInput";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
+import { textAlign } from "@mui/system";
 
 type Props = {
   registerMode: boolean;
@@ -221,9 +222,10 @@ const Steps = ({ step, setStep }: StepsProps) => {
     case 2:
       localStorage.setItem("reg_discord", "true");
       return (
-        <div style={{ textAlign: "center" }}>
+        <div style={{ textAlign: "center", margin: "1em" }}>
           <Typography>
-            デジクリではDiscordサーバーを所有しています。正規の部員のみがDiscordサーバーに入れるようにアカウントと連携が必要です。
+            デジクリではDiscordサーバーを所有しています。
+            正規の部員のみがDiscordサーバーに入れるようにアカウントと連携が必要です。
           </Typography>
           <Typography>
             Discordアカウントを持っていない方は先に
@@ -232,6 +234,11 @@ const Steps = ({ step, setStep }: StepsProps) => {
             </a>
             Discordのアカウント作成を行いましょう（大学のメールアドレスで作る必要はありません!）
           </Typography>
+          <Alert severity="warning" style={{ margin: "1em", textAlign: "left" }}>
+            【注意】一部の環境では、Discord連携ボタンを一度押しても本項目に戻ってしまう可能性があります。
+            <br />
+            その際はお手数ですが、もう一度Discord連携ボタンを押してください。次項目で「これで登録は完了です。」と出ましたら大丈夫です。
+          </Alert>
           <Button href={discord.loginUrl} variant="contained">
             Discord連携
           </Button>
