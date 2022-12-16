@@ -31,17 +31,21 @@ type Props = {
   registerMode: boolean;
 };
 const ProfileRegister = ({ registerMode }: Props) => {
-  const { authState } = useAuthState();
+  const { authState, refresh } = useAuthState();
   const [step, setStep] = useState(0);
   useEffect(() => {
     if (!authState.isLogined) return;
     if (localStorage.getItem("reg_discord")) {
       localStorage.removeItem("reg_discord");
-      if (authState.user.discordUserId) {
-        setStep(3);
-      } else {
-        setStep(2);
-      }
+      refresh()
+        .then((user) => {
+          if (user.discordUserId) {
+            setStep(3);
+          } else {
+            setStep(2);
+          }
+        })
+        .catch((e) => {});
     }
   }, [authState]);
   return (
