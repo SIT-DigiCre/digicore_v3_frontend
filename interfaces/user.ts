@@ -21,5 +21,18 @@ export type UserPrivateProfile = {
   parentName: string;
   phoneNumber: string;
 };
+export const DEFAULT_USER_PRIVATE_PROFILE: UserPrivateProfile = {
+  address: "",
+  firstName: "",
+  firstNameKana: "",
+  isMale: true,
+  lastName: "",
+  lastNameKana: "",
+  parentAddress: "",
+  parentCellphoneNumber: "",
+  parentHomephoneNumber: "",
+  parentName: "",
+  phoneNumber: "",
+};
 
 export type FullUser = User & UserPrivateProfile;

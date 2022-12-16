@@ -1,5 +1,5 @@
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props = {
   title: string;
@@ -9,6 +9,9 @@ type Props = {
 };
 const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
   const [num, setNum] = useState(initPhoneNumber ? initPhoneNumber : "");
+  useEffect(() => {
+    setNum(initPhoneNumber);
+  }, [initPhoneNumber]);
 
   return (
     <>

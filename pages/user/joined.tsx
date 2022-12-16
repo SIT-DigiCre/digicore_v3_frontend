@@ -44,6 +44,11 @@ const JoinedPage = () => {
           </Typography>
         </Grid>
         <Grid>
+          <h3>Mattermost</h3>
+          <Typography>※デジクリでのメインの連絡ツールです。必ず登録してください</Typography>
+          <Button href="/mattermost" variant="contained" target="_blank">
+            Mattermostの登録ページを開く
+          </Button>
           <h3>Discord</h3>
           <Typography>※かならず先ほど登録したアカウントで登録してください</Typography>
           <Button href={joinData.discordUrl} variant="contained" target="_blank">

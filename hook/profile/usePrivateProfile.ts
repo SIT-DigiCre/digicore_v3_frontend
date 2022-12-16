@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { UserPrivateProfile } from "../../interfaces/user";
+import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
-type UsePrivateProfile = () => [
-  UserPrivateProfile,
-  (privateProfile: UserPrivateProfile) => Promise<boolean>,
-];
+type UsePrivateProfile = (
+  register?: boolean,
+) => [UserPrivateProfile, (privateProfile: UserPrivateProfile) => Promise<boolean>];
 
-export const usePrivateProfile: UsePrivateProfile = () => {
-  const [profile, setProfile] = useState<UserPrivateProfile>();
+export const usePrivateProfile: UsePrivateProfile = (register) => {
+  const registerMode = register ? register : false;
+  const [profile, setProfile] = useState<UserPrivateProfile>(DEFAULT_USER_PRIVATE_PROFILE);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   useEffect(() => {
+    if (registerMode) return;
     (async () => {
       if (!authState.isLogined) return;
       try {

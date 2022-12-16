@@ -1,11 +1,11 @@
-import { useAuthState } from "../hook/useAuthState";
 import { Grid, Button, Container, Typography } from "@mui/material";
-import { baseURL } from "../utils/common";
+import { baseURL } from "../../utils/common";
 import { Google } from "@mui/icons-material";
-import PageHead from "../components/Common/PageHead";
+import PageHead from "../../components/Common/PageHead";
+import { useRegisterData } from "../../hook/useRegisterData";
 
 const RegisterPage = () => {
-  const { authState } = useAuthState();
+  const { registerUrl } = useRegisterData();
   return (
     <>
       <PageHead title="登録" />
@@ -15,11 +15,7 @@ const RegisterPage = () => {
           <p>デジクリの入部もこちらからできます</p>
         </Grid>
         <Grid>
-          <Button
-            variant="contained"
-            startIcon={<Google />}
-            href={baseURL + "/google/oauth/url/?register=true"}
-          >
+          <Button variant="contained" startIcon={<Google />} href={registerUrl}>
             大学Googleアカウントで登録
           </Button>
           <Typography>

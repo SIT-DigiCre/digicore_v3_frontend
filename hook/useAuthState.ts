@@ -16,34 +16,36 @@ type UseAuthState = () => {
   authState: AuthState;
   onLogin: (token: string) => void;
   logout: () => void;
+  refresh: () => Promise<User>;
 };
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
   const { setNewError, removeError } = useErrorState();
-  const getUserInfo = (token: string) => {
-    axios
-      .get("/user/me", {
+  const getUserInfo = async (token: string): Promise<User> => {
+    try {
+      const res = await axios.get("/user/me", {
         headers: {
           Authorization: "Bearer " + token,
         },
-      })
-      .then((res) => {
-        if (auth.isLogined) return;
-        const user: User = res.data;
-        setAuth({
-          isLogined: true,
-          isLoading: false,
-          user: user,
-          token: token,
-        });
-        removeError("autologin-fail");
-      })
-      .catch((err) => {
-        setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
-        setNewError({ name: "autologin-fail", message: "ログインしてください" });
       });
+      if (auth.isLogined) return;
+      const user: User = res.data;
+      setAuth({
+        isLogined: true,
+        isLoading: false,
+        user: user,
+        token: token,
+      });
+      removeError("autologin-fail");
+      return user;
+    } catch (e: any) {
+      setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
+      setNewError({ name: "autologin-fail", message: "ログインしてください" });
+    }
+    return null;
   };
+  const refresh = async () => await getUserInfo(localStorage.getItem("jwt"));
   // ローカルストレージを削除する関数
   const logout = () => {
     setAuth({
@@ -66,5 +68,6 @@ export const useAuthState: UseAuthState = () => {
     authState: auth,
     onLogin: onLogin,
     logout: logout,
+    refresh,
   };
 };
