@@ -31,21 +31,23 @@ type Props = {
   registerMode: boolean;
 };
 const ProfileRegister = ({ registerMode }: Props) => {
-  const { authState, refresh } = useAuthState();
+  const { authState } = useAuthState();
   const [step, setStep] = useState(0);
+  const router = useRouter();
   useEffect(() => {
     if (!authState.isLogined) return;
     if (localStorage.getItem("reg_discord")) {
-      localStorage.removeItem("reg_discord");
-      refresh()
-        .then((user) => {
-          if (user.discordUserId) {
-            setStep(3);
-          } else {
-            setStep(2);
-          }
-        })
-        .catch((e) => {});
+      if (localStorage.getItem("reg_discord") == "true") {
+        localStorage.setItem("reg_discord", "false");
+        router.reload();
+      } else {
+        localStorage.removeItem("reg_discord");
+        if (authState.user.discordUserId) {
+          setStep(3);
+        } else {
+          setStep(2);
+        }
+      }
     }
   }, [authState]);
   return (
@@ -238,18 +240,15 @@ const Steps = ({ step, setStep }: StepsProps) => {
             </a>
             Discordのアカウント作成を行いましょう（大学のメールアドレスで作る必要はありません!）
           </Typography>
-          <Alert severity="warning" style={{ margin: "1em", textAlign: "left" }}>
-            【注意】一部の環境では、Discord連携ボタンを一度押しても本項目に戻ってしまう可能性があります。
-            <br />
-            その際はお手数ですが、もう一度Discord連携ボタンを押してください。次項目で「これで登録は完了です。」と出ましたら大丈夫です。
-          </Alert>
           <Button href={discord.loginUrl} variant="contained">
             Discord連携
           </Button>
         </div>
       );
     case 3:
-      router.push("/user/joined");
+      setTimeout(() => {
+        router.push("/user/joined");
+      }, 1000);
       return (
         <>
           <p>これで登録は完了です。</p>
