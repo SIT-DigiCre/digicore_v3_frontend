@@ -13,7 +13,7 @@ const NavBar = () => {
         <Toolbar>
           <AppMenu />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            デジコア v3.0
+            デジコア v3.1
           </Typography>
           {authState.isLogined ? (
             <>
