@@ -12,7 +12,6 @@ export const convertNodes = (nodes: NodeList): Element[] => {
 };
 
 export const convertNode = (node: Node): Element | null => {
-  console.log(node);
   if (node instanceof Element) {
     let elem = node;
     //const classnames = getClassnamesFromElem(elem);
@@ -74,7 +73,6 @@ export const markupToFullHtml = (markup: string): string => {
   const parsed = parser.parseFromString(markup, "text/html");
   const bodyRawHtml = htmlSanitize(elemsToHtml(convertNodes(parsed.body.childNodes)));
   let result = parsed;
-  console.log(result);
   result.body.innerHTML = bodyRawHtml;
   return result.documentElement.outerHTML;
 };

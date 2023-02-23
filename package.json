@@ -22,6 +22,7 @@
     "marked": "^4.0.15",
     "next": "latest",
     "nookies": "^2.5.2",
+    "puppeteer": "^19.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "recoil": "^0.6.1",

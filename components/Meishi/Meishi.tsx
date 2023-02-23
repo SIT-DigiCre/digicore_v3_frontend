@@ -20,7 +20,9 @@ const Meishi = ({ markup, width, height }: Props) => {
   wrapper.innerHTML = markup;
   const srcHtml = markupToFullHtml(wrapper.outerHTML);
 
-  return <iframe srcDoc={srcHtml} style={{ width: w, height: h, border: 0 }} />;
+  return (
+    <iframe srcDoc={srcHtml} className="meishi-frame" style={{ width: w, height: h, border: 0 }} />
+  );
   /*
   return (
     <div
