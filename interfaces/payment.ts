@@ -3,4 +3,5 @@ export type Payment = {
   studentNumber: string;
   transferName: string;
   checked: boolean;
+  note: string;
 };
