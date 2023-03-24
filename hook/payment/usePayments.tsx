@@ -40,6 +40,7 @@ export const usePayments: UsePayments = () => {
       });
       const index = payments.findIndex((payment) => payment.paymentId === paymentId);
       payments[index].checked = checked;
+      payments[index].note = note;
       setPayments([...payments]);
       removeError("payments-update-fail");
       return true;
