@@ -1,10 +1,6 @@
-import { Box, Button, Checkbox, Container, FormControl, Grid, InputLabel, MenuItem, Modal, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Container, Grid, Modal, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import PageHead from "../../components/Common/PageHead";
 import { usePayments } from "../../hook/payment/usePayments";
-import { useDarkMode } from "../../hook/useDarkMode";
-import { DarkMode } from "../../interfaces";
 import { Payment } from "../../interfaces/payment";
 
 const PaymentPage = () => {

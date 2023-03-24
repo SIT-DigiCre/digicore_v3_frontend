@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Payment } from "../../interfaces/payment";
-import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
