@@ -4,20 +4,17 @@ import {
   Grid,
   TextField,
   Typography,
-  Alert,
   Stepper,
   StepLabel,
   Step,
-  StepProps,
   FormControl,
   RadioGroup,
   FormControlLabel,
   Radio,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import { ChangeEventHandler, Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useAuthState } from "../../hook/useAuthState";
-import { PrivateParentProfileEditor, PrivatePersonalProfileEditor } from "./PrivateProfileEditor";
 import { PublicProfileEditor } from "./ProfileEditor";
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
 import NameInput from "./NameInput";
@@ -25,31 +22,24 @@ import PhoneInput from "./PhoneInput";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
-import { textAlign } from "@mui/system";
 
 type Props = {
   registerMode: boolean;
 };
 const ProfileRegister = ({ registerMode }: Props) => {
   const { authState } = useAuthState();
+  const [privateProfile] = usePrivateProfile();
   const [step, setStep] = useState(0);
-  const router = useRouter();
   useEffect(() => {
     if (!authState.isLogined) return;
-    if (localStorage.getItem("reg_discord")) {
-      if (localStorage.getItem("reg_discord") == "true") {
-        localStorage.setItem("reg_discord", "false");
-        router.reload();
-      } else {
-        localStorage.removeItem("reg_discord");
-        if (authState.user.discordUserId) {
-          setStep(3);
-        } else {
-          setStep(2);
-        }
-      }
+    if (authState.user.username !== authState.user.studentNumber) {
+      console.log(authState.user);
+      if (privateProfile.firstName !== "") {
+        if (authState.user.discordUserId !== "") setStep(3);
+        else setStep(2);
+      } else setStep(1);
     }
-  }, [authState]);
+  }, [authState, privateProfile]);
   return (
     <>
       {authState.isLoading || !authState.isLogined ? (
