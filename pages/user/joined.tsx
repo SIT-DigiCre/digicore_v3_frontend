@@ -70,7 +70,7 @@ const JoinedPage = () => {
             から振込完了報告をする必要があります
           </Typography>
           <Typography>
-            期限を過ぎても振込完了報告がされない場合、メールにて会計から確認の連絡が届きます。それらに反応が無い場合、デジコアやSlack、Discordのアカウント制限がかかります。
+            期限を過ぎても振込完了報告がされない場合、メールにて会計から確認の連絡が届きます。それらに反応が無い場合、デジコアやMattermost、Discordのアカウント制限がかかります。
           </Typography>
           <Grid style={{ padding: "2px", border: "solid" }}>
             <Typography>記号:10370 番号:81757581 店番:038</Typography>
