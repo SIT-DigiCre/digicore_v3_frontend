@@ -1,37 +1,32 @@
-import { Button, Container, Grid, Paper, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  Paper,
+  Step,
+  StepLabel,
+  Stepper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
-import { EnvJoinAPIData } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
+import { useJoinData } from "../../hook/user/useJoinData";
+import { MattermostRegister } from "../../components/Mattermost/Register";
+import TransferAccountView from "../../components/Register/TransferAccountView";
+import { useRouter } from "next/router";
 const JoinedPage = () => {
-  const { authState } = useAuthState();
-
-  const [joinData, setJoinData] = useState<EnvJoinAPIData>();
-  useEffect(() => {
-    if (authState.isLoading || !authState.isLogined) return;
-    axios
-      .get("/user/me/private", {
-        headers: {
-          Authorization: "Bearer " + authState.token,
-        },
-      })
-      .then((res1) => {
-        axios
-          .get("/tool", {
-            headers: {
-              Authorization: "Bearer " + authState.token,
-            },
-          })
-          .then((res) => {
-            const envJoinAPIData: EnvJoinAPIData = res.data;
-            setJoinData(envJoinAPIData);
-          });
-      });
-  }, [authState]);
-  if (authState.isLoading || !authState.isLogined || !joinData) return <p>Loading...</p>;
+  const [step, setStep] = useState(0);
   return (
     <>
       <PageHead title="デジクリへようこそ" />
@@ -39,94 +34,202 @@ const JoinedPage = () => {
         <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Joined" }]} />
         <Grid>
           <h2>デジクリへようこそ</h2>
-          <Typography>
-            これで入部処理は完了です。続いてデジクリで使っているSNSの登録を行いましょう
-          </Typography>
         </Grid>
-        <Grid>
-          <h3>Mattermost</h3>
-          <Typography>※デジクリでのメインの連絡ツールです。必ず登録してください</Typography>
-          <Button href="/mattermost" variant="contained" target="_blank">
-            Mattermostの登録ページを開く
-          </Button>
-          <h3>Discord</h3>
-          <Typography>※かならず先ほど登録したアカウントで登録してください</Typography>
-          <Button href={joinData.discordUrl} variant="contained" target="_blank">
-            Discordの招待URLを開く
-          </Button>
-          <Typography>
-            本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
-          </Typography>
-        </Grid>
-        <Grid>
-          <h3>部費の振込について</h3>
-          <Typography>
-            手数料抜きで2000円の部費を<b>3週間以内</b>
-            に、下記の口座に振り込んでください。デジクリの口座はゆうちょ銀行です。
-          </Typography>
-          <Typography>
-            部費の振込が完了した際はデジコア上の
-            <Link href="/user/form/payment">部費振込報告フォーム</Link>
-            から振込完了報告をする必要があります
-          </Typography>
-          <Typography>
-            期限を過ぎても振込完了報告がされない場合、メールにて会計から確認の連絡が届きます。それらに反応が無い場合、デジコアやMattermost、Discordのアカウント制限がかかります。
-          </Typography>
-          <Grid style={{ padding: "2px", border: "solid" }}>
-            <Typography>記号:10370 番号:81757581 店番:038</Typography>
-            <Typography>口座番号:8175758 預金種目:普通預金</Typography>
-          </Grid>
-          <Grid>
-            <h4>振込方法と手数料</h4>
-            <Grid style={{ marginLeft: "30px" }}>
-              <ol>
-                <li>
-                  ゆうちょ銀行の口座から振り込む場合
-                  <br />
-                  <br />
-                  <Typography>「電信振替」にて入金されることをお勧めいたします。</Typography>
-                  <Typography>ATM扱い:100円 窓口扱い:146円</Typography>
-                  <Typography>ゆうちょダイレクト:月5回まで無料、6回目以降100円</Typography>
-                  <a
-                    href="https://www.jp-bank.japanpost.jp/kojin/sokin/koza/kj_sk_kz_furikae.html"
-                    target="_blank"
-                  >
-                    ゆうちょ銀行HP「電信振替」について
-                  </a>
-                </li>
-                <li>
-                  他銀行の口座から振り込む場合
-                  <br />
-                  <br />
-                  <Typography>
-                    各銀行の窓口やATMからなど、それぞれの方法で入金してください。手数料は各銀行・各方法によって異なります。
-                  </Typography>
-                </li>
-                <li>
-                  現金で振り込む場合
-                  <br />
-                  <br />
-                  <Typography>お近くの銀行のATMや、窓口から振り込んでください。</Typography>
-                  <Typography>
-                    手数料はおよそ440～660円ほどですが、各方法によって異なります。郵便局窓口からの「電信払込み」ですと、550円です。
-                  </Typography>
-                  <Typography>
-                    また、デジクリの口座は総合口座ですので、ゆうちょ・郵便局での「通常払込み」はできません。
-                  </Typography>
-                  <a
-                    href="https://www.jp-bank.japanpost.jp/kojin/sokin/koza/kj_sk_kz_densin.html"
-                    target="_blank"
-                  >
-                    ゆうちょ銀行HP「電信払込み」について
-                  </a>
-                </li>
-              </ol>
-            </Grid>
-          </Grid>
-        </Grid>
+        <Stepper activeStep={step} style={{ marginBottom: "10px", overflow: "auto" }}>
+          <Step>
+            <StepLabel>ようこそ</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Mattermost登録</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Mattermostアプリ</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>Discord登録</StepLabel>
+          </Step>
+          <Step>
+            <StepLabel>部費振込</StepLabel>
+          </Step>
+        </Stepper>
+        <JoinedSteps step={step} setStep={setStep} />
       </Container>
     </>
   );
 };
 
 export default JoinedPage;
+type StepsProps = { step: number; setStep: Dispatch<SetStateAction<number>> };
+const JoinedSteps = ({ step, setStep }: StepsProps) => {
+  const joinData = useJoinData();
+  const router = useRouter();
+  switch (step) {
+    case 0:
+      return (
+        <Box textAlign="center">
+          <Typography>
+            これで入部処理は完了です。あと少しです。続いてデジクリで使っているSNSの登録を行いましょう。
+          </Typography>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setStep(1);
+            }}
+            sx={{ mt: 2 }}
+          >
+            次へ
+          </Button>
+        </Box>
+      );
+    case 1:
+      return (
+        <>
+          <Box textAlign="right">
+            <Button
+              onClick={() => {
+                setStep(2);
+              }}
+              variant="contained"
+              color="warning"
+            >
+              既にMattermostは登録しているのでスキップする
+            </Button>
+          </Box>
+
+          <MattermostRegister
+            onRegistered={() => {
+              setStep(2);
+            }}
+          />
+        </>
+      );
+    case 2:
+      return (
+        <Box textAlign="center">
+          <Typography>
+            Mattermostへの登録が完了しました。
+            <br />
+            続いてアプリのインストールを行いましょう。
+          </Typography>
+          <Typography marginTop={2}>
+            <a href="https://mattermost.com/apps/" target="_blank" rel="noreferrer">
+              アプリの取得はこちらから
+            </a>
+          </Typography>
+          <Typography marginTop={2}>
+            アプリ起動後、以下のように設定し、先ほど作成したアカウントでログインください
+          </Typography>
+          <TableContainer component={Paper} sx={{ maxWidth: 250, margin: "10px auto" }}>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>サーバーURL</TableCell>
+                  <TableCell>mm.digicre.net</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>サーバー名</TableCell>
+                  <TableCell>デジクリ</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setStep(3);
+            }}
+            sx={{ mt: 2 }}
+          >
+            次へ
+          </Button>
+        </Box>
+      );
+    case 3:
+      return (
+        <Box textAlign="center">
+          <Typography>
+            Discordでは、VC（ボイスチャット）を使用した雑談や趣味の交流、作品の途中経過などを投稿しています。
+          </Typography>
+          <Typography marginTop={2}>
+            ※かならず先ほど登録したDiscordアカウントで登録してください
+          </Typography>
+          <Button href={joinData.discordUrl} variant="contained" target="_blank">
+            Discordの招待URLを開く
+          </Button>
+          <Typography marginTop={2}>
+            本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
+          </Typography>
+          <Typography marginTop={1}>
+            夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
+          </Typography>
+          <Typography variant="h3" fontSize={20} marginTop={2}>
+            主なVoiceChatやTextChat
+          </Typography>
+          <TableContainer component={Paper} sx={{ maxWidth: 500, margin: "10px auto" }}>
+            <Table>
+              <TableBody>
+                <TableRow>
+                  <TableCell>free VC / FREEDOM VC</TableCell>
+                  <TableCell>雑談など自由なVC</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>work VC</TableCell>
+                  <TableCell>作業などをしながらおしゃべりするVC</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>集中 VC</TableCell>
+                  <TableCell>黙々と作業をしたい人向けVC</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>会議室 VC</TableCell>
+                  <TableCell>企画などの会議を行うVC、乱入注意!</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>vc-notif</TableCell>
+                  <TableCell>VCへの入退室記録。ミュート推奨</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>random</TableCell>
+                  <TableCell>VCで何をやっているかを投稿したりするチャンネル</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>ﾃｸﾆｶﾙｻﾎﾟｰﾄ</TableCell>
+                  <TableCell>PCの操作など困ったらここで質問しよう</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell>課題相談</TableCell>
+                  <TableCell>授業で困ったことなどを相談しよう</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setStep(4);
+            }}
+            sx={{ mt: 2 }}
+          >
+            次へ
+          </Button>
+        </Box>
+      );
+    case 4:
+      return (
+        <>
+          <TransferAccountView />
+          <Box textAlign="center">
+            <Button
+              variant="contained"
+              onClick={() => {
+                router.push("/");
+              }}
+              sx={{ mt: 2 }}
+            >
+              Homeへ
+            </Button>
+          </Box>
+        </>
+      );
+  }
+};
