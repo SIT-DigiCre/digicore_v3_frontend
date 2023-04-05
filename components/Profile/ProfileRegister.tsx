@@ -45,7 +45,7 @@ const ProfileRegister = ({ registerMode }: Props) => {
       {authState.isLoading || !authState.isLogined ? (
         <p>Loading...</p>
       ) : (
-        <Container sx={{ mx: 5, my: 3 }}>
+        <Container>
           <Stepper activeStep={step}>
             <Step>
               <StepLabel>プロフィール登録</StepLabel>
@@ -216,7 +216,6 @@ const Steps = ({ step, setStep }: StepsProps) => {
         </>
       );
     case 2:
-      localStorage.setItem("reg_discord", "true");
       return (
         <div style={{ textAlign: "center", margin: "1em" }}>
           <Typography>
