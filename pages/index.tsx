@@ -5,12 +5,19 @@ import { useAuthState } from "../hook/useAuthState";
 
 const IndexPage = () => {
   const { authState } = useAuthState();
+  if (!authState.isLogined)
+    return (
+      <Container>
+        <PageHead title="Home 未ログイン" />
+        <p>未ログイン状態です。ログインしてください。</p>
+      </Container>
+    );
   return (
     <Container>
       <PageHead title="Home" />
       <Grid>
-        <h1>ようこそ、デジコア3.0へ</h1>
-        <p>デジコア3.0は開発途上のアプリケーションです。優しい気持ちで接してみてください</p>
+        <h1>ようこそ、デジコア3.1へ</h1>
+        <p>デジコア3.1は開発途上のアプリケーションです。優しい気持ちで接してみてください</p>
         <div className="index_calender">
           <iframe
             src="https://calendar.google.com/calendar/embed?src=sitdigicrecircle%40gmail.com&ctz=Asia%2FTokyo"
@@ -23,21 +30,11 @@ const IndexPage = () => {
         </div>
       </Grid>
       <Grid>
-        {authState.isLogined ? (
-          <>
-            <h2>使いそうな項目</h2>
-            <Typography>
-              <Link href="/user/joined">入部完了ページ</Link>
-              ：部費の入金先やSlack、Discordへの参加リンクがあります
-            </Typography>
-          </>
-        ) : (
-          <>
-            <Typography>
-              ログインが出来ていないようですね。右上のログインボタンからログインしましょう
-            </Typography>
-          </>
-        )}
+        <h2>使いそうな項目</h2>
+        <Typography>
+          <Link href="/user/joined">入部完了ページ</Link>
+          ：部費の入金先やSlack、Discordへの参加リンクがあります
+        </Typography>
       </Grid>
     </Container>
   );
