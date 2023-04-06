@@ -10,21 +10,23 @@ type Props = {
 const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   const { setCallbackCode } = useDiscordLogin();
   const router = useRouter();
-  const { authState } = useAuthState();
+  const { authState, refresh } = useAuthState();
   useEffect(() => {
     if (!authState.isLogined) return;
     setCallbackCode(code).then((res) => {
       if (localStorage.getItem("reg_discord")) {
         setTimeout(() => {
-          router.push("/user/profile?register=true");
-        }, 500);
+          refresh().then(() => {
+            router.push("/user/profile?register=true");
+          });
+        }, 1000);
       } else {
         router.push("/user/profile");
       }
     });
   }, [authState]);
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
-  return <></>;
+  return <>Discord連携作業中...（そのままお待ちください）</>;
 };
 
 export default DiscordCallbackPage;

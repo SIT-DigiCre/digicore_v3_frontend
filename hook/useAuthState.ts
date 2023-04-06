@@ -22,14 +22,14 @@ type UseAuthState = () => {
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
   const { setNewError, removeError } = useErrorState();
-  const getUserInfo = async (token: string): Promise<User> => {
+  const getUserInfo = async (token: string, refresh: boolean): Promise<User> => {
     try {
       const res = await axios.get("/user/me", {
         headers: {
           Authorization: "Bearer " + token,
         },
       });
-      if (auth.isLogined) return;
+      if (auth.isLogined && !refresh) return;
       const user: User = res.data;
       setAuth({
         isLogined: true,
@@ -45,7 +45,7 @@ export const useAuthState: UseAuthState = () => {
     }
     return null;
   };
-  const refresh = async () => await getUserInfo(localStorage.getItem("jwt"));
+  const refresh = async () => await getUserInfo(localStorage.getItem("jwt"), true);
   // ローカルストレージを削除する関数
   const logout = () => {
     setAuth({
@@ -59,10 +59,10 @@ export const useAuthState: UseAuthState = () => {
 
   const onLogin = (token: string) => {
     localStorage.setItem("jwt", token);
-    getUserInfo(token);
+    getUserInfo(token, true);
   };
   useEffect(() => {
-    getUserInfo(localStorage.getItem("jwt"));
+    getUserInfo(localStorage.getItem("jwt"), false);
   }, []);
   return {
     authState: auth,

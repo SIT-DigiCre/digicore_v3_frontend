@@ -3,7 +3,6 @@ import Image from "next/image";
 import {
   Box,
   Button,
-  Container,
   Grid,
   Typography,
   TextField,
@@ -11,17 +10,14 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { useAuthState } from "../../hook/useAuthState";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import PageHead from "../../components/Common/PageHead";
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
 import { MattermostRegistrationRequest } from "../../interfaces/api";
-import { MattermostDisplayPage } from "../../interfaces/mattermost";
 
 type Props = {
-  displayPageSetter: (page: MattermostDisplayPage) => void;
+  onRegistered: () => void;
 };
 
-export const MattermostRegister = ({ displayPageSetter }: Props) => {
+export const MattermostRegister = ({ onRegistered }: Props) => {
   const { authState } = useAuthState();
   const userProfile = authState.user;
   const { register } = useMattermostRegister();
@@ -69,7 +65,7 @@ export const MattermostRegister = ({ displayPageSetter }: Props) => {
       const res = await register(registrationForm);
       setSending(false);
       if (res) {
-        displayPageSetter("complete");
+        onRegistered();
       }
     })();
   };
@@ -83,36 +79,25 @@ export const MattermostRegister = ({ displayPageSetter }: Props) => {
     }
   }, [userProfile]);
   return (
-    <Container>
-      <PageHead title="Mattermost アカウント登録" />
-      <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Mattermost" }]} />
-      <Grid margin={2}>
-        <Typography variant="h4" align="center" noWrap={true}>
-          Mattermost
-        </Typography>
-        <Typography variant="h4" align="center" noWrap={true}>
-          アカウント登録
-        </Typography>
+    <>
+      <Grid container my={2}>
+        <Grid xs={12}>
+          <Typography align="center" variant="h3" fontSize={50}>
+            <Image src="/image/mattermost_icon.png" width={40} height={40} />
+            Mattermost 登録
+          </Typography>
+        </Grid>
       </Grid>
       <Grid margin={2}>
         <Typography align="center">
-          デジコアとの連携機能を用いて、Mattermostへのアカウント登録を行います。
+          Mattermostはデジクリにて定例会やイベントの連絡、コミュニケーションに利用しているSlack風サービスです。
         </Typography>
-        <Typography align="center">必要なアカウント情報を記入してください。</Typography>
+        <Typography align="center">
+          アカウント作成にあたり、必要な情報を記入してください。
+        </Typography>
       </Grid>
       <hr />
-      <Grid container my={2}>
-        <Grid xs={6}>
-          <Typography align="center">
-            <Image src="/image/digicore.png" width={100} height={100} />
-          </Typography>
-        </Grid>
-        <Grid xs={6}>
-          <Typography align="center">
-            <Image src="/image/mattermost_icon.png" width={100} height={100} />
-          </Typography>
-        </Grid>
-      </Grid>
+
       <Grid margin={2}>
         <Box component="form" onSubmit={onRegister}>
           <FormControl fullWidth error={0 < usernameError.length}>
@@ -229,6 +214,6 @@ export const MattermostRegister = ({ displayPageSetter }: Props) => {
           </strong>
         </Typography>
       </Grid>
-    </Container>
+    </>
   );
 };
