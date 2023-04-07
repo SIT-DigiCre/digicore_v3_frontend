@@ -1,0 +1,34 @@
+import { useEffect, useState } from "react";
+import { useAuthState } from "../useAuthState";
+import { EnvJoinAPIData } from "../../interfaces/api";
+import { axios } from "../../utils/axios";
+import { useErrorState } from "../useErrorState";
+
+export const useJoinData = () => {
+  const { authState } = useAuthState();
+  const [joinData, setJoinData] = useState<EnvJoinAPIData>();
+  const { setNewError } = useErrorState();
+  useEffect(() => {
+    if (authState.isLoading || !authState.isLogined) return;
+    if (authState.user.discordUserId === "") {
+      setNewError({
+        name: "no-register",
+        message:
+          "緊急連絡先やDiscordの登録が正常に済んでいません。先に登録が完了していることを確認してください。",
+      });
+      return;
+    }
+    (async () => {
+      try {
+        const res = await axios.get("/tool", {
+          headers: { Authorization: "Bearer " + authState.token },
+        });
+        const envJoinAPIData: EnvJoinAPIData = res.data;
+        setJoinData(envJoinAPIData);
+      } catch (e) {
+        setNewError({ name: "get-join", message: "Discordなどの招待URLの取得に失敗しました" });
+      }
+    })();
+  }, [authState]);
+  return joinData;
+};
