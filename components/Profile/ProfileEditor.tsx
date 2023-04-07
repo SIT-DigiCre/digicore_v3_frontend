@@ -9,7 +9,6 @@ import { User } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
 import { FileBrowserModal } from "../File/FileBrowser";
-import ActiveLimitRenewal from "./ActiveLimitRenewal";
 import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
@@ -38,10 +37,6 @@ const ProfileEditor = () => {
           <Button href={discordLogin.loginUrl} variant="contained">
             {userProfile.discordUserId == "" ? "Discord連携" : "Discord再連携"}
           </Button>
-        </Grid>
-        <Grid sx={{ mb: 3 }}>
-          <h2>有効期限</h2>
-          <ActiveLimitRenewal />
         </Grid>
         <Grid>
           <h2>自己紹介ページ文章</h2>
