@@ -1,0 +1,131 @@
+import { Button, Container, Grid, Typography } from "@mui/material";
+import { useState } from "react";
+import { useActiveLimit } from "../../../hook/profile/useActiveLimit";
+import { getFiscalYear } from "../../../utils/date-util";
+import { PrivatePersonalProfileEditor } from "../../../components/Profile/PrivateProfileEditor";
+import { PrivateParentProfileEditor } from "../../../components/Profile/PrivateProfileEditor";
+import TransferAccountView from "../../../components/Register/TransferAccountView";
+import PageHead from "../../../components/Common/PageHead";
+import { useAuthState } from "../../../hook/useAuthState";
+import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import { useRouter } from "next/router";
+
+const checkStatus = (activeLimit: string): "未確認" | "部費入金待ち" | "部費入金済み" => {
+  const now = new Date();
+  const limit = new Date(activeLimit);
+  if (getFiscalYear(now) < getFiscalYear(limit)) return "部費入金済み";
+  if (limit.getMonth() > 4) return "部費入金待ち";
+  return "未確認";
+};
+
+const ContinuePage = () => {
+  const [check, setCheck] = useState(false);
+  const [activeLimit, setActiveLimit] = useActiveLimit();
+  const { authState } = useAuthState();
+  const router = useRouter();
+  if (!authState.isLogined) return <p>未ログイン状態です。ログインしてください。</p>;
+  return (
+    <Container>
+      <PageHead title="継続確認フォーム" />
+      <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "継続確認フォーム" }]} />
+      <Grid sx={{ mt: 2 }}>
+        <Typography variant="h2" fontSize={30}>
+          継続確認フォーム
+        </Typography>
+        <Typography>
+          既存でデジクリ部員の方が継続をするフォームです。
+          <br />
+          芝浦工業大学の大学院へ院進した方は、こちらのフォームを使用せずインフラへ直接ご相談ください。
+        </Typography>
+      </Grid>
+      <Grid sx={{ mt: 2 }}>
+        <Typography>
+          現在のアカウントの有効期限: {new Date(activeLimit).toLocaleDateString()}
+        </Typography>
+        <Typography>
+          判定: <Status activeLimit={activeLimit} />
+        </Typography>
+      </Grid>
+      {checkStatus(activeLimit) === "未確認" ? (
+        <Grid sx={{ mt: 2 }}>
+          {check ? (
+            <>
+              <Typography variant="h3" fontSize={24}>
+                緊急連絡先の再確認
+              </Typography>
+              <Typography>
+                緊急連絡先に変更がないかを再確認してください。変更がある場合は、修正を加え保存ボタンを押してください。
+              </Typography>
+              <hr />
+              <Grid sx={{ mt: 2, mb: 1 }}>
+                <Typography variant="h4" fontSize={20}>
+                  自身の連絡先
+                </Typography>
+                <PrivatePersonalProfileEditor />
+              </Grid>
+              <hr />
+              <Grid sx={{ mt: 2, mb: 1 }}>
+                <Typography variant="h4" fontSize={20}>
+                  保護者の連絡先
+                </Typography>
+                <PrivateParentProfileEditor />
+              </Grid>
+              <hr />
+              <Grid sx={{ mt: 2 }}>
+                <Typography>上記緊急連絡先に間違いはありませんか？</Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => {
+                    setActiveLimit().then((res) => {
+                      if (res) {
+                        alert("継続処理が完了しました。部費の振込をお願いします。");
+                        router.reload();
+                      } else {
+                        alert("継続処理に失敗しました。");
+                      }
+                    });
+                  }}
+                >
+                  間違い無く、これで継続する
+                </Button>
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setCheck(true);
+                }}
+              >
+                継続の意思がある（継続処理に進む）
+              </Button>
+            </>
+          )}
+        </Grid>
+      ) : (
+        <>
+          {checkStatus(activeLimit) === "部費入金待ち" ? (
+            <TransferAccountView />
+          ) : (
+            <Typography>継続処理は完了しています。今年度もデジクリしていきましょう！</Typography>
+          )}
+        </>
+      )}
+    </Container>
+  );
+};
+
+const Status = ({ activeLimit }: { activeLimit: string }) => {
+  const st = checkStatus(activeLimit);
+  switch (st) {
+    case "未確認":
+      return <span style={{ color: "red" }}>継続意思未確認</span>;
+    case "部費入金待ち":
+      return <span style={{ color: "orange" }}>部費入金待ち</span>;
+    case "部費入金済み":
+      return <span style={{ color: "green" }}>継続処理完了</span>;
+  }
+};
+
+export default ContinuePage;
