@@ -216,6 +216,7 @@ const Steps = ({ step, setStep }: StepsProps) => {
         </>
       );
     case 2:
+      if (localStorage.getItem("reg_discord") == null) localStorage.setItem("reg_discord", "true");
       return (
         <div style={{ textAlign: "center", margin: "1em" }}>
           <Typography>

@@ -14,9 +14,10 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   useEffect(() => {
     if (!authState.isLogined) return;
     setCallbackCode(code).then((res) => {
-      if (localStorage.getItem("reg_discord")) {
+      if (localStorage.getItem("reg_discord") != null) {
         setTimeout(() => {
           refresh().then(() => {
+            localStorage.removeItem("reg_discord");
             router.push("/user/profile?register=true");
           });
         }, 1000);
