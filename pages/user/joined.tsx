@@ -173,7 +173,7 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
                   <TableCell>作業などをしながらおしゃべりするVC</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>集中 VC</TableCell>
+                  <TableCell>もくもく work VC</TableCell>
                   <TableCell>黙々と作業をしたい人向けVC</TableCell>
                 </TableRow>
                 <TableRow>
@@ -181,7 +181,7 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
                   <TableCell>企画などの会議を行うVC、乱入注意!</TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell>vc-notif</TableCell>
+                  <TableCell>vc-notf</TableCell>
                   <TableCell>VCへの入退室記録。ミュート推奨</TableCell>
                 </TableRow>
                 <TableRow>
