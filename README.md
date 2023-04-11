@@ -80,9 +80,9 @@ PR で行っている ToDo が完了して master に Merge する準備がで�
 GitHub の`Reviewers`の歯車ボタンをクリックしてレビュ依頼をする人を選択します。
 ![レビュワー指定](./doc/pic/pr-reviewer.png)
 
-### Slack で報告
+### Mattermost で報告
 
-GitHub の通知だけでは気づきにくいので、Slack の`#digicore-develop`チャンネルにてメンション付きでレビュー依頼を PR の URL 付きで送りましょう。
+GitHub の通知だけでは気づきにくいので、Mattermost の`~system-development`チャンネルにてメンション付きでレビュー依頼を PR の URL 付きで送りましょう。
 
 ### Approve されたら
 

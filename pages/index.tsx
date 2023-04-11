@@ -33,7 +33,7 @@ const IndexPage = () => {
         <h2>使いそうな項目</h2>
         <Typography>
           <Link href="/user/joined">入部完了ページ</Link>
-          ：部費の入金先やSlack、Discordへの参加リンクがあります
+          ：部費の入金先やMattermost、Discordへの参加リンクがあります
         </Typography>
       </Grid>
     </Container>
