@@ -1,7 +1,7 @@
 import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { useMyFiles } from "../../hook/file/useFile";
-import { FileObject } from "../../interfaces/file";
+import { FileKind, FileObject, getFileExtWithKind } from "../../interfaces/file";
 
 const style = {
   position: "absolute" as "absolute",
@@ -19,9 +19,19 @@ type FileUploaderProps = {
   open: boolean;
   onCancel: () => void;
   onUploaded: (fileObject: FileObject) => void;
+  onlyFileKind?: FileKind;
 };
-export const FileUploader = ({ open, onCancel, onUploaded }: FileUploaderProps) => {
+export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileUploaderProps) => {
   const [isOpen, setIsOpen] = useState(open);
+  const [availableExtStr, setAvailableExtStr] = useState<string>(undefined);
+  useEffect(() => {
+    if (!onlyFileKind) return;
+    let extStr = "";
+    getFileExtWithKind(onlyFileKind).forEach((ext, i, list) => {
+      extStr += "." + ext + (list.length - 1 === i ? "" : ",");
+    });
+    setAvailableExtStr(extStr);
+  }, [onlyFileKind]);
   useEffect(() => {
     setIsOpen(open);
     setErrorMsg(undefined);
@@ -64,7 +74,7 @@ export const FileUploader = ({ open, onCancel, onUploaded }: FileUploaderProps) 
     <Modal open={isOpen}>
       <Box sx={style}>
         <h2>ファイルアップロード</h2>
-        <input type="file" onChange={onChangeFileInput} />
+        <input type="file" onChange={onChangeFileInput} accept={availableExtStr} />
         {errorMsg ? <Typography color="error">{errorMsg}</Typography> : <></>}
         {uploading ? <LinearProgress color="success" sx={{ marginTop: 1 }} /> : <></>}
         <Button variant="contained" color="error" onClick={onClickCancel} sx={{ marginTop: 1 }}>

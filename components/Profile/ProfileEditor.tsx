@@ -102,9 +102,14 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
       >
         アイコン設定
       </Button>
-      <FileUploader open={openFileModal} onCancel={() => {
+      <FileUploader
+        open={openFileModal}
+        onCancel={() => {
           setOpenFileModal(false);
-        }} onUploaded={onAvatarImageSelected} />
+        }}
+        onUploaded={onAvatarImageSelected}
+        onlyFileKind="image"
+      />
       {/*<FileBrowserModal
         open={openFileModal}
         onCancel={() => {
