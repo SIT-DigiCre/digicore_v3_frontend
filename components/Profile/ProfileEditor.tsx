@@ -8,8 +8,8 @@ import { FileObject } from "../../interfaces/file";
 import { User } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
-import { FileBrowserModal } from "../File/FileBrowser";
 import PrivateProfileEditor from "./PrivateProfileEditor";
+import { FileUploader } from "../File/FileUploader";
 
 const ProfileEditor = () => {
   const [userProfile] = useMyProfile();
@@ -102,14 +102,17 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
       >
         アイコン設定
       </Button>
-      <FileBrowserModal
+      <FileUploader open={openFileModal} onCancel={() => {
+          setOpenFileModal(false);
+        }} onUploaded={onAvatarImageSelected} />
+      {/*<FileBrowserModal
         open={openFileModal}
         onCancel={() => {
           setOpenFileModal(false);
         }}
         onSelected={onAvatarImageSelected}
         onlyFileKind="image"
-      />
+      />*/}
       {userProfile.studentNumber === userProfile.username ? (
         <Alert severity="warning">ユーザー名を学番以外で設定しましょう!</Alert>
       ) : (
