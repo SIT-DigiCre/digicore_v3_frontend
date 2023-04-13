@@ -5,7 +5,7 @@ import { useAuthState } from "../useAuthState";
 
 type UseDiscordLogin = () => {
   loginUrl: string;
-  setCallbackCode: (string) => Promise<boolean>;
+  setCallbackCode: (string) => Promise<void>;
 };
 
 export const useDiscordLogin: UseDiscordLogin = () => {
@@ -32,21 +32,16 @@ export const useDiscordLogin: UseDiscordLogin = () => {
       }
     })();
   }, [authState]);
-  const setCallbackCode = async (code: string): Promise<boolean> => {
-    try {
-      const _ = await axios.put(
-        "/user/me/discord/callback",
-        { code: code },
-        {
-          headers: {
-            Authorization: "Bearer " + authState.token,
-          },
+  const setCallbackCode = async (code: string): Promise<void> => {
+    const _ = await axios.put(
+      "/user/me/discord/callback",
+      { code: code },
+      {
+        headers: {
+          Authorization: "Bearer " + authState.token,
         },
-      );
-      return true;
-    } catch (e: any) {
-      return false;
-    }
+      },
+    );
   };
   return {
     loginUrl,
