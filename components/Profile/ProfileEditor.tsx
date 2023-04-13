@@ -10,6 +10,8 @@ import { objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
 import PrivateProfileEditor from "./PrivateProfileEditor";
 import { FileUploader } from "../File/FileUploader";
+import { useMyFiles } from "../../hook/file/useFile";
+import { FileBrowserModal } from "../File/FileBrowser";
 
 const ProfileEditor = () => {
   const [userProfile] = useMyProfile();
@@ -69,6 +71,7 @@ type PublicProfileEditorProps = {
 
 export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
   const [userProfile, updateProfile] = useMyProfile();
+  const { myFileInfos } = useMyFiles();
   const [editUserProfile, setEditUserProfile] = useState<User>(userProfile);
   useEffect(() => {
     setEditUserProfile(userProfile);
@@ -102,22 +105,25 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
       >
         アイコン設定
       </Button>
-      <FileUploader
-        open={openFileModal}
-        onCancel={() => {
-          setOpenFileModal(false);
-        }}
-        onUploaded={onAvatarImageSelected}
-        onlyFileKind="image"
-      />
-      {/*<FileBrowserModal
-        open={openFileModal}
-        onCancel={() => {
-          setOpenFileModal(false);
-        }}
-        onSelected={onAvatarImageSelected}
-        onlyFileKind="image"
-      />*/}
+      {myFileInfos && myFileInfos.length === 0 ? (
+        <FileUploader
+          open={openFileModal}
+          onCancel={() => {
+            setOpenFileModal(false);
+          }}
+          onUploaded={onAvatarImageSelected}
+          onlyFileKind="image"
+        />
+      ) : (
+        <FileBrowserModal
+          open={openFileModal}
+          onCancel={() => {
+            setOpenFileModal(false);
+          }}
+          onSelected={onAvatarImageSelected}
+          onlyFileKind="image"
+        />
+      )}
       {userProfile.studentNumber === userProfile.username ? (
         <Alert severity="warning">ユーザー名を学番以外で設定しましょう!</Alert>
       ) : (
