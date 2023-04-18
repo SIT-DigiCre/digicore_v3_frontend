@@ -14,7 +14,13 @@ const LoginCallbackPage = ({ code }: Props) => {
   useEffect(() => {
     setCallbackCode(code).then((jwt) => {
       onLogin(jwt);
-      router.push("/");
+      if (localStorage.getItem("backto")) {
+        const backto = localStorage.getItem("backto");
+        localStorage.removeItem("backto");
+        router.push(backto);
+      } else {
+        router.push("/");
+      }
     });
   }, []);
   return <>ログイン処理中... （この画面が長時間出る場合はログインからやり直して下さい）</>;
