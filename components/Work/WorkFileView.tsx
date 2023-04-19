@@ -4,6 +4,8 @@ import FileView from "../File/FileView";
 import ElementResizeListener from "../Common/ElementResizeListener";
 import FileKindIcon from "../File/FileKindIcon";
 import { getFileKind } from "../../interfaces/file";
+import { Fab } from "@mui/material";
+import PageviewIcon from "@mui/icons-material/Pageview";
 
 type WorkFileViewProps = {
   fileId: string;
@@ -50,15 +52,16 @@ export const WorkFileView = ({ fileId, previewLimit }: WorkFileViewProps) => {
         <FileKindIcon kind={getFileKind(file.extension)} />
         PowerPointファイル
         <br />
-        <button
-          style={{ margin: 2, padding: 15, cursor: "pointer" }}
+        <Fab
+          variant="extended"
           onClick={(e) => {
             e.stopPropagation();
             setView(true);
           }}
         >
-          クリックして表示
-        </button>
+          <PageviewIcon sx={{ mr: 1 }} />
+          表示
+        </Fab>
       </div>
     );
   return <FileView file={file} />;
