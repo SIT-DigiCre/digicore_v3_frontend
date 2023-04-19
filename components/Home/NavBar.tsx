@@ -4,9 +4,11 @@ import { useAuthState } from "../../hook/useAuthState";
 import { baseURL } from "../../utils/common";
 import AccountMenu from "./AccountMenu";
 import AppMenu from "./AppMenu";
+import { useRouter } from "next/router";
 
 const NavBar = () => {
   const { authState, onLogin } = useAuthState();
+  const router = useRouter();
   return (
     <>
       <AppBar position="static" color="primary">
@@ -22,7 +24,14 @@ const NavBar = () => {
               </IconButton>
             </>
           ) : (
-            <Button startIcon={<AccountCircle />} color="inherit" href={"/login"}>
+            <Button
+              startIcon={<AccountCircle />}
+              color="inherit"
+              onClick={() => {
+                localStorage.setItem("backto", router.asPath);
+                router.push("/login");
+              }}
+            >
               Login
             </Button>
           )}
