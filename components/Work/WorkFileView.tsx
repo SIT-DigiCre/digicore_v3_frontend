@@ -51,7 +51,7 @@ export const WorkFileView = ({ fileId, previewLimit }: WorkFileViewProps) => {
         PowerPointファイル
         <br />
         <button
-          style={{ margin: 2, cursor: "pointer" }}
+          style={{ margin: 2, padding: 15, cursor: "pointer" }}
           onClick={(e) => {
             e.stopPropagation();
             setView(true);
