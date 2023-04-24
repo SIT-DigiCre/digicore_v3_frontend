@@ -18,8 +18,12 @@ export const useErrorState: UseErrorState = () => {
       setErrors([...errors, error]);
     } else {
       //既存エラー
-      errors.find((e) => e.name === error.name).count++;
-      setErrors(errors);
+      const targetError = errors.find((e) => e.name === error.name);
+      const editError = errors.filter((e) => e.name !== error.name);
+      setErrors([
+        ...editError,
+        { name: targetError.name, count: targetError.count + 1, message: targetError.message },
+      ]);
     }
   };
 
