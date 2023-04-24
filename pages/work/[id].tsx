@@ -9,14 +9,37 @@ import WorkEditor from "../../components/Work/WorkEditor";
 import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
+import { axios } from "../../utils/axios";
+import { useAuthState } from "../../hook/useAuthState";
+import Head from "next/head";
 
 type Props = {
   id: string;
   modeStr?: string;
   error?: string;
+  workPublic?: WorkPublic;
 };
-const WorkDetailPage = ({ id, modeStr, error }: Props) => {
+type WorkPublicAuthor = {
+  userId: string;
+  username: string;
+  iconUrl: string;
+};
+type WorkPublicTag = {
+  tagId: string;
+  name: string;
+};
+type WorkPublic = {
+  workId: string;
+  name: string;
+  description: string;
+  authors: WorkPublicAuthor[];
+  fileUrl: string;
+  fileName: string;
+  tags: WorkPublicTag[];
+};
+const WorkDetailPage = ({ id, modeStr, error, workPublic }: Props) => {
   const { workDetail, updateWork, deleteWork } = useWork(id);
+  const { authState } = useAuthState();
   const router = useRouter();
   const onSubmit = (workRequest: WorkRequest) => {
     updateWork(workRequest).then((result) => {
@@ -24,7 +47,20 @@ const WorkDetailPage = ({ id, modeStr, error }: Props) => {
       router.push(`/work/${id}`);
     });
   };
-
+  if (!authState.isLogined)
+    return (
+      <>
+        <Head>
+          <meta property="og:title" content={workPublic.name} />
+          <meta property="og:discription" content={workPublic.description} />
+          <meta property="og:url" content={"https://core3.digicre.net/work/" + workPublic.workId} />
+          <meta property="og:image" content={workPublic.fileUrl} />
+          <meta property="og:type" content="article" />
+          <meta property="og:site_name" content="デジコアWork" />
+          <meta name="twitter:card" content="summary_large_image"></meta>
+        </Head>
+      </>
+    );
   if (!workDetail) return <p>Loading...</p>;
   return (
     <Container>
@@ -79,7 +115,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     const id = params?.id;
     const { mode } = query;
     const modeStr = typeof mode === "string" ? mode : null;
-    return { props: { id, modeStr } };
+    const res = await axios.get(`/work/work/${id}/public`);
+    let work: WorkPublic = res.data;
+    work.description = work.description.substring(0, 100);
+    console.log(work);
+    return { props: { id, modeStr, workPublic: work } };
   } catch (error) {
     return { props: { errors: error.message } };
   }
