@@ -9,7 +9,7 @@ import WorkEditor from "../../components/Work/WorkEditor";
 import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
-import { axios } from "../../utils/axios";
+import { axios, isAxiosError, serverSideAxios } from "../../utils/axios";
 import { useAuthState } from "../../hook/useAuthState";
 import Head from "next/head";
 
@@ -115,8 +115,16 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     const id = params?.id;
     const { mode } = query;
     const modeStr = typeof mode === "string" ? mode : null;
-    const res = await axios.get(`/work/work/${id}/public`);
-    let work: WorkPublic = res.data;
+    let work: WorkPublic;
+    try {
+      const res = await serverSideAxios.get(`/work/work/${id}/public`);
+      work = res.data;
+    } catch (e: any) {
+      if (isAxiosError(e)) {
+        console.log(e.response?.data);
+      }
+    }
+
     work.description = work.description.substring(0, 100);
     console.log(work);
     return { props: { id, modeStr, workPublic: work } };

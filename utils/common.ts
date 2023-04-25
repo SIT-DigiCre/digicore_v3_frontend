@@ -1,5 +1,7 @@
 export const baseURL =
   process.env.NODE_ENV === "production" ? "https://coreapi3.digicre.net" : "http://localhost:8000";
+export const baseURLForServerSide =
+  process.env.NODE_ENV === "production" ? "http://digicoreapi_v3:8000" : "http://localhost:8000";
 
 const objectSort = (obj) => {
   if (!obj) return obj;

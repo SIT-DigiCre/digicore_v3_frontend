@@ -1,5 +1,5 @@
 import axiosBase from "axios";
-import { baseURL } from "./common";
+import { baseURL, baseURLForServerSide } from "./common";
 
 export const axios = axiosBase.create({
   baseURL: baseURL,
@@ -9,3 +9,14 @@ export const axios = axiosBase.create({
   },
   responseType: "json",
 });
+
+export const serverSideAxios = axiosBase.create({
+  baseURL: baseURLForServerSide,
+  headers: {
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+  },
+  responseType: "json",
+});
+
+export const isAxiosError = axiosBase.isAxiosError;
