@@ -52,7 +52,7 @@ const WorkDetailPage = ({ id, modeStr, error, workPublic }: Props) => {
       <>
         <Head>
           <meta property="og:title" content={workPublic.name} />
-          <meta property="og:discription" content={workPublic.description} />
+          <meta property="og:description" content={workPublic.description} />
           <meta property="og:url" content={"https://core3.digicre.net/work/" + workPublic.workId} />
           <meta property="og:image" content={workPublic.fileUrl} />
           <meta property="og:type" content="article" />
