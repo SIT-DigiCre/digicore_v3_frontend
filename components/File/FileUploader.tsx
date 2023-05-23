@@ -1,4 +1,4 @@
-import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
+import { Alert, Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { useMyFiles } from "../../hook/file/useFile";
 import { FileKind, FileObject, getFileExtWithKind } from "../../interfaces/file";
@@ -74,6 +74,7 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
     <Modal open={isOpen}>
       <Box sx={style}>
         <h2>ファイルアップロード</h2>
+        <Alert severity="info">ファイル上限: 100MBまで</Alert>
         <input type="file" onChange={onChangeFileInput} accept={availableExtStr} />
         {errorMsg ? <Typography color="error">{errorMsg}</Typography> : <></>}
         {uploading ? <LinearProgress color="success" sx={{ marginTop: 1 }} /> : <></>}
