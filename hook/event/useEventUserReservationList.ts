@@ -23,7 +23,7 @@ const useEventUserReservationList: UseEventUserReservation = (eventId, reservati
             Authorization: "Bearer " + authState.token,
           },
         });
-        const userReservationRes: DigicreEventUserReservation[] = res.data.user;
+        const userReservationRes: DigicreEventUserReservation[] = res.data.users;
         setUserReservations(userReservationRes);
       } catch (err) {
         console.log(err);
