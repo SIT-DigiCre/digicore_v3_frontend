@@ -1,6 +1,7 @@
-import { axios } from "../utils/axios";
+import { axios, isAxiosError } from "../utils/axios";
 import { useEffect, useState } from "react";
 import { useErrorState } from "./useErrorState";
+import { AxiosError } from "axios";
 
 type UseLoginData = () => {
   loginUrl: string;
@@ -22,13 +23,16 @@ export const useLoginData: UseLoginData = () => {
       }
     })();
   }, []);
-  const setCallbackCode = async (code: string): Promise<string> => {
+  const setCallbackCode = async (code: string): Promise<string | null> => {
     try {
       const res = await axios.post("/login/callback", { code: code });
       const jwt: string = res.data.jwt;
       return jwt;
     } catch (e: any) {
-      return "";
+      if (isAxiosError(e)) {
+        setNewError({ name: "login-fail", message: `ログイン失敗:${e.response.data.message}` });
+      }
+      throw e;
     }
   };
   return {
