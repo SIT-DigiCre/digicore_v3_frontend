@@ -104,7 +104,7 @@ export const useWorks: UseWorks = (authorId) => {
     loadWork(0);
   }, [authState]);
   const loadMore = () => {
-    loadWork(offsetNum + 100);
+    loadWork(offsetNum + 10);
   };
   const createWork = async (workRequest: WorkRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
