@@ -11,10 +11,10 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { BudgetClass } from "../../interfaces/budget";
+import { BudgetClass, CreateBudgetRequest } from "../../interfaces/budget";
 import { useErrorState } from "../../hook/useErrorState";
-import { axios } from "../../utils/axios";
 import { useAuthState } from "../../hook/useAuthState";
+import { useBudgets } from "../../hook/budget/useBudget";
 type Props = {
   open: boolean;
   onClose: () => void;
@@ -25,6 +25,7 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
   const [inputClass, setInputClass] = useState<BudgetClass | undefined>();
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
+  const { createBudget } = useBudgets();
 
   const onClickCreate = () => {
     const name = inputName;
@@ -32,16 +33,7 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
     if (name == "" || className == undefined) {
       alert("稟議名が空、もしくは種別が指定されていません");
     } else {
-      axios
-        .post(
-          "/budget",
-          { name: name, class: className },
-          {
-            headers: {
-              Authorization: "Bearer " + authState.token,
-            },
-          },
-        )
+      createBudget({ name: name, class: className, proposerUserId: authState.user.userId })
         .then(() => {
           onClose();
         })
