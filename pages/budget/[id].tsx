@@ -2,6 +2,7 @@ import { useBudget } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
 import { Budget, BudgetStatus } from "../../interfaces/budget";
 import {
+  Button,
   Chip,
   Container,
   Grid,
@@ -17,6 +18,7 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { GetServerSideProps } from "next";
 import FileView from "../../components/File/FileView";
 import { useFile } from "../../hook/file/useFile";
+import { useRouter } from "next/router";
 
 const budgetStatusColor: {
   [K in BudgetStatus]:
@@ -52,6 +54,7 @@ type Props = {
 };
 
 const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
+  const router = useRouter();
   const { budgetDetail } = useBudget(id);
   const { authState } = useAuthState();
 
@@ -76,7 +79,23 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
         <>
           <Grid>
             <h1>{budgetDetail.name}</h1>
-            <Chip label={budgetDetail.status} color={budgetStatusColor[budgetDetail.status]} />
+            <div>
+              <Chip label={budgetDetail.status} color={budgetStatusColor[budgetDetail.status]} />
+              {authState.user.userId === budgetDetail.proposer.userId ? (
+                <div style={{ float: "right" }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      router.push(`/budget/${budgetDetail.budgetId}?mode=edit`);
+                    }}
+                  >
+                    編集
+                  </Button>
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           </Grid>
           <Grid container sx={{ marginTop: 3 }}>
             <TableContainer>
@@ -164,10 +183,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
 
 export default BudgetDetailPage;
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   try {
     const id = params?.id;
-    return { props: { id } };
+    const { mode } = query;
+    const modeStr = typeof mode === "string" ? mode : null;
+    return { props: { id, modeStr } };
   } catch (error) {
     return { props: { errors: error.message } };
   }
