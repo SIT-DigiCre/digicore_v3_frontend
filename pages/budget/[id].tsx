@@ -30,6 +30,7 @@ import { useState } from "react";
 import { AdminApproveDialog } from "../../components/Budget/AdminApproveDialog";
 import { AdminRejectDialog } from "../../components/Budget/AdminRejectDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
+import { AdminPaidDialog } from "../../components/Budget/AdminPaidDialog";
 
 const budgetStatusColor: {
   [K in BudgetStatus]:
@@ -77,6 +78,7 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
   const { authState } = useAuthState();
   const [openAdminApproveDialog, setOpenAdminApproveDialog] = useState(false);
   const [openAdminRejectDialog, setOpenAdminRejectDialog] = useState(false);
+  const [openAdminPaidDialog, setOpenAdminPaidDialog] = useState(false);
   const [openMarkAsBoughtDialog, setOpenMarkAsBoughtDialog] = useState(false);
 
   const onSubmit = (budgetRequest: PutBudgetRequest) => {
@@ -126,6 +128,15 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
     });
   };
 
+  const submitAdminPaid = () => {
+    updateAdminBudget({
+      status: "paid",
+    }).then((result) => {
+      if (!result) return;
+      setOpenAdminPaidDialog(false);
+    });
+  };
+
   const submitMarkAsBought = () => {
     updateBudgetStatusApprove({
       bought: true,
@@ -165,6 +176,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
             open={openAdminRejectDialog}
             onClose={() => setOpenAdminRejectDialog(false)}
             onConfirm={() => submitAdminReject()}
+            name={budgetDetail.name}
+          />
+          <AdminPaidDialog
+            open={openAdminPaidDialog}
+            onClose={() => setOpenAdminPaidDialog(false)}
+            onConfirm={() => submitAdminPaid()}
             name={budgetDetail.name}
           />
         </>
@@ -218,7 +235,18 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                       </Stack>
                     </>
                   ) : budgetDetail.status === "bought" ? (
-                    <></>
+                    <>
+                      <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
+                        <Button
+                          variant="contained"
+                          onClick={() => {
+                            setOpenAdminPaidDialog(true);
+                          }}
+                        >
+                          支払い済みにする
+                        </Button>
+                      </Stack>
+                    </>
                   ) : (
                     <></>
                   )}
