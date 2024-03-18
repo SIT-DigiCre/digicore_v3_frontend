@@ -10,6 +10,7 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { Close } from "@mui/icons-material";
 import { useState } from "react";
 import { BudgetClass, CreateBudgetRequest } from "../../interfaces/budget";
 import { useErrorState } from "../../hook/useErrorState";
@@ -62,11 +63,13 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
         onClick={onClose}
         sx={{
           position: "absolute",
-          right: 8,
-          top: 8,
+          right: 12,
+          top: 12,
           color: (theme) => theme.palette.grey[500],
         }}
-      ></IconButton>
+      >
+        <Close />
+      </IconButton>
       <DialogContent dividers>
         <FormControl fullWidth sx={{ padding: 2 }}>
           <TextField
