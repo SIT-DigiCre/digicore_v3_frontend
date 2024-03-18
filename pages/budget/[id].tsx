@@ -29,6 +29,7 @@ import { BudgetFileView } from "../../components/Budget/BudgetFileView";
 import { useState } from "react";
 import { AdminApproveDialog } from "../../components/Budget/AdminApproveDialog";
 import { AdminRejectDialog } from "../../components/Budget/AdminRejectDialog";
+import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
 
 const budgetStatusColor: {
   [K in BudgetStatus]:
@@ -76,6 +77,7 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
   const { authState } = useAuthState();
   const [openAdminApproveDialog, setOpenAdminApproveDialog] = useState(false);
   const [openAdminRejectDialog, setOpenAdminRejectDialog] = useState(false);
+  const [openMarkAsBoughtDialog, setOpenMarkAsBoughtDialog] = useState(false);
 
   const onSubmit = (budgetRequest: PutBudgetRequest) => {
     switch (budgetDetail.status) {
@@ -124,6 +126,18 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
     });
   };
 
+  const submitMarkAsBought = () => {
+    updateBudgetStatusApprove({
+      bought: true,
+      files: budgetDetail.files ? budgetDetail.files.map((f) => f.fileId) : [],
+      remark: budgetDetail.remark,
+      settlement: budgetDetail.settlement,
+    }).then((result) => {
+      if (!result) return;
+      setOpenMarkAsBoughtDialog(false);
+    });
+  };
+
   if (!authState.isLogined) return <></>;
   if (!budgetDetail) return <p>Loading...</p>;
 
@@ -157,6 +171,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
       ) : (
         <></>
       )}
+      <MarkAsBoughtDialog
+        open={openMarkAsBoughtDialog}
+        onClose={() => setOpenMarkAsBoughtDialog(false)}
+        onConfirm={() => submitMarkAsBought()}
+        name={budgetDetail.name}
+      />
 
       {modeStr === "edit" ? (
         <>
@@ -205,16 +225,32 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                 </>
               ) : authState.user.userId === budgetDetail.proposer.userId ? (
                 // 通常モード かつ 編集権限がある場合
-                <div style={{ float: "right" }}>
+                <>
+                  <div style={{ float: "right" }}>
+                    <Button
+                      variant="contained"
+                      onClick={() => {
+                        router.push(`/budget/${budgetDetail.budgetId}?mode=edit`);
+                      }}
+                    >
+                      編集
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <></>
+              )}
+              {budgetDetail.status === "approve" ? (
+                <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
                   <Button
                     variant="contained"
                     onClick={() => {
-                      router.push(`/budget/${budgetDetail.budgetId}?mode=edit`);
+                      setOpenMarkAsBoughtDialog(true);
                     }}
                   >
-                    編集
+                    購入済みにする
                   </Button>
-                </div>
+                </Stack>
               ) : (
                 <></>
               )}
