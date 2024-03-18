@@ -25,6 +25,7 @@ export const AdminApproveDialog = ({ open, onClose, onConfirm, name }: Props) =>
       </IconButton>
       <DialogContent dividers sx={{ textAlign: "center" }}>
         <p>稟議「{name}」を承認しますか？</p>
+        <p>変更後は元に戻すことができません！</p>
         <Button variant="contained" color="success" sx={{ marginY: 3 }} onClick={onConfirm}>
           承認
         </Button>
