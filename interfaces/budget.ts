@@ -48,3 +48,31 @@ export type CreateBudgetRequest = {
   class: BudgetClass;
   proposerUserId: string;
 }
+
+export type PutBudgetStatusPendingRequest = {
+  name: string;
+  budget: number;
+  purpose: string;
+  mattermostUrl: string;
+  remark: string;
+  files: string[];
+}
+
+export type PutBudgetStatusApproveRequest = {
+  settlement: number;
+  remark: string;
+  bought: boolean;
+  files: string[];
+}
+
+export type PutBudgetStatusBoughtRequest = {
+  settlement: number;
+  remark: string;
+  files: string[];
+}
+
+export type PutBudgetStatusPaidRequest = {
+  remark: string;
+}
+
+export type PutBudgetRequest = PutBudgetStatusPendingRequest & PutBudgetStatusApproveRequest & PutBudgetStatusBoughtRequest & PutBudgetStatusPaidRequest;

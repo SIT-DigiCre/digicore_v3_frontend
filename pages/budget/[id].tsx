@@ -1,6 +1,6 @@
 import { useBudget } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
-import { Budget, BudgetStatus } from "../../interfaces/budget";
+import { Budget, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
 import {
   Button,
   Chip,
@@ -16,9 +16,10 @@ import {
 import PageHead from "../../components/Common/PageHead";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { GetServerSideProps } from "next";
-import FileView from "../../components/File/FileView";
-import { useFile } from "../../hook/file/useFile";
 import { useRouter } from "next/router";
+import BudgetEditor from "../../components/Budget/BudgetEditor";
+import { WorkFileView } from "../../components/Work/WorkFileView";
+import { BudgetFileView } from "../../components/Budget/BudgetFileView";
 
 const budgetStatusColor: {
   [K in BudgetStatus]:
@@ -55,13 +56,45 @@ type Props = {
 
 const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
   const router = useRouter();
-  const { budgetDetail } = useBudget(id);
+  const {
+    budgetDetail,
+    updateBudgetStatusApprove,
+    updateBudgetStatusBought,
+    updateBudgetStatusPaid,
+    updateBudgetStatusPending,
+  } = useBudget(id);
   const { authState } = useAuthState();
+  const onSubmit = (budgetRequest: PutBudgetRequest) => {
+    switch (budgetDetail.status) {
+      case "pending":
+        updateBudgetStatusPending(budgetRequest).then((result) => {
+          if (!result) return;
+          router.push(`/budget/${id}`);
+        });
+        break;
+      case "approve":
+        updateBudgetStatusApprove(budgetRequest).then((result) => {
+          if (!result) return;
+          router.push(`/budget/${id}`);
+        });
+        break;
+      case "bought":
+        updateBudgetStatusBought(budgetRequest).then((result) => {
+          if (!result) return;
+          router.push(`/budget/${id}`);
+        });
+        break;
+      case "paid":
+        updateBudgetStatusPaid(budgetRequest).then((result) => {
+          if (!result) return;
+          router.push(`/budget/${id}`);
+        });
+        break;
+    }
+  };
 
   if (!authState.isLogined) return <></>;
   if (!budgetDetail) return <p>Loading...</p>;
-
-  const files = budgetDetail.files.map((file) => useFile(file.fileId));
 
   return (
     <Container>
@@ -74,7 +107,13 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
         ]}
       />
       {modeStr === "edit" ? (
-        <></>
+        <>
+          <Grid>
+            <h1>{budgetDetail.name}</h1>
+            <Chip label={budgetDetail.status} color={budgetStatusColor[budgetDetail.status]} />
+          </Grid>
+          <BudgetEditor onSubmit={onSubmit} initBudget={budgetDetail} />
+        </>
       ) : (
         <>
           <Grid>
@@ -164,10 +203,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                   <TableRow>
                     <TableCell>領収書</TableCell>
                     <TableCell>
-                      <Stack spacing={1} direction="column">
-                        {files.map((fileObj) => (
-                          <FileView file={fileObj} key={fileObj.name} />
-                        ))}
+                      <Stack spacing={1}>
+                        {budgetDetail.files ? (
+                          budgetDetail.files.map((f) => <BudgetFileView fileId={f.fileId} />)
+                        ) : (
+                          <></>
+                        )}
                       </Stack>
                     </TableCell>
                   </TableRow>

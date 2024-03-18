@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Budget, BudgetDetail, CreateBudgetRequest } from "../../interfaces/budget"
+import { Budget, BudgetDetail, CreateBudgetRequest, PutBudgetRequest, PutBudgetStatusApproveRequest, PutBudgetStatusBoughtRequest, PutBudgetStatusPaidRequest, PutBudgetStatusPendingRequest } from "../../interfaces/budget"
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 import { axios } from "../../utils/axios";
@@ -9,26 +9,118 @@ export const useBudget = (budgetId: string) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
 
+  const fetchBudget = async () => {
+    if (!authState.isLogined) return;
+    try {
+      const res = await axios.get(`/budget/${budgetId}`, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        },
+      });
+      const budgetDetail: BudgetDetail = res.data;
+      setBudget(budgetDetail);
+      removeError("budgetdetail-get-fail");
+    } catch (e: any) {
+      setNewError({ name: "budgetdetail-get-fail", message: "稟議の取得に失敗しました" });
+    }
+  }
+
   useEffect(() => {
-    (async () => {
-      if (!authState.isLogined) return;
-      try {
-        const res = await axios.get(`/budget/${budgetId}`, {
-          headers: {
-            Authorization: "Bearer " + authState.token,
-          },
-        });
-        const budgetDetail: BudgetDetail = res.data;
-        setBudget(budgetDetail);
-        removeError("budgetdetail-get-fail");
-      } catch (e: any) {
-        setNewError({ name: "budgetdetail-get-fail", message: "稟議の取得に失敗しました" });
-      }
-    })();
+    fetchBudget();
   }, [authState]);
+
+  const updateBudgetStatusPending = async (budgetRequest: PutBudgetStatusPendingRequest): Promise<boolean> => {
+    try {
+      const body: PutBudgetStatusPendingRequest = {
+        budget: budgetRequest.budget,
+        files: budgetRequest.files,
+        mattermostUrl: budgetRequest.mattermostUrl,
+        name: budgetRequest.name,
+        purpose: budgetRequest.purpose,
+        remark: budgetRequest.remark,
+      };
+      const res = await axios.put(`/budget/${budgetId}/status_pending`, body, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-put-fail");
+      await fetchBudget();  // update 後に詳細ページ側の値が更新されないので再度 fetch する
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" })
+      return false;
+    }
+  }
+
+  const updateBudgetStatusApprove = async (budgetRequest: PutBudgetStatusApproveRequest): Promise<boolean> => {
+    try {
+      const body: PutBudgetStatusApproveRequest = {
+        bought: budgetRequest.bought,
+        files: budgetRequest.files,
+        remark: budgetRequest.remark,
+        settlement: budgetRequest.settlement,
+      };
+      const res = await axios.put(`/budget/${budgetId}/status_approve`, body, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-put-fail");
+      await fetchBudget();  // update 後に詳細ページ側の値が更新されないので再度 fetch する
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" })
+      return false;
+    }
+  }
+
+  const updateBudgetStatusBought = async (budgetRequest: PutBudgetStatusBoughtRequest): Promise<boolean> => {
+    try {
+      const body: PutBudgetStatusBoughtRequest = {
+        files: budgetRequest.files,
+        remark: budgetRequest.remark,
+        settlement: budgetRequest.settlement,
+      };
+      const res = await axios.put(`/budget/${budgetId}/status_bought`, body, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-put-fail");
+      await fetchBudget();  // update 後に詳細ページ側の値が更新されないので再度 fetch する
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" })
+      return false;
+    }
+  }
+
+  const updateBudgetStatusPaid = async (budgetRequest: PutBudgetStatusPaidRequest): Promise<boolean> => {
+    try {
+      const body: PutBudgetStatusPaidRequest = {
+        remark: budgetRequest.remark,
+      };
+      const res = await axios.put(`/budget/${budgetId}/status_paid`, body, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-put-fail");
+      await fetchBudget();  // update 後に詳細ページ側の値が更新されないので再度 fetch する
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" })
+      return false;
+    }
+  }
 
   return {
     budgetDetail: budget,
+    updateBudgetStatusPending,
+    updateBudgetStatusApprove,
+    updateBudgetStatusBought,
+    updateBudgetStatusPaid,
   };
 }
 
