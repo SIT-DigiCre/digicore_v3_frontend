@@ -1,10 +1,16 @@
 import { useBudget } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
-import { Budget, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
+import {
+  Budget,
+  BudgetStatus,
+  PutBudgetAdminRequest,
+  PutBudgetRequest,
+} from "../../interfaces/budget";
 import {
   Button,
   Chip,
   Container,
+  Divider,
   Grid,
   Stack,
   Table,
@@ -20,6 +26,9 @@ import { useRouter } from "next/router";
 import BudgetEditor from "../../components/Budget/BudgetEditor";
 import { WorkFileView } from "../../components/Work/WorkFileView";
 import { BudgetFileView } from "../../components/Budget/BudgetFileView";
+import { useState } from "react";
+import { AdminApproveDialog } from "../../components/Budget/AdminApproveDialog";
+import { AdminRejectDialog } from "../../components/Budget/AdminRejectDialog";
 
 const budgetStatusColor: {
   [K in BudgetStatus]:
@@ -62,8 +71,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
     updateBudgetStatusBought,
     updateBudgetStatusPaid,
     updateBudgetStatusPending,
+    updateAdminBudget,
   } = useBudget(id);
   const { authState } = useAuthState();
+  const [openAdminApproveDialog, setOpenAdminApproveDialog] = useState(false);
+  const [openAdminRejectDialog, setOpenAdminRejectDialog] = useState(false);
+
   const onSubmit = (budgetRequest: PutBudgetRequest) => {
     switch (budgetDetail.status) {
       case "pending":
@@ -93,19 +106,58 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
     }
   };
 
+  const submitAdminApprove = () => {
+    updateAdminBudget({
+      status: "approve",
+    }).then((result) => {
+      if (!result) return;
+      setOpenAdminApproveDialog(false);
+    });
+  };
+
+  const submitAdminReject = () => {
+    updateAdminBudget({
+      status: "reject",
+    }).then((result) => {
+      if (!result) return;
+      setOpenAdminRejectDialog(false);
+    });
+  };
+
   if (!authState.isLogined) return <></>;
   if (!budgetDetail) return <p>Loading...</p>;
 
   return (
     <Container>
-      <PageHead title={budgetDetail.name} />
+      <PageHead title={modeStr === "admin" ? `★ ${budgetDetail.name}` : budgetDetail.name} />
       <Breadcrumbs
         links={[
           { text: "Home", href: "/" },
-          { text: "Budget", href: "/budget" },
+          modeStr === "admin"
+            ? { text: "Budget (ADMIN)", href: "/budget?mode=admin" }
+            : { text: "Budget", href: "/budget" },
           { text: budgetDetail.name },
         ]}
       />
+      {modeStr === "admin" ? (
+        <>
+          <AdminApproveDialog
+            open={openAdminApproveDialog}
+            onClose={() => setOpenAdminApproveDialog(false)}
+            onConfirm={() => submitAdminApprove()}
+            name={budgetDetail.name}
+          />
+          <AdminRejectDialog
+            open={openAdminRejectDialog}
+            onClose={() => setOpenAdminRejectDialog(false)}
+            onConfirm={() => submitAdminReject()}
+            name={budgetDetail.name}
+          />
+        </>
+      ) : (
+        <></>
+      )}
+
       {modeStr === "edit" ? (
         <>
           <Grid>
@@ -120,7 +172,39 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
             <h1>{budgetDetail.name}</h1>
             <div>
               <Chip label={budgetDetail.status} color={budgetStatusColor[budgetDetail.status]} />
-              {authState.user.userId === budgetDetail.proposer.userId ? (
+              {modeStr === "admin" ? (
+                <>
+                  {budgetDetail.status === "pending" ? (
+                    <>
+                      <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          onClick={() => {
+                            setOpenAdminApproveDialog(true);
+                          }}
+                        >
+                          承認
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => {
+                            setOpenAdminRejectDialog(true);
+                          }}
+                        >
+                          却下
+                        </Button>
+                      </Stack>
+                    </>
+                  ) : budgetDetail.status === "bought" ? (
+                    <></>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              ) : authState.user.userId === budgetDetail.proposer.userId ? (
+                // 通常モード かつ 編集権限がある場合
                 <div style={{ float: "right" }}>
                   <Button
                     variant="contained"

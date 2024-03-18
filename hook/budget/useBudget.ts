@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { Budget, BudgetDetail, CreateBudgetRequest, PutBudgetRequest, PutBudgetStatusApproveRequest, PutBudgetStatusBoughtRequest, PutBudgetStatusPaidRequest, PutBudgetStatusPendingRequest } from "../../interfaces/budget"
+import { Budget, BudgetDetail, CreateBudgetRequest, PutBudgetAdminRequest, PutBudgetRequest, PutBudgetStatusApproveRequest, PutBudgetStatusBoughtRequest, PutBudgetStatusPaidRequest, PutBudgetStatusPendingRequest } from "../../interfaces/budget"
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 import { axios } from "../../utils/axios";
@@ -115,12 +115,32 @@ export const useBudget = (budgetId: string) => {
     }
   }
 
+  const updateAdminBudget = async (budgetRequest: PutBudgetAdminRequest): Promise<boolean> => {
+    try {
+      const body: PutBudgetAdminRequest = {
+        status: budgetRequest.status,
+      };
+      const res = await axios.put(`/budget/${budgetId}/admin`, body, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-put-fail");
+      await fetchBudget();
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
+      return false;
+    }
+  }
+
   return {
     budgetDetail: budget,
     updateBudgetStatusPending,
     updateBudgetStatusApprove,
     updateBudgetStatusBought,
     updateBudgetStatusPaid,
+    updateAdminBudget,
   };
 }
 

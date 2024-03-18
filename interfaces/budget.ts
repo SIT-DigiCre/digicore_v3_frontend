@@ -76,3 +76,7 @@ export type PutBudgetStatusPaidRequest = {
 }
 
 export type PutBudgetRequest = PutBudgetStatusPendingRequest & PutBudgetStatusApproveRequest & PutBudgetStatusBoughtRequest & PutBudgetStatusPaidRequest;
+
+export type PutBudgetAdminRequest = {
+  status: BudgetStatus;
+}

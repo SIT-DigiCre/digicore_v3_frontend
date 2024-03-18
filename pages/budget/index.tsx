@@ -15,6 +15,7 @@ import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
 import { useState } from "react";
 import { useBudgets } from "../../hook/budget/useBudget";
+import { GetServerSideProps } from "next";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -24,14 +25,24 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   minute: "2-digit",
 };
 
-const BudgetPage = () => {
+type Props = {
+  modeStr?: string;
+  error?: string;
+};
+
+const BudgetPage = ({ modeStr, error }: Props) => {
   const router = useRouter();
   const { budgets } = useBudgets();
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
   return (
     <Container>
-      <PageHead title="稟議" />
-      <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "稟議" }]} />
+      <PageHead title={modeStr === "admin" ? "★ 稟議" : "稟議"} />
+      <Breadcrumbs
+        links={[
+          { text: "Home", href: "/" },
+          { text: modeStr === "admin" ? "Budget (ADMIN)" : "Budget" },
+        ]}
+      />
       <NewBudgetDialog
         open={openNewBudgetDialog}
         onClose={() => {
@@ -40,17 +51,30 @@ const BudgetPage = () => {
       />
       <Grid>
         <div>
-          <h1 className="d-inlineblock">稟議</h1>
+          <h1 className="d-inlineblock">{modeStr === "admin" ? "稟議（管理者用）" : "稟議"}</h1>
           <div style={{ float: "right" }}>
-            <Button
-              variant="contained"
-              sx={{ margin: "0.1rem" }}
-              onClick={() => {
-                setOpenNewBudgetDialog(true);
-              }}
-            >
-              新規稟議申請
-            </Button>
+            {modeStr === "admin" ? (
+              <Button
+                variant="contained"
+                color="error"
+                sx={{ margin: "0.1rem" }}
+                onClick={() => {
+                  router.push(`/budget`);
+                }}
+              >
+                通常モードに戻る
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                sx={{ margin: "0.1rem" }}
+                onClick={() => {
+                  setOpenNewBudgetDialog(true);
+                }}
+              >
+                新規稟議申請
+              </Button>
+            )}
           </div>
         </div>
         <hr style={{ clear: "both" }} />
@@ -73,9 +97,15 @@ const BudgetPage = () => {
               {budgets.map((budget) => (
                 <TableRow
                   key={budget.budgetId}
-                  onClick={() => {
-                    router.push(`/budget/${budget.budgetId}`);
-                  }}
+                  onClick={
+                    modeStr === "admin"
+                      ? () => {
+                          router.push(`/budget/${budget.budgetId}?mode=admin`);
+                        }
+                      : () => {
+                          router.push(`/budget/${budget.budgetId}`);
+                        }
+                  }
                   className="clickable-gray"
                 >
                   <TableCell>{budget.name}</TableCell>
@@ -98,3 +128,13 @@ const BudgetPage = () => {
 };
 
 export default BudgetPage;
+
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+  try {
+    const { mode } = query;
+    const modeStr = typeof mode === "string" ? mode : null;
+    return { props: { modeStr } };
+  } catch (error) {
+    return { props: { errors: error.message } };
+  }
+};
