@@ -397,7 +397,9 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                       <TableCell>
                         <Stack spacing={1}>
                           {budgetDetail.files ? (
-                            budgetDetail.files.map((f) => <BudgetFileView fileId={f.fileId} />)
+                            budgetDetail.files.map((f) => (
+                              <BudgetFileView fileId={f.fileId} key={f.fileId} />
+                            ))
                           ) : (
                             <></>
                           )}

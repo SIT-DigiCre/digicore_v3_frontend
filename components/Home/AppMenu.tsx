@@ -13,6 +13,7 @@ import { useAuthState } from "../../hook/useAuthState";
 import LoginIcon from "@mui/icons-material/Login";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 
 const appMenuStyle = {
   position: "absolute" as "absolute",
@@ -104,6 +105,13 @@ export default function AppMenu() {
                 name="Payments"
                 onClick={() => {
                   onClickMenuApp("/user/form/payment");
+                }}
+              />
+              <AppMenuButton
+                icon={<ReceiptLongIcon />}
+                name="Budgets"
+                onClick={() => {
+                  onClickMenuApp("/budget");
                 }}
               />
             </>
