@@ -8,6 +8,7 @@ import {
   TableRow,
   TableCell,
   TableBody,
+  Chip,
 } from "@mui/material";
 import { useRouter } from "next/router";
 import PageHead from "../../components/Common/PageHead";
@@ -16,6 +17,7 @@ import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
 import { useState } from "react";
 import { useBudgets } from "../../hook/budget/useBudget";
 import { GetServerSideProps } from "next";
+import { BudgetClass, BudgetStatus } from "../../interfaces/budget";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
   year: "numeric",
@@ -23,6 +25,43 @@ const dateOptions: Intl.DateTimeFormatOptions = {
   day: "numeric",
   hour: "2-digit",
   minute: "2-digit",
+};
+
+const classDisplay: {
+  [K in BudgetClass]: string;
+} = {
+  room: "部室",
+  project: "企画",
+  outside: "学外活動",
+  fixed: "固定費用",
+  festival: "学園祭",
+};
+
+const statusDisplay: {
+  [K in BudgetStatus]: string;
+} = {
+  pending: "申請中",
+  reject: "却下",
+  approve: "承認済み",
+  bought: "購入済み",
+  paid: "支払い完了",
+};
+
+const budgetStatusColor: {
+  [K in BudgetStatus]:
+    | "primary"
+    | "error"
+    | "success"
+    | "warning"
+    | "default"
+    | "secondary"
+    | "info";
+} = {
+  pending: "default",
+  reject: "error",
+  approve: "success",
+  bought: "secondary",
+  paid: "primary",
 };
 
 type Props = {
@@ -108,11 +147,27 @@ const BudgetPage = ({ modeStr, error }: Props) => {
                   }
                   className="clickable-gray"
                 >
-                  <TableCell>{budget.name}</TableCell>
-                  <TableCell>{budget.status}</TableCell>
-                  <TableCell>{budget.class}</TableCell>
-                  <TableCell>{budget.budget}</TableCell>
-                  <TableCell>{budget.settlement}</TableCell>
+                  <TableCell>
+                    {budget.name.length > 20 ? budget.name.substring(0, 20) + "…" : budget.name}
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      label={statusDisplay[budget.status]}
+                      color={budgetStatusColor[budget.status]}
+                      size="small"
+                    />
+                  </TableCell>
+                  <TableCell>{classDisplay[budget.class]}</TableCell>
+                  <TableCell>
+                    {budget.class === "festival" || budget.class === "fixed"
+                      ? "-"
+                      : `${budget.budget} 円`}
+                  </TableCell>
+                  <TableCell>
+                    {budget.status === "pending" || budget.status === "reject"
+                      ? "-"
+                      : `${budget.settlement} 円`}
+                  </TableCell>
                   <TableCell>{budget.proposer.username}</TableCell>
                   <TableCell title={budget.updatedAt}>
                     {new Date(budget.updatedAt).toLocaleString("ja-JP", dateOptions)}

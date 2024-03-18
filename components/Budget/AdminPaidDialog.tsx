@@ -24,10 +24,10 @@ export const AdminPaidDialog = ({ open, onClose, onConfirm, name }: Props) => {
         <Close />
       </IconButton>
       <DialogContent dividers sx={{ textAlign: "center" }}>
-        <p>稟議「{name}」を支払い済みに切り替えますか？</p>
+        <p>稟議「{name}」を支払い完了に切り替えますか？</p>
         <p>変更後は元に戻すことができません！</p>
         <Button variant="contained" sx={{ marginY: 3 }} onClick={onConfirm}>
-          支払い済みにする
+          支払い完了にする
         </Button>
       </DialogContent>
     </Dialog>

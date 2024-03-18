@@ -81,7 +81,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
   useEffect(() => {
     if (!initBudget) return;
     setName(initBudget.name);
-    setBudgetStr(initBudget.budget.toString());
+    setBudgetStr(initBudget.budget === 0 ? "" : initBudget.budget.toString());
     setMattermostUrl(initBudget.mattermostUrl);
     setPurpose(initBudget.purpose);
     setRemark(initBudget.remark);
