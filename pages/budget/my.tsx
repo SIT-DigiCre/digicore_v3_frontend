@@ -71,16 +71,19 @@ type Props = {
 
 const BudgetPage = ({ modeStr, error }: Props) => {
   const router = useRouter();
-  const { budgets, loadMore } = useBudgets();
+  const { budgets, loadMore } = useBudgets("my");
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(true);
   return (
     <Container>
-      <PageHead title={modeStr === "admin" ? "★ 稟議" : "稟議"} />
+      <PageHead title={modeStr === "admin" ? "★ 自分の稟議" : "自分の稟議"} />
       <Breadcrumbs
         links={[
           { text: "Home", href: "/" },
-          { text: modeStr === "admin" ? "Budget (ADMIN)" : "Budget" },
+          modeStr === "admin"
+            ? { text: "Budget (ADMIN)", href: "/budget?mode=admin" }
+            : { text: "Budget", href: "/budget" },
+          { text: "My" },
         ]}
       />
       <NewBudgetDialog
@@ -91,7 +94,9 @@ const BudgetPage = ({ modeStr, error }: Props) => {
       />
       <Grid>
         <div>
-          <h1 className="d-inlineblock">{modeStr === "admin" ? "稟議（管理者用）" : "稟議"}</h1>
+          <h1 className="d-inlineblock">
+            {modeStr === "admin" ? "自分の稟議（管理者用）" : "自分の稟議"}
+          </h1>
           <div style={{ float: "right" }}>
             {modeStr === "admin" ? (
               <Button
@@ -115,21 +120,6 @@ const BudgetPage = ({ modeStr, error }: Props) => {
                 新規稟議申請
               </Button>
             )}
-            <Button
-              variant="contained"
-              sx={{ margin: "0.1rem", marginLeft: 1 }}
-              onClick={
-                modeStr === "admin"
-                  ? () => {
-                      router.push(`/budget/my?mode=admin`);
-                    }
-                  : () => {
-                      router.push(`/budget/my`);
-                    }
-              }
-            >
-              自分の稟議
-            </Button>
           </div>
         </div>
         <hr style={{ clear: "both" }} />

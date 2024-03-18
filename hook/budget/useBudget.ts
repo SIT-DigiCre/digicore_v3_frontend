@@ -165,11 +165,12 @@ export const useBudgets: UseBudgets = (proposerId) => {
   const fetchBudgets = async (n: number): Promise<FetchBudgetsResult> => {
     if (!authState.isLogined) return { isLogined: false };
     try {
-      const res = await axios.get(`/budget?offset=${n}${proposerId ?
-        proposerId === "my"
-          ? `&proposerId=${authState.user.userId!}`
-          : `&proposerId=${proposerId}`
-        : ""
+      const res = await axios.get(
+        `/budget?offset=${n}${proposerId ?
+          proposerId === "my"
+            ? `&proposerId=${authState.user.userId!}`
+            : `&proposerId=${proposerId}`
+          : ""
         }`, {
         headers: {
           Authorization: "Bearer " + authState.token,
