@@ -13,6 +13,7 @@ import {
   Container,
   Divider,
   Grid,
+  IconButton,
   Stack,
   Table,
   TableBody,
@@ -20,6 +21,7 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
+import LaunchIcon from "@mui/icons-material/Launch";
 import PageHead from "../../components/Common/PageHead";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import { GetServerSideProps } from "next";
@@ -350,6 +352,34 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                     <TableCell>備考</TableCell>
                     <TableCell>{budgetDetail.remark}</TableCell>
                   </TableRow>
+                  {budgetDetail.class === "outside" ||
+                  budgetDetail.class === "project" ||
+                  budgetDetail.class === "room" ? (
+                    <TableRow>
+                      <TableCell>スレッド</TableCell>
+                      <TableCell>
+                        {budgetDetail.mattermostUrl &&
+                        new URL(budgetDetail.mattermostUrl).hostname === "mm.digicre.net" ? (
+                          <IconButton
+                            size="small"
+                            title="Mattermostで開く"
+                            onClick={() =>
+                              router.push(
+                                budgetDetail.mattermostUrl.replace(/^http[s]?:/, "mattermost:"),
+                              )
+                            }
+                          >
+                            <LaunchIcon />
+                          </IconButton>
+                        ) : (
+                          <></>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  ) : (
+                    <></>
+                  )}
+
                   <TableRow>
                     <TableCell>申請者</TableCell>
                     <TableCell>{budgetDetail.proposer.username}</TableCell>
