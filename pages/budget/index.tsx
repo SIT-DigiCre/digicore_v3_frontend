@@ -71,8 +71,9 @@ type Props = {
 
 const BudgetPage = ({ modeStr, error }: Props) => {
   const router = useRouter();
-  const { budgets } = useBudgets();
+  const { budgets, loadMore } = useBudgets();
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
+  const [showLoadMoreButton, setShowLoadMoreButton] = useState(true);
   return (
     <Container>
       <PageHead title={modeStr === "admin" ? "★ 稟議" : "稟議"} />
@@ -129,55 +130,78 @@ const BudgetPage = ({ modeStr, error }: Props) => {
                 <TableCell>予定金額</TableCell>
                 <TableCell>購入金額</TableCell>
                 <TableCell>申請者</TableCell>
-                <TableCell>申請日</TableCell>
+                <TableCell>最終更新日</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {budgets.map((budget) => (
-                <TableRow
-                  key={budget.budgetId}
-                  onClick={
-                    modeStr === "admin"
-                      ? () => {
-                          router.push(`/budget/${budget.budgetId}?mode=admin`);
-                        }
-                      : () => {
-                          router.push(`/budget/${budget.budgetId}`);
-                        }
-                  }
-                  className="clickable-gray"
-                >
-                  <TableCell>
-                    {budget.name.length > 20 ? budget.name.substring(0, 20) + "…" : budget.name}
-                  </TableCell>
-                  <TableCell>
-                    <Chip
-                      label={statusDisplay[budget.status]}
-                      color={budgetStatusColor[budget.status]}
-                      size="small"
-                    />
-                  </TableCell>
-                  <TableCell>{classDisplay[budget.class]}</TableCell>
-                  <TableCell>
-                    {budget.class === "festival" || budget.class === "fixed"
-                      ? "-"
-                      : `${budget.budget} 円`}
-                  </TableCell>
-                  <TableCell>
-                    {budget.status === "pending" || budget.status === "reject"
-                      ? "-"
-                      : `${budget.settlement} 円`}
-                  </TableCell>
-                  <TableCell>{budget.proposer.username}</TableCell>
-                  <TableCell title={budget.updatedAt}>
-                    {new Date(budget.updatedAt).toLocaleString("ja-JP", dateOptions)}
-                  </TableCell>
-                </TableRow>
-              ))}
+              {budgets ? (
+                <>
+                  {budgets.map((budget) => (
+                    <TableRow
+                      key={budget.budgetId}
+                      onClick={
+                        modeStr === "admin"
+                          ? () => {
+                              router.push(`/budget/${budget.budgetId}?mode=admin`);
+                            }
+                          : () => {
+                              router.push(`/budget/${budget.budgetId}`);
+                            }
+                      }
+                      className="clickable-gray"
+                    >
+                      <TableCell>
+                        {budget.name.length > 20 ? budget.name.substring(0, 20) + "…" : budget.name}
+                      </TableCell>
+                      <TableCell>
+                        <Chip
+                          label={statusDisplay[budget.status]}
+                          color={budgetStatusColor[budget.status]}
+                          size="small"
+                        />
+                      </TableCell>
+                      <TableCell>{classDisplay[budget.class]}</TableCell>
+                      <TableCell>
+                        {budget.class === "festival" || budget.class === "fixed"
+                          ? "-"
+                          : `${budget.budget} 円`}
+                      </TableCell>
+                      <TableCell>
+                        {budget.status === "pending" || budget.status === "reject"
+                          ? "-"
+                          : `${budget.settlement} 円`}
+                      </TableCell>
+                      <TableCell>{budget.proposer.username}</TableCell>
+                      <TableCell title={budget.updatedAt}>
+                        {new Date(budget.updatedAt).toLocaleString("ja-JP", dateOptions)}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </>
+              ) : (
+                <TableRow>稟議がありません</TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
       </Grid>
+      {showLoadMoreButton ? (
+        <Grid sx={{ textAlign: "center", marginY: 3 }}>
+          <Button
+            variant="contained"
+            onClick={() => {
+              loadMore().then((result) => {
+                if (!result) return;
+                if (result.isLogined && result.reachedToEnd) setShowLoadMoreButton(false);
+              });
+            }}
+          >
+            Load More
+          </Button>
+        </Grid>
+      ) : (
+        <Grid sx={{ marginBottom: 3 }}></Grid>
+      )}
     </Container>
   );
 };

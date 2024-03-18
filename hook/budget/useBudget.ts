@@ -144,33 +144,61 @@ export const useBudget = (budgetId: string) => {
   };
 }
 
-export const useBudgets = () => {
+type FetchBudgetsResult = {
+  isLogined: boolean,
+  isError?: boolean,
+  reachedToEnd?: boolean,
+}
+
+type UseBudgets = (proposerId?: string | "my") => {
+  budgets: Budget[];
+  createBudget: (createBudgetRequest: CreateBudgetRequest) => Promise<string>;
+  loadMore: () => Promise<FetchBudgetsResult>;
+}
+
+export const useBudgets: UseBudgets = (proposerId) => {
   const [budgets, setBudgets] = useState<Budget[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+  const [offsetNum, setOffsetNum] = useState(0);
 
-  const fetchBudgets = async () => {
-    if (!authState.isLogined) return;
+  const fetchBudgets = async (n: number): Promise<FetchBudgetsResult> => {
+    if (!authState.isLogined) return { isLogined: false };
     try {
-      const res = await axios.get(`/budget`, {
+      const res = await axios.get(`/budget?offset=${n}${proposerId ?
+        proposerId === "my"
+          ? `&proposerId=${authState.user.userId!}`
+          : `&proposerId=${proposerId}`
+        : ""
+        }`, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
-      const budgets: Budget[] = res.data.budgets;
-      setBudgets(budgets);
+      const newBudgets: Budget[] = res.data.budgets;
+      setBudgets(budgets.concat(newBudgets));
       removeError("budgets-get-fail");
+      setOffsetNum(n);
+      return { isLogined: true, reachedToEnd: newBudgets.length < 10 }
     } catch (err: any) {
+      if (err.response && err.response.status === 400)
+        return { isLogined: true, reachedToEnd: true, isError: true }
+
       setNewError({
         name: "budgets-get-fail",
         message: "稟議情報の一覧の取得に失敗しました",
       });
+      return { isLogined: true, isError: true }
     }
   };
 
   useEffect(() => {
-    fetchBudgets();
+    fetchBudgets(0);
   }, [authState]);
+
+  const loadMore = () => {
+    return fetchBudgets(offsetNum + 10);
+  };
 
   const createBudget = async (createBudgetRequest: CreateBudgetRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
@@ -191,5 +219,6 @@ export const useBudgets = () => {
   return {
     budgets: budgets,
     createBudget: createBudget,
+    loadMore: loadMore,
   };
 }
