@@ -1,8 +1,36 @@
 import { useEffect, useState } from "react"
-import { Budget, CreateBudgetRequest } from "../../interfaces/budget"
+import { Budget, BudgetDetail, CreateBudgetRequest } from "../../interfaces/budget"
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 import { axios } from "../../utils/axios";
+
+export const useBudget = (budgetId: string) => {
+  const [budget, setBudget] = useState<BudgetDetail>();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+
+  useEffect(() => {
+    (async () => {
+      if (!authState.isLogined) return;
+      try {
+        const res = await axios.get(`/budget/${budgetId}`, {
+          headers: {
+            Authorization: "Bearer " + authState.token,
+          },
+        });
+        const budgetDetail: BudgetDetail = res.data;
+        setBudget(budgetDetail);
+        removeError("budgetdetail-get-fail");
+      } catch (e: any) {
+        setNewError({ name: "budgetdetail-get-fail", message: "稟議の取得に失敗しました" });
+      }
+    })();
+  }, [authState]);
+
+  return {
+    budgetDetail: budget,
+  };
+}
 
 export const useBudgets = () => {
   const [budgets, setBudgets] = useState<Budget[]>([]);

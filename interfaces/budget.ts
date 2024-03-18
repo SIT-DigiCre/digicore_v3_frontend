@@ -8,6 +8,17 @@ export type BudgetProposer = {
   iconUrl: string;
 }
 
+export type BudgetApprover = {
+  userId: string;
+  username: string;
+  iconUrl: string;
+}
+
+export type BudgetFile = {
+  fileId: string;
+  name: string;
+}
+
 export type Budget = {
   userId: string;
   username: string;
@@ -20,6 +31,16 @@ export type Budget = {
   budget: number;
   updatedAt: string;
   proposer: BudgetProposer;
+}
+
+export type BudgetDetail = Budget & {
+  purpose: string;
+  mattermostUrl: string;
+  approver?: BudgetApprover;
+  files: BudgetFile[];
+  createdAt: string;
+  approvedAt?: string;
+  remark: string;
 }
 
 export type CreateBudgetRequest = {

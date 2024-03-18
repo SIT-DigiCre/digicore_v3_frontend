@@ -71,7 +71,13 @@ const BudgetPage = () => {
             </TableHead>
             <TableBody>
               {budgets.map((budget) => (
-                <TableRow key={budget.budgetId}>
+                <TableRow
+                  key={budget.budgetId}
+                  onClick={() => {
+                    router.push(`/budget/${budget.budgetId}`);
+                  }}
+                  className="clickable-gray"
+                >
                   <TableCell>{budget.name}</TableCell>
                   <TableCell>{budget.status}</TableCell>
                   <TableCell>{budget.class}</TableCell>
