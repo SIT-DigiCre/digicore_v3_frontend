@@ -10,21 +10,34 @@ import {
   Select,
   TextField,
 } from "@mui/material";
+import { Close } from "@mui/icons-material";
 import { useState } from "react";
-import { BudgetClass } from "../../interfaces/budget";
+import { BudgetClass, CreateBudgetRequest } from "../../interfaces/budget";
 import { useErrorState } from "../../hook/useErrorState";
-import { axios } from "../../utils/axios";
 import { useAuthState } from "../../hook/useAuthState";
+import { useBudgets } from "../../hook/budget/useBudget";
+import { useRouter } from "next/router";
 type Props = {
   open: boolean;
   onClose: () => void;
 };
 const classList: BudgetClass[] = ["room", "project", "outside", "fixed", "festival"];
+const classDisplay: {
+  [K in BudgetClass]: string;
+} = {
+  room: "部室",
+  project: "企画",
+  outside: "学外活動",
+  fixed: "固定費用",
+  festival: "学園祭",
+};
 export const NewBudgetDialog = ({ open, onClose }: Props) => {
   const [inputName, setInputName] = useState("");
   const [inputClass, setInputClass] = useState<BudgetClass | undefined>();
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
+  const { createBudget } = useBudgets();
+  const router = useRouter();
 
   const onClickCreate = () => {
     const name = inputName;
@@ -32,18 +45,10 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
     if (name == "" || className == undefined) {
       alert("稟議名が空、もしくは種別が指定されていません");
     } else {
-      axios
-        .post(
-          "/budget",
-          { name: name, class: className },
-          {
-            headers: {
-              Authorization: "Bearer " + authState.token,
-            },
-          },
-        )
-        .then(() => {
+      createBudget({ name: name, class: className, proposerUserId: authState.user.userId })
+        .then((budgetId) => {
           onClose();
+          router.push(`/budget/${budgetId}?mode=edit`);
         })
         .catch((e) => {
           setNewError({ name: "post-budget", message: "稟議申請に失敗しました" });
@@ -58,14 +63,17 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
         onClick={onClose}
         sx={{
           position: "absolute",
-          right: 8,
-          top: 8,
+          right: 12,
+          top: 12,
           color: (theme) => theme.palette.grey[500],
         }}
-      ></IconButton>
+      >
+        <Close />
+      </IconButton>
       <DialogContent dividers>
         <FormControl fullWidth sx={{ padding: 2 }}>
           <TextField
+            required
             label="稟議名"
             variant="outlined"
             value={inputName}
@@ -74,8 +82,8 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
             }}
           />
         </FormControl>
-        <FormControl fullWidth sx={{ padding: 2 }}>
-          <InputLabel>種別</InputLabel>
+        <FormControl fullWidth required sx={{ padding: 2 }}>
+          <InputLabel sx={{ margin: 2 }}>種別</InputLabel>
           <Select
             value={inputClass}
             label="種別"
@@ -83,7 +91,7 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
           >
             {classList.map((c) => (
               <MenuItem value={c} key={c}>
-                {c}
+                {classDisplay[c]}
               </MenuItem>
             ))}
           </Select>
