@@ -35,8 +35,11 @@ const ContinuePage = () => {
         <Typography>
           既存でデジクリ部員の方が継続をするフォームです。
           <br />
-          芝浦工業大学の大学院へ院進した方は、こちらのフォームを使用せずインフラへ直接ご相談ください。
+          学籍番号に変更がある場合は、こちらのフォームを使用せずインフラサポート・依頼フォームからご相談ください。
         </Typography>
+        <a href="https://forms.gle/MQicA1No8LSZPe5QA" target="_blank">
+          インフラサポート・依頼フォーム
+        </a>
       </Grid>
       <Grid sx={{ mt: 2 }}>
         <Typography>
