@@ -297,7 +297,8 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
               ) : (
                 <></>
               )}
-              {budgetDetail.status === "approve" ? (
+              {budgetDetail.status === "approve" &&
+              authState.user.userId === budgetDetail.proposer.userId ? (
                 <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
                   <Button
                     variant="contained"
