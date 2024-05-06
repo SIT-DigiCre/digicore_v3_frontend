@@ -204,7 +204,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
           <strong>
             アカウント登録にお困りの際は{" "}
             <a
-              href="https://docs.google.com/forms/d/e/1FAIpQLSfu4AwLvNg5me5Exymbpb6ZA8Liutt0u8Z0vWPJ2TRl575chQ/viewform?usp=sf_link"
+              href="https://forms.gle/MQicA1No8LSZPe5QA"
               target="_blank"
               rel="noreferrer"
             >
