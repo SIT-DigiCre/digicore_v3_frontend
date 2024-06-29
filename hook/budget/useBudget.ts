@@ -134,6 +134,36 @@ export const useBudget = (budgetId: string) => {
     }
   }
 
+  const deleteBudgetStatusPending = async () => {
+    try {
+      const res = await axios.delete(`/budget/${budgetId}/status_pending`, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-delete-fail");
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-delete-fail", message: "稟議の削除に失敗しました" });
+      return false;
+    }
+  }
+
+  const deleteBudgetStatusApprove = async () => {
+    try {
+      const res = await axios.delete(`/budget/${budgetId}/status_approve`, {
+        headers: {
+          Authorization: "Bearer " + authState.token,
+        }
+      });
+      removeError("budget-delete-fail");
+      return true;
+    } catch (e: any) {
+      setNewError({ name: "budget-delete-fail", message: "稟議の削除に失敗しました" });
+      return false;
+    }
+  }
+
   return {
     budgetDetail: budget,
     updateBudgetStatusPending,
@@ -141,6 +171,8 @@ export const useBudget = (budgetId: string) => {
     updateBudgetStatusBought,
     updateBudgetStatusPaid,
     updateAdminBudget,
+    deleteBudgetStatusPending,
+    deleteBudgetStatusApprove,
   };
 }
 
