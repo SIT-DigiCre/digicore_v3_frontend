@@ -34,6 +34,7 @@ import { AdminApproveDialog } from "../../components/Budget/AdminApproveDialog";
 import { AdminRejectDialog } from "../../components/Budget/AdminRejectDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
 import { AdminPaidDialog } from "../../components/Budget/AdminPaidDialog";
+import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
 
 const classDisplay: {
   [K in BudgetClass]: string;
@@ -97,12 +98,15 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
     updateBudgetStatusPaid,
     updateBudgetStatusPending,
     updateAdminBudget,
+    deleteBudgetStatusPending,
+    deleteBudgetStatusApprove,
   } = useBudget(id);
   const { authState } = useAuthState();
   const [openAdminApproveDialog, setOpenAdminApproveDialog] = useState(false);
   const [openAdminRejectDialog, setOpenAdminRejectDialog] = useState(false);
   const [openAdminPaidDialog, setOpenAdminPaidDialog] = useState(false);
   const [openMarkAsBoughtDialog, setOpenMarkAsBoughtDialog] = useState(false);
+  const [openDeleteBudgetDialog, setOpenDeleteBudgetDialog] = useState(false);
 
   const onSubmit = (budgetRequest: PutBudgetRequest) => {
     switch (budgetDetail.status) {
@@ -172,6 +176,23 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
     });
   };
 
+  const submitDelete = () => {
+    switch (budgetDetail.status) {
+      case "pending":
+        deleteBudgetStatusPending().then((result) => {
+          if (!result) return;
+          router.push(`/budget`);
+        });
+        break;
+      case "approve":
+        deleteBudgetStatusApprove().then((result) => {
+          if (!result) return;
+          router.push(`/budget`);
+        });
+        break;
+    }
+  };
+
   if (!authState.isLogined) return <></>;
   if (!budgetDetail) return <p>Loading...</p>;
 
@@ -215,6 +236,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
         open={openMarkAsBoughtDialog}
         onClose={() => setOpenMarkAsBoughtDialog(false)}
         onConfirm={() => submitMarkAsBought()}
+        name={budgetDetail.name}
+      />
+      <DeleteBudgetDialog
+        open={openDeleteBudgetDialog}
+        onClose={() => setOpenDeleteBudgetDialog(false)}
+        onConfirm={() => submitDelete()}
         name={budgetDetail.name}
       />
 
@@ -284,14 +311,29 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                 // 通常モード かつ 編集権限がある場合
                 <>
                   <div style={{ float: "right" }}>
-                    <Button
-                      variant="contained"
-                      onClick={() => {
-                        router.push(`/budget/${budgetDetail.budgetId}?mode=edit`);
-                      }}
-                    >
-                      編集
-                    </Button>
+                    <Stack spacing={3} direction="row">
+                      <Button
+                        variant="contained"
+                        onClick={() => {
+                          router.push(`/budget/${budgetDetail.budgetId}?mode=edit`);
+                        }}
+                      >
+                        編集
+                      </Button>
+                      {(budgetDetail.status === "pending" || budgetDetail.status === "approve") && (
+                        <>
+                          <Button
+                            variant="contained"
+                            color="error"
+                            onClick={() => {
+                              setOpenDeleteBudgetDialog(true);
+                            }}
+                          >
+                            削除
+                          </Button>
+                        </>
+                      )}
+                    </Stack>
                   </div>
                 </>
               ) : (

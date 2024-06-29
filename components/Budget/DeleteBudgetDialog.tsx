@@ -7,7 +7,7 @@ type Props = {
   onConfirm: () => void;
   name: string;
 };
-export const MarkAsBoughtDialog = ({ open, onClose, onConfirm, name }: Props) => {
+export const DeleteBudgetDialog = ({ open, onClose, onConfirm, name }: Props) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>操作の確認</DialogTitle>
@@ -24,15 +24,10 @@ export const MarkAsBoughtDialog = ({ open, onClose, onConfirm, name }: Props) =>
         <Close />
       </IconButton>
       <DialogContent dividers sx={{ textAlign: "center" }}>
-        <p>稟議「{name}」を購入済みに切り替えますか？</p>
-        <p>変更後は元に戻すことができません！</p>
-        <p>また購入済みにした稟議は削除できなくなります！</p>
-        <p style={{ fontSize: "small" }}>
-          <br />
-          (変更後も支払いが行われるまでは購入金額・備考・領収書の修正は可能です)
-        </p>
-        <Button variant="contained" sx={{ marginY: 3 }} onClick={onConfirm}>
-          購入済みにする
+        <p>本当に稟議「{name}」を削除しますか？</p>
+        <p>削除後は元に戻すことができません！</p>
+        <Button variant="contained" color="error" sx={{ marginY: 3 }} onClick={onConfirm}>
+          削除する
         </Button>
       </DialogContent>
     </Dialog>
