@@ -2,6 +2,7 @@ import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { useMyFiles } from "../../hook/file/useFile";
 import { FileKind, FileObject, getFileExtWithKind } from "../../interfaces/file";
+import { DropzoneArea } from "react-mui-dropzone";
 
 const style = {
   position: "absolute" as "absolute",
@@ -74,7 +75,10 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
     <Modal open={isOpen}>
       <Box sx={style}>
         <h2>ファイルアップロード</h2>
-        <input type="file" onChange={onChangeFileInput} accept={availableExtStr} />
+        
+        <DropzoneArea onChange={onChangeFileInput}/>
+        {/* <input type="file" onChange={onChangeFileInput} accept={availableExtStr} /> */}
+        
         {errorMsg ? <Typography color="error">{errorMsg}</Typography> : <></>}
         {uploading ? <LinearProgress color="success" sx={{ marginTop: 1 }} /> : <></>}
         <Button variant="contained" color="error" onClick={onClickCancel} sx={{ marginTop: 1 }}>
