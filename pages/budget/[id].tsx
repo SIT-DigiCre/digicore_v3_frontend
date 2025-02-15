@@ -294,7 +294,7 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                     </>
                   ) : budgetDetail.status === "bought" ? (
                     <>
-                      <Stack spacing={2} direction="row" sx={{ marginTop: 3 }}>
+                      <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
                         <Button
                           variant="contained"
                           onClick={() => {
@@ -349,7 +349,7 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
               )}
               {budgetDetail.status === "approve" &&
               authState.user.userId === budgetDetail.proposer.userId ? (
-                <Stack spacing={2} direction="row" sx={{ marginTop: 3 }}>
+                <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
                   <Button
                     variant="contained"
                     onClick={() => {
