@@ -35,6 +35,7 @@ import { AdminRejectDialog } from "../../components/Budget/AdminRejectDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
 import { AdminPaidDialog } from "../../components/Budget/AdminPaidDialog";
 import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
+import { ErrorOutline, WarningAmber } from "@mui/icons-material";
 
 const classDisplay: {
   [K in BudgetClass]: string;
@@ -227,6 +228,7 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
             onClose={() => setOpenAdminPaidDialog(false)}
             onConfirm={() => submitAdminPaid()}
             name={budgetDetail.name}
+            filesMissing={budgetDetail.files.length === 0}
           />
         </>
       ) : (
@@ -292,7 +294,7 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                     </>
                   ) : budgetDetail.status === "bought" ? (
                     <>
-                      <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
+                      <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
                         <Button
                           variant="contained"
                           onClick={() => {
@@ -301,6 +303,12 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
                         >
                           支払い完了にする
                         </Button>
+                        {budgetDetail.files.length === 0 && (
+                          <Stack spacing={0.5} direction="row" alignItems="center" color="#d32f2f">
+                            <ErrorOutline color="error" fontSize="small" />
+                            <p>この稟議には領収書が添付されていません</p>
+                          </Stack>
+                        )}
                       </Stack>
                     </>
                   ) : (
@@ -341,15 +349,22 @@ const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
               )}
               {budgetDetail.status === "approve" &&
               authState.user.userId === budgetDetail.proposer.userId ? (
-                <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
+                <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
                   <Button
                     variant="contained"
                     onClick={() => {
                       setOpenMarkAsBoughtDialog(true);
                     }}
+                    disabled={budgetDetail.files.length === 0}
                   >
                     購入済みにする
                   </Button>
+                  {budgetDetail.files.length === 0 && (
+                    <Stack spacing={0.5} direction="row" alignItems="center" color="#ed6c02">
+                      <WarningAmber fontSize="inherit" color="warning" />
+                      <p>購入済みにするには「編集」から領収書の添付が必要です</p>
+                    </Stack>
+                  )}
                 </Stack>
               ) : (
                 <></>
