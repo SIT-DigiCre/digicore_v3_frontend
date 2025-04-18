@@ -2,8 +2,8 @@ FROM node:14
 
 WORKDIR /core3
 COPY package.json .
-COPY yarn.lock .
-RUN yarn install
+COPY pnpm-lock.yaml .
+RUN pnpm install
 COPY . .
-RUN yarn build
-CMD yarn start
+RUN pnpm build
+CMD pnpm start
