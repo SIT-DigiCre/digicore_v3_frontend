@@ -58,7 +58,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     validatePassword(registrationForm.password) === true &&
     registrationForm.password === passwordConfirm;
 
-  const onRegister = (e: FormEvent<HTMLInputElement>) => {
+  const onRegister = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     (async () => {
       setSending(true);
@@ -81,9 +81,9 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
   return (
     <>
       <Grid container my={2}>
-        <Grid xs={12}>
+        <Grid size={12}>
           <Typography align="center" variant="h3" fontSize={50}>
-            <Image src="/image/mattermost_icon.png" width={40} height={40} />
+            <Image alt="Mattermost" src="/image/mattermost_icon.png" width={40} height={40} />
             Mattermost 登録
           </Typography>
         </Grid>
@@ -99,7 +99,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
       <hr />
 
       <Grid margin={2}>
-        <Box component="form" onSubmit={onRegister}>
+        <form onSubmit={onRegister}>
           <FormControl fullWidth error={0 < usernameError.length}>
             <TextField
               label="ユーザーID"
@@ -183,7 +183,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
               {sending ? "処理中" : "登録"}
             </Button>
           </FormControl>
-        </Box>
+        </form>
       </Grid>
       <Grid>
         <Typography m={1}>Mattermost 公式による注意事項</Typography>

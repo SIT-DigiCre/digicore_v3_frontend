@@ -48,13 +48,13 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
         </Typography>
       </Grid>
       <Grid margin={2}>
-        <Typography align="center" paragraph={true}>
+        <Typography align="center">
           2022/10/17 より デジクリ は Slack から Mattermost へ移行を開始いたします。
         </Typography>
-        <Typography align="center" paragraph={true}>
+        <Typography align="center">
           これから部員の皆さんにはアカウントを登録していただきますが、
         </Typography>
-        <Typography align="center" paragraph={true} sx={{ color: colors.red[500] }}>
+        <Typography align="center" sx={{ color: colors.red[500] }}>
           アカウントを登録する前に以下のお願い事をよくお読みください。
         </Typography>
       </Grid>
@@ -62,13 +62,13 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
       <Grid margin={2}>
         <Typography variant="h5">Mattermostとは</Typography>
         <Typography my={4} align="center">
-          <Image src="/image/mattermost_logo.png" width="300" height="50" objectFit="contain" />
+          <Image alt="Mattermost" src="/image/mattermost_logo.png" width="300" height="50" objectFit="contain" />
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           Mattermost は
           組織や企業の内部チャットとして設計された、オープンソースのチャットサービスです。
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           Slack や Microsoft Teams の代替ソフトとして 売り出されており、
           <ul>
             <li>チャンネルの閲覧、作成</li>
@@ -83,30 +83,30 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
           でもできると考えて良いです。
         </Typography>
         <Typography variant="h6">登録後にやること</Typography>
-        <Typography paragraph={true}>
+        <Typography>
           サーバーへの加入後、皆さんは自動的に ~town-square チャンネルに参加します。
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           Slack の #general と同様、 デジクリに関する重要な連絡は ~town-square
           上でお知らせしますが、 その他にも以下のチャンネルへ参加することを 強くオススメします。
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           <ul>
             <li>~random</li>
             <li>~presentation</li>
           </ul>
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           ~random では部員なら誰でもデジクリ内外の イベントや企画の案内・宣伝、 ~presentation
           では部員の発表資料の投稿ができます。
         </Typography>
         <Typography>
-          <Image src="/image/mattermost_screen.png" width={300} height={250} objectFit="contain" />
+          <Image alt="Mattermostのスクリーンショット" src="/image/mattermost_screen.png" width={300} height={250} objectFit="contain" />
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           チャンネルへの参加は、 左上の＋ボタン（モバイル版は左上のメニュー）から行えます。
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           Mattermost 登録後にすべきオススメの設定を、
           <a
             href="https://teal-consonant-36c.notion.site/Mattermost-89604847155a4a92aaaa46d51cac65c2"
@@ -117,7 +117,7 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
           </a>{" "}
           に記載しました。
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           プロフィール写真の設定や、 チャンネル入退出の通知についてなど、
           興味がありましたら是非ご一読ください。
         </Typography>
@@ -125,11 +125,11 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
         <Typography m={2} sx={{ fontSize: "2rem" }}>
           さあ、登録を始めましょう
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           上記の説明をご確認いただけましたら、
           下のボタンを押してデジクリMattermostへの登録を始めてください。
         </Typography>
-        <Typography paragraph={true}>
+        <Typography>
           <FormGroup>
             <FormControlLabel
               control={
@@ -144,7 +144,7 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
             />
           </FormGroup>
         </Typography>
-        <Typography paragraph={true} align="center">
+        <Typography align="center">
           <Button
             variant="contained"
             disabled={!agree}

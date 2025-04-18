@@ -9,7 +9,7 @@ const RegisterPage = () => {
     <>
       <PageHead title="登録" />
       <Container>
-        <Grid item xs={12} style={{ marginTop: "30px" }}>
+        <Grid size={12} style={{ marginTop: "30px" }}>
           <Box textAlign="center">
             <h2>デジコア登録ページ</h2>
             <p>デジクリの入部もこちらからできます</p>

@@ -1,4 +1,4 @@
-import { Grid, Button, Container, Box, Typography } from "@mui/material";
+import { Grid, Button, Container, Box, Typography, Stack } from "@mui/material";
 import { Google } from "@mui/icons-material";
 import PageHead from "../../components/Common/PageHead";
 import { useLoginData } from "../../hook/useLoginData";
@@ -8,14 +8,12 @@ const LoginPage = () => {
     <>
       <PageHead title="Login" />
       <Container>
-        <Grid item xs={12} style={{ marginTop: "30px" }}>
+        <Stack mt={30} gap={10}>
           <Box textAlign="center">
             <Button variant="contained" startIcon={<Google />} href={loginUrl}>
               Googleログイン
             </Button>
           </Box>
-        </Grid>
-        <Grid item xs={12} style={{ marginTop: "10px" }}>
           <Typography textAlign="center">
             Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます
           </Typography>
@@ -23,7 +21,7 @@ const LoginPage = () => {
             デジクリに入部希望の方は<a href="https://twitter.com/sitdigicre">公式Twitter</a>
             にご相談下さい
           </Typography>
-        </Grid>
+        </Stack>
       </Container>
     </>
   );

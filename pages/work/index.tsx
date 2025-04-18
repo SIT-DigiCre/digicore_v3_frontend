@@ -63,7 +63,7 @@ const WorkIndexPage = () => {
         {works ? (
           <>
             {works.map((w) => (
-              <Grid item md={4} sm={6} xs={12} sx={{ padding: 0.5 }}>
+              <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
                 <Card
                   sx={{ width: "100%", display: "inline-block", m: 0.5, height: "100%" }}
                   onClick={() => {

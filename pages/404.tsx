@@ -13,7 +13,7 @@ const NotFoundPage = () => {
         justifyContent="center"
         sx={{ minHeight: "100vh" }}
       >
-        <Grid item xs={12} textAlign="center">
+        <Grid size={12} textAlign="center">
           <Typography variant="h2" component="h1">
             404
           </Typography>

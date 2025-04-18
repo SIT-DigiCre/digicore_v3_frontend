@@ -13,7 +13,7 @@ const UserIndexPage = () => {
       </Grid>
       <Grid container>
         {userProfiles.map((userProfile) => (
-          <Grid item md={4} sm={6} xs={12} sx={{ padding: 0.5 }}>
+          <Grid size={[12, 6, 4]} sx={{ padding: 0.5 }}>
             <Card
               onClick={() => {
                 router.push(`/user/${userProfile.userId}`);
