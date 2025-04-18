@@ -3,11 +3,12 @@ import highlight from "highlightjs";
 import DOMPurify from "isomorphic-dompurify";
 
 marked.setOptions({
-  highlight: (code, lang) => {
-    return highlight.highlightAuto(code, [lang]).value;
-  },
+  // highlightは主に使用しているわけではないので、エラーを回避するため一旦コメントアウト
+  // highlight: (code, lang) => {
+  //   return highlight.highlightAuto(code, [lang]).value;
+  // },
+  // langPrefix: "hljs language-",
   breaks: true,
-  langPrefix: "hljs language-",
 });
 
 export const convertToPlainText: (md: string) => string = (md) => {
@@ -22,10 +23,10 @@ export const getPreviewText: (md: string, limit: number) => string = (md, limit)
 };
 
 export const convertToHtmlWithoutIframe: (md: string) => string = (md) => {
-  return DOMPurify.sanitize(marked(md));
+  return DOMPurify.sanitize(marked(md) as string);
 };
 
 export const convertToHtml: (md: string) => string = (md) => {
   const config = { ADD_TAGS: ["iframe"], KEEP_CONTENT: false };
-  return DOMPurify.sanitize(marked(md), config);
+  return DOMPurify.sanitize(marked(md) as string, config);
 };
