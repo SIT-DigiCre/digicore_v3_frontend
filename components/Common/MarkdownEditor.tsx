@@ -1,4 +1,4 @@
-import { Grid, Button, TextField } from "@mui/material";
+import { Grid, Button, TextField, Stack, Box } from "@mui/material";
 import { ChangeEventHandler, useState, useRef, useEffect } from "react";
 import { FileObject } from "../../interfaces/file";
 import { FileBrowserModal } from "../File/FileBrowser";
@@ -55,8 +55,8 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   };
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} sx={{ marginBottom: "0.5rem" }}>
+      <Stack>
+        <Box sx={{ marginBottom: "0.5rem" }}>
           {markdownEditorActionBtns.map((btn) => (
             <Button
               onClick={() => insertText(btn.text, btn.rtnAdd)}
@@ -83,28 +83,25 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
             onSelected={onFileSelected}
             onlyFileKind="image"
           />
-        </Grid>
-        <Grid item xs={6}>
-          <Grid>
-            <textarea
-              rows={20}
-              value={md}
-              onChange={onChangeMd}
-              ref={textFieldElement}
-              onScroll={onScrollTextField}
-              style={{ height: 500, width: "100%", fontSize: 18, paddingLeft: "2px" }}
-              onClick={() => {
-                setSelectStart(textFieldElement.current.selectionStart);
-              }}
-              onKeyDown={() => {
-                setSelectStart(textFieldElement.current.selectionStart);
-              }}
-            />
-          </Grid>
-        </Grid>
-        <Grid item xs={6}>
-          <Grid
+        </Box>
+        <Stack direction="row" spacing={2}>
+          <textarea
+            rows={20}
+            value={md}
+            onChange={onChangeMd}
+            ref={textFieldElement}
+            onScroll={onScrollTextField}
+            style={{ height: 500, width: "50%", fontSize: 18, paddingLeft: "2px" }}
+            onClick={() => {
+              setSelectStart(textFieldElement.current.selectionStart);
+            }}
+            onKeyDown={() => {
+              setSelectStart(textFieldElement.current.selectionStart);
+            }}
+          />
+          <Box
             sx={{
+              width: "50%",
               overflowY: "auto",
               overflowWrap: "break-word",
               marginLeft: "0.5rem",
@@ -116,9 +113,9 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
             ref={mdPreviewDivElement}
           >
             <MarkdownView md={md} />
-          </Grid>
-        </Grid>
-      </Grid>
+          </Box>
+        </Stack>
+      </Stack>
     </>
   );
 };
