@@ -97,7 +97,6 @@ export const useWorks: UseWorks = (authorId) => {
       removeError("works-get-fail");
       setOffsetNum(n);
     } catch (e: any) {
-      console.error(e);
       setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
     }
   };
