@@ -84,25 +84,24 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
             onlyFileKind="image"
           />
         </Box>
-        <Stack direction="row">
-          <Box>
-            <textarea
-              rows={20}
-              value={md}
-              onChange={onChangeMd}
-              ref={textFieldElement}
-              onScroll={onScrollTextField}
-              style={{ height: 500, width: "100%", fontSize: 18, paddingLeft: "2px" }}
-              onClick={() => {
-                setSelectStart(textFieldElement.current.selectionStart);
-              }}
-              onKeyDown={() => {
-                setSelectStart(textFieldElement.current.selectionStart);
-              }}
-            />
-          </Box>
+        <Stack direction="row" spacing={2}>
+          <textarea
+            rows={20}
+            value={md}
+            onChange={onChangeMd}
+            ref={textFieldElement}
+            onScroll={onScrollTextField}
+            style={{ height: 500, width: "50%", fontSize: 18, paddingLeft: "2px" }}
+            onClick={() => {
+              setSelectStart(textFieldElement.current.selectionStart);
+            }}
+            onKeyDown={() => {
+              setSelectStart(textFieldElement.current.selectionStart);
+            }}
+          />
           <Box
             sx={{
+              width: "50%",
               overflowY: "auto",
               overflowWrap: "break-word",
               marginLeft: "0.5rem",
@@ -115,7 +114,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
           >
             <MarkdownView md={md} />
           </Box>
-          </Stack>
+        </Stack>
       </Stack>
     </>
   );
