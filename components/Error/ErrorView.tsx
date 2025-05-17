@@ -11,7 +11,7 @@ const ErrorView = () => {
           <AlertTitle>Error</AlertTitle>
           <ul>
             {errors.map((e) => (
-              <li>{e.message}</li>
+              <li key={e.name}>{e.message}</li>
             ))}
           </ul>
         </Alert>

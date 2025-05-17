@@ -13,12 +13,11 @@ import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useAuthState } from "../../hook/useAuthState";
 import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
-import { axios, isAxiosError, serverSideAxios } from "../../utils/axios";
+import { isAxiosError, serverSideAxios } from "../../utils/axios";
 
 type Props = {
   id: string;
   modeStr?: string;
-  error?: string;
   workPublic?: WorkPublic;
 };
 type WorkPublicAuthor = {
@@ -39,8 +38,8 @@ type WorkPublic = {
   fileName: string;
   tags: WorkPublicTag[];
 };
-const WorkDetailPage = ({ id, modeStr, error, workPublic }: Props) => {
-  const { workDetail, updateWork, deleteWork } = useWork(id);
+const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
+  const { workDetail, updateWork } = useWork(id);
   const { authState } = useAuthState();
   const router = useRouter();
   const onSubmit = (workRequest: WorkRequest) => {
@@ -89,6 +88,7 @@ const WorkDetailPage = ({ id, modeStr, error, workPublic }: Props) => {
                       router.push(`/user/${a.userId}`);
                     }}
                     className="clickable d-inlineblock"
+                    key={a.userId}
                   >
                     <Avatar src={a.iconUrl} className="d-inlineblock" />
                   </div>
@@ -103,7 +103,7 @@ const WorkDetailPage = ({ id, modeStr, error, workPublic }: Props) => {
           </Grid>
           <Grid sx={{ marginTop: 3 }}>
             {workDetail.files
-              ? workDetail.files.map((f) => <WorkFileView fileId={f.fileId} />)
+              ? workDetail.files.map((f) => <WorkFileView key={f.fileId} fileId={f.fileId} />)
               : ""}
           </Grid>
         </>
@@ -121,16 +121,15 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     try {
       const res = await serverSideAxios.get(`/work/work/${id}/public`);
       work = res.data;
-    } catch (e: any) {
+    } catch (e) {
       if (isAxiosError(e)) {
-        console.log(e.response?.data);
+        console.error(e.response?.data);
       }
     }
 
     work.description = work.description.substring(0, 100);
-    console.log(work);
     return { props: { id, modeStr, workPublic: work } };
   } catch (error) {
-    return { props: { errors: error.message } };
+    return { props: { errors: (error as Error).message } };
   }
 };

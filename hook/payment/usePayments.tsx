@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { Payment } from "../../interfaces/payment";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
@@ -25,7 +26,7 @@ export const usePayments: UsePayments = () => {
         const payments: Payment[] = res.data.payments;
         setPayments(payments);
         removeError("payments-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({
           name: "payments-get-fail",
           message: "支払情報の一覧の取得に失敗しました",
@@ -35,7 +36,7 @@ export const usePayments: UsePayments = () => {
   }, [authState]);
   const update = async (paymentId: string, checked: boolean, note: string) => {
     try {
-      const res = await axios.put(
+      await axios.put(
         `/payment/${paymentId}`,
         { checked: checked, note: note },
         {
@@ -50,7 +51,7 @@ export const usePayments: UsePayments = () => {
       setPayments([...payments]);
       removeError("payments-update-fail");
       return true;
-    } catch (err: any) {
+    } catch {
       setNewError({ name: "payments-update-fail", message: "支払情報の更新に失敗しました" });
       return false;
     }

@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import {
@@ -42,7 +41,6 @@ const modalStyle = {
 
 const PaymentPage = () => {
   const [openModal, setOpenModal] = useState(false);
-  const router = useRouter();
   const { paymentHistories, updatePayment } = usePayment();
   const [transferName, setTransferName] = useState("");
   const getCurrentYearPayment = (histories: PaymentHistory[]) => {
@@ -54,7 +52,7 @@ const PaymentPage = () => {
     if (current) setTransferName(current.transferName);
   }, [paymentHistories]);
   const onSubmit = () => {
-    updatePayment(transferName).then((result) => {
+    updatePayment(transferName).then(() => {
       setOpenModal(false);
       setTransferName("");
     });

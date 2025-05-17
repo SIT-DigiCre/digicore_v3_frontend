@@ -81,7 +81,7 @@ const WorkIndexPage = () => {
                         {w.authors ? (
                           <>
                             {w.authors.map((a) => (
-                              <Avatar src={a.iconUrl} alt={a.name} />
+                              <Avatar key={a.userId} src={a.iconUrl} alt={a.name} />
                             ))}
                           </>
                         ) : (

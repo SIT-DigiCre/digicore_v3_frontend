@@ -47,7 +47,7 @@ export const WorkFileView = ({ fileId, previewLimit }: WorkFileViewProps) => {
         }}
       >
         <ElementResizeListener
-          onResize={(e) => {
+          onResize={() => {
             setHeight((contentRef.current.getBoundingClientRect().width * 10) / 16);
           }}
         />

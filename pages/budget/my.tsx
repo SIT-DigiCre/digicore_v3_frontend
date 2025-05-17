@@ -3,16 +3,16 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import {
+  Button,
+  Chip,
   Container,
   Grid,
-  Button,
-  TableContainer,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  Chip,
 } from "@mui/material";
 
 import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
@@ -68,10 +68,9 @@ const budgetStatusColor: {
 
 type Props = {
   modeStr?: string;
-  error?: string;
 };
 
-const BudgetPage = ({ modeStr, error }: Props) => {
+const BudgetPage = ({ modeStr }: Props) => {
   const router = useRouter();
   const { budgets, loadMore } = useBudgets("my");
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);

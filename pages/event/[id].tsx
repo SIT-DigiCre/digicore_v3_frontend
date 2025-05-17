@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 
-import { Container, Typography } from "@mui/material";
+import { Container } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
@@ -10,9 +10,8 @@ import useEventDetail from "../../hook/event/useEventDetail";
 
 type EventPageProps = {
   id?: string;
-  errors?: any;
 };
-const EventPage = ({ id, errors }: EventPageProps) => {
+const EventPage = ({ id }: EventPageProps) => {
   const { isLoading, notFound, eventDetail, reservation, cancelReservation } = useEventDetail(id);
   if (notFound) return <p>指定されたイベントが見つかりませんでした</p>;
   if (isLoading) return <p>Loading...</p>;

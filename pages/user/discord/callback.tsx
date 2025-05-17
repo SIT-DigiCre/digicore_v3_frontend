@@ -27,7 +27,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
           router.push("/user/profile");
         }
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }, [authState]);
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
   return <>Discord連携作業中...（そのままお待ちください）</>;

@@ -1,11 +1,4 @@
-import { useState } from "react";
-
 import { Container, Typography } from "@mui/material";
-
-import { MattermostAgreement } from "../../components/Mattermost/Agreement";
-import { MattermostRegister } from "../../components/Mattermost/Register";
-import { MattermostRegisterComplete } from "../../components/Mattermost/RegisterComplete";
-import { MattermostDisplayPage } from "../../interfaces/mattermost";
 
 const MatatermostIndex = () => {
   return (

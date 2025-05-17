@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { DigicreEventUserReservation } from "../../interfaces/event";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
@@ -26,7 +27,7 @@ const useEventUserReservationList: UseEventUserReservation = (eventId, reservati
         const userReservationRes: DigicreEventUserReservation[] = res.data.users;
         setUserReservations(userReservationRes);
       } catch (err) {
-        console.log(err);
+        console.error(err);
       }
     };
     getFunc();

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { PaymentHistory } from "../../interfaces/form";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
@@ -21,11 +22,12 @@ export const usePayment: UsePayment = () => {
         },
       });
       const histories: PaymentHistory[] = res.data.histories;
+      // eslint-disable-next-line no-console
       console.log(histories);
       setPaymentHistories(histories);
 
       removeError("payment-get");
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "payment-get", message: "部費支払い情報の取得に失敗しました" });
     }
   };
@@ -45,7 +47,7 @@ export const usePayment: UsePayment = () => {
         },
       );
       getHistories();
-    } catch (e: any) {
+    } catch {
       return false;
     }
     return true;

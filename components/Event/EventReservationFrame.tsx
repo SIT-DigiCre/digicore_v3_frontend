@@ -117,7 +117,7 @@ const EventReservationFrame = ({
               color="error"
               variant="contained"
               onClick={() => {
-                cancelReservation(eventReservation.reservationId).then((res) => {
+                cancelReservation(eventReservation.reservationId).then(() => {
                   router.reload();
                 });
               }}
@@ -150,7 +150,7 @@ const EventReservationFrame = ({
           <br />
           <Button
             onClick={() => {
-              reservation(eventReservation.reservationId!, commentText, urlText).then((res) => {
+              reservation(eventReservation.reservationId!, commentText, urlText).then(() => {
                 router.reload();
               });
             }}

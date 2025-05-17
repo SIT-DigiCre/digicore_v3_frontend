@@ -31,7 +31,7 @@ const LoginCallbackPage = ({ code }: Props) => {
         }
       })
       .catch((e) => {
-        console.log(e);
+        console.error(e);
         setLogining(false);
       });
   }, []);
@@ -52,7 +52,7 @@ const LoginCallbackPage = ({ code }: Props) => {
     </div>
   );
 };
-export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
     const { code } = query;
     const codeStr = typeof code === "string" ? code : null;

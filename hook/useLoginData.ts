@@ -1,7 +1,8 @@
-import { axios, isAxiosError } from "../utils/axios";
 import { useEffect, useState } from "react";
+
+import { axios, isAxiosError } from "../utils/axios";
+
 import { useErrorState } from "./useErrorState";
-import { AxiosError } from "axios";
 
 type UseLoginData = () => {
   loginUrl: string;
@@ -18,7 +19,7 @@ export const useLoginData: UseLoginData = () => {
         const url: string = res.data.url;
         setLoginUrl(url);
         removeError("get-login-url");
-      } catch (e: any) {
+      } catch {
         setNewError({ name: "get-login-url", message: "ログイン用URLの取得に失敗しました" });
       }
     })();
@@ -28,7 +29,7 @@ export const useLoginData: UseLoginData = () => {
       const res = await axios.post("/login/callback", { code: code });
       const jwt: string = res.data.jwt;
       return jwt;
-    } catch (e: any) {
+    } catch (e) {
       if (isAxiosError(e)) {
         setNewError({ name: "login-fail", message: `ログイン失敗:${e.response.data.message}` });
       }

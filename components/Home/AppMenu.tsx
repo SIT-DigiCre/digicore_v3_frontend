@@ -1,8 +1,7 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Apps, Login } from "@mui/icons-material";
+import { Apps } from "@mui/icons-material";
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import EventIcon from "@mui/icons-material/Event";
 import HomeIcon from "@mui/icons-material/Home";
@@ -12,7 +11,7 @@ import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { Tooltip, IconButton, Modal, Box, Button } from "@mui/material";
+import { Box, IconButton, Modal, Tooltip } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
 

@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import { useState } from "react";
 
 import { Delete } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -59,6 +58,7 @@ const MyWorkPage = () => {
             <>
               {works.map((w) => (
                 <ListItem
+                  key={w.workId}
                   secondaryAction={
                     <>
                       <IconButton

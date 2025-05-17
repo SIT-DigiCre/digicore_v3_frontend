@@ -80,11 +80,10 @@ const dateOptions: Intl.DateTimeFormatOptions = {
 type Props = {
   id: string;
   modeStr?: string;
-  error?: string;
   budgetPublic?: Budget;
 };
 
-const BudgetDetailPage = ({ id, modeStr, error }: Props) => {
+const BudgetDetailPage = ({ id, modeStr }: Props) => {
   const router = useRouter();
   const {
     budgetDetail,

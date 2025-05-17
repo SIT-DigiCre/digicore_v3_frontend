@@ -18,7 +18,7 @@ import {
 import { useBudgets } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
-import { BudgetClass, CreateBudgetRequest } from "../../interfaces/budget";
+import { BudgetClass } from "../../interfaces/budget";
 
 type Props = {
   open: boolean;
@@ -53,7 +53,7 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
           onClose();
           router.push(`/budget/${budgetId}?mode=edit`);
         })
-        .catch((e) => {
+        .catch(() => {
           setNewError({ name: "post-budget", message: "稟議申請に失敗しました" });
         });
     }

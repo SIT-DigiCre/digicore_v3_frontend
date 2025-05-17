@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Alert, Avatar, Button, Container, Grid, TextField } from "@mui/material";
+import { Alert, Avatar, Button, Grid, TextField } from "@mui/material";
 
 import { useMyFiles } from "../../hook/file/useFile";
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";

@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { useAuthState } from "../useAuthState";
+
 import { EnvJoinAPIData } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
+import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
 export const useJoinData = () => {
@@ -25,7 +26,7 @@ export const useJoinData = () => {
         });
         const envJoinAPIData: EnvJoinAPIData = res.data;
         setJoinData(envJoinAPIData);
-      } catch (e) {
+      } catch {
         setNewError({ name: "get-join", message: "Discordなどの招待URLの取得に失敗しました" });
       }
     })();

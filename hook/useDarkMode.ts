@@ -1,7 +1,8 @@
-import { KeyboardReturnOutlined } from "@mui/icons-material";
+import { useEffect } from "react";
+
 import { useMediaQuery } from "@mui/material";
-import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
+
 import { darkModeState } from "../atom/userAtom";
 import { DarkMode } from "../interfaces";
 
@@ -17,7 +18,9 @@ export const useDarkMode: UseDarkMode = () => {
       const localMode = localStorage.getItem("darkmode");
       if (localMode == null || localMode === "") return;
       setDarkModeValue(localMode as DarkMode);
-    } catch (err: any) {}
+    } catch (err) {
+      console.error(err);
+    }
   }, []);
   const setDarkMode = (mode: DarkMode) => {
     if (mode == darkModeValue) return;

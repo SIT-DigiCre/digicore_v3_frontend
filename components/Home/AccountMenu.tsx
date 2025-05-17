@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { Settings, Logout } from "@mui/icons-material";
-import { Menu, MenuItem, Divider, Tooltip, IconButton, Avatar, ListItemIcon } from "@mui/material";
+import { Logout } from "@mui/icons-material";
+import { Avatar, IconButton, ListItemIcon, Menu, MenuItem, Tooltip } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
 

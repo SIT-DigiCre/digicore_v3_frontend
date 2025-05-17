@@ -36,7 +36,6 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
     setIsOpenFileBrowser(false);
   };
   const onFileSelected = (f: FileObject) => {
-    console.log("selected");
     setIsOpenFileBrowser(false);
     setFiles([...files, f.fileId]);
   };

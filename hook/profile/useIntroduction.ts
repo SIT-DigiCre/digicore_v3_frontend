@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
@@ -27,14 +28,14 @@ export const useMyIntroduction: UseMyIntroduction = () => {
         } else {
           throw "API Error";
         }
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "introduction-get-fail", message: "自己紹介情報の取得に失敗しました" });
       }
     })();
   }, [authState]);
   const update = async (newMd: string) => {
     try {
-      const res = await axios.put(
+      await axios.put(
         `/user/me/introduction`,
         { introduction: newMd },
         {
@@ -46,7 +47,7 @@ export const useMyIntroduction: UseMyIntroduction = () => {
       setMd(newMd);
       removeError("introduction-update-fail");
       return true;
-    } catch (err: any) {
+    } catch {
       setNewError({
         name: "introduction-update-fail",
         message: "自己紹介情報の更新に失敗しました",
@@ -75,7 +76,7 @@ export const useIntroduction: UseIntroduction = (userId) => {
         const userIntroduction: string = res.data.introduction;
         setMd(userIntroduction);
         removeError("introduction-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({
           name: "introduction-get-fail",
           message: "自己紹介情報の取得に失敗しました",

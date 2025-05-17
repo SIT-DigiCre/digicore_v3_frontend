@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
+
 import { useRecoilState } from "recoil";
+
 import { userListSeed } from "../../atom/userAtom";
-import { UserProfileLite, UsersAPIData } from "../../interfaces/api";
 import { User } from "../../interfaces/user";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
@@ -17,7 +18,7 @@ export const useUserProfiles: UseUserProfiles = () => {
   const [users, setUsers] = useState<User[]>([]);
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
-  const [seed, setSeed] = useRecoilState(userListSeed);
+  const [seed] = useRecoilState(userListSeed);
   const [isOver, setIsOver] = useState(false);
   const getNew = async (num: number) => {
     if (authState.isLoading || !authState.isLogined) return;
@@ -31,7 +32,7 @@ export const useUserProfiles: UseUserProfiles = () => {
       if (resUsers.length === 0) setIsOver(true);
       setUsers(users.concat(resUsers));
       removeError("userprofiles-get-fail");
-    } catch (err: any) {
+    } catch {
       setNewError({ name: "userprofiles-get-fail", message: "ユーザー一覧の取得に失敗しました" });
     }
   };

@@ -1,15 +1,7 @@
 import Image from "next/image";
-import { useEffect, useState, FormEvent } from "react";
+import { FormEvent, useEffect, useState } from "react";
 
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  TextField,
-  FormControl,
-  FormHelperText,
-} from "@mui/material";
+import { Button, FormControl, FormHelperText, Grid, TextField, Typography } from "@mui/material";
 
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
 import { useAuthState } from "../../hook/useAuthState";

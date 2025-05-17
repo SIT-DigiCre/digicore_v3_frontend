@@ -12,7 +12,8 @@ const FileView = ({ file, width }: Props) => {
   const [contentWidth, setContentWidth] = useState(100);
   const [contentHight, setContentHight] = useState(100);
   const onResize = (event: Event) => {
-    console.log(contentRef.current.getBoundingClientRect().width);
+    // eslint-disable-next-line no-console
+    console.log(event);
     setContentWidth(contentRef.current.getBoundingClientRect().width);
     setContentHight((contentRef.current.getBoundingClientRect().width * 10) / 16);
   };

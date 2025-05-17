@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
+
 import {
   Budget,
   BudgetDetail,
   CreateBudgetRequest,
   PutBudgetAdminRequest,
-  PutBudgetRequest,
   PutBudgetStatusApproveRequest,
   PutBudgetStatusBoughtRequest,
   PutBudgetStatusPaidRequest,
   PutBudgetStatusPendingRequest,
 } from "../../interfaces/budget";
+import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
-import { axios } from "../../utils/axios";
 
 export const useBudget = (budgetId: string) => {
   const [budget, setBudget] = useState<BudgetDetail>();
@@ -30,7 +30,7 @@ export const useBudget = (budgetId: string) => {
       const budgetDetail: BudgetDetail = res.data;
       setBudget(budgetDetail);
       removeError("budgetdetail-get-fail");
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budgetdetail-get-fail", message: "稟議の取得に失敗しました" });
     }
   };
@@ -51,7 +51,7 @@ export const useBudget = (budgetId: string) => {
         purpose: budgetRequest.purpose,
         remark: budgetRequest.remark,
       };
-      const res = await axios.put(`/budget/${budgetId}/status_pending`, body, {
+      await axios.put(`/budget/${budgetId}/status_pending`, body, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -59,7 +59,7 @@ export const useBudget = (budgetId: string) => {
       removeError("budget-put-fail");
       await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
       return false;
     }
@@ -75,7 +75,7 @@ export const useBudget = (budgetId: string) => {
         remark: budgetRequest.remark,
         settlement: budgetRequest.settlement,
       };
-      const res = await axios.put(`/budget/${budgetId}/status_approve`, body, {
+      await axios.put(`/budget/${budgetId}/status_approve`, body, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -83,7 +83,7 @@ export const useBudget = (budgetId: string) => {
       removeError("budget-put-fail");
       await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
       return false;
     }
@@ -98,7 +98,7 @@ export const useBudget = (budgetId: string) => {
         remark: budgetRequest.remark,
         settlement: budgetRequest.settlement,
       };
-      const res = await axios.put(`/budget/${budgetId}/status_bought`, body, {
+      await axios.put(`/budget/${budgetId}/status_bought`, body, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -106,7 +106,7 @@ export const useBudget = (budgetId: string) => {
       removeError("budget-put-fail");
       await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
       return false;
     }
@@ -119,7 +119,7 @@ export const useBudget = (budgetId: string) => {
       const body: PutBudgetStatusPaidRequest = {
         remark: budgetRequest.remark,
       };
-      const res = await axios.put(`/budget/${budgetId}/status_paid`, body, {
+      await axios.put(`/budget/${budgetId}/status_paid`, body, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -127,7 +127,7 @@ export const useBudget = (budgetId: string) => {
       removeError("budget-put-fail");
       await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
       return false;
     }
@@ -138,7 +138,7 @@ export const useBudget = (budgetId: string) => {
       const body: PutBudgetAdminRequest = {
         status: budgetRequest.status,
       };
-      const res = await axios.put(`/budget/${budgetId}/admin`, body, {
+      await axios.put(`/budget/${budgetId}/admin`, body, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -146,7 +146,7 @@ export const useBudget = (budgetId: string) => {
       removeError("budget-put-fail");
       await fetchBudget();
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
       return false;
     }
@@ -154,14 +154,14 @@ export const useBudget = (budgetId: string) => {
 
   const deleteBudgetStatusPending = async () => {
     try {
-      const res = await axios.delete(`/budget/${budgetId}/status_pending`, {
+      await axios.delete(`/budget/${budgetId}/status_pending`, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
       removeError("budget-delete-fail");
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-delete-fail", message: "稟議の削除に失敗しました" });
       return false;
     }
@@ -169,14 +169,14 @@ export const useBudget = (budgetId: string) => {
 
   const deleteBudgetStatusApprove = async () => {
     try {
-      const res = await axios.delete(`/budget/${budgetId}/status_approve`, {
+      await axios.delete(`/budget/${budgetId}/status_approve`, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
       removeError("budget-delete-fail");
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "budget-delete-fail", message: "稟議の削除に失敗しました" });
       return false;
     }
@@ -234,7 +234,7 @@ export const useBudgets: UseBudgets = (proposerId) => {
       removeError("budgets-get-fail");
       setOffsetNum(n);
       return { isLogined: true, reachedToEnd: newBudgets.length < 10 };
-    } catch (err: any) {
+    } catch (err) {
       if (err.response && err.response.status === 400)
         return { isLogined: true, reachedToEnd: true, isError: true };
 
@@ -264,7 +264,7 @@ export const useBudgets: UseBudgets = (proposerId) => {
       });
       removeError("budget-post-fail");
       return res.data.budgetId;
-    } catch (err: any) {
+    } catch {
       setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
       return "error";
     }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { DigicreEvent } from "../../interfaces/event";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
@@ -26,7 +27,7 @@ export const useEventList: UseEventList = () => {
         setEvents(eventRes);
         removeError("eventlist-get-fail");
       } catch (err) {
-        console.log(err);
+        console.error(err);
         setNewError({ name: "eventlist-get-fail", message: "イベント一覧の取得に失敗しました" });
       }
     };

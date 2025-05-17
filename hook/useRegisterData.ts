@@ -1,5 +1,7 @@
-import { axios } from "../utils/axios";
 import { useEffect, useState } from "react";
+
+import { axios } from "../utils/axios";
+
 import { useErrorState } from "./useErrorState";
 
 type UseRegisterData = () => {
@@ -17,7 +19,7 @@ export const useRegisterData: UseRegisterData = () => {
         const url: string = res.data.url;
         setRegisterUrl(url);
         removeError("get-register-url");
-      } catch (e: any) {
+      } catch {
         setNewError({ name: "get-register-url", message: "登録用URLの取得に失敗しました" });
       }
     })();
@@ -27,7 +29,7 @@ export const useRegisterData: UseRegisterData = () => {
       const res = await axios.post("/signup/callback", { code: code });
       const jwt: string = res.data.jwt;
       return jwt;
-    } catch (e: any) {
+    } catch {
       return "";
     }
   };

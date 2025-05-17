@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -8,7 +6,7 @@ import { useDarkMode } from "../../hook/useDarkMode";
 import { DarkMode } from "../../interfaces";
 
 const SettingPage = () => {
-  const { isDarkMode, setDarkMode, currentMode } = useDarkMode();
+  const { setDarkMode, currentMode } = useDarkMode();
   return (
     <Container>
       <PageHead title="ユーザー設定" />

@@ -16,7 +16,7 @@ const EventIndexPage = () => {
       <p>イベント一覧から参加するイベントを探してください。</p>
       <hr />
       {events.map((event) => (
-        <EventListItem event={event} />
+        <EventListItem key={event.eventId} event={event} />
       ))}
     </Container>
   );
