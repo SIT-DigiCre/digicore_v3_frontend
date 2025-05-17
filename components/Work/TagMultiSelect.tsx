@@ -1,15 +1,15 @@
 import {
-  Stack,
   Chip,
   FormControl,
   InputLabel,
+  MenuItem,
   OutlinedInput,
   Select,
   SelectChangeEvent,
-  MenuItem,
+  Stack,
 } from "@mui/material";
+
 import { useWorkTags } from "../../hook/work/useWorkTag";
-import { WorkTag } from "../../interfaces/work";
 
 type Props = {
   selectedTags: string[];

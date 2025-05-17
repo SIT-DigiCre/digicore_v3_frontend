@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from "react";
+
+import PageviewIcon from "@mui/icons-material/Pageview";
+import { Fab } from "@mui/material";
+
 import { useFile } from "../../hook/file/useFile";
-import FileView from "../File/FileView";
+import { getFileKind } from "../../interfaces/file";
 import ElementResizeListener from "../Common/ElementResizeListener";
 import FileKindIcon from "../File/FileKindIcon";
-import { getFileKind } from "../../interfaces/file";
-import { Fab } from "@mui/material";
-import PageviewIcon from "@mui/icons-material/Pageview";
+import FileView from "../File/FileView";
 
 type WorkFileViewProps = {
   fileId: string;

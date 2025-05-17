@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
 type Props = {

@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
 import { useAuthState } from "../../hook/useAuthState";
 import { useRegisterData } from "../../hook/useRegisterData";
 

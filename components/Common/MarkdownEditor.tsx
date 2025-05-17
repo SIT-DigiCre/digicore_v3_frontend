@@ -1,7 +1,10 @@
-import { Grid, Button, TextField, Stack, Box } from "@mui/material";
 import { ChangeEventHandler, useState, useRef, useEffect } from "react";
+
+import { Grid, Button, TextField, Stack, Box } from "@mui/material";
+
 import { FileObject } from "../../interfaces/file";
 import { FileBrowserModal } from "../File/FileBrowser";
+
 import MarkdownView from "./MarkdownView";
 
 type MarkdownEditorProps = {

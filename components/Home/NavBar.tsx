@@ -1,10 +1,14 @@
-import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { useRouter } from "next/router";
+
 import { Apps, AccountCircle } from "@mui/icons-material";
+import { AppBar, Avatar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+
 import { useAuthState } from "../../hook/useAuthState";
 import { baseURL } from "../../utils/common";
+
 import AccountMenu from "./AccountMenu";
 import AppMenu from "./AppMenu";
-import { useRouter } from "next/router";
+
 
 const NavBar = () => {
   const { authState, onLogin } = useAuthState();

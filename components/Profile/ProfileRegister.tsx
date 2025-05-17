@@ -1,3 +1,6 @@
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import {
   Button,
   Container,
@@ -12,16 +15,17 @@ import {
   FormControlLabel,
   Radio,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useAuthState } from "../../hook/useAuthState";
-import { PublicProfileEditor } from "./ProfileEditor";
+
+
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
-import NameInput from "./NameInput";
-import PhoneInput from "./PhoneInput";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
+import { useAuthState } from "../../hook/useAuthState";
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
+
+import NameInput from "./NameInput";
+import PhoneInput from "./PhoneInput";
+import { PublicProfileEditor } from "./ProfileEditor";
 
 type Props = {
   registerMode: boolean;

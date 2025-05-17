@@ -1,10 +1,12 @@
-import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
 import { ChangeEventHandler, useEffect, useState } from "react";
+
+import { Box, Button, LinearProgress, Modal, Typography } from "@mui/material";
+
 import { useMyFiles } from "../../hook/file/useFile";
 import { FileKind, FileObject, getFileExtWithKind } from "../../interfaces/file";
 
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -43,7 +45,7 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
   };
   const getBase64 = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => {
         const base64 = reader.result;

@@ -1,12 +1,15 @@
+import { useEffect, useState } from "react";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Grid, IconButton, List, ListItem, TextField } from "@mui/material";
+
+import { useAuthState } from "../../hook/useAuthState";
+import { FileObject } from "../../interfaces/file";
+import { WorkDetail, WorkRequest } from "../../interfaces/work";
 import MarkdownEditor from "../Common/MarkdownEditor";
 import { FileBrowserModal } from "../File/FileBrowser";
+
 import TagMultiSelect from "./TagMultiSelect";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { FileObject } from "../../interfaces/file";
-import { useAuthState } from "../../hook/useAuthState";
-import { useEffect, useState } from "react";
-import { WorkDetail, WorkRequest } from "../../interfaces/work";
 import WorkListItem from "./WorkListItem";
 
 type Props = {

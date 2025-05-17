@@ -1,5 +1,7 @@
-import { Avatar, Button, Card, CardHeader, Container, Grid } from "@mui/material";
 import { useRouter } from "next/router";
+
+import { Avatar, Button, Card, CardHeader, Container, Grid } from "@mui/material";
+
 import { useUserProfiles } from "../../hook/user/useUserProfiles";
 
 const UserIndexPage = () => {

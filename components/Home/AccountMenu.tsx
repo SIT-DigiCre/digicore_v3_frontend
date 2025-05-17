@@ -1,6 +1,8 @@
 import * as React from "react";
-import { Menu, MenuItem, Divider, Tooltip, IconButton, Avatar, ListItemIcon } from "@mui/material";
+
 import { Settings, Logout } from "@mui/icons-material";
+import { Menu, MenuItem, Divider, Tooltip, IconButton, Avatar, ListItemIcon } from "@mui/material";
+
 import { useAuthState } from "../../hook/useAuthState";
 
 const AccountMenu = () => {

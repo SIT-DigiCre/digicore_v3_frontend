@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { FileObject, getFileKind } from "../../interfaces/file";
 import ElementResizeListener from "../Common/ElementResizeListener";
 

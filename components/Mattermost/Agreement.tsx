@@ -1,5 +1,7 @@
-import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 import {
   Button,
   Container,
@@ -10,12 +12,13 @@ import {
   Checkbox,
   colors,
 } from "@mui/material";
-import { useAuthState } from "../../hook/useAuthState";
-import PageHead from "../../components/Common/PageHead";
+
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import PageHead from "../../components/Common/PageHead";
+import { useAuthState } from "../../hook/useAuthState";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 import { User } from "../../interfaces/user";
-import { useRouter } from "next/router";
+
 
 type Props = {
   displayPageSetter: (page: MattermostDisplayPage) => void;

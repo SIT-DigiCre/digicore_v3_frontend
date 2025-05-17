@@ -1,4 +1,5 @@
 import { Alert, AlertTitle } from "@mui/material";
+
 import { useErrorState } from "../../hook/useErrorState";
 
 const ErrorView = () => {

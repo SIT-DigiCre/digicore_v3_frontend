@@ -1,5 +1,6 @@
-import { useEffect, useState, FormEvent } from "react";
 import Image from "next/image";
+import { useEffect, useState, FormEvent } from "react";
+
 import {
   Box,
   Button,
@@ -9,8 +10,9 @@ import {
   FormControl,
   FormHelperText,
 } from "@mui/material";
-import { useAuthState } from "../../hook/useAuthState";
+
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
+import { useAuthState } from "../../hook/useAuthState";
 import { MattermostRegistrationRequest } from "../../interfaces/api";
 
 type Props = {

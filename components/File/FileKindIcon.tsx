@@ -1,13 +1,14 @@
-import { FileKind } from "../../interfaces/file";
-import ImageIcon from "@mui/icons-material/Image";
-import MovieIcon from "@mui/icons-material/Movie";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
-import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import ImageIcon from "@mui/icons-material/Image";
 import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+import MovieIcon from "@mui/icons-material/Movie";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import ViewInArIcon from "@mui/icons-material/ViewInAr";
 import { Icon } from "@mui/material";
+
+import { FileKind } from "../../interfaces/file";
 
 type Props = {
   kind: FileKind;

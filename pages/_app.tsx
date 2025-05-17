@@ -1,12 +1,16 @@
 import { RecoilRoot } from "recoil";
+
 import NavBar from "../components/Home/NavBar";
+
 import "../style/common.css";
 import "highlightjs/styles/vs2015.css";
-import ErrorView from "../components/Error/ErrorView";
 import Head from "next/head";
-import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import { useMemo } from "react";
+
+import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
+
+import ErrorView from "../components/Error/ErrorView";
 import { useDarkMode } from "../hook/useDarkMode";
 
 const App = ({ Component, pageProps }) => {

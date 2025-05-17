@@ -1,4 +1,5 @@
 import { Button, Grid, Typography } from "@mui/material";
+
 import PageHead from "../components/Common/PageHead";
 
 const NotFoundPage = () => {
