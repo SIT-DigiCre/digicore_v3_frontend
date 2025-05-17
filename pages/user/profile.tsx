@@ -18,12 +18,14 @@ type Props = {
 const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
   const router = useRouter();
   const { authState } = useAuthState();
+
   useEffect(() => {
     const value = sessionStorage.getItem("register");
     if (value === null) return;
     sessionStorage.removeItem("register");
     router.push("/user/joined");
   }, []);
+
   return (
     <>
       <PageHead title="Profile編集" />
@@ -32,7 +34,7 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
       ) : (
         <Container>
           <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Profile" }]} />
-          {registerMode ? <ProfileRegister registerMode={registerMode} /> : <ProfileEditor />}
+          {registerMode ? <ProfileRegister /> : <ProfileEditor />}
           {backtoUrl ? <FloatingWindow to={backtoUrl} text={"Mattermostの登録に戻る"} /> : <></>}
         </Container>
       )}
