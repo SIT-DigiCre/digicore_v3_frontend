@@ -12,7 +12,6 @@ import { useActiveLimit } from "../../../hook/profile/useActiveLimit";
 import { useAuthState } from "../../../hook/useAuthState";
 import { getFiscalYear } from "../../../utils/date-util";
 
-
 const checkStatus = (activeLimit: string): "未確認" | "部費入金待ち" | "部費入金済み" => {
   const now = new Date();
   const limit = new Date(activeLimit);

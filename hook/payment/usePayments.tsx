@@ -4,7 +4,10 @@ import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
-type UsePayments = () => [Payment[], (paymentId: string, checked: boolean, note: string) => Promise<boolean>];
+type UsePayments = () => [
+  Payment[],
+  (paymentId: string, checked: boolean, note: string) => Promise<boolean>,
+];
 
 export const usePayments: UsePayments = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
@@ -32,11 +35,15 @@ export const usePayments: UsePayments = () => {
   }, [authState]);
   const update = async (paymentId: string, checked: boolean, note: string) => {
     try {
-      const res = await axios.put(`/payment/${paymentId}`, { checked: checked, note: note }, {
-        headers: {
-          Authorization: "Bearer " + authState.token,
+      const res = await axios.put(
+        `/payment/${paymentId}`,
+        { checked: checked, note: note },
+        {
+          headers: {
+            Authorization: "Bearer " + authState.token,
+          },
         },
-      });
+      );
       const index = payments.findIndex((payment) => payment.paymentId === paymentId);
       payments[index].checked = checked;
       payments[index].note = note;

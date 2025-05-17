@@ -31,12 +31,18 @@ const TagRow = ({ tagId, deleteWorkTag }: Props) => {
       </div>
       <Modal open={deleteModal}>
         <Box style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
-          <Box sx={{bgcolor: "background.paper", p: 4}}>
+          <Box sx={{ bgcolor: "background.paper", p: 4 }}>
             本当にタグ {tagDetail.name} を削除してよろしいですか？
-            <Button type="submit" variant="contained" color="error" style={{ margin: "1rem" }} onClick={() => {
-              deleteWorkTag(tagId);
-              setDeleteModal(false);
-            }}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="error"
+              style={{ margin: "1rem" }}
+              onClick={() => {
+                deleteWorkTag(tagId);
+                setDeleteModal(false);
+              }}
+            >
               削除
             </Button>
             <Button

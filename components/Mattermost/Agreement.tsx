@@ -19,7 +19,6 @@ import { useAuthState } from "../../hook/useAuthState";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 import { User } from "../../interfaces/user";
 
-
 type Props = {
   displayPageSetter: (page: MattermostDisplayPage) => void;
 };
@@ -65,7 +64,13 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
       <Grid margin={2}>
         <Typography variant="h5">Mattermostとは</Typography>
         <Typography my={4} align="center">
-          <Image alt="Mattermost" src="/image/mattermost_logo.png" width="300" height="50" objectFit="contain" />
+          <Image
+            alt="Mattermost"
+            src="/image/mattermost_logo.png"
+            width="300"
+            height="50"
+            objectFit="contain"
+          />
         </Typography>
         <Typography>
           Mattermost は
@@ -104,7 +109,13 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
           では部員の発表資料の投稿ができます。
         </Typography>
         <Typography>
-          <Image alt="Mattermostのスクリーンショット" src="/image/mattermost_screen.png" width={300} height={250} objectFit="contain" />
+          <Image
+            alt="Mattermostのスクリーンショット"
+            src="/image/mattermost_screen.png"
+            width={300}
+            height={250}
+            objectFit="contain"
+          />
         </Typography>
         <Typography>
           チャンネルへの参加は、 左上の＋ボタン（モバイル版は左上のメニュー）から行えます。

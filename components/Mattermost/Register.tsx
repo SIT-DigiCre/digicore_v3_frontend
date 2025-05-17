@@ -205,11 +205,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
         <Typography align="center" m={2}>
           <strong>
             アカウント登録にお困りの際は{" "}
-            <a
-              href="https://forms.gle/MQicA1No8LSZPe5QA"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://forms.gle/MQicA1No8LSZPe5QA" target="_blank" rel="noreferrer">
               こちらのフォームから
             </a>{" "}
             ご相談を

@@ -5,7 +5,8 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "lint": "next lint --fix"
+    "lint": "next lint --fix",
+    "format": "prettier --write \"./**/*.{ts,tsx}\""
   },
   "dependencies": {
     "@emotion/react": "11.14.0",

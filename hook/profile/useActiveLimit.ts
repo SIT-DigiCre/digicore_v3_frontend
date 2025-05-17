@@ -11,15 +11,18 @@ export const useActiveLimit: UseActiveLimit = () => {
   const [userProfile] = useMyProfile();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  useEffect(() => {
-  }, [userProfile]);
+  useEffect(() => {}, [userProfile]);
   const update = async () => {
     try {
-      const res = await axios.put(`/user/me/renewal`,{}, {
-        headers: {
-          Authorization: "Bearer " + authState.token,
+      const res = await axios.put(
+        `/user/me/renewal`,
+        {},
+        {
+          headers: {
+            Authorization: "Bearer " + authState.token,
+          },
         },
-      });
+      );
       removeError("active-limit-renreal-fail");
       return true;
     } catch (err: any) {

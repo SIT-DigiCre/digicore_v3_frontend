@@ -15,7 +15,6 @@ import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
 import { axios, isAxiosError, serverSideAxios } from "../../utils/axios";
 
-
 type Props = {
   id: string;
   modeStr?: string;

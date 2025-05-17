@@ -16,7 +16,6 @@ import { FileUploader } from "../File/FileUploader";
 
 import PrivateProfileEditor from "./PrivateProfileEditor";
 
-
 const ProfileEditor = () => {
   const [userProfile] = useMyProfile();
   const discordLogin = useDiscordLogin();

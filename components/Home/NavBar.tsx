@@ -9,7 +9,6 @@ import { baseURL } from "../../utils/common";
 import AccountMenu from "./AccountMenu";
 import AppMenu from "./AppMenu";
 
-
 const NavBar = () => {
   const { authState, onLogin } = useAuthState();
   const router = useRouter();

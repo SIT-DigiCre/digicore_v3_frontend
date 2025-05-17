@@ -7,7 +7,6 @@ import { MattermostRegister } from "../../components/Mattermost/Register";
 import { MattermostRegisterComplete } from "../../components/Mattermost/RegisterComplete";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 
-
 const MatatermostIndex = () => {
   return (
     <Container>

@@ -16,7 +16,6 @@ import {
   Radio,
 } from "@mui/material";
 
-
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
 import { useAuthState } from "../../hook/useAuthState";
