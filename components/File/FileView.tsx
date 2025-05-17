@@ -25,7 +25,7 @@ const FileView = ({ file, width }: Props) => {
   const getFileTag = () => {
     switch (getFileKind(file.extension)) {
       case "image":
-        return <img src={file.url} style={{ maxWidth: "100%" }} />;
+        return <img src={file.url} alt={file.name} style={{ maxWidth: "100%" }} />;
       case "docx":
       case "xlsx":
       case "pptx":
