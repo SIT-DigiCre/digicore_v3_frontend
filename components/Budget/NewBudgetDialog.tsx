@@ -53,7 +53,8 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
           onClose();
           router.push(`/budget/${budgetId}?mode=edit`);
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error("Error creating budget:", error);
           setNewError({ name: "post-budget", message: "稟議申請に失敗しました" });
         });
     }
