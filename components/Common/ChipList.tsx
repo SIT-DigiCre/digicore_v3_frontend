@@ -9,9 +9,9 @@ const ChipList = ({ chipList, onClick }: Props) => (
   <Stack spacing={1} direction="row">
     {chipList.map((chipName, i) =>
       onClick ? (
-        <Chip key={i} label={chipName} onClick={() => onClick(i)} />
+        <Chip key={chipName} label={chipName} onClick={() => onClick(i)} />
       ) : (
-        <Chip key={i} label={chipName} />
+        <Chip key={chipName} label={chipName} />
       ),
     )}
   </Stack>
