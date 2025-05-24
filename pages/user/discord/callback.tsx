@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
 type Props = {
@@ -26,7 +27,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
           router.push("/user/profile");
         }
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   }, [authState]);
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
   return <>Discord連携作業中...（そのままお待ちください）</>;

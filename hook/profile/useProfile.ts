@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
+
+import { User } from "../../interfaces/user";
+import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
-import { axios } from "../../utils/axios";
-import { User } from "../../interfaces/user";
 
 type UseMyProfile = () => [User, (profile: User) => Promise<boolean>];
 
@@ -22,14 +23,14 @@ export const useMyProfile: UseMyProfile = () => {
         const user: User = res.data;
         setProfile(user);
         removeError("profile-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "profile-get-fail", message: "ユーザー情報の取得に失敗しました" });
       }
     })();
   }, [authState]);
   const update = async (profile: User) => {
     try {
-      const res = await axios.put(`/user/me`, profile, {
+      await axios.put(`/user/me`, profile, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -37,7 +38,7 @@ export const useMyProfile: UseMyProfile = () => {
       setProfile(profile);
       removeError("profile-update-fail");
       return true;
-    } catch (err: any) {
+    } catch {
       setNewError({ name: "profile-update-fail", message: "ユーザー情報の更新に失敗しました" });
       return false;
     }
@@ -63,7 +64,7 @@ export const useProfile: UseProfile = (id: string) => {
         const user: User = res.data;
         setProfile(user);
         removeError("profile-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "profile-get-fail", message: "ユーザー情報の取得に失敗しました" });
       }
     })();

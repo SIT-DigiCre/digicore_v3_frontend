@@ -1,5 +1,7 @@
-import { Container } from "@mui/material";
 import { GetServerSideProps } from "next";
+
+import { Container } from "@mui/material";
+
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
 import { useIntroduction } from "../../hook/profile/useIntroduction";
@@ -7,9 +9,8 @@ import { useProfile } from "../../hook/profile/useProfile";
 
 type Props = {
   id: string;
-  error?: string;
 };
-const UserProfilePage = ({ id, error }: Props) => {
+const UserProfilePage = ({ id }: Props) => {
   const profile = useProfile(id);
   const introMd = useIntroduction(id);
   if (!profile || introMd === undefined) return <p>Loading...</p>;

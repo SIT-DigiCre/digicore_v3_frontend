@@ -1,6 +1,7 @@
+import Link from "next/link";
+
 import { Typography } from "@mui/material";
 import MBC from "@mui/material/Breadcrumbs";
-import Link from "next/link";
 type Props = {
   links: { text: string; href?: string }[];
 };

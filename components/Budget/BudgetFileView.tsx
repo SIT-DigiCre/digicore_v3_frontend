@@ -1,12 +1,12 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+
 import { useFile } from "../../hook/file/useFile";
 import FileView from "../File/FileView";
 
 type WorkFileViewProps = {
   fileId: string;
-  previewLimit?: boolean;
 };
-export const BudgetFileView = ({ fileId, previewLimit }: WorkFileViewProps) => {
+export const BudgetFileView = ({ fileId }: WorkFileViewProps) => {
   const file = useFile(fileId);
   const contentRef: React.RefObject<HTMLDivElement> = useRef(null);
   useEffect(() => {

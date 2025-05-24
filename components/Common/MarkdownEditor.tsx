@@ -1,7 +1,10 @@
-import { Grid, Button, TextField, Stack, Box } from "@mui/material";
-import { ChangeEventHandler, useState, useRef, useEffect } from "react";
+import { ChangeEventHandler, useEffect, useRef, useState } from "react";
+
+import { Box, Button, Stack } from "@mui/material";
+
 import { FileObject } from "../../interfaces/file";
 import { FileBrowserModal } from "../File/FileBrowser";
+
 import MarkdownView from "./MarkdownView";
 
 type MarkdownEditorProps = {
@@ -49,7 +52,6 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   };
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
   const onFileSelected = (file: FileObject) => {
-    console.log(file);
     setIsOpenFileBrowser(false);
     insertText(`![${file.name}](${file.url})`, true);
   };
@@ -59,6 +61,8 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
         <Box sx={{ marginBottom: "0.5rem" }}>
           {markdownEditorActionBtns.map((btn) => (
             <Button
+              key={btn.title}
+              type="button"
               onClick={() => insertText(btn.text, btn.rtnAdd)}
               variant="contained"
               sx={{ marginRight: "0.5rem" }}

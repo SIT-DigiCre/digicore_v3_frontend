@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
 import {
   Alert,
   Box,
@@ -18,16 +21,14 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+
 import PageHead from "../../../components/Common/PageHead";
 import { usePayment } from "../../../hook/user/usePayment";
 import { PaymentHistory } from "../../../interfaces/form";
 import { getFiscalYear } from "../../../utils/date-util";
 
 const modalStyle = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -40,7 +41,6 @@ const modalStyle = {
 
 const PaymentPage = () => {
   const [openModal, setOpenModal] = useState(false);
-  const router = useRouter();
   const { paymentHistories, updatePayment } = usePayment();
   const [transferName, setTransferName] = useState("");
   const getCurrentYearPayment = (histories: PaymentHistory[]) => {
@@ -52,7 +52,7 @@ const PaymentPage = () => {
     if (current) setTransferName(current.transferName);
   }, [paymentHistories]);
   const onSubmit = () => {
-    updatePayment(transferName).then((result) => {
+    updatePayment(transferName).then(() => {
       setOpenModal(false);
       setTransferName("");
     });

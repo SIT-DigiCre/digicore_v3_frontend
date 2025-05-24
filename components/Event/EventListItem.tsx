@@ -1,5 +1,7 @@
-import { Card, CardContent } from "@mui/material";
 import { useRouter } from "next/router";
+
+import { Card, CardContent } from "@mui/material";
+
 import { DigicreEvent } from "../../interfaces/event";
 import MarkdownView from "../Common/MarkdownView";
 

@@ -1,4 +1,5 @@
 import { ListItemIcon, ListItemText } from "@mui/material";
+
 import { useFile } from "../../hook/file/useFile";
 import { getFileKind } from "../../interfaces/file";
 import FileKindIcon from "../File/FileKindIcon";
@@ -13,7 +14,7 @@ const BudgetListItem = ({ fileId }: Props) => {
   return (
     <>
       {getFileKind(file.extension) === "image" ? (
-        <img src={file.url} alt="" style={{ height: "100px" }} />
+        <img src={file.url} alt={file.name} style={{ height: "100px" }} />
       ) : (
         <ListItemIcon>
           <FileKindIcon kind={getFileKind(file.extension)} />

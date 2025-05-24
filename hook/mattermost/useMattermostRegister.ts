@@ -1,7 +1,7 @@
+import { MattermostRegistrationRequest } from "../../interfaces/api";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
-import { MattermostRegistrationRequest } from "../../interfaces/api";
 
 export const useMattermostRegister = (): {
   register: (f: MattermostRegistrationRequest) => Promise<{ username: string } | false>;

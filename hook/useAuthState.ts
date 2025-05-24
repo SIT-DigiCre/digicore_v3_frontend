@@ -1,9 +1,12 @@
-import { useRecoilState } from "recoil";
-import { authState } from "../atom/userAtom";
 import { useEffect } from "react";
-import { axios } from "../utils/axios";
-import { useErrorState } from "./useErrorState";
+
+import { useRecoilState } from "recoil";
+
+import { authState } from "../atom/userAtom";
 import { User } from "../interfaces/user";
+import { axios } from "../utils/axios";
+
+import { useErrorState } from "./useErrorState";
 
 export type AuthState = {
   isLogined: boolean;
@@ -39,7 +42,7 @@ export const useAuthState: UseAuthState = () => {
       });
       removeError("autologin-fail");
       return user;
-    } catch (e: any) {
+    } catch {
       setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
       setNewError({ name: "autologin-fail", message: "ログインしてください" });
     }

@@ -1,6 +1,9 @@
-import { Alert, Avatar, Button, Container, Grid, TextField } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+
+import { Alert, Avatar, Button, Grid, TextField } from "@mui/material";
+
+import { useMyFiles } from "../../hook/file/useFile";
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useMyProfile } from "../../hook/profile/useProfile";
@@ -8,10 +11,10 @@ import { FileObject } from "../../interfaces/file";
 import { User } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 import MarkdownEditor from "../Common/MarkdownEditor";
-import PrivateProfileEditor from "./PrivateProfileEditor";
-import { FileUploader } from "../File/FileUploader";
-import { useMyFiles } from "../../hook/file/useFile";
 import { FileBrowserModal } from "../File/FileBrowser";
+import { FileUploader } from "../File/FileUploader";
+
+import PrivateProfileEditor from "./PrivateProfileEditor";
 
 const ProfileEditor = () => {
   const [userProfile] = useMyProfile();

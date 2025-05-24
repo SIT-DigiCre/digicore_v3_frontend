@@ -1,7 +1,8 @@
-import { axios } from "../../utils/axios";
 import { useEffect, useState } from "react";
-import { useErrorState } from "../useErrorState";
+
+import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
+import { useErrorState } from "../useErrorState";
 
 type UseDiscordLogin = () => {
   loginUrl: string;
@@ -24,7 +25,7 @@ export const useDiscordLogin: UseDiscordLogin = () => {
         const url: string = res.data.url;
         setLoginUrl(url);
         removeError("get-discord-login-url");
-      } catch (e: any) {
+      } catch {
         setNewError({
           name: "get-discord-login-url",
           message: "Discordログイン用URLの取得に失敗しました",
@@ -33,7 +34,7 @@ export const useDiscordLogin: UseDiscordLogin = () => {
     })();
   }, [authState]);
   const setCallbackCode = async (code: string): Promise<void> => {
-    const _ = await axios.put(
+    await axios.put(
       "/user/me/discord/callback",
       { code: code },
       {

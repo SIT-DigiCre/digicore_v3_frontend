@@ -1,6 +1,7 @@
 import { Container, Grid, Typography } from "@mui/material";
-import PageHead from "../../components/Common/PageHead";
+
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import PageHead from "../../components/Common/PageHead";
 
 export const MattermostRegisterComplete = () => {
   return (

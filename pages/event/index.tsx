@@ -1,4 +1,5 @@
 import { Container } from "@mui/material";
+
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
 import EventListItem from "../../components/Event/EventListItem";
@@ -15,7 +16,7 @@ const EventIndexPage = () => {
       <p>イベント一覧から参加するイベントを探してください。</p>
       <hr />
       {events.map((event) => (
-        <EventListItem event={event} />
+        <EventListItem key={event.eventId} event={event} />
       ))}
     </Container>
   );

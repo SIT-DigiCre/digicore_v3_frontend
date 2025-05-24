@@ -1,16 +1,10 @@
-import { useEffect, useState, FormEvent } from "react";
 import Image from "next/image";
-import {
-  Box,
-  Button,
-  Grid,
-  Typography,
-  TextField,
-  FormControl,
-  FormHelperText,
-} from "@mui/material";
-import { useAuthState } from "../../hook/useAuthState";
+import { FormEvent, useEffect, useState } from "react";
+
+import { Button, FormControl, FormHelperText, Grid, TextField, Typography } from "@mui/material";
+
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
+import { useAuthState } from "../../hook/useAuthState";
 import { MattermostRegistrationRequest } from "../../interfaces/api";
 
 type Props = {
@@ -203,11 +197,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
         <Typography align="center" m={2}>
           <strong>
             アカウント登録にお困りの際は{" "}
-            <a
-              href="https://forms.gle/MQicA1No8LSZPe5QA"
-              target="_blank"
-              rel="noreferrer"
-            >
+            <a href="https://forms.gle/MQicA1No8LSZPe5QA" target="_blank" rel="noreferrer">
               こちらのフォームから
             </a>{" "}
             ご相談を

@@ -1,5 +1,7 @@
-import { Avatar, Button, Card, CardHeader, Container, Grid } from "@mui/material";
 import { useRouter } from "next/router";
+
+import { Avatar, Button, Card, CardHeader, Container, Grid } from "@mui/material";
+
 import { useUserProfiles } from "../../hook/user/useUserProfiles";
 
 const UserIndexPage = () => {
@@ -13,7 +15,7 @@ const UserIndexPage = () => {
       </Grid>
       <Grid container>
         {userProfiles.map((userProfile) => (
-          <Grid size={[12, 6, 4]} sx={{ padding: 0.5 }}>
+          <Grid size={[12, 6, 4]} sx={{ padding: 0.5 }} key={userProfile.userId}>
             <Card
               onClick={() => {
                 router.push(`/user/${userProfile.userId}`);

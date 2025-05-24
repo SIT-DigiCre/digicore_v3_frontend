@@ -1,22 +1,24 @@
-import { Tooltip, IconButton, Modal, Box, Button } from "@mui/material";
-import { Apps, Login } from "@mui/icons-material";
+import { useRouter } from "next/router";
 import { useState } from "react";
-import Link from "next/link";
+
+import { Apps } from "@mui/icons-material";
+import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
 import EventIcon from "@mui/icons-material/Event";
 import HomeIcon from "@mui/icons-material/Home";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
-import SettingsIcon from "@mui/icons-material/Settings";
-import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
-import { useRouter } from "next/router";
-import AppMenuButton from "./AppMenuButton";
-import { useAuthState } from "../../hook/useAuthState";
-import LoginIcon from "@mui/icons-material/Login";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
+import LoginIcon from "@mui/icons-material/Login";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { Box, IconButton, Modal, Tooltip } from "@mui/material";
+
+import { useAuthState } from "../../hook/useAuthState";
+
+import AppMenuButton from "./AppMenuButton";
 
 const appMenuStyle = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "70px",
   left: "10px",
   width: 350,

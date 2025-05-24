@@ -1,6 +1,7 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+
 import { useAuthState } from "../../hook/useAuthState";
 import { useRegisterData } from "../../hook/useRegisterData";
 
@@ -19,7 +20,7 @@ const LoginCallbackPage = ({ code }: Props) => {
   }, []);
   return <>初回ログイン処理中... （この画面が長時間出る場合は登録からやり直して下さい）</>;
 };
-export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   try {
     const { code } = query;
     const codeStr = typeof code === "string" ? code : null;

@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useAuthState } from "../../hook/useAuthState";
-import { BudgetDetail, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
-import { FileObject } from "../../interfaces/file";
+
+import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Button,
   Divider,
@@ -12,12 +11,15 @@ import {
   ListItem,
   TextField,
 } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+
+import { BudgetDetail, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
+import { FileObject } from "../../interfaces/file";
 import { FileBrowserModal } from "../File/FileBrowser";
+
 import BudgetListItem from "./BudgetListItem";
 
 type Props = {
-  onSubmit: (budget: any) => void;
+  onSubmit: (budget: PutBudgetRequest) => void;
   initBudget?: BudgetDetail;
 };
 
@@ -60,7 +62,7 @@ const editableFields: {
 
 const isFilled = (s?: string) => {
   if (!s) return false;
-  if (s === "") false;
+  if (s === "") return false;
   return true;
 };
 
@@ -70,7 +72,6 @@ const isInt = (s?: string) => {
 };
 
 const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
-  const { authState } = useAuthState();
   const [name, setName] = useState("");
   const [budgetStr, setBudgetStr] = useState("");
   const [mattermostUrl, setMattermostUrl] = useState("");

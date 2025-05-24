@@ -1,16 +1,18 @@
+import { useEffect, useState } from "react";
+
 import {
-  Modal,
   Box,
   Button,
   List,
-  ListItem,
-  ListItemText,
   ListItemButton,
   ListItemIcon,
+  ListItemText,
+  Modal,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+
 import { useFile, useMyFiles } from "../../hook/file/useFile";
 import { FileKind, FileObject, getFileKind } from "../../interfaces/file";
+
 import FileKindIcon from "./FileKindIcon";
 import { FileUploader } from "./FileUploader";
 type FileBrowserModalProps = {
@@ -20,7 +22,7 @@ type FileBrowserModalProps = {
   onlyFileKind?: FileKind;
 };
 const style = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

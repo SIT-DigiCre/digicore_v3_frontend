@@ -1,22 +1,24 @@
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
 import {
+  Button,
+  Chip,
   Container,
   Grid,
-  Button,
-  TableContainer,
   Table,
+  TableBody,
+  TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  TableCell,
-  TableBody,
-  Chip,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import PageHead from "../../components/Common/PageHead";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+
 import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
-import { useState } from "react";
+import Breadcrumbs from "../../components/Common/Breadcrumb";
+import PageHead from "../../components/Common/PageHead";
 import { useBudgets } from "../../hook/budget/useBudget";
-import { GetServerSideProps } from "next";
 import { BudgetClass, BudgetStatus } from "../../interfaces/budget";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
@@ -66,10 +68,9 @@ const budgetStatusColor: {
 
 type Props = {
   modeStr?: string;
-  error?: string;
 };
 
-const BudgetPage = ({ modeStr, error }: Props) => {
+const BudgetPage = ({ modeStr }: Props) => {
   const router = useRouter();
   const { budgets, loadMore } = useBudgets();
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);

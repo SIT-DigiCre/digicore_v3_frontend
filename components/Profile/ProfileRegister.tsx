@@ -1,38 +1,39 @@
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import {
   Button,
   Container,
+  FormControl,
+  FormControlLabel,
   Grid,
+  Radio,
+  RadioGroup,
+  Step,
+  StepLabel,
+  Stepper,
   TextField,
   Typography,
-  Stepper,
-  StepLabel,
-  Step,
-  FormControl,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { useAuthState } from "../../hook/useAuthState";
-import { PublicProfileEditor } from "./ProfileEditor";
+
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
-import NameInput from "./NameInput";
-import PhoneInput from "./PhoneInput";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
+import { useAuthState } from "../../hook/useAuthState";
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 
-type Props = {
-  registerMode: boolean;
-};
-const ProfileRegister = ({ registerMode }: Props) => {
+import NameInput from "./NameInput";
+import PhoneInput from "./PhoneInput";
+import { PublicProfileEditor } from "./ProfileEditor";
+
+const ProfileRegister = () => {
   const { authState } = useAuthState();
   const [privateProfile] = usePrivateProfile();
   const [step, setStep] = useState(0);
   useEffect(() => {
     if (!authState.isLogined) return;
     if (authState.user.username !== authState.user.studentNumber) {
+      // eslint-disable-next-line no-console
       console.log(authState.user);
       if (privateProfile.firstName !== "") {
         if (authState.user.discordUserId !== "") setStep(3);

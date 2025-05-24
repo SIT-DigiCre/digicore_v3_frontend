@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { UploadFile } from "../../interfaces/api";
 import { FileInfo, FileObject } from "../../interfaces/file";
 import { axios } from "../../utils/axios";
@@ -23,7 +24,7 @@ export const useFile: UseFile = (fileId) => {
         const fileObject: FileObject = res.data;
         setFile(fileObject);
         removeError("fileobject-get-fail");
-      } catch (e: any) {
+      } catch {
         setNewError({ name: "fileobject-get-fail", message: "ファイルの取得に失敗しました" });
       }
     })();
@@ -52,7 +53,7 @@ export const useMyFiles: UseMyFiles = () => {
       const filesRes: FileInfo[] = res.data.files;
       setFileInfos(filesRes);
       removeError("myfileobjects-get-fail");
-    } catch (e: any) {
+    } catch {
       setNewError({
         name: "myfileobjects-get-fail",
         message: "個人ファイル一覧の取得に失敗しました",
@@ -72,7 +73,7 @@ export const useMyFiles: UseMyFiles = () => {
       const fileObject: FileObject = res.data;
       removeError("myfileobject-post-fail");
       return fileObject;
-    } catch (e: any) {
+    } catch (e) {
       setNewError({
         name: "myfileobject-post-fail",
         message: "ファイルのアップロードに失敗しました",

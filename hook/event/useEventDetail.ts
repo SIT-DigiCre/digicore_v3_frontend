@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { DigicreEvent, DigicreEventDetail } from "../../interfaces/event";
+
+import { DigicreEventDetail } from "../../interfaces/event";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
@@ -29,7 +30,7 @@ const useEventDetail: UseEventDetail = (id) => {
         const ed: DigicreEventDetail = res.data;
         setEventDetail(ed);
         removeError("eventdetail-get-fail");
-      } catch (err: any) {
+      } catch (err) {
         const msg: string = err.message;
         if (msg.indexOf("404") !== -1) setEventNotFound(true);
         setNewError({ name: "eventdetail-get-fail", message: "イベント詳細の取得に失敗しました" });
@@ -40,7 +41,7 @@ const useEventDetail: UseEventDetail = (id) => {
 
   const reservation = async (frameId: string, commentText: string, urlText: string) => {
     try {
-      const _ = await axios.put(
+      await axios.put(
         `/event/${id}/${frameId}/me`,
         {
           comment: commentText,
@@ -53,7 +54,7 @@ const useEventDetail: UseEventDetail = (id) => {
         },
       );
       removeError("eventdetailreservation-post-fail");
-    } catch (err) {
+    } catch {
       setNewError({
         name: "eventdetailreservation-post-fail",
         message: "イベント枠予約に失敗しました",
@@ -63,13 +64,13 @@ const useEventDetail: UseEventDetail = (id) => {
   };
   const cancelReservation = async (frameId: string) => {
     try {
-      const _ = await axios.delete(`/event/${id}/${frameId}/me`, {
+      await axios.delete(`/event/${id}/${frameId}/me`, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
       removeError("eventdetailreservation-delete-fail");
-    } catch (err) {
+    } catch {
       setNewError({
         name: "eventdetailreservation-delete-fail",
         message: "イベント枠予約キャンセルに失敗しました",

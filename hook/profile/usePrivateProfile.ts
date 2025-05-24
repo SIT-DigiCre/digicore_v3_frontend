@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
 import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
@@ -26,7 +27,7 @@ export const usePrivateProfile: UsePrivateProfile = (register) => {
         const userPrivateProfile: UserPrivateProfile = res.data;
         setProfile(userPrivateProfile);
         removeError("privateprofile-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({
           name: "privateprofile-get-fail",
           message: "ユーザーの非公開情報の取得に失敗しました",
@@ -36,7 +37,7 @@ export const usePrivateProfile: UsePrivateProfile = (register) => {
   }, [authState]);
   const update = async (profile: UserPrivateProfile) => {
     try {
-      const res = await axios.put(`/user/me/private`, profile, {
+      await axios.put(`/user/me/private`, profile, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
@@ -44,7 +45,7 @@ export const usePrivateProfile: UsePrivateProfile = (register) => {
       setProfile(profile);
       removeError("privateprofile-update-fail");
       return true;
-    } catch (err: any) {
+    } catch {
       setNewError({
         name: "privateprofile-update-fail",
         message: "ユーザー情報の更新に失敗しました",

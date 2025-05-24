@@ -1,5 +1,6 @@
-import { Grid, Button, Container, Typography, Box } from "@mui/material";
 import { Google } from "@mui/icons-material";
+import { Grid, Button, Container, Typography, Box } from "@mui/material";
+
 import PageHead from "../../components/Common/PageHead";
 import { useRegisterData } from "../../hook/useRegisterData";
 

@@ -1,4 +1,4 @@
-import { Stack, Chip } from "@mui/material";
+import { Chip, Stack } from "@mui/material";
 
 type Props = {
   chipList: string[];
@@ -8,7 +8,11 @@ type Props = {
 const ChipList = ({ chipList, onClick }: Props) => (
   <Stack spacing={1} direction="row">
     {chipList.map((chipName, i) =>
-      onClick ? <Chip label={chipName} onClick={() => onClick(i)} /> : <Chip label={chipName} />,
+      onClick ? (
+        <Chip key={chipName} label={chipName} onClick={() => onClick(i)} />
+      ) : (
+        <Chip key={chipName} label={chipName} />
+      ),
     )}
   </Stack>
 );

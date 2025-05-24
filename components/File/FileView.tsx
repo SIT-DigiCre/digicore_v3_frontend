@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+
 import { FileObject, getFileKind } from "../../interfaces/file";
 import ElementResizeListener from "../Common/ElementResizeListener";
 
@@ -11,7 +12,8 @@ const FileView = ({ file, width }: Props) => {
   const [contentWidth, setContentWidth] = useState(100);
   const [contentHight, setContentHight] = useState(100);
   const onResize = (event: Event) => {
-    console.log(contentRef.current.getBoundingClientRect().width);
+    // eslint-disable-next-line no-console
+    console.log(event);
     setContentWidth(contentRef.current.getBoundingClientRect().width);
     setContentHight((contentRef.current.getBoundingClientRect().width * 10) / 16);
   };
@@ -23,7 +25,7 @@ const FileView = ({ file, width }: Props) => {
   const getFileTag = () => {
     switch (getFileKind(file.extension)) {
       case "image":
-        return <img src={file.url} style={{ maxWidth: "100%" }} />;
+        return <img src={file.url} alt={file.name} style={{ maxWidth: "100%" }} />;
       case "docx":
       case "xlsx":
       case "pptx":

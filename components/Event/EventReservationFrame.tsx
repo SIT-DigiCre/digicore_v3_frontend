@@ -1,3 +1,6 @@
+import { useRouter } from "next/router";
+import { ChangeEventHandler, useState } from "react";
+
 import {
   Box,
   Button,
@@ -8,8 +11,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useRouter } from "next/router";
-import { ChangeEventHandler, useState } from "react";
+
 import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
 import { useDarkMode } from "../../hook/useDarkMode";
 import { DigicreEventReservation } from "../../interfaces/event";
@@ -22,7 +24,7 @@ type Props = {
   cancelReservation: (id: string) => Promise<boolean>;
 };
 const modalStyle = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",
@@ -115,7 +117,7 @@ const EventReservationFrame = ({
               color="error"
               variant="contained"
               onClick={() => {
-                cancelReservation(eventReservation.reservationId).then((res) => {
+                cancelReservation(eventReservation.reservationId).then(() => {
                   router.reload();
                 });
               }}
@@ -148,7 +150,7 @@ const EventReservationFrame = ({
           <br />
           <Button
             onClick={() => {
-              reservation(eventReservation.reservationId!, commentText, urlText).then((res) => {
+              reservation(eventReservation.reservationId!, commentText, urlText).then(() => {
                 router.reload();
               });
             }}

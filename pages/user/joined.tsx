@@ -1,3 +1,6 @@
+import { useRouter } from "next/router";
+import { Dispatch, SetStateAction, useState } from "react";
+
 import {
   Box,
   Button,
@@ -14,13 +17,13 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
-import { useJoinData } from "../../hook/user/useJoinData";
 import { MattermostRegister } from "../../components/Mattermost/Register";
 import TransferAccountView from "../../components/Register/TransferAccountView";
-import { useRouter } from "next/router";
+import { useJoinData } from "../../hook/user/useJoinData";
+
 const JoinedPage = () => {
   const [step, setStep] = useState(0);
   return (

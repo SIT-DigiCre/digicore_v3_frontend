@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { useRecoilState } from "recoil";
+
+import { WorkTag, WorkTagDetail } from "../../interfaces/work";
+import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
-import { axios } from "../../utils/axios";
-import { WorkTag, WorkTagDetail } from "../../interfaces/work";
 
 type WorkTagsResponse = {
   tags: WorkTag[];
@@ -25,7 +25,7 @@ export const useWorkTags = () => {
         });
         setWorkTags(res.data.tags);
         removeError("work-tag-list-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "work-tag-list-get-fail", message: "タグ一覧の取得に失敗しました" });
       }
     })();
@@ -48,7 +48,7 @@ export const useWorkTags = () => {
         );
         removeError("work-tag-create-fail");
         setTagUpdate(tagUpdate + 1);
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "work-tag-create-fail", message: "タグの新規作成に失敗しました" });
       }
     })();
@@ -63,7 +63,7 @@ export const useWorkTags = () => {
         });
         removeError("work-tag-delete-fail");
         setTagUpdate(tagUpdate + 1);
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "work-tag-delete-fail", message: "タグの削除に失敗しました" });
       }
     })();
@@ -86,7 +86,7 @@ export const useWorkTagDetail = (tagId: string) => {
         });
         setWorkTag(res.data);
         removeError("work-tag-detail-get-fail");
-      } catch (err: any) {
+      } catch {
         setNewError({ name: "work-tag-detail-get-fail", message: "タグの取得に失敗しました" });
       }
     })();

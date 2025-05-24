@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
   Box,
   Button,
@@ -14,11 +16,11 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+
 import { usePayments } from "../../hook/payment/usePayments";
 import { Payment } from "../../interfaces/payment";
 const modalStyle = {
-  position: "absolute" as "absolute",
+  position: "absolute" as const,
   top: "50%",
   left: "50%",
   transform: "translate(-50%, -50%)",

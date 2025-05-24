@@ -1,6 +1,7 @@
-import { axios } from "../../utils/axios";
 import { useEffect, useState } from "react";
+
 import { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
+import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
@@ -25,35 +26,35 @@ export const useWork: UseWork = (workId) => {
         const workDetail: WorkDetail = res.data;
         setWork(workDetail);
         removeError("workdetail-get-fail");
-      } catch (e: any) {
+      } catch {
         setNewError({ name: "workdetail-get-fail", message: "Workの取得に失敗しました" });
       }
     })();
   }, [authState]);
   const updateWork = async (workRequest: WorkRequest): Promise<boolean> => {
     try {
-      const res = await axios.put(`/work/work/${workId}`, workRequest, {
+      await axios.put(`/work/work/${workId}`, workRequest, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
       removeError("work-put-fail");
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "work-put-fail", message: "Workの更新に失敗しました" });
       return false;
     }
   };
   const deleteWork = async (): Promise<boolean> => {
     try {
-      const res = await axios.delete(`/work/work/${workId}`, {
+      await axios.delete(`/work/work/${workId}`, {
         headers: {
           Authorization: "bearer " + authState.token,
         },
       });
       removeError("work-delete-fail");
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
       return false;
     }
@@ -96,7 +97,7 @@ export const useWorks: UseWorks = (authorId) => {
       setWorks(works.concat(newWorks));
       removeError("works-get-fail");
       setOffsetNum(n);
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
     }
   };
@@ -116,21 +117,21 @@ export const useWorks: UseWorks = (authorId) => {
       });
       removeError("work-post-fail");
       return res.data.workId;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "work-post-fail", message: "Workの投稿に失敗しました" });
       return "error";
     }
   };
   const deleteWork = async (id: string): Promise<boolean> => {
     try {
-      const res = await axios.delete(`/work/work/${id}`, {
+      await axios.delete(`/work/work/${id}`, {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
       removeError("work-delete-fail");
       return true;
-    } catch (e: any) {
+    } catch {
       setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
       return false;
     }
