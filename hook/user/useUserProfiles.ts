@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 
 import { userListSeed } from "../../atom/userAtom";
 import { User } from "../../interfaces/user";
@@ -18,7 +18,7 @@ export const useUserProfiles: UseUserProfiles = () => {
   const [users, setUsers] = useState<User[]>([]);
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
-  const [seed] = useRecoilState(userListSeed);
+  const seed = useRecoilValue(userListSeed);
   const [isOver, setIsOver] = useState(false);
   const getNew = async (num: number) => {
     if (authState.isLoading || !authState.isLogined) return;
