@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import { useRecoilState } from "recoil";
@@ -24,7 +25,9 @@ type UseAuthState = () => {
 
 export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
-  const { setNewError, removeError } = useErrorState();
+  const { removeError } = useErrorState();
+  const router = useRouter();
+
   const getUserInfo = async (token: string, refresh: boolean): Promise<User> => {
     try {
       const res = await axios.get("/user/me", {
@@ -44,10 +47,11 @@ export const useAuthState: UseAuthState = () => {
       return user;
     } catch {
       setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
-      setNewError({ name: "autologin-fail", message: "ログインしてください" });
+      router.push("/login");
     }
     return null;
   };
+
   const refresh = async () => await getUserInfo(localStorage.getItem("jwt"), true);
   // ローカルストレージを削除する関数
   const logout = () => {
