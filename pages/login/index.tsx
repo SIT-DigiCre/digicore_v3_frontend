@@ -9,19 +9,22 @@ const LoginPage = () => {
     <>
       <PageHead title="Login" />
       <Container>
-        <Stack mt={30} gap={10}>
-          <Box textAlign="center">
+        <Stack alignItems="center" mt={10}>
+          <Typography variant="h4">DigiCore v3</Typography>
+          <Box my={10}>
             <Button variant="contained" startIcon={<Google />} href={loginUrl}>
-              Googleログイン
+              ログインする
             </Button>
           </Box>
-          <Typography textAlign="center">
-            Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます
-          </Typography>
-          <Typography textAlign="center">
-            デジクリに入部希望の方は<a href="https://twitter.com/sitdigicre">公式Twitter</a>
-            にご相談下さい
-          </Typography>
+          <Box>
+            <Typography>
+              Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます。
+            </Typography>
+            <Typography>
+              デジクリに入部希望の方は<a href="https://twitter.com/sitdigicre">公式Twitter</a>
+              にご相談下さい。
+            </Typography>
+          </Box>
         </Stack>
       </Container>
     </>
