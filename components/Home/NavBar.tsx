@@ -11,6 +11,7 @@ import AppMenu from "./AppMenu";
 const NavBar = () => {
   const { authState } = useAuthState();
   const router = useRouter();
+
   return (
     <>
       <AppBar position="static" color="primary">
@@ -21,7 +22,7 @@ const NavBar = () => {
             <IconButton>
               <AccountMenu />
             </IconButton>
-          ) : (
+          ) : router.pathname !== "/login" ? (
             <Button
               startIcon={<AccountCircle />}
               color="inherit"
@@ -32,7 +33,7 @@ const NavBar = () => {
             >
               ログインする
             </Button>
-          )}
+          ) : null}
         </Toolbar>
       </AppBar>
     </>
