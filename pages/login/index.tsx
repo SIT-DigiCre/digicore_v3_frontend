@@ -7,6 +7,7 @@ import PageHead from "../../components/Common/PageHead";
 import { useLoginData } from "../../hook/useLoginData";
 const LoginPage = () => {
   const { loginUrl } = useLoginData();
+
   return (
     <>
       <PageHead title="ログイン" />
@@ -20,7 +21,7 @@ const LoginPage = () => {
           />
           <Typography variant="h4">DigiCore v3</Typography>
           <Box my={10}>
-            <Button variant="contained" startIcon={<Google />} href={loginUrl}>
+            <Button variant="contained" startIcon={<Google aria-label="Google" />} href={loginUrl}>
               ログインする
             </Button>
           </Box>
@@ -29,7 +30,10 @@ const LoginPage = () => {
               Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます。
             </Typography>
             <Typography>
-              デジクリに入部希望の方は<a href="https://twitter.com/sitdigicre">公式Twitter</a>
+              デジクリに入部希望の方は contact@digicre.net までメールするか、
+              <a href="https://twitter.com/sitdigicre" target="_blank">
+                公式Twitter
+              </a>
               にご相談下さい。
             </Typography>
           </Box>

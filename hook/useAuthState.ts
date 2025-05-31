@@ -68,9 +68,11 @@ export const useAuthState: UseAuthState = () => {
     localStorage.setItem("jwt", token);
     getUserInfo(token, true);
   };
+
   useEffect(() => {
     getUserInfo(localStorage.getItem("jwt"), false);
   }, []);
+
   return {
     authState: auth,
     onLogin: onLogin,

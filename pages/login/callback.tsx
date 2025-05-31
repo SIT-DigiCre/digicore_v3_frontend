@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
-import { CSSProperties, useEffect, useState } from "react";
+import { type CSSProperties, useEffect, useState } from "react";
 
 import { useAuthState } from "../../hook/useAuthState";
 import { useLoginData } from "../../hook/useLoginData";
@@ -19,7 +19,7 @@ const LoginCallbackPage = ({ code }: Props) => {
   const { setCallbackCode } = useLoginData();
   const router = useRouter();
   const { onLogin } = useAuthState();
-  const [logining, setLogining] = useState(true);
+  const [isLoggingIn, setIsLoggingIn] = useState(true);
 
   useEffect(() => {
     setCallbackCode(code)
@@ -35,11 +35,11 @@ const LoginCallbackPage = ({ code }: Props) => {
       })
       .catch((e) => {
         console.error(e);
-        setLogining(false);
+        setIsLoggingIn(false);
       });
   }, []);
 
-  if (logining) {
+  if (isLoggingIn) {
     return (
       <p style={centerTextStyle}>
         ログイン処理中... （この画面が長時間出る場合はログインからやり直して下さい）

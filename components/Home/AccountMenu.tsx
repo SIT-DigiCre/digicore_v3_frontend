@@ -9,12 +9,15 @@ const AccountMenu = () => {
   const { authState, logout } = useAuthState();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
   return (
     <>
       <Tooltip title="Account settings">
@@ -22,6 +25,7 @@ const AccountMenu = () => {
           onClick={handleClick}
           size="small"
           sx={{ ml: 2 }}
+          aria-label={authState.user.username}
           aria-controls={open ? "account-menu" : undefined}
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
