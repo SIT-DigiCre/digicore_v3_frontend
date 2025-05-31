@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 
 import { AccountCircle } from "@mui/icons-material";
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
 
@@ -11,21 +11,16 @@ import AppMenu from "./AppMenu";
 const NavBar = () => {
   const { authState } = useAuthState();
   const router = useRouter();
+
   return (
     <>
       <AppBar position="static" color="primary">
         <Toolbar>
           <AppMenu />
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            デジコア v3.1
-          </Typography>
+          <Box sx={{ flexGrow: 1 }}>デジコア v3.1</Box>
           {authState.isLogined ? (
-            <>
-              <IconButton>
-                <AccountMenu />
-              </IconButton>
-            </>
-          ) : (
+            <AccountMenu />
+          ) : router.pathname !== "/login" ? (
             <Button
               startIcon={<AccountCircle />}
               color="inherit"
@@ -34,9 +29,9 @@ const NavBar = () => {
                 router.push("/login");
               }}
             >
-              Login
+              ログインする
             </Button>
-          )}
+          ) : null}
         </Toolbar>
       </AppBar>
     </>
