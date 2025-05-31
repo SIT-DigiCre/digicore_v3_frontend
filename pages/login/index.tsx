@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { Google } from "@mui/icons-material";
 import { Box, Button, Container, Stack, Typography } from "@mui/material";
 
@@ -7,9 +9,15 @@ const LoginPage = () => {
   const { loginUrl } = useLoginData();
   return (
     <>
-      <PageHead title="Login" />
+      <PageHead title="ログイン" />
       <Container>
-        <Stack alignItems="center" mt={10}>
+        <Stack alignItems="center" mt={20}>
+          <Image
+            src="/image/digicre-logo.webp"
+            alt="デジクリ Digital Creation Circle"
+            width={333}
+            height={111}
+          />
           <Typography variant="h4">DigiCore v3</Typography>
           <Box my={10}>
             <Button variant="contained" startIcon={<Google />} href={loginUrl}>
