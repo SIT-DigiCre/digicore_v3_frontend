@@ -12,19 +12,21 @@ import MenuIcon from "@mui/icons-material/Menu";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
-import MuiAppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import IconButton from "@mui/material/IconButton";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
+import {
+  Box,
+  CssBaseline,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  AppBar as MuiAppBar,
+  Toolbar,
+  Typography,
+} from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
 
@@ -37,12 +39,12 @@ interface MenuItem {
   ariaLabel: string;
 }
 
-interface PersistentDrawerProps {
+interface AppBarProps {
   children?: React.ReactNode;
   window?: () => Window;
 }
 
-export default function ResponsiveDrawer({ children, window }: PersistentDrawerProps) {
+export default function AppBar({ children, window }: AppBarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const { authState } = useAuthState();

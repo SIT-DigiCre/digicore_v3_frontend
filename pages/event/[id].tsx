@@ -15,7 +15,7 @@ const EventPage = ({ id }: EventPageProps) => {
   const { isLoading, notFound, eventDetail, reservation, cancelReservation } = useEventDetail(id);
 
   if (notFound) return <p>指定されたイベントが見つかりませんでした</p>;
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>読み込み中...</p>;
 
   return (
     <>

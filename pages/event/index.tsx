@@ -8,7 +8,7 @@ import { useEventList } from "../../hook/event/useEventList";
 const EventIndexPage = () => {
   const { isLoading, events } = useEventList();
 
-  if (isLoading) return <p>Loading..</p>;
+  if (isLoading) return <p>読み込み中...</p>;
 
   return (
     <>
