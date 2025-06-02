@@ -129,7 +129,7 @@ const EventReservationFrame = ({
             <Button
               size="small"
               variant="contained"
-              disabled={!eventReservation.reservable || !isReservableDatetime}
+              disabled={!eventReservation.reservable && !isReservableDatetime}
               onClick={() => setShowModal(true)}
               startIcon={<Add />}
             >
@@ -137,7 +137,7 @@ const EventReservationFrame = ({
             </Button>
           )}
           <Typography>
-            {eventReservation.freeCapacity} / {eventReservation.capacity}人
+            {(userReservations || []).length} / {eventReservation.capacity}人
           </Typography>
         </CardActions>
       </Card>
