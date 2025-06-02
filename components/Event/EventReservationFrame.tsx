@@ -70,10 +70,7 @@ const EventReservationFrame = ({
   };
   return (
     <>
-      <Card
-        sx={{ minWidth: 275, margin: "3px", backgroundColor: getBackgroudColor() }}
-        variant="outlined"
-      >
+      <Card sx={{ minWidth: 275, backgroundColor: getBackgroudColor() }} variant="outlined">
         <CardContent>
           <Typography variant="h5">{eventReservation.name}</Typography>
           <Typography>{eventReservation.description}</Typography>
