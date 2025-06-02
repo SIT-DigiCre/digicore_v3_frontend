@@ -46,8 +46,10 @@ export const useAuthState: UseAuthState = () => {
       removeError("autologin-fail");
       return user;
     } catch {
-      setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
-      router.push("/login");
+      if (!router.pathname.startsWith("/login") && !router.pathname.startsWith("/signup")) {
+        setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
+        router.push("/login");
+      }
     }
     return null;
   };
