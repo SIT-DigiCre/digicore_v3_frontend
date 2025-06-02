@@ -82,9 +82,7 @@ const EventReservationFrame = ({
             eventReservation.reservationStartDate,
             eventReservation.reservationFinishDate,
           )}`}</Typography>
-          {isLoading ? (
-            <></>
-          ) : (
+          {!isLoading && (
             <div style={{ display: "inline-block" }}>
               {userReservations.map((userReservation) => (
                 <Box
@@ -92,10 +90,8 @@ const EventReservationFrame = ({
                   style={{ border: "black 1px solid", borderRadius: "5px", padding: "3px" }}
                 >
                   <h5>{userReservation.name!}</h5>
-                  {userReservation.comment === "" ? <></> : <p>{userReservation.comment}</p>}
-                  {userReservation.url === "" ? (
-                    <></>
-                  ) : (
+                  {userReservation.comment !== "" && <p>{userReservation.comment}</p>}
+                  {userReservation.url !== "" && (
                     <a href={userReservation.url}>{userReservation.url}</a>
                   )}
                 </Box>

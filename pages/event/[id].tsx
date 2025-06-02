@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 
-import { Stack } from "@mui/material";
+import { Alert, Stack } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
@@ -28,9 +28,13 @@ const EventPage = ({ id }: EventPageProps) => {
         ]}
       />
       <h1>{eventDetail.name}イベント予約フォーム</h1>
+      {eventDetail.reservated && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          既にあなたは予約済みです
+        </Alert>
+      )}
       <MarkdownView md={eventDetail.description} />
-      {eventDetail.reservated && <p style={{ color: "red" }}>既にあなたは予約済みです</p>}
-      <Stack spacing={2} direction="column">
+      <Stack spacing={2} my={2} direction="column">
         {eventDetail.reservations ? (
           <>
             {eventDetail.reservations

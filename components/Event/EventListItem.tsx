@@ -12,10 +12,10 @@ type Props = {
 const EventListItem = ({ event }: Props) => {
   return (
     <Card
-      variant="outlined"
       component={Link}
       href={`/event/${event.eventId!}`}
-      sx={{ textDecoration: "none", color: "inherit" }}
+      sx={{ textDecoration: "none" }}
+      variant="outlined"
     >
       <CardContent>
         <h3>{event.name}</h3>

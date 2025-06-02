@@ -15,7 +15,7 @@ const EventIndexPage = () => {
       <PageHead title="イベント一覧" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Event" }]} />
       <h1>イベント一覧</h1>
-      <Stack spacing={2} direction="column">
+      <Stack spacing={2} my={2} direction="column">
         {events.map((event) => (
           <EventListItem key={event.eventId} event={event} />
         ))}
