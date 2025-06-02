@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import CurrencyYenIcon from "@mui/icons-material/CurrencyYen";
@@ -45,6 +46,14 @@ export default function ResponsiveDrawer({ children, window }: PersistentDrawerP
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const { authState } = useAuthState();
+  const router = useRouter();
+
+  const isMenuItemActive = (href: string): boolean => {
+    if (href === "/") {
+      return router.pathname === href;
+    }
+    return router.pathname.startsWith(href);
+  };
 
   const handleDrawerClose = () => {
     setIsClosing(true);
@@ -138,6 +147,16 @@ export default function ResponsiveDrawer({ children, window }: PersistentDrawerP
                   aria-label={item.ariaLabel}
                   tabIndex={0}
                   onClick={handleDrawerClose}
+                  sx={{
+                    backgroundColor: isMenuItemActive(item.href)
+                      ? "action.selected"
+                      : "transparent",
+                    "&:hover": {
+                      backgroundColor: isMenuItemActive(item.href)
+                        ? "action.selected"
+                        : "action.hover",
+                    },
+                  }}
                 >
                   <ListItemIcon aria-hidden="true">{item.icon}</ListItemIcon>
                   <ListItemText primary={item.label} />
@@ -156,6 +175,16 @@ export default function ResponsiveDrawer({ children, window }: PersistentDrawerP
                 aria-label={loginItem.ariaLabel}
                 tabIndex={0}
                 onClick={handleDrawerClose}
+                sx={{
+                  backgroundColor: isMenuItemActive(loginItem.href)
+                    ? "action.selected"
+                    : "transparent",
+                  "&:hover": {
+                    backgroundColor: isMenuItemActive(loginItem.href)
+                      ? "action.selected"
+                      : "action.hover",
+                  },
+                }}
               >
                 <ListItemIcon aria-hidden="true">{loginItem.icon}</ListItemIcon>
                 <ListItemText primary={loginItem.label} />
