@@ -19,6 +19,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
 import { DigicreEventReservation } from "../../interfaces/event";
@@ -64,10 +65,19 @@ const EventReservationFrame = ({
     setUrlText(e.target.value);
   };
 
-  const isReservableDatetime =
-    eventReservation.reservationStartDate <= new Date() &&
-    eventReservation.reservationFinishDate >= new Date() &&
-    eventReservation.finishDate > new Date();
+  const isReservable = () => {
+    const now = dayjs();
+    const reservationStartDate = dayjs(eventReservation.reservationStartDate);
+    const reservationFinishDate = dayjs(eventReservation.reservationFinishDate);
+    const finishDate = dayjs(eventReservation.finishDate);
+
+    return (
+      reservationStartDate.isBefore(now) &&
+      reservationFinishDate.isAfter(now) &&
+      finishDate.isAfter(now) &&
+      eventReservation.reservable
+    );
+  };
 
   return (
     <>
@@ -129,7 +139,7 @@ const EventReservationFrame = ({
             <Button
               size="small"
               variant="contained"
-              disabled={!eventReservation.reservable && !isReservableDatetime}
+              disabled={!isReservable()}
               onClick={() => setShowModal(true)}
               startIcon={<Add />}
             >
