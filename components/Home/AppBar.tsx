@@ -117,7 +117,7 @@ export default function ResponsiveDrawer({ children, window }: PersistentDrawerP
   const loginItem: MenuItem = {
     href: "/login",
     icon: <LoginIcon />,
-    label: "Login",
+    label: "ログイン",
     ariaLabel: "ログインページへ移動",
   };
 

@@ -1,19 +1,26 @@
 import { useRouter } from "next/router";
 import { ChangeEventHandler, useState } from "react";
 
+import { Add, Cancel, OpenInNew } from "@mui/icons-material";
 import {
+  Avatar,
   Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  CardHeader,
+  IconButton,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   Modal,
   TextField,
   Typography,
 } from "@mui/material";
 
 import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
-import { useDarkMode } from "../../hook/useDarkMode";
 import { DigicreEventReservation } from "../../interfaces/event";
 import { getTimeSpanText } from "../../utils/date-util";
 
@@ -49,61 +56,61 @@ const EventReservationFrame = ({
     eventId,
     eventReservation.reservationId!,
   );
+
   const onChangeCommnetText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCommentText(e.target.value);
   };
   const onChangeUrlText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setUrlText(e.target.value);
   };
-  const { isDarkMode } = useDarkMode();
-  const getBackgroudColor = () => {
-    const finishDate = new Date(eventReservation.finishDate);
-    const now = new Date(Date.now());
-    if (finishDate.getTime() < now.getTime()) return "darkgray";
-    if (
-      finishDate.getDate() === now.getDate() &&
-      finishDate.getMonth() === now.getMonth() &&
-      finishDate.getFullYear() === now.getFullYear()
-    )
-      return isDarkMode ? "green" : "lightgreen";
-    return "none";
-  };
+
+  const isReservableDatetime =
+    eventReservation.reservationStartDate <= new Date() &&
+    eventReservation.reservationFinishDate >= new Date() &&
+    eventReservation.finishDate > new Date();
+
   return (
     <>
-      <Card sx={{ minWidth: 275, backgroundColor: getBackgroudColor() }} variant="outlined">
+      <Card variant="outlined">
+        <CardHeader
+          title={eventReservation.name}
+          subheader={getTimeSpanText(eventReservation.startDate, eventReservation.finishDate)}
+          sx={{ pb: 0 }}
+        />
         <CardContent>
-          <Typography variant="h5">{eventReservation.name}</Typography>
           <Typography>{eventReservation.description}</Typography>
-          <Typography>{`実施期間: ${getTimeSpanText(
-            eventReservation.startDate,
-            eventReservation.finishDate,
-          )}`}</Typography>
-          <Typography>{`予約実行可能期間: ${getTimeSpanText(
-            eventReservation.reservationStartDate,
-            eventReservation.reservationFinishDate,
-          )}`}</Typography>
-          {!isLoading && (
-            <div style={{ display: "inline-block" }}>
+          {!isLoading && userReservations.length > 0 ? (
+            <List>
               {userReservations.map((userReservation) => (
-                <Box
+                <ListItem
                   key={userReservation.userId!}
-                  style={{ border: "black 1px solid", borderRadius: "5px", padding: "3px" }}
+                  secondaryAction={
+                    userReservation.url.startsWith("http") && (
+                      <IconButton
+                        aria-label="リンクを開く"
+                        component="a"
+                        href={userReservation.url}
+                      >
+                        <OpenInNew />
+                      </IconButton>
+                    )
+                  }
                 >
-                  <h5>{userReservation.name!}</h5>
-                  {userReservation.comment !== "" && <p>{userReservation.comment}</p>}
-                  {userReservation.url !== "" && (
-                    <a href={userReservation.url}>{userReservation.url}</a>
-                  )}
-                </Box>
+                  <ListItemIcon>
+                    <Avatar src={userReservation.userIcon}>{userReservation.name.charAt(0)}</Avatar>
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={userReservation.name}
+                    secondary={userReservation.comment}
+                  />
+                </ListItem>
               ))}
-            </div>
+            </List>
+          ) : (
+            <p>予約者がいません</p>
           )}
-
-          <Typography>
-            残り予約数: {eventReservation.freeCapacity}/{eventReservation.capacity}
-          </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ p: 2, pt: 0, gap: 2, alignItems: "center" }}>
           {eventReservation.reservated ? (
             <Button
               size="small"
@@ -114,19 +121,24 @@ const EventReservationFrame = ({
                   router.reload();
                 });
               }}
+              startIcon={<Cancel />}
             >
-              イベント予約をキャンセル
+              キャンセルする
             </Button>
           ) : (
             <Button
               size="small"
               variant="contained"
-              disabled={!eventReservation.reservable}
+              disabled={!eventReservation.reservable || !isReservableDatetime}
               onClick={() => setShowModal(true)}
+              startIcon={<Add />}
             >
-              この枠を予約
+              予約する
             </Button>
           )}
+          <Typography>
+            {eventReservation.freeCapacity} / {eventReservation.capacity}人
+          </Typography>
         </CardActions>
       </Card>
       <Modal

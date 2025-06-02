@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 
-import { Alert, Stack } from "@mui/material";
+import { Alert, Box, Stack } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
@@ -34,27 +34,29 @@ const EventPage = ({ id }: EventPageProps) => {
         </Alert>
       )}
       <MarkdownView md={eventDetail.description} />
-      <Stack spacing={2} my={2} direction="column">
-        {eventDetail.reservations ? (
-          <>
-            {eventDetail.reservations
-              .sort((a, b) =>
-                new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
-              )
-              .map((frame) => (
-                <EventReservationFrame
-                  key={frame.reservationId!}
-                  eventId={id}
-                  eventReservation={frame}
-                  reservation={reservation}
-                  cancelReservation={cancelReservation}
-                />
-              ))}
-          </>
-        ) : (
-          <p>枠はありません</p>
-        )}
-      </Stack>
+      <Box sx={{ maxWidth: 700, mx: "auto" }}>
+        <Stack spacing={2} my={2} direction="column">
+          {eventDetail.reservations ? (
+            <>
+              {eventDetail.reservations
+                .sort((a, b) =>
+                  new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
+                )
+                .map((frame) => (
+                  <EventReservationFrame
+                    key={frame.reservationId!}
+                    eventId={id}
+                    eventReservation={frame}
+                    reservation={reservation}
+                    cancelReservation={cancelReservation}
+                  />
+                ))}
+            </>
+          ) : (
+            <p>枠はありません</p>
+          )}
+        </Stack>
+      </Box>
     </>
   );
 };
