@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { Container, Grid, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import PageHead from "../components/Common/PageHead";
 import { useAuthState } from "../hook/useAuthState";
@@ -9,13 +9,13 @@ const IndexPage = () => {
   const { authState } = useAuthState();
   if (!authState.isLogined)
     return (
-      <Container>
+      <>
         <PageHead title="Home 未ログイン" />
         <p>未ログイン状態です。ログインしてください。</p>
-      </Container>
+      </>
     );
   return (
-    <Container>
+    <>
       <PageHead title="Home" />
       <Grid>
         <h1>ようこそ、デジコア3.1へ</h1>
@@ -36,7 +36,7 @@ const IndexPage = () => {
           ：部費の入金先やMattermost、Discordへの参加リンクがあります
         </Typography>
       </Grid>
-    </Container>
+    </>
   );
 };
 

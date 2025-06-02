@@ -37,16 +37,11 @@ interface MenuItem {
 }
 
 interface PersistentDrawerProps {
-  title?: React.ReactNode;
   children?: React.ReactNode;
   window?: () => Window;
 }
 
-export default function ResponsiveDrawer({
-  title = "デジクリ",
-  children,
-  window,
-}: PersistentDrawerProps) {
+export default function ResponsiveDrawer({ children, window }: PersistentDrawerProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const { authState } = useAuthState();
@@ -196,7 +191,7 @@ export default function ResponsiveDrawer({
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div" role="heading" aria-level={1}>
-            {title}
+            デジクリ
           </Typography>
         </Toolbar>
       </MuiAppBar>
@@ -235,10 +230,7 @@ export default function ResponsiveDrawer({
           {drawer}
         </Drawer>
       </Box>
-      <Box
-        component="main"
-        sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}
-      >
+      <Box sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar />
         {children}
       </Box>

@@ -8,7 +8,7 @@ const ErrorView = () => {
   return (
     <>
       {errors.length > 0 && (
-        <Alert severity="error" sx={{ m: 2 }}>
+        <Alert severity="error" sx={{ mb: 2 }}>
           <AlertTitle>エラー</AlertTitle>
           <ul>
             {errors.map((e) => (

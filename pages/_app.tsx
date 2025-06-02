@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 
-import { Container, createTheme, ThemeProvider, Typography } from "@mui/material";
+import { createTheme, ThemeProvider, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { RecoilRoot } from "recoil";
 
@@ -35,11 +35,11 @@ const AppRoot = ({ Component, pageProps }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar title={Component.displayName || Component.name || "デジクリ"}>
-        <ErrorView />
-        <Container component="main" sx={{ py: 4, minHeight: "60vh" }}>
+      <AppBar>
+        <main style={{ minHeight: "65vh" }}>
+          <ErrorView />
           <Component {...pageProps} />
-        </Container>
+        </main>
         <footer style={{ textAlign: "center", padding: "2rem 0" }}>
           <Typography>
             <a href="https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-licensing-agreement-for-icons8">
