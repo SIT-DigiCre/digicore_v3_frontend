@@ -36,7 +36,6 @@ interface MenuItem {
   href: string;
   icon: React.ReactNode;
   label: string;
-  ariaLabel: string;
 }
 
 interface AppBarProps {
@@ -79,49 +78,41 @@ export default function AppBar({ children, window }: AppBarProps) {
       href: "/",
       icon: <HomeIcon />,
       label: "ホーム",
-      ariaLabel: "ホームページへ移動",
     },
     {
       href: "/user/profile",
       icon: <ManageAccountsIcon />,
       label: "プロフィール",
-      ariaLabel: "プロフィールページへ移動",
     },
     {
       href: "/event",
       icon: <EventIcon />,
       label: "イベント",
-      ariaLabel: "イベントページへ移動",
     },
     {
       href: "/setting",
       icon: <SettingsIcon />,
       label: "設定",
-      ariaLabel: "設定ページへ移動",
     },
     {
       href: "/user",
       icon: <PeopleAltIcon />,
       label: "ユーザー",
-      ariaLabel: "ユーザーページへ移動",
     },
     {
       href: "/work",
       icon: <InventoryIcon />,
       label: "作品",
-      ariaLabel: "作品一覧ページへ移動",
     },
     {
       href: "/user/form/payment",
       icon: <CurrencyYenIcon />,
       label: "部費振込",
-      ariaLabel: "部費振込ページへ移動",
     },
     {
       href: "/budget",
       icon: <ReceiptLongIcon />,
       label: "稟議",
-      ariaLabel: "稟議ページへ移動",
     },
   ];
 
@@ -129,7 +120,6 @@ export default function AppBar({ children, window }: AppBarProps) {
     href: "/login",
     icon: <LoginIcon />,
     label: "ログイン",
-    ariaLabel: "ログインページへ移動",
   };
 
   const drawer = (
@@ -146,7 +136,6 @@ export default function AppBar({ children, window }: AppBarProps) {
               >
                 <ListItemButton
                   role="menuitem"
-                  aria-label={item.ariaLabel}
                   tabIndex={0}
                   onClick={handleDrawerClose}
                   sx={{
@@ -174,7 +163,6 @@ export default function AppBar({ children, window }: AppBarProps) {
             >
               <ListItemButton
                 role="menuitem"
-                aria-label={loginItem.ariaLabel}
                 tabIndex={0}
                 onClick={handleDrawerClose}
                 sx={{
@@ -221,7 +209,7 @@ export default function AppBar({ children, window }: AppBarProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div" role="heading" aria-level={1}>
+          <Typography variant="h1" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
             デジクリ
           </Typography>
         </Toolbar>

@@ -17,8 +17,7 @@ const NotFoundPage = () => {
           <Typography variant="h2" component="h1">
             404
           </Typography>
-          <Typography paragraph={true}>ページが見つかりません</Typography>
-
+          <Typography>ページが見つかりません</Typography>
           <Button variant="contained" href="/">
             Home へ戻る
           </Button>

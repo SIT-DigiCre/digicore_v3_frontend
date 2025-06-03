@@ -16,6 +16,7 @@ const EventListItem = ({ event }: Props) => {
       href={`/event/${event.eventId!}`}
       sx={{ textDecoration: "none" }}
       variant="outlined"
+      className="clickable-gray"
     >
       <CardContent>
         <h3>{event.name}</h3>

@@ -100,6 +100,8 @@ const EventReservationFrame = ({
                         aria-label="リンクを開く"
                         component="a"
                         href={userReservation.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
                         <OpenInNew />
                       </IconButton>
@@ -117,7 +119,7 @@ const EventReservationFrame = ({
               ))}
             </List>
           ) : (
-            <p>予約者がいません</p>
+            <Typography>予約者がいません</Typography>
           )}
         </CardContent>
         <CardActions sx={{ p: 2, pt: 0, gap: 2, alignItems: "center" }}>
