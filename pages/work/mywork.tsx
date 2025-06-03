@@ -4,7 +4,6 @@ import { Delete } from "@mui/icons-material";
 import EditIcon from "@mui/icons-material/Edit";
 import {
   Button,
-  Container,
   Grid,
   IconButton,
   List,
@@ -20,8 +19,9 @@ import { useWorks } from "../../hook/work/useWork";
 const MyWorkPage = () => {
   const router = useRouter();
   const { works, deleteWork } = useWorks("my");
+
   return (
-    <Container>
+    <>
       <PageHead title="MyWork" />
       <Breadcrumbs
         links={[{ text: "Home", href: "/" }, { text: "Work", href: "/work" }, { text: "MyWork" }]}
@@ -107,7 +107,7 @@ const MyWorkPage = () => {
           )}
         </List>
       </Grid>
-    </Container>
+    </>
   );
 };
 

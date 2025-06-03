@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 import { Google } from "@mui/icons-material";
-import { Box, Button, Container, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 import PageHead from "../../components/Common/PageHead";
 import { useLoginData } from "../../hook/useLoginData";
@@ -11,34 +11,32 @@ const LoginPage = () => {
   return (
     <>
       <PageHead title="ログイン" />
-      <Container>
-        <Stack alignItems="center" mt={20}>
-          <Image
-            src="/image/digicre-logo.webp"
-            alt="デジクリ Digital Creation Circle"
-            width={333}
-            height={111}
-          />
-          <Typography variant="h4">DigiCore v3</Typography>
-          <Box my={10}>
-            <Button variant="contained" startIcon={<Google aria-label="Google" />} href={loginUrl}>
-              ログインする
-            </Button>
-          </Box>
-          <Box>
-            <Typography>
-              Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます。
-            </Typography>
-            <Typography>
-              デジクリに入部希望の方は contact@digicre.net までメールするか、
-              <a href="https://twitter.com/sitdigicre" target="_blank">
-                公式Twitter
-              </a>
-              にご相談下さい。
-            </Typography>
-          </Box>
-        </Stack>
-      </Container>
+      <Stack alignItems="center" mt={20}>
+        <Image
+          src="/image/digicre-logo.webp"
+          alt="デジクリ Digital Creation Circle"
+          width={333}
+          height={111}
+        />
+        <Typography variant="h4">DigiCore v3</Typography>
+        <Box my={10}>
+          <Button variant="contained" startIcon={<Google aria-label="Google" />} href={loginUrl}>
+            ログインする
+          </Button>
+        </Box>
+        <Box>
+          <Typography>
+            Googleアカウントはshibaura-it.ac.jpドメインのもののみ使用できます。
+          </Typography>
+          <Typography>
+            デジクリに入部希望の方は contact@digicre.net までメールするか、
+            <a href="https://twitter.com/sitdigicre" target="_blank">
+              公式Twitter
+            </a>
+            にご相談下さい。
+          </Typography>
+        </Box>
+      </Stack>
     </>
   );
 };

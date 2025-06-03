@@ -6,7 +6,6 @@ const NotFoundPage = () => {
   return (
     <>
       <PageHead title="ページが見つかりません" />
-
       <Grid
         container
         direction="column"

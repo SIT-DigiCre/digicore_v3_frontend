@@ -1,4 +1,4 @@
-import { Container, FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
@@ -7,8 +7,9 @@ import { DarkMode } from "../../interfaces";
 
 const SettingPage = () => {
   const { setDarkMode, currentMode } = useDarkMode();
+
   return (
-    <Container>
+    <>
       <PageHead title="ユーザー設定" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Setting" }]} />
       <h1>ユーザー設定</h1>
@@ -33,7 +34,7 @@ const SettingPage = () => {
           </Select>
         </FormControl>
       </Grid>
-    </Container>
+    </>
   );
 };
 

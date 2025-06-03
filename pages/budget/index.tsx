@@ -5,7 +5,6 @@ import { useState } from "react";
 import {
   Button,
   Chip,
-  Container,
   Grid,
   Table,
   TableBody,
@@ -76,7 +75,7 @@ const BudgetPage = ({ modeStr }: Props) => {
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
   const [showLoadMoreButton, setShowLoadMoreButton] = useState(true);
   return (
-    <Container>
+    <>
       <PageHead title={modeStr === "admin" ? "★ 稟議" : "稟議"} />
       <Breadcrumbs
         links={[
@@ -218,7 +217,7 @@ const BudgetPage = ({ modeStr }: Props) => {
       ) : (
         <Grid sx={{ marginBottom: 3 }}></Grid>
       )}
-    </Container>
+    </>
   );
 };
 

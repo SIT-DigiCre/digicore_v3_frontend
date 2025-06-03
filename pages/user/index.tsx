@@ -1,14 +1,15 @@
 import { useRouter } from "next/router";
 
-import { Avatar, Button, Card, CardHeader, Container, Grid } from "@mui/material";
+import { Avatar, Button, Card, CardHeader, Grid } from "@mui/material";
 
 import { useUserProfiles } from "../../hook/user/useUserProfiles";
 
 const UserIndexPage = () => {
   const { userProfiles, requestMoreProfiles } = useUserProfiles();
   const router = useRouter();
+
   return (
-    <Container>
+    <>
       <Grid>
         <h1>ユーザー一覧</h1>
         <hr />
@@ -42,7 +43,7 @@ const UserIndexPage = () => {
           Load More
         </Button>
       </Grid>
-    </Container>
+    </>
   );
 };
 

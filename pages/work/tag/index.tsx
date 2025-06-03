@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Box, Button, Container, Modal, TextField } from "@mui/material";
+import { Box, Button, Modal, TextField } from "@mui/material";
 
 import PageHead from "../../../components/Common/PageHead";
 import TagRow from "../../../components/Work/TagRow";
@@ -13,7 +13,7 @@ const WorkTagIndexPage = () => {
   const { workTags, createWorkTag, deleteWorkTag } = useWorkTags();
 
   return (
-    <Container>
+    <>
       <PageHead title="WorkTag一覧" />
       <div>
         <div>
@@ -76,7 +76,7 @@ const WorkTagIndexPage = () => {
           </Box>
         </Box>
       </Modal>
-    </Container>
+    </>
   );
 };
 
