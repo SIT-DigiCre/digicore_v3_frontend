@@ -1,6 +1,6 @@
 import { GetServerSideProps } from "next";
 
-import { Container } from "@mui/material";
+import { Alert, Box, Stack } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
@@ -13,10 +13,12 @@ type EventPageProps = {
 };
 const EventPage = ({ id }: EventPageProps) => {
   const { isLoading, notFound, eventDetail, reservation, cancelReservation } = useEventDetail(id);
+
   if (notFound) return <p>指定されたイベントが見つかりませんでした</p>;
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p>読み込み中...</p>;
+
   return (
-    <Container>
+    <>
       <PageHead title={eventDetail.name} />
       <Breadcrumbs
         links={[
@@ -26,29 +28,36 @@ const EventPage = ({ id }: EventPageProps) => {
         ]}
       />
       <h1>{eventDetail.name}イベント予約フォーム</h1>
-      <MarkdownView md={eventDetail.description} />
-      {eventDetail.reservated ? <p style={{ color: "red" }}>既にあなたは予約済みです</p> : <></>}
-      <hr />
-      {eventDetail.reservations ? (
-        <>
-          {eventDetail.reservations
-            .sort((a, b) =>
-              new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
-            )
-            .map((frame) => (
-              <EventReservationFrame
-                key={frame.reservationId!}
-                eventId={id}
-                eventReservation={frame}
-                reservation={reservation}
-                cancelReservation={cancelReservation}
-              />
-            ))}
-        </>
-      ) : (
-        <p>枠はありません</p>
+      {eventDetail.reservated && (
+        <Alert severity="info" sx={{ mb: 2 }}>
+          既にあなたは予約済みです
+        </Alert>
       )}
-    </Container>
+      <MarkdownView md={eventDetail.description} />
+      <Box sx={{ maxWidth: 700, mx: "auto" }}>
+        <Stack spacing={2} my={2} direction="column">
+          {eventDetail.reservations ? (
+            <>
+              {eventDetail.reservations
+                .sort((a, b) =>
+                  new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
+                )
+                .map((frame) => (
+                  <EventReservationFrame
+                    key={frame.reservationId!}
+                    eventId={id}
+                    eventReservation={frame}
+                    reservation={reservation}
+                    cancelReservation={cancelReservation}
+                  />
+                ))}
+            </>
+          ) : (
+            <p>枠はありません</p>
+          )}
+        </Stack>
+      </Box>
+    </>
   );
 };
 

@@ -7,7 +7,6 @@ import LaunchIcon from "@mui/icons-material/Launch";
 import {
   Button,
   Chip,
-  Container,
   Grid,
   IconButton,
   Stack,
@@ -191,7 +190,7 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
   if (!budgetDetail) return <p>Loading...</p>;
 
   return (
-    <Container>
+    <>
       <PageHead title={modeStr === "admin" ? `★ ${budgetDetail.name}` : budgetDetail.name} />
       <Breadcrumbs
         links={[
@@ -496,7 +495,7 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
           </Grid>
         </>
       )}
-    </Container>
+    </>
   );
 };
 

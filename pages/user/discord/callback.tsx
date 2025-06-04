@@ -12,6 +12,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   const { setCallbackCode } = useDiscordLogin();
   const router = useRouter();
   const { authState, refresh } = useAuthState();
+
   useEffect(() => {
     if (!authState.isLogined) return;
     setCallbackCode(code)
@@ -29,8 +30,9 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
       })
       .catch((e) => console.error(e));
   }, [authState]);
+
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
-  return <>Discord連携作業中...（そのままお待ちください）</>;
+  return <p>Discord連携作業中...（そのままお待ちください）</p>;
 };
 
 export default DiscordCallbackPage;

@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import { Container, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
@@ -11,6 +11,7 @@ import { WorkRequest } from "../../interfaces/work";
 const WorkCreatePage = () => {
   const router = useRouter();
   const { createWork } = useWorks();
+
   const onSubmit = (workRequest: WorkRequest) => {
     (async () => {
       const res = await createWork(workRequest);
@@ -18,8 +19,9 @@ const WorkCreatePage = () => {
       router.push(`/work/${res}`);
     })();
   };
+
   return (
-    <Container>
+    <>
       <PageHead title="Work新規作成" />
       <Breadcrumbs
         links={[{ text: "Home", href: "/" }, { text: "User", href: "/work" }, { text: "新規作成" }]}
@@ -29,7 +31,7 @@ const WorkCreatePage = () => {
         <hr />
       </Grid>
       <WorkEditor onSubmit={onSubmit} />
-    </Container>
+    </>
   );
 };
 export default WorkCreatePage;

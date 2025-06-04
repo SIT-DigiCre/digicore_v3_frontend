@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 
-import { createTheme, ThemeProvider, Typography } from "@mui/material";
+import { Container, createTheme, ThemeProvider, Typography } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { RecoilRoot } from "recoil";
 
 import ErrorView from "../components/Error/ErrorView";
-import NavBar from "../components/Home/NavBar";
+import AppBar from "../components/Home/AppBar";
 import { useDarkMode } from "../hook/useDarkMode";
 import "../style/common.css";
 
@@ -35,20 +35,21 @@ const AppRoot = ({ Component, pageProps }) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <NavBar />
-      <ErrorView />
-      <main style={{ minHeight: "60vh" }}>
-        <Component {...pageProps} />
-      </main>
-      <footer style={{ textAlign: "center" }}>
-        <Typography>
-          <a href="https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-licensing-agreement-for-icons8">
-            Icons8 License
-          </a>
-        </Typography>
-        <Typography>&copy; 2022-2025</Typography>
-        <Typography>芝浦工業大学 デジクリ</Typography>
-      </footer>
+      <AppBar>
+        <Container component="main" sx={{ minHeight: "65vh" }}>
+          <ErrorView />
+          <Component {...pageProps} />
+        </Container>
+        <footer style={{ textAlign: "center", padding: "2rem 0" }}>
+          <Typography>
+            <a href="https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-licensing-agreement-for-icons8">
+              Icons8 License
+            </a>
+          </Typography>
+          <Typography>&copy; 2022-2025</Typography>
+          <Typography>芝浦工業大学 デジクリ</Typography>
+        </footer>
+      </AppBar>
     </ThemeProvider>
   );
 };

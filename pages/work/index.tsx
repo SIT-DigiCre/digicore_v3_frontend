@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Container,
   Fab,
   Grid,
 } from "@mui/material";
@@ -22,8 +21,9 @@ import { useWorks } from "../../hook/work/useWork";
 const WorkIndexPage = () => {
   const { works, loadMore } = useWorks();
   const router = useRouter();
+
   return (
-    <Container>
+    <>
       <PageHead title="Work一覧" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Work" }]} />
       <Grid>
@@ -122,7 +122,7 @@ const WorkIndexPage = () => {
       >
         <AddIcon />
       </Fab>
-    </Container>
+    </>
   );
 };
 export default WorkIndexPage;

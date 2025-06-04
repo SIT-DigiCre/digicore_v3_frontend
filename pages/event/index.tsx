@@ -1,4 +1,4 @@
-import { Container } from "@mui/material";
+import { Stack } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
@@ -7,18 +7,20 @@ import { useEventList } from "../../hook/event/useEventList";
 
 const EventIndexPage = () => {
   const { isLoading, events } = useEventList();
-  if (isLoading) return <p>Loading..</p>;
+
+  if (isLoading) return <p>読み込み中...</p>;
+
   return (
-    <Container>
+    <>
       <PageHead title="イベント一覧" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Event" }]} />
       <h1>イベント一覧</h1>
-      <p>イベント一覧から参加するイベントを探してください。</p>
-      <hr />
-      {events.map((event) => (
-        <EventListItem key={event.eventId} event={event} />
-      ))}
-    </Container>
+      <Stack spacing={2} my={2} direction="column">
+        {events.map((event) => (
+          <EventListItem key={event.eventId} event={event} />
+        ))}
+      </Stack>
+    </>
   );
 };
 

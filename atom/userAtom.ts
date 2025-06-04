@@ -1,4 +1,5 @@
 import { atom } from "recoil";
+
 import { AuthState } from "../hook/useAuthState";
 import { DarkMode, ErrorState } from "../interfaces";
 

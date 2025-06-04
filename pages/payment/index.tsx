@@ -4,7 +4,6 @@ import {
   Box,
   Button,
   Checkbox,
-  Container,
   Grid,
   Modal,
   Table,
@@ -35,7 +34,7 @@ const PaymentPage = () => {
   const [targetPayment, updateTargetPayment] = useState<Payment>();
 
   return (
-    <Container>
+    <>
       <Grid>
         <h1>支払い一覧</h1>
         <hr />
@@ -132,7 +131,7 @@ const PaymentPage = () => {
           </Box>
         </Modal>
       </Grid>
-    </Container>
+    </>
   );
 };
 

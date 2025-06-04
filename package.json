@@ -19,6 +19,7 @@
     "@types/nookies": "2.0.3",
     "@types/recoil": "0.0.9",
     "axios": "1.8.4",
+    "dayjs": "^1.11.13",
     "highlightjs": "9.16.2",
     "isomorphic-dompurify": "2.23.0",
     "marked": "15.0.8",

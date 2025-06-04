@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Avatar, Container, Grid } from "@mui/material";
+import { Avatar, Grid } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
@@ -48,23 +48,25 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
       router.push(`/work/${id}`);
     });
   };
-  if (!authState.isLogined)
+
+  if (!authState.isLogined) {
     return (
-      <>
-        <Head>
-          <meta property="og:title" content={workPublic.name} />
-          <meta property="og:description" content={workPublic.description} />
-          <meta property="og:url" content={"https://core3.digicre.net/work/" + workPublic.workId} />
-          <meta property="og:image" content={workPublic.fileUrl} />
-          <meta property="og:type" content="article" />
-          <meta property="og:site_name" content="デジコアWork" />
-          <meta name="twitter:card" content="summary_large_image"></meta>
-        </Head>
-      </>
+      <Head>
+        <meta property="og:title" content={workPublic.name} />
+        <meta property="og:description" content={workPublic.description} />
+        <meta property="og:url" content={"https://core3.digicre.net/work/" + workPublic.workId} />
+        <meta property="og:image" content={workPublic.fileUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="デジコアWork" />
+        <meta name="twitter:card" content="summary_large_image"></meta>
+      </Head>
     );
-  if (!workDetail) return <p>Loading...</p>;
+  }
+
+  if (!workDetail) return <p>読み込み中...</p>;
+
   return (
-    <Container>
+    <>
       <PageHead title={workDetail.name} />
       <Breadcrumbs
         links={[
@@ -108,7 +110,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
           </Grid>
         </>
       )}
-    </Container>
+    </>
   );
 };
 export default WorkDetailPage;

@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 
 import { Card, CardContent } from "@mui/material";
 
@@ -8,20 +8,21 @@ import MarkdownView from "../Common/MarkdownView";
 type Props = {
   event: DigicreEvent;
 };
+
 const EventListItem = ({ event }: Props) => {
-  const router = useRouter();
-  const onClick = () => {
-    router.push(`/event/${event.eventId!}`);
-  };
   return (
-    <>
-      <Card sx={{ margin: "3px" }} variant="outlined" onClick={onClick} className="clickable-gray">
-        <CardContent>
-          <h3>{event.name}</h3>
-          <MarkdownView md={event.description ? event.description : ""} />
-        </CardContent>
-      </Card>
-    </>
+    <Card
+      component={Link}
+      href={`/event/${event.eventId!}`}
+      sx={{ textDecoration: "none" }}
+      variant="outlined"
+      className="clickable-gray"
+    >
+      <CardContent>
+        <h3>{event.name}</h3>
+        <MarkdownView md={event.description ? event.description : ""} />
+      </CardContent>
+    </Card>
   );
 };
 

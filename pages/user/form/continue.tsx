@@ -1,12 +1,14 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Button, Container, Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import PageHead from "../../../components/Common/PageHead";
-import { PrivatePersonalProfileEditor } from "../../../components/Profile/PrivateProfileEditor";
-import { PrivateParentProfileEditor } from "../../../components/Profile/PrivateProfileEditor";
+import {
+  PrivateParentProfileEditor,
+  PrivatePersonalProfileEditor,
+} from "../../../components/Profile/PrivateProfileEditor";
 import TransferAccountView from "../../../components/Register/TransferAccountView";
 import { useActiveLimit } from "../../../hook/profile/useActiveLimit";
 import { useAuthState } from "../../../hook/useAuthState";
@@ -25,9 +27,11 @@ const ContinuePage = () => {
   const [activeLimit, setActiveLimit] = useActiveLimit();
   const { authState } = useAuthState();
   const router = useRouter();
+
   if (!authState.isLogined) return <p>未ログイン状態です。ログインしてください。</p>;
+
   return (
-    <Container>
+    <>
       <PageHead title="継続確認フォーム" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "継続確認フォーム" }]} />
       <Grid sx={{ mt: 2 }}>
@@ -117,7 +121,7 @@ const ContinuePage = () => {
           )}
         </>
       )}
-    </Container>
+    </>
   );
 };
 

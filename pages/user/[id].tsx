@@ -1,7 +1,5 @@
 import { GetServerSideProps } from "next";
 
-import { Container } from "@mui/material";
-
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import MarkdownView from "../../components/Common/MarkdownView";
 import { useIntroduction } from "../../hook/profile/useIntroduction";
@@ -13,9 +11,11 @@ type Props = {
 const UserProfilePage = ({ id }: Props) => {
   const profile = useProfile(id);
   const introMd = useIntroduction(id);
-  if (!profile || introMd === undefined) return <p>Loading...</p>;
+
+  if (!profile || introMd === undefined) return <p>読み込み中...</p>;
+
   return (
-    <Container>
+    <>
       <Breadcrumbs
         links={[
           { text: "Home", href: "/" },
@@ -46,7 +46,7 @@ const UserProfilePage = ({ id }: Props) => {
       <div>
         <MarkdownView md={introMd} />
       </div>
-    </Container>
+    </>
   );
 };
 export default UserProfilePage;
