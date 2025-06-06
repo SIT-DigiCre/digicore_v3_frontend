@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -29,6 +30,7 @@ import {
 } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
+import { usePageTitle } from "../../hook/usePageTitle";
 
 const drawerWidth = 240;
 
@@ -48,6 +50,7 @@ export default function AppBar({ children, window }: AppBarProps) {
   const [isClosing, setIsClosing] = useState(false);
   const { authState } = useAuthState();
   const router = useRouter();
+  const { title } = usePageTitle();
 
   const isMenuItemActive = (href: string): boolean => {
     if (href === "/") {
@@ -124,7 +127,25 @@ export default function AppBar({ children, window }: AppBarProps) {
 
   const drawer = (
     <div role="navigation" aria-label="メインメニュー">
-      <Toolbar />
+      <Toolbar sx={{ justifyContent: "center" }}>
+        <Link
+          href="/"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            fontWeight: 800,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            src="/image/digicre-logo.webp"
+            alt="デジクリ Digital Creation Circle"
+            width={180}
+            height={60}
+          />
+        </Link>
+      </Toolbar>
       <Divider />
       <List role="menu" aria-label="メニュー項目">
         {authState.isLogined ? (
@@ -210,7 +231,7 @@ export default function AppBar({ children, window }: AppBarProps) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h1" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            デジクリ
+            {title}
           </Typography>
         </Toolbar>
       </MuiAppBar>
