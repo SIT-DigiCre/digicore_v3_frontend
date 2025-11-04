@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@mui/material";
 
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
 import MarkdownEditor from "../../../components/Common/MarkdownEditor";
-import { useAuthState } from "../../../hook/useAuthState";
+import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
+import { useAuthState } from "../../../hook/useAuthState";
 
 const IntroductionProfilePage = () => {
   const router = useRouter();
@@ -37,7 +37,7 @@ const IntroductionProfilePage = () => {
   if (!editUserIntro) return <p>isLoading...</p>;
 
   return (
-    <ProfileTabLayout>
+    <EditorTabLayout>
       <div>
         <h2>自己紹介ページ文章</h2>
         <MarkdownEditor
@@ -55,7 +55,7 @@ const IntroductionProfilePage = () => {
           保存
         </Button>
       </div>
-    </ProfileTabLayout>
+    </EditorTabLayout>
   );
 };
 

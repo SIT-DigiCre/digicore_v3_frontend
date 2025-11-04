@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { Box, Button, Link, Typography } from "@mui/material";
 
-import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../hook/useAuthState";
 
@@ -37,10 +37,8 @@ const RegisterDiscordProfilePage = () => {
   }
 
   return (
-    <ProfileTabLayout
-      isRegisterMode={true}
+    <RegisterStepLayout
       title="プロフィール登録"
-      showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
       nextDisabled={false}
@@ -62,7 +60,7 @@ const RegisterDiscordProfilePage = () => {
           </Button>
         </Box>
       </Box>
-    </ProfileTabLayout>
+    </RegisterStepLayout>
   );
 };
 

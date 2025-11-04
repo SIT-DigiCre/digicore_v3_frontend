@@ -3,12 +3,12 @@ import { useEffect, useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
 import { FileBrowserModal } from "../../../components/File/FileBrowser";
 import { FileUploader } from "../../../components/File/FileUploader";
-import { useAuthState } from "../../../hook/useAuthState";
+import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyFiles } from "../../../hook/file/useFile";
 import { useMyProfile } from "../../../hook/profile/useProfile";
+import { useAuthState } from "../../../hook/useAuthState";
 import { FileObject } from "../../../interfaces/file";
 import { User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
@@ -55,7 +55,7 @@ const PublicProfilePage = () => {
   if (!userProfile || !editUserProfile) return <p>isLoading...</p>;
 
   return (
-    <ProfileTabLayout>
+    <EditorTabLayout>
       <div>
         <h2>公開情報（他の部員も見れる情報）</h2>
         <Stack spacing={4} py={4}>
@@ -137,7 +137,7 @@ const PublicProfilePage = () => {
           </Button>
         </Stack>
       </div>
-    </ProfileTabLayout>
+    </EditorTabLayout>
   );
 };
 

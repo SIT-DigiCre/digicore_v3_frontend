@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 
 import EmergencyContactForm from "../../components/Profile/EmergencyContactForm";
-import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
 import { useAuthState } from "../../hook/useAuthState";
 import { UserPrivateProfile } from "../../interfaces/user";
@@ -44,16 +44,13 @@ const RegisterEmergencyProfilePage = () => {
   if (!privateProfile) return <p>Loading...</p>;
 
   return (
-    <ProfileTabLayout
-      isRegisterMode={true}
+    <RegisterStepLayout
       title="プロフィール登録"
-      showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
       nextDisabled={
         editProfile.parentName === "" ||
         editProfile.parentCellphoneNumber === "" ||
-        editProfile.parentHomephoneNumber === "" ||
         editProfile.parentAddress === ""
       }
     >
@@ -65,7 +62,7 @@ const RegisterEmergencyProfilePage = () => {
           showSaveButton={false}
         />
       </Stack>
-    </ProfileTabLayout>
+    </RegisterStepLayout>
   );
 };
 

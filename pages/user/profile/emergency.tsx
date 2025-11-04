@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 
 import { Stack, Typography } from "@mui/material";
 
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
+import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import EmergencyContactForm from "../../../components/Profile/EmergencyContactForm";
-import { useAuthState } from "../../../hook/useAuthState";
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
+import { useAuthState } from "../../../hook/useAuthState";
 import { UserPrivateProfile } from "../../../interfaces/user";
 
 const EmergencyProfilePage = () => {
@@ -40,7 +40,7 @@ const EmergencyProfilePage = () => {
   if (!privateProfile) return <p>Loading...</p>;
 
   return (
-    <ProfileTabLayout>
+    <EditorTabLayout>
       <Stack spacing={2}>
         <Typography variant="h5">緊急連絡先</Typography>
         <EmergencyContactForm
@@ -51,7 +51,7 @@ const EmergencyProfilePage = () => {
           saveButtonText="保存"
         />
       </Stack>
-    </ProfileTabLayout>
+    </EditorTabLayout>
   );
 };
 

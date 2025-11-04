@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import MarkdownEditor from "../../components/Common/MarkdownEditor";
-import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useAuthState } from "../../hook/useAuthState";
 
@@ -42,10 +42,8 @@ const RegisterIntroductionProfilePage = () => {
   if (!editUserIntro) return <p>isLoading...</p>;
 
   return (
-    <ProfileTabLayout
-      isRegisterMode={true}
+    <RegisterStepLayout
       title="プロフィール登録"
-      showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
       nextDisabled={false}
@@ -59,7 +57,7 @@ const RegisterIntroductionProfilePage = () => {
           }}
         />
       </div>
-    </ProfileTabLayout>
+    </RegisterStepLayout>
   );
 };
 

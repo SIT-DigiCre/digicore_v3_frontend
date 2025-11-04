@@ -3,7 +3,7 @@ import { useEffect } from "react";
 
 import { Box, Button, Link, Typography } from "@mui/material";
 
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
+import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
 
@@ -29,7 +29,7 @@ const DiscordProfilePage = () => {
   }
 
   return (
-    <ProfileTabLayout>
+    <EditorTabLayout>
       <Box my={2}>
         <Typography>
           デジクリではDiscordサーバーを所有しています。正規の部員のみがDiscordサーバーに入れるようにアカウントと連携が必要です。
@@ -47,7 +47,7 @@ const DiscordProfilePage = () => {
           </Button>
         </Box>
       </Box>
-    </ProfileTabLayout>
+    </EditorTabLayout>
   );
 };
 

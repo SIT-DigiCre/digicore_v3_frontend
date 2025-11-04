@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 
 import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
-import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
 import { useAuthState } from "../../hook/useAuthState";
 import { UserPrivateProfile } from "../../interfaces/user";
@@ -44,10 +44,8 @@ const RegisterPersonalProfilePage = () => {
   if (!privateProfile) return <p>Loading...</p>;
 
   return (
-    <ProfileTabLayout
-      isRegisterMode={true}
+    <RegisterStepLayout
       title="プロフィール登録"
-      showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
       nextDisabled={
@@ -67,7 +65,7 @@ const RegisterPersonalProfilePage = () => {
           showSaveButton={false}
         />
       </Stack>
-    </ProfileTabLayout>
+    </RegisterStepLayout>
   );
 };
 

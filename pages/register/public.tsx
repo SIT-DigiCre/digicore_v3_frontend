@@ -5,7 +5,7 @@ import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 
 import { FileBrowserModal } from "../../components/File/FileBrowser";
 import { FileUploader } from "../../components/File/FileUploader";
-import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useMyFiles } from "../../hook/file/useFile";
 import { useMyProfile } from "../../hook/profile/useProfile";
 import { useAuthState } from "../../hook/useAuthState";
@@ -54,10 +54,8 @@ const RegisterPublicProfilePage = () => {
   if (!userProfile || !editUserProfile) return <p>isLoading...</p>;
 
   return (
-    <ProfileTabLayout
-      isRegisterMode={true}
+    <RegisterStepLayout
       title="プロフィール登録"
-      showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
       nextDisabled={
@@ -136,7 +134,7 @@ const RegisterPublicProfilePage = () => {
           />
         </Stack>
       </div>
-    </ProfileTabLayout>
+    </RegisterStepLayout>
   );
 };
 
