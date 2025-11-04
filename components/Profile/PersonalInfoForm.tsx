@@ -42,7 +42,7 @@ const PersonalInfoForm = ({
 
   useEffect(() => {
     onProfileChange(editProfile);
-  }, [editProfile, onProfileChange]);
+  }, [editProfile]);
 
   const handleSave = () => {
     if (onSave) {

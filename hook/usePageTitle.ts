@@ -2,7 +2,7 @@ import { atom, useRecoilState } from "recoil";
 
 const pageTitleState = atom<string>({
   key: "pageTitleState",
-  default: "ページタイトル",
+  default: "デジクリ",
 });
 
 export const usePageTitle = () => {

@@ -19,6 +19,7 @@ const DiscordProfilePage = () => {
   }, [authState, router]);
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     if (localStorage.getItem("reg_discord") == null) {
       localStorage.setItem("reg_discord", "true");
     }

@@ -23,7 +23,7 @@ const RegisterPage = () => {
           デジクリの入部もこちらからできます
         </Typography>
         <Box my={10}>
-          <Button variant="contained" startIcon={<Google aria-label="Google" />} href={registerUrl}>
+          <Button variant="contained" startIcon={<Google aria-hidden />} href={registerUrl}>
             大学Googleアカウントで登録
           </Button>
         </Box>

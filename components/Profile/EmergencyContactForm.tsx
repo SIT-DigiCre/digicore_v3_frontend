@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react";
 
-import {
-  Button,
-  Stack,
-  TextField,
-} from "@mui/material";
+import { Button, Stack, TextField } from "@mui/material";
 
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
@@ -36,7 +32,7 @@ const EmergencyContactForm = ({
 
   useEffect(() => {
     onProfileChange(editProfile);
-  }, [editProfile, onProfileChange]);
+  }, [editProfile]);
 
   const handleSave = () => {
     if (onSave) {
@@ -89,10 +85,7 @@ const EmergencyContactForm = ({
         value={editProfile.parentAddress}
         helperText="郵便番号無しで入力してください"
       />
-      <Button
-        variant="contained"
-        onClick={copyPersonalAddress}
-      >
+      <Button variant="contained" onClick={copyPersonalAddress}>
         本人住所と同じにする
       </Button>
       {showSaveButton && (
