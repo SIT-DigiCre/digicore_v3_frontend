@@ -1,5 +1,7 @@
+import Image from "next/image";
+
 import { Google } from "@mui/icons-material";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 import PageHead from "../../components/Common/PageHead";
 import { useRegisterData } from "../../hook/useRegisterData";
@@ -9,22 +11,28 @@ const RegisterPage = () => {
   return (
     <>
       <PageHead title="登録" />
-      <Grid size={12} style={{ marginTop: "30px" }}>
-        <Box textAlign="center">
-          <h2>デジコア登録ページ</h2>
-          <p>デジクリの入部もこちらからできます</p>
-        </Box>
-      </Grid>
-      <Grid style={{ marginTop: "20px" }}>
-        <Box textAlign="center">
-          <Button variant="contained" startIcon={<Google />} href={registerUrl}>
+      <Stack alignItems="center" mt={20}>
+        <Image
+          src="/image/digicre-logo.webp"
+          alt="デジクリ Digital Creation Circle"
+          width={333}
+          height={111}
+        />
+        <Typography variant="h4">デジコア登録ページ</Typography>
+        <Typography variant="body1" sx={{ mb: 4 }}>
+          デジクリの入部もこちらからできます
+        </Typography>
+        <Box my={10}>
+          <Button variant="contained" startIcon={<Google aria-label="Google" />} href={registerUrl}>
             大学Googleアカウントで登録
           </Button>
+        </Box>
+        <Box>
           <Typography>
             芝浦工業大学より支給されているshibaura-it.ac.jpのドメインでのみ登録が可能です。
           </Typography>
         </Box>
-      </Grid>
+      </Stack>
     </>
   );
 };

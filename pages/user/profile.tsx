@@ -2,7 +2,6 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
 import FloatingWindow from "../../components/Common/FloatingWindow";
 import PageHead from "../../components/Common/PageHead";
 import ProfileEditor from "../../components/Profile/ProfileEditor";
@@ -31,7 +30,6 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
         <p>読み込み中...</p>
       ) : (
         <>
-          <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Profile" }]} />
           {registerMode ? <ProfileRegister /> : <ProfileEditor />}
           {backtoUrl ? <FloatingWindow to={backtoUrl} text={"Mattermostの登録に戻る"} /> : <></>}
         </>

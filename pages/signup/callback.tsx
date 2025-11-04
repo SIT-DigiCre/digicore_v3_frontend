@@ -2,6 +2,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+import { Stack, Typography } from "@mui/material";
+
 import { useAuthState } from "../../hook/useAuthState";
 import { useRegisterData } from "../../hook/useRegisterData";
 
@@ -20,7 +22,14 @@ const LoginCallbackPage = ({ code }: Props) => {
     });
   }, []);
 
-  return <p>初回ログイン処理中... （この画面が長時間出る場合は登録からやり直して下さい）</p>;
+  return (
+    <Stack alignItems="center" mt={20}>
+      <Typography variant="h4">登録処理中...</Typography>
+      <Typography variant="body1">
+        （この画面が長時間出る場合は登録からやり直して下さい）
+      </Typography>
+    </Stack>
+  );
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query }) => {

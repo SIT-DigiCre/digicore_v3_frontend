@@ -19,7 +19,8 @@ export const useLoginData: UseLoginData = () => {
         const url: string = res.data.url;
         setLoginUrl(url);
         removeError("get-login-url");
-      } catch {
+      } catch (e) {
+        console.error(e);
         setNewError({ name: "get-login-url", message: "ログイン用URLの取得に失敗しました" });
       }
     })();
