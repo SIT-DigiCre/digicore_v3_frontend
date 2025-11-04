@@ -4,13 +4,13 @@ import { Button, Stack, Typography } from "@mui/material";
 
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../../interfaces/user";
-import PersonalInfoForm from "../PersonalInfoForm";
+import EmergencyContactForm from "../EmergencyContactForm";
 
-interface PersonalInfoStepProps {
+interface EmergencyContactStepProps {
   onNext: () => void;
 }
 
-const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
+const EmergencyContactStep = ({ onNext }: EmergencyContactStepProps) => {
   const [privateProfile, updateProfile] = usePrivateProfile(true);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
 
@@ -28,8 +28,8 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">本人情報</Typography>
-      <PersonalInfoForm
+      <Typography variant="h5">緊急連絡先</Typography>
+      <EmergencyContactForm
         profile={privateProfile}
         onProfileChange={handleProfileChange}
       />
@@ -44,4 +44,4 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
   );
 };
 
-export default PersonalInfoStep;
+export default EmergencyContactStep;

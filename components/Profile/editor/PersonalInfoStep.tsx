@@ -1,22 +1,22 @@
 import { useState } from "react";
 
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../../interfaces/user";
 import PersonalInfoForm from "../PersonalInfoForm";
 
 interface PersonalInfoStepProps {
-  onNext: () => void;
+  onNext?: () => void;
 }
 
 const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
-  const [privateProfile, updateProfile] = usePrivateProfile(true);
+  const [privateProfile, updateProfile] = usePrivateProfile(false);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
 
   const handleSave = () => {
     updateProfile(editProfile).then((result) => {
-      if (result) onNext();
+      if (result && onNext) onNext();
     });
   };
 
@@ -32,14 +32,10 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
       <PersonalInfoForm
         profile={privateProfile}
         onProfileChange={handleProfileChange}
+        onSave={handleSave}
+        showSaveButton={true}
+        saveButtonText="保存"
       />
-      <Button
-        variant="contained"
-        onClick={handleSave}
-        sx={{ mt: 2 }}
-      >
-        次へ
-      </Button>
     </Stack>
   );
 };

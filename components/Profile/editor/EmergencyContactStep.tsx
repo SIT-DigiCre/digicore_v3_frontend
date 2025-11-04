@@ -1,22 +1,22 @@
 import { useState } from "react";
 
-import { Button, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../../interfaces/user";
-import PersonalInfoForm from "../PersonalInfoForm";
+import EmergencyContactForm from "../EmergencyContactForm";
 
-interface PersonalInfoStepProps {
-  onNext: () => void;
+interface EmergencyContactStepProps {
+  onNext?: () => void;
 }
 
-const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
-  const [privateProfile, updateProfile] = usePrivateProfile(true);
+const EmergencyContactStep = ({ onNext }: EmergencyContactStepProps) => {
+  const [privateProfile, updateProfile] = usePrivateProfile(false);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
 
   const handleSave = () => {
     updateProfile(editProfile).then((result) => {
-      if (result) onNext();
+      if (result && onNext) onNext();
     });
   };
 
@@ -28,20 +28,16 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h5">本人情報</Typography>
-      <PersonalInfoForm
+      <Typography variant="h5">緊急連絡先</Typography>
+      <EmergencyContactForm
         profile={privateProfile}
         onProfileChange={handleProfileChange}
+        onSave={handleSave}
+        showSaveButton={true}
+        saveButtonText="保存"
       />
-      <Button
-        variant="contained"
-        onClick={handleSave}
-        sx={{ mt: 2 }}
-      >
-        次へ
-      </Button>
     </Stack>
   );
 };
 
-export default PersonalInfoStep;
+export default EmergencyContactStep;
