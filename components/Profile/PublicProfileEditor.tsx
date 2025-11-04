@@ -75,11 +75,11 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
         variant="outlined"
         required
         helperText={
-          userProfile.studentNumber === userProfile.username
+          userProfile.studentNumber === editUserProfile.username
             ? "ユーザー名を学番以外で設定しましょう!"
             : "ハンドルネームなどを指定しましょう"
         }
-        error={userProfile.studentNumber === userProfile.username}
+        error={userProfile.studentNumber === editUserProfile.username}
         margin="normal"
         fullWidth
         onChange={(e) => {
@@ -90,6 +90,7 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
       <TextField
         label="短い自己紹介文"
         variant="outlined"
+        required
         helperText="学科やどんなことをしているか簡潔に書きましょう"
         margin="normal"
         fullWidth
@@ -100,7 +101,11 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
       />
       <Button
         variant="contained"
-        disabled={objectEquals(userProfile, editUserProfile)}
+        disabled={
+          objectEquals(userProfile, editUserProfile) ||
+          editUserProfile.username === "" ||
+          editUserProfile.shortIntroduction === ""
+        }
         onClick={() => {
           updateProfile(editUserProfile).then((result) => {
             if (!result) return;

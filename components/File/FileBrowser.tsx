@@ -19,12 +19,14 @@ import { FileKind, FileObject, getFileKind } from "../../interfaces/file";
 
 import FileKindIcon from "./FileKindIcon";
 import { FileUploader } from "./FileUploader";
+
 type FileBrowserModalProps = {
   open: boolean;
   onCancel: () => void;
   onSelected: (file: FileObject) => void;
   onlyFileKind?: FileKind;
 };
+
 const modalStyle = {
   position: "absolute" as const,
   top: "50%",
@@ -38,6 +40,7 @@ const modalStyle = {
   p: 0,
   outline: "none",
 };
+
 export const FileBrowserModal = ({
   open,
   onCancel,
@@ -71,7 +74,6 @@ export const FileBrowserModal = ({
       <Modal open={isOpen} onClose={onClickCancel} closeAfterTransition>
         <Fade in={isOpen}>
           <Paper sx={modalStyle} elevation={8}>
-            {/* Header */}
             <Box
               sx={{
                 display: "flex",
@@ -90,7 +92,6 @@ export const FileBrowserModal = ({
               </IconButton>
             </Box>
 
-            {/* Content */}
             <Box sx={{ p: 3 }}>
               <Stack spacing={2}>
                 <Box
@@ -124,7 +125,6 @@ export const FileBrowserModal = ({
               </Stack>
             </Box>
 
-            {/* Footer */}
             <Box
               sx={{
                 p: 3,
@@ -155,11 +155,13 @@ export const FileBrowserModal = ({
     </>
   );
 };
+
 type FileListItemProps = {
   fileId: string;
   onlyFileKind: FileKind;
   onClick: (file: FileObject) => void;
 };
+
 const FileListItem = ({ fileId, onClick, onlyFileKind }: FileListItemProps) => {
   const file = useFile(fileId);
   const getDisable = (fk: FileKind, fo: FileObject) => {

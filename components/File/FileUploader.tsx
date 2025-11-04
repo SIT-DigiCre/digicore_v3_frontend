@@ -35,12 +35,14 @@ const modalStyle = {
   p: 0,
   outline: "none",
 };
+
 type FileUploaderProps = {
   open: boolean;
   onCancel: () => void;
   onUploaded: (fileObject: FileObject) => void;
   onlyFileKind?: FileKind;
 };
+
 export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileUploaderProps) => {
   const [isOpen, setIsOpen] = useState(open);
   const [availableExtStr, setAvailableExtStr] = useState<string>(undefined);
@@ -199,7 +201,6 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
                     または、クリックしてファイルを選択
                   </Typography>
 
-                  {/* Available Extensions */}
                   {availableExtensions.length > 0 && (
                     <Box sx={{ mt: 2 }}>
                       <Typography
@@ -250,7 +251,6 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
                 </Box>
               )}
 
-              {/* Error Message */}
               {errorMsg && (
                 <Alert severity="error" variant="filled">
                   {errorMsg}
