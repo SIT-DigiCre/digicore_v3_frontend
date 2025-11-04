@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Link,
   Paper,
   Table,
   TableBody,
@@ -47,7 +48,9 @@ const UserIndexPage = () => {
                 <TableCell>
                   <Avatar src={userProfile.iconUrl} sx={{ width: 40, height: 40 }} />
                 </TableCell>
-                <TableCell>{userProfile.username}</TableCell>
+                <TableCell>
+                  <Link href={`/member/${userProfile.userId}`}>{userProfile.username}</Link>
+                </TableCell>
                 <TableCell>{gradeMap[userProfile.schoolGrade]}</TableCell>
                 <TableCell>{userProfile.studentNumber}</TableCell>
                 <TableCell>{userProfile.shortIntroduction}</TableCell>

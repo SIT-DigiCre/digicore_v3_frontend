@@ -18,7 +18,7 @@ const LoginCallbackPage = ({ code }: Props) => {
   useEffect(() => {
     setCallbackCode(code).then((jwt) => {
       onLogin(jwt);
-      router.push("/user/profile?register=true");
+      router.push("/register/public");
     });
   }, []);
 
