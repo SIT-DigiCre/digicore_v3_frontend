@@ -34,7 +34,7 @@ const RegisterPublicProfilePage = () => {
   const handleNext = () => {
     updateProfile(editUserProfile).then((result) => {
       if (result) {
-        router.push("/user/register/personal");
+        router.push("/register/personal");
       }
     });
   };

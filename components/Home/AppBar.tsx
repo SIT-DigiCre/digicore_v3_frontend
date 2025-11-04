@@ -83,7 +83,7 @@ export default function AppBar({ children, window }: AppBarProps) {
       label: "ホーム",
     },
     {
-      href: "/user/profile",
+      href: "/user/profile/public",
       icon: <ManageAccountsIcon />,
       label: "プロフィール",
     },
@@ -93,14 +93,9 @@ export default function AppBar({ children, window }: AppBarProps) {
       label: "イベント",
     },
     {
-      href: "/setting",
-      icon: <SettingsIcon />,
-      label: "設定",
-    },
-    {
-      href: "/user",
+      href: "/member",
       icon: <PeopleAltIcon />,
-      label: "ユーザー",
+      label: "部員一覧",
     },
     {
       href: "/work",
@@ -116,6 +111,11 @@ export default function AppBar({ children, window }: AppBarProps) {
       href: "/budget",
       icon: <ReceiptLongIcon />,
       label: "稟議",
+    },
+    {
+      href: "/setting",
+      icon: <SettingsIcon />,
+      label: "設定",
     },
   ];
 

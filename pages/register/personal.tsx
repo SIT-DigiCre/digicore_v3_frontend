@@ -4,12 +4,12 @@ import { useEffect, useState } from "react";
 import { Stack, Typography } from "@mui/material";
 
 import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
-import EmergencyContactForm from "../../../components/Profile/EmergencyContactForm";
+import PersonalInfoForm from "../../../components/Profile/PersonalInfoForm";
 import { useAuthState } from "../../../hook/useAuthState";
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../../interfaces/user";
 
-const RegisterEmergencyProfilePage = () => {
+const RegisterPersonalProfilePage = () => {
   const router = useRouter();
   const { authState } = useAuthState();
   const [privateProfile, updateProfile] = usePrivateProfile(false);
@@ -24,13 +24,13 @@ const RegisterEmergencyProfilePage = () => {
   const handleNext = () => {
     updateProfile(editProfile).then((result) => {
       if (result) {
-        router.push("/user/register/discord");
+        router.push("/register/emergency");
       }
     });
   };
 
   const handlePrev = () => {
-    router.push("/user/register/personal");
+    router.push("/register/public");
   };
 
   const handleProfileChange = (profile: UserPrivateProfile) => {
@@ -53,8 +53,8 @@ const RegisterEmergencyProfilePage = () => {
       nextDisabled={false}
     >
       <Stack spacing={2}>
-        <Typography variant="h5">緊急連絡先</Typography>
-        <EmergencyContactForm
+        <Typography variant="h5">本人情報</Typography>
+        <PersonalInfoForm
           profile={privateProfile}
           onProfileChange={handleProfileChange}
           showSaveButton={false}
@@ -64,4 +64,4 @@ const RegisterEmergencyProfilePage = () => {
   );
 };
 
-export default RegisterEmergencyProfilePage;
+export default RegisterPersonalProfilePage;

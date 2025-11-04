@@ -66,7 +66,7 @@ const PaymentPage = () => {
       <Grid>
         <h2>部費振り込み完了報告フォーム</h2>
         <Typography>
-          振り込みは済みましたか？振込先は <Link href="/user/joined">こちら</Link>
+          振り込みは済みましたか？振込先は <Link href="/register/joined">こちら</Link>
           のページをご覧下さい。
         </Typography>
         <Button

@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import { Box, Button, Link, Typography } from "@mui/material";
 
 import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
-import { useAuthState } from "../../../hook/useAuthState";
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
+import { useAuthState } from "../../../hook/useAuthState";
 
 const DiscordProfilePage = () => {
   const router = useRouter();

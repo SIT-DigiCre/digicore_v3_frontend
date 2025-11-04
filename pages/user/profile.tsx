@@ -18,7 +18,7 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
     const value = sessionStorage.getItem("register");
     if (value === null) return;
     sessionStorage.removeItem("register");
-    router.push("/user/joined");
+    router.push("/register/joined");
   }, []);
 
   useEffect(() => {

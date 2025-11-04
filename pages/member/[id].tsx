@@ -19,7 +19,7 @@ const UserProfilePage = ({ id }: Props) => {
       <Breadcrumbs
         links={[
           { text: "Home", href: "/" },
-          { text: "User", href: "/user" },
+          { text: "User", href: "/member" },
           { text: profile.username },
         ]}
       />

@@ -30,11 +30,11 @@ const RegisterIntroductionProfilePage = () => {
     }
     // 登録完了処理
     sessionStorage.setItem("register", "true");
-    router.push("/user/joined");
+    router.push("/register/joined");
   };
 
   const handlePrev = () => {
-    router.push("/user/register/discord");
+    router.push("/register/discord");
   };
 
   if (authState.isLoading || !authState.isLogined) {

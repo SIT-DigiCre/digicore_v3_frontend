@@ -25,11 +25,11 @@ const RegisterDiscordProfilePage = () => {
   }, []);
 
   const handleNext = () => {
-    router.push("/user/register/introduction");
+    router.push("/register/introduction");
   };
 
   const handlePrev = () => {
-    router.push("/user/register/emergency");
+    router.push("/register/emergency");
   };
 
   if (authState.isLoading || !authState.isLogined) {

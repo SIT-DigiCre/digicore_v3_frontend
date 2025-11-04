@@ -53,8 +53,6 @@ const ProfileTabLayout = ({
     <>
       <PageHead title={title} />
       <Container sx={{ my: 2 }}>
-        <h1>{isRegisterMode ? "プロフィール登録" : "プロフィール編集"}</h1>
-
         {isRegisterMode ? (
           // 登録モードの場合はStepper
           <Box sx={{ mb: 3 }}>

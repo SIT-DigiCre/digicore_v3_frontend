@@ -6,7 +6,7 @@ const CompletionStep = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      router.push("/user/joined");
+      router.push("/register/joined");
     }, 1000);
 
     return () => clearTimeout(timer);
