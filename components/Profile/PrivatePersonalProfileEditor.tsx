@@ -1,0 +1,47 @@
+import { useEffect, useState } from "react";
+
+import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
+import { UserPrivateProfile } from "../../interfaces/user";
+
+import PersonalInfoForm from "./PersonalInfoForm";
+
+type PrivatePersonalProfileEditorProps = {
+  onSave?: () => void;
+  isRegisterMode?: boolean;
+};
+
+export const PrivatePersonalProfileEditor = ({
+  onSave,
+  isRegisterMode,
+}: PrivatePersonalProfileEditorProps) => {
+  const [privateProfile, updateProfile] = usePrivateProfile(isRegisterMode);
+  const [editPrivateProfile, setEditPrivateProfile] = useState<UserPrivateProfile>(privateProfile);
+
+  useEffect(() => {
+    setEditPrivateProfile(privateProfile);
+  }, [privateProfile]);
+
+  const handleSave = () => {
+    updateProfile(editPrivateProfile).then((result) => {
+      if (onSave && result) onSave();
+    });
+  };
+
+  const handleProfileChange = (profile: UserPrivateProfile) => {
+    setEditPrivateProfile(profile);
+  };
+
+  if (!editPrivateProfile) return <p>Loading...</p>;
+
+  return (
+    <PersonalInfoForm
+      profile={privateProfile}
+      onProfileChange={handleProfileChange}
+      onSave={handleSave}
+      showSaveButton={true}
+      saveButtonText="保存"
+    />
+  );
+};
+
+export default PrivatePersonalProfileEditor;

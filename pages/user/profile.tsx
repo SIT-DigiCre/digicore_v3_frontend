@@ -4,8 +4,6 @@ import { useEffect } from "react";
 
 import FloatingWindow from "../../components/Common/FloatingWindow";
 import PageHead from "../../components/Common/PageHead";
-import ProfileEditor from "../../components/Profile/ProfileEditor";
-import ProfileRegister from "../../components/Profile/ProfileRegister";
 import { useAuthState } from "../../hook/useAuthState";
 
 type Props = {
@@ -23,6 +21,14 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
     router.push("/user/joined");
   }, []);
 
+  useEffect(() => {
+    if (registerMode) {
+      router.replace("/user/register/public");
+    } else {
+      router.replace("/user/profile/public");
+    }
+  }, [registerMode, router]);
+
   return (
     <>
       <PageHead title="Profile編集" />
@@ -30,7 +36,9 @@ const ProfilePage = ({ registerMode, backtoUrl }: Props) => {
         <p>読み込み中...</p>
       ) : (
         <>
-          {registerMode ? <ProfileRegister /> : <ProfileEditor />}
+          <div>
+            <p>リダイレクト中...</p>
+          </div>
           {backtoUrl ? <FloatingWindow to={backtoUrl} text={"Mattermostの登録に戻る"} /> : <></>}
         </>
       )}
