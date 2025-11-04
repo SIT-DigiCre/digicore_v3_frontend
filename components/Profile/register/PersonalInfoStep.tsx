@@ -1,6 +1,15 @@
 import { useEffect, useState } from "react";
 
-import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../../interfaces/user";
@@ -28,10 +37,9 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
 
   return (
     <>
-      <div>
-        <h3>個人情報</h3>
+      <Stack spacing={2} py={2}>
+        <Typography variant="h6">氏名</Typography>
         <NameInput
-          title="氏名"
           firstNameTitle="名字"
           lastNameTitle="名前"
           onChange={(first, last) => {
@@ -45,7 +53,6 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
           initLastName={editPrivateProfile.lastName}
         />
         <NameInput
-          title="氏名（カタカナ）"
           firstNameTitle="ミョウジ"
           lastNameTitle="ナマエ"
           onChange={(first, last) => {
@@ -58,9 +65,10 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
           initFirstName={editPrivateProfile.firstNameKana}
           initLastName={editPrivateProfile.lastNameKana}
         />
-        <h5>性別</h5>
+        <Typography variant="h6">性別</Typography>
         <FormControl>
           <RadioGroup
+            row
             value={editPrivateProfile.isMale ? "male" : "female"}
             name="sex-radio-group"
             onChange={(e) => {
@@ -70,15 +78,15 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
               });
             }}
           >
-            <FormControlLabel value="female" control={<Radio />} label="女性" />
             <FormControlLabel value="male" control={<Radio />} label="男性" />
+            <FormControlLabel value="female" control={<Radio />} label="女性" />
           </RadioGroup>
         </FormControl>
         <PhoneInput
+          title="携帯電話番号"
           onChange={(num) => {
             setEditPrivateProfile({ ...editPrivateProfile, phoneNumber: num });
           }}
-          title="携帯電話番号"
           required
           initPhoneNumber={editPrivateProfile.phoneNumber}
         />
@@ -93,8 +101,8 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
           value={editPrivateProfile.address}
           helperText="郵便番号無しで入力してください"
         />
-      </div>
-      <div>
+      </Stack>
+      <Stack spacing={2}>
         <h3>緊急連絡先</h3>
         <TextField
           label="保護者氏名"
@@ -151,7 +159,7 @@ const PersonalInfoStep = ({ onNext }: PersonalInfoStepProps) => {
         >
           次へ
         </Button>
-      </div>
+      </Stack>
     </>
   );
 };

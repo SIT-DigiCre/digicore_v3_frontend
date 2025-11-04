@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 
 type Props = {
   title: string;
@@ -16,7 +16,7 @@ const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
 
   return (
     <>
-      <h5>{title}</h5>
+      <Typography variant="h6">{title}</Typography>
       <TextField
         label="09012345678"
         variant="outlined"

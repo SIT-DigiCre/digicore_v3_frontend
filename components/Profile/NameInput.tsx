@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { TextField } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
 
 type Props = {
-  title: string;
   onChange: (firstName: string, lastName: string) => void;
   firstNameTitle: string;
   lastNameTitle: string;
@@ -11,7 +10,6 @@ type Props = {
   initLastName?: string;
 };
 const NameInput = ({
-  title,
   onChange,
   firstNameTitle,
   lastNameTitle,
@@ -26,8 +24,7 @@ const NameInput = ({
   }, [initFirstName, initLastName]);
 
   return (
-    <>
-      <h5>{title}</h5>
+    <Stack direction="row" spacing={2}>
       <TextField
         label={firstNameTitle}
         variant="outlined"
@@ -50,7 +47,7 @@ const NameInput = ({
           onChange(firstName, e.target.value);
         }}
       />
-    </>
+    </Stack>
   );
 };
 

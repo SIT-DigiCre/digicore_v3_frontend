@@ -4,10 +4,11 @@ import {
   Button,
   FormControl,
   FormControlLabel,
-  Grid,
   Radio,
   RadioGroup,
+  Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
@@ -33,9 +34,8 @@ export const PrivatePersonalProfileEditor = ({
   }, [privateProfile]);
   if (!editPrivateProfile) return <p>Loading...</p>;
   return (
-    <Grid>
+    <Stack spacing={4} py={4}>
       <NameInput
-        title="氏名"
         firstNameTitle="名字"
         lastNameTitle="名前"
         onChange={(first, last) => {
@@ -49,7 +49,6 @@ export const PrivatePersonalProfileEditor = ({
         initLastName={editPrivateProfile.lastName}
       />
       <NameInput
-        title="氏名（カタカナ）"
         firstNameTitle="ミョウジ"
         lastNameTitle="ナマエ"
         onChange={(first, last) => {
@@ -62,22 +61,25 @@ export const PrivatePersonalProfileEditor = ({
         initFirstName={editPrivateProfile.firstNameKana}
         initLastName={editPrivateProfile.lastNameKana}
       />
-      <h5>性別</h5>
-      <FormControl>
-        <RadioGroup
-          value={editPrivateProfile.isMale ? "male" : "female"}
-          name="sex-radio-group"
-          onChange={(e) => {
-            setEditPrivateProfile({
-              ...editPrivateProfile,
-              isMale: e.target.value === "male",
-            });
-          }}
-        >
-          <FormControlLabel value="female" control={<Radio />} label="女性" />
-          <FormControlLabel value="male" control={<Radio />} label="男性" />
-        </RadioGroup>
-      </FormControl>
+      <Stack spacing={2}>
+        <Typography variant="h6">性別（戸籍上のものを入力してください）</Typography>
+        <FormControl>
+          <RadioGroup
+            value={editPrivateProfile.isMale ? "male" : "female"}
+            name="sex-radio-group"
+            row
+            onChange={(e) => {
+              setEditPrivateProfile({
+                ...editPrivateProfile,
+                isMale: e.target.value === "male",
+              });
+            }}
+          >
+            <FormControlLabel value="female" control={<Radio />} label="女性" />
+            <FormControlLabel value="male" control={<Radio />} label="男性" />
+          </RadioGroup>
+        </FormControl>
+      </Stack>
       <PhoneInput
         onChange={(num) => {
           setEditPrivateProfile({ ...editPrivateProfile, phoneNumber: num });
@@ -108,7 +110,7 @@ export const PrivatePersonalProfileEditor = ({
       >
         保存
       </Button>
-    </Grid>
+    </Stack>
   );
 };
 
@@ -116,6 +118,7 @@ type PrivateParentProfileEditorProps = {
   onSave?: () => void;
   isRegisterMode?: boolean;
 };
+
 export const PrivateParentProfileEditor = ({
   onSave,
   isRegisterMode,
@@ -127,11 +130,12 @@ export const PrivateParentProfileEditor = ({
   }, [privateProfile]);
   if (!editPrivateProfile) return <p>Loading...</p>;
   return (
-    <Grid>
+    <Stack spacing={4} py={4}>
       <TextField
         label="氏名"
         required
         margin="normal"
+        fullWidth
         onChange={(e) => {
           setEditPrivateProfile({ ...editPrivateProfile, parentName: e.target.value });
         }}
@@ -174,7 +178,6 @@ export const PrivateParentProfileEditor = ({
       >
         本人住所と同じにする
       </Button>
-      <br />
       <Button
         variant="contained"
         disabled={objectEquals(privateProfile, editPrivateProfile)}
@@ -183,11 +186,10 @@ export const PrivateParentProfileEditor = ({
             if (onSave && result) onSave();
           });
         }}
-        sx={{ mt: 2 }}
       >
         保存
       </Button>
-    </Grid>
+    </Stack>
   );
 };
 
