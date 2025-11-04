@@ -31,6 +31,7 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
     setEditUserProfile({ ...editUserProfile, iconUrl: file.url });
     setOpenFileModal(false);
   };
+
   return (
     <Stack spacing={4} py={4}>
       <Stack spacing={2}>
@@ -43,7 +44,7 @@ export const PublicProfileEditor = ({ onSave }: PublicProfileEditorProps) => {
           >
             アイコンを設定する
           </Button>
-          {userProfile.iconUrl === "" ? (
+          {editUserProfile.iconUrl === "" ? (
             <Typography color="error">アイコンを設定しましょう!</Typography>
           ) : (
             <Avatar src={editUserProfile.iconUrl} sx={{ margin: 1 }} />
