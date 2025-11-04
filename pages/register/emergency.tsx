@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 
 import { Stack, Typography } from "@mui/material";
 
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
-import EmergencyContactForm from "../../../components/Profile/EmergencyContactForm";
-import { useAuthState } from "../../../hook/useAuthState";
-import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
-import { UserPrivateProfile } from "../../../interfaces/user";
+import EmergencyContactForm from "../../components/Profile/EmergencyContactForm";
+import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
+import { useAuthState } from "../../hook/useAuthState";
+import { UserPrivateProfile } from "../../interfaces/user";
 
 const RegisterEmergencyProfilePage = () => {
   const router = useRouter();
@@ -44,13 +44,18 @@ const RegisterEmergencyProfilePage = () => {
   if (!privateProfile) return <p>Loading...</p>;
 
   return (
-    <ProfileTabLayout 
-      isRegisterMode={true} 
+    <ProfileTabLayout
+      isRegisterMode={true}
       title="プロフィール登録"
       showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
-      nextDisabled={false}
+      nextDisabled={
+        editProfile.parentName === "" ||
+        editProfile.parentCellphoneNumber === "" ||
+        editProfile.parentHomephoneNumber === "" ||
+        editProfile.parentAddress === ""
+      }
     >
       <Stack spacing={2}>
         <Typography variant="h5">緊急連絡先</Typography>

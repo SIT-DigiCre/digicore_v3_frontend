@@ -3,11 +3,11 @@ import { useEffect, useState } from "react";
 
 import { Stack, Typography } from "@mui/material";
 
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
-import PersonalInfoForm from "../../../components/Profile/PersonalInfoForm";
-import { useAuthState } from "../../../hook/useAuthState";
-import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
-import { UserPrivateProfile } from "../../../interfaces/user";
+import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
+import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
+import { useAuthState } from "../../hook/useAuthState";
+import { UserPrivateProfile } from "../../interfaces/user";
 
 const RegisterPersonalProfilePage = () => {
   const router = useRouter();
@@ -44,13 +44,20 @@ const RegisterPersonalProfilePage = () => {
   if (!privateProfile) return <p>Loading...</p>;
 
   return (
-    <ProfileTabLayout 
-      isRegisterMode={true} 
+    <ProfileTabLayout
+      isRegisterMode={true}
       title="プロフィール登録"
       showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
-      nextDisabled={false}
+      nextDisabled={
+        editProfile.firstName === "" ||
+        editProfile.lastName === "" ||
+        editProfile.firstNameKana === "" ||
+        editProfile.lastNameKana === "" ||
+        editProfile.phoneNumber === "" ||
+        editProfile.address === ""
+      }
     >
       <Stack spacing={2}>
         <Typography variant="h5">本人情報</Typography>

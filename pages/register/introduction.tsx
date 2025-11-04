@@ -1,12 +1,10 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Button } from "@mui/material";
-
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
-import MarkdownEditor from "../../../components/Common/MarkdownEditor";
-import { useAuthState } from "../../../hook/useAuthState";
-import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
+import MarkdownEditor from "../../components/Common/MarkdownEditor";
+import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import { useMyIntroduction } from "../../hook/profile/useIntroduction";
+import { useAuthState } from "../../hook/useAuthState";
 
 const RegisterIntroductionProfilePage = () => {
   const router = useRouter();
@@ -44,8 +42,8 @@ const RegisterIntroductionProfilePage = () => {
   if (!editUserIntro) return <p>isLoading...</p>;
 
   return (
-    <ProfileTabLayout 
-      isRegisterMode={true} 
+    <ProfileTabLayout
+      isRegisterMode={true}
       title="プロフィール登録"
       showNavigation={true}
       onNext={handleNext}

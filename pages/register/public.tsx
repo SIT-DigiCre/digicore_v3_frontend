@@ -3,15 +3,14 @@ import { useEffect, useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 
-import { FileBrowserModal } from "../../../components/File/FileBrowser";
-import { FileUploader } from "../../../components/File/FileUploader";
-import ProfileTabLayout from "../../../components/Profile/ProfileTabLayout";
-import { useMyFiles } from "../../../hook/file/useFile";
-import { useMyProfile } from "../../../hook/profile/useProfile";
-import { useAuthState } from "../../../hook/useAuthState";
-import { FileObject } from "../../../interfaces/file";
-import { User } from "../../../interfaces/user";
-import { objectEquals } from "../../../utils/common";
+import { FileBrowserModal } from "../../components/File/FileBrowser";
+import { FileUploader } from "../../components/File/FileUploader";
+import ProfileTabLayout from "../../components/Profile/ProfileTabLayout";
+import { useMyFiles } from "../../hook/file/useFile";
+import { useMyProfile } from "../../hook/profile/useProfile";
+import { useAuthState } from "../../hook/useAuthState";
+import { FileObject } from "../../interfaces/file";
+import { User } from "../../interfaces/user";
 
 const RegisterPublicProfilePage = () => {
   const router = useRouter();
@@ -48,14 +47,6 @@ const RegisterPublicProfilePage = () => {
     setOpenFileModal(false);
   };
 
-  const isFormValid = () => {
-    return (
-      editUserProfile.username !== "" &&
-      editUserProfile.shortIntroduction !== "" &&
-      editUserProfile.username !== userProfile.studentNumber
-    );
-  };
-
   if (authState.isLoading || !authState.isLogined) {
     return <p>読み込み中...</p>;
   }
@@ -69,7 +60,11 @@ const RegisterPublicProfilePage = () => {
       showNavigation={true}
       onNext={handleNext}
       onPrev={handlePrev}
-      nextDisabled={!isFormValid() || objectEquals(userProfile, editUserProfile)}
+      nextDisabled={
+        editUserProfile.username === "" ||
+        editUserProfile.shortIntroduction === "" ||
+        editUserProfile.username === userProfile.studentNumber
+      }
     >
       <div>
         <h2>公開情報（他の部員も見れる情報）</h2>
