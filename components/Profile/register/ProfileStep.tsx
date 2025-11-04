@@ -1,4 +1,4 @@
-import { PublicProfileEditor } from "../ProfileEditor";
+import { PublicProfileEditor } from "../PublicProfileEditor";
 
 interface ProfileStepProps {
   onNext: () => void;

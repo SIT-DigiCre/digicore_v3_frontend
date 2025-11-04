@@ -11,7 +11,7 @@ const RegisterStepper = ({ activeStep }: RegisterStepperProps) => {
         <StepLabel>プロフィール登録</StepLabel>
       </Step>
       <Step>
-        <StepLabel>個人情報&緊急連絡先登録</StepLabel>
+        <StepLabel>個人情報登録</StepLabel>
       </Step>
       <Step>
         <StepLabel>Discord連携</StepLabel>

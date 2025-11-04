@@ -1,17 +1,10 @@
 import { useEffect, useState } from "react";
-import {
-  Button,
-  FormControl,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  TextField,
-} from "@mui/material";
+
+import { Button, FormControl, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material";
 
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
 import { UserPrivateProfile } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
-
 import NameInput from "../NameInput";
 import PhoneInput from "../PhoneInput";
 
