@@ -35,11 +35,11 @@ export const PrivateParentProfileEditor = ({
 
   return (
     <EmergencyContactForm
-      profile={privateProfile}
+      initialProfile={privateProfile}
+      profile={editPrivateProfile}
       onProfileChange={handleProfileChange}
       onSave={handleSave}
       showSaveButton={true}
-      saveButtonText="保存"
     />
   );
 };
