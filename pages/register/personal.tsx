@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Box, Stack, Typography } from "@mui/material";
 
@@ -7,20 +7,12 @@ import EmergencyContactForm from "../../components/Profile/EmergencyContactForm"
 import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
-import { useAuthState } from "../../hook/useAuthState";
 import { UserPrivateProfile } from "../../interfaces/user";
 
 const RegisterPersonalProfilePage = () => {
   const router = useRouter();
-  const { authState } = useAuthState();
   const [privateProfile, updateProfile] = usePrivateProfile(true);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   const handleNext = () => {
     updateProfile(editProfile).then((result) => {
@@ -37,10 +29,6 @@ const RegisterPersonalProfilePage = () => {
   const handleProfileChange = (profile: UserPrivateProfile) => {
     setEditProfile(profile);
   };
-
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
 
   if (!privateProfile) return <p>Loading...</p>;
 
@@ -67,7 +55,8 @@ const RegisterPersonalProfilePage = () => {
             本人情報
           </Typography>
           <PersonalInfoForm
-            profile={privateProfile}
+            initialProfile={privateProfile}
+            profile={editProfile}
             onProfileChange={handleProfileChange}
             showSaveButton={false}
           />
@@ -77,7 +66,8 @@ const RegisterPersonalProfilePage = () => {
             緊急連絡先
           </Typography>
           <EmergencyContactForm
-            profile={privateProfile}
+            initialProfile={privateProfile}
+            profile={editProfile}
             onProfileChange={handleProfileChange}
             showSaveButton={false}
           />

@@ -46,11 +46,11 @@ const EmergencyProfilePage = () => {
           緊急連絡先
         </Typography>
         <EmergencyContactForm
+          initialProfile={privateProfile}
           profile={privateProfile}
           onProfileChange={handleProfileChange}
           onSave={handleSave}
           showSaveButton={true}
-          saveButtonText="保存"
         />
       </Stack>
     </EditorTabLayout>

@@ -22,11 +22,7 @@ const PersonalProfilePage = () => {
   }, [authState, router]);
 
   const handleSave = () => {
-    updateProfile(editProfile).then((result) => {
-      if (result) {
-        // 保存成功時の処理（必要に応じて次のタブに移動）
-      }
-    });
+    updateProfile(editProfile);
   };
 
   const handleProfileChange = (profile: UserPrivateProfile) => {
@@ -46,11 +42,11 @@ const PersonalProfilePage = () => {
           本人情報
         </Typography>
         <PersonalInfoForm
+          initialProfile={privateProfile}
           profile={privateProfile}
           onProfileChange={handleProfileChange}
           onSave={handleSave}
           showSaveButton={true}
-          saveButtonText="保存"
         />
       </Stack>
     </EditorTabLayout>

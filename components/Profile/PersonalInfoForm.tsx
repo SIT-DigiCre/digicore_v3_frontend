@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import {
   Box,
   Button,
@@ -19,32 +17,20 @@ import NameInput from "./NameInput";
 import PhoneInput from "./PhoneInput";
 
 interface PersonalInfoFormProps {
+  initialProfile: UserPrivateProfile;
   profile: UserPrivateProfile;
   onProfileChange: (profile: UserPrivateProfile) => void;
   onSave?: () => void;
   showSaveButton?: boolean;
-  saveButtonText?: string;
-  disabled?: boolean;
 }
 
 const PersonalInfoForm = ({
+  initialProfile,
   profile,
   onProfileChange,
   onSave,
   showSaveButton = false,
-  saveButtonText = "保存",
-  disabled = false,
 }: PersonalInfoFormProps) => {
-  const [editProfile, setEditProfile] = useState<UserPrivateProfile>(profile);
-
-  useEffect(() => {
-    setEditProfile(profile);
-  }, [profile]);
-
-  useEffect(() => {
-    onProfileChange(editProfile);
-  }, [editProfile]);
-
   const handleSave = () => {
     if (onSave) {
       onSave();
@@ -62,27 +48,27 @@ const PersonalInfoForm = ({
             firstNameTitle="名字"
             lastNameTitle="名前"
             onChange={(first, last) => {
-              setEditProfile({
-                ...editProfile,
+              onProfileChange({
+                ...profile,
                 firstName: first,
                 lastName: last,
               });
             }}
-            initFirstName={editProfile.firstName}
-            initLastName={editProfile.lastName}
+            initFirstName={profile.firstName}
+            initLastName={profile.lastName}
           />
           <NameInput
             firstNameTitle="ミョウジ"
             lastNameTitle="ナマエ"
             onChange={(first, last) => {
-              setEditProfile({
-                ...editProfile,
+              onProfileChange({
+                ...profile,
                 firstNameKana: first,
                 lastNameKana: last,
               });
             }}
-            initFirstName={editProfile.firstNameKana}
-            initLastName={editProfile.lastNameKana}
+            initFirstName={profile.firstNameKana}
+            initLastName={profile.lastNameKana}
           />
         </Stack>
       </Stack>
@@ -96,18 +82,18 @@ const PersonalInfoForm = ({
           </Typography>
           <FormControl>
             <RadioGroup
-              value={editProfile.isMale ? "male" : "female"}
+              value={profile.isMale ? "male" : "female"}
               name="sex-radio-group"
               row
               onChange={(e) => {
-                setEditProfile({
-                  ...editProfile,
+                onProfileChange({
+                  ...profile,
                   isMale: e.target.value === "male",
                 });
               }}
             >
-              <FormControlLabel value="female" control={<Radio />} label="女性" />
               <FormControlLabel value="male" control={<Radio />} label="男性" />
+              <FormControlLabel value="female" control={<Radio />} label="女性" />
             </RadioGroup>
           </FormControl>
         </Stack>
@@ -115,11 +101,11 @@ const PersonalInfoForm = ({
       <Box>
         <PhoneInput
           onChange={(num) => {
-            setEditProfile({ ...editProfile, phoneNumber: num });
+            onProfileChange({ ...profile, phoneNumber: num });
           }}
           title="携帯電話番号"
           required
-          initPhoneNumber={editProfile.phoneNumber}
+          initialPhoneNumber={profile.phoneNumber}
         />
       </Box>
       <Stack spacing={2}>
@@ -132,19 +118,19 @@ const PersonalInfoForm = ({
           required
           margin="normal"
           onChange={(e) => {
-            setEditProfile({ ...editProfile, address: e.target.value });
+            onProfileChange({ ...profile, address: e.target.value });
           }}
-          value={editProfile.address}
+          value={profile.address}
           helperText="郵便番号無しで入力してください"
         />
       </Stack>
       {showSaveButton && (
         <Button
           variant="contained"
-          disabled={disabled || objectEquals(profile, editProfile)}
+          disabled={objectEquals(profile, initialProfile)}
           onClick={handleSave}
         >
-          {saveButtonText}
+          保存
         </Button>
       )}
     </Stack>

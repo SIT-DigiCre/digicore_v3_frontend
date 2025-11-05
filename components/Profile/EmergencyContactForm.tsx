@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { Button, Stack, TextField, Typography } from "@mui/material";
 
 import { UserPrivateProfile } from "../../interfaces/user";
@@ -8,32 +6,20 @@ import { objectEquals } from "../../utils/common";
 import PhoneInput from "./PhoneInput";
 
 interface EmergencyContactFormProps {
+  initialProfile: UserPrivateProfile;
   profile: UserPrivateProfile;
   onProfileChange: (profile: UserPrivateProfile) => void;
   onSave?: () => void;
   showSaveButton?: boolean;
-  saveButtonText?: string;
-  disabled?: boolean;
 }
 
 const EmergencyContactForm = ({
+  initialProfile,
   profile,
   onProfileChange,
   onSave,
   showSaveButton = false,
-  saveButtonText = "保存",
-  disabled = false,
 }: EmergencyContactFormProps) => {
-  const [editProfile, setEditProfile] = useState<UserPrivateProfile>(profile);
-
-  useEffect(() => {
-    setEditProfile(profile);
-  }, [profile]);
-
-  useEffect(() => {
-    onProfileChange(editProfile);
-  }, [editProfile]);
-
   const handleSave = () => {
     if (onSave) {
       onSave();
@@ -41,9 +27,9 @@ const EmergencyContactForm = ({
   };
 
   const copyPersonalAddress = () => {
-    setEditProfile({
-      ...editProfile,
-      parentAddress: editProfile.address,
+    onProfileChange({
+      ...profile,
+      parentAddress: profile.address,
     });
   };
 
@@ -59,25 +45,25 @@ const EmergencyContactForm = ({
           required
           fullWidth
           onChange={(e) => {
-            setEditProfile({ ...editProfile, parentName: e.target.value });
+            onProfileChange({ ...profile, parentName: e.target.value });
           }}
-          value={editProfile.parentName}
+          value={profile.parentName}
         />
       </Stack>
       <PhoneInput
         onChange={(num) => {
-          setEditProfile({ ...editProfile, parentCellphoneNumber: num });
+          onProfileChange({ ...profile, parentCellphoneNumber: num });
         }}
         title="保護者携帯電話番号"
         required
-        initPhoneNumber={editProfile.parentCellphoneNumber}
+        initialPhoneNumber={profile.parentCellphoneNumber}
       />
       <PhoneInput
         onChange={(num) => {
-          setEditProfile({ ...editProfile, parentHomephoneNumber: num });
+          onProfileChange({ ...profile, parentHomephoneNumber: num });
         }}
         title="固定電話番号（ある場合のみ記入）"
-        initPhoneNumber={editProfile.parentHomephoneNumber}
+        initialPhoneNumber={profile.parentHomephoneNumber}
       />
       <Stack spacing={2}>
         <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
@@ -88,9 +74,9 @@ const EmergencyContactForm = ({
             label="保護者住所"
             required
             onChange={(e) => {
-              setEditProfile({ ...editProfile, parentAddress: e.target.value });
+              onProfileChange({ ...profile, parentAddress: e.target.value });
             }}
-            value={editProfile.parentAddress}
+            value={profile.parentAddress}
             sx={{ flexGrow: 1 }}
           />
           <Button variant="contained" onClick={copyPersonalAddress}>
@@ -101,10 +87,10 @@ const EmergencyContactForm = ({
       {showSaveButton && (
         <Button
           variant="contained"
-          disabled={disabled || objectEquals(profile, editProfile)}
+          disabled={objectEquals(profile, initialProfile)}
           onClick={handleSave}
         >
-          {saveButtonText}
+          保存
         </Button>
       )}
     </Stack>
