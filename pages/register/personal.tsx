@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
+import EmergencyContactForm from "../../components/Profile/EmergencyContactForm";
 import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { usePrivateProfile } from "../../hook/profile/usePrivateProfile";
@@ -12,7 +13,7 @@ import { UserPrivateProfile } from "../../interfaces/user";
 const RegisterPersonalProfilePage = () => {
   const router = useRouter();
   const { authState } = useAuthState();
-  const [privateProfile, updateProfile] = usePrivateProfile(false);
+  const [privateProfile, updateProfile] = usePrivateProfile(true);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
 
   useEffect(() => {
@@ -24,7 +25,7 @@ const RegisterPersonalProfilePage = () => {
   const handleNext = () => {
     updateProfile(editProfile).then((result) => {
       if (result) {
-        router.push("/register/emergency");
+        router.push("/register/discord");
       }
     });
   };
@@ -54,16 +55,33 @@ const RegisterPersonalProfilePage = () => {
         editProfile.firstNameKana === "" ||
         editProfile.lastNameKana === "" ||
         editProfile.phoneNumber === "" ||
-        editProfile.address === ""
+        editProfile.address === "" ||
+        editProfile.parentName === "" ||
+        editProfile.parentCellphoneNumber === "" ||
+        editProfile.parentAddress === ""
       }
     >
-      <Stack spacing={2}>
-        <Typography variant="h5">本人情報</Typography>
-        <PersonalInfoForm
-          profile={privateProfile}
-          onProfileChange={handleProfileChange}
-          showSaveButton={false}
-        />
+      <Stack spacing={4} mb={8}>
+        <Box>
+          <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+            本人情報
+          </Typography>
+          <PersonalInfoForm
+            profile={privateProfile}
+            onProfileChange={handleProfileChange}
+            showSaveButton={false}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+            緊急連絡先
+          </Typography>
+          <EmergencyContactForm
+            profile={privateProfile}
+            onProfileChange={handleProfileChange}
+            showSaveButton={false}
+          />
+        </Box>
       </Stack>
     </RegisterStepLayout>
   );

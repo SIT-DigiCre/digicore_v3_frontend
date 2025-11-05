@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button, Stack, TextField } from "@mui/material";
+import { Button, Stack, TextField, Typography } from "@mui/material";
 
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
@@ -48,22 +48,27 @@ const EmergencyContactForm = ({
   };
 
   return (
-    <Stack spacing={4} py={4}>
-      <TextField
-        label="氏名"
-        required
-        margin="normal"
-        fullWidth
-        onChange={(e) => {
-          setEditProfile({ ...editProfile, parentName: e.target.value });
-        }}
-        value={editProfile.parentName}
-      />
+    <Stack spacing={4}>
+      <Stack spacing={2}>
+        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+          保護者氏名
+        </Typography>
+
+        <TextField
+          label="保護者氏名"
+          required
+          fullWidth
+          onChange={(e) => {
+            setEditProfile({ ...editProfile, parentName: e.target.value });
+          }}
+          value={editProfile.parentName}
+        />
+      </Stack>
       <PhoneInput
         onChange={(num) => {
           setEditProfile({ ...editProfile, parentCellphoneNumber: num });
         }}
-        title="携帯電話番号"
+        title="保護者携帯電話番号"
         required
         initPhoneNumber={editProfile.parentCellphoneNumber}
       />
@@ -74,20 +79,25 @@ const EmergencyContactForm = ({
         title="固定電話番号（ある場合のみ記入）"
         initPhoneNumber={editProfile.parentHomephoneNumber}
       />
-      <TextField
-        label="住所"
-        fullWidth
-        required
-        margin="normal"
-        onChange={(e) => {
-          setEditProfile({ ...editProfile, parentAddress: e.target.value });
-        }}
-        value={editProfile.parentAddress}
-        helperText="郵便番号無しで入力してください"
-      />
-      <Button variant="contained" onClick={copyPersonalAddress}>
-        本人住所と同じにする
-      </Button>
+      <Stack spacing={2}>
+        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+          保護者住所
+        </Typography>
+        <Stack direction="row" spacing={2}>
+          <TextField
+            label="保護者住所"
+            required
+            onChange={(e) => {
+              setEditProfile({ ...editProfile, parentAddress: e.target.value });
+            }}
+            value={editProfile.parentAddress}
+            sx={{ flexGrow: 1 }}
+          />
+          <Button variant="contained" onClick={copyPersonalAddress}>
+            本人と同じ
+          </Button>
+        </Stack>
+      </Stack>
       {showSaveButton && (
         <Button
           variant="contained"

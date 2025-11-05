@@ -29,7 +29,7 @@ const RegisterDiscordProfilePage = () => {
   };
 
   const handlePrev = () => {
-    router.push("/register/emergency");
+    router.push("/register/personal");
   };
 
   if (authState.isLoading || !authState.isLogined) {

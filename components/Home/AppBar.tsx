@@ -270,7 +270,7 @@ export default function AppBar({ children, window }: AppBarProps) {
           {drawer}
         </Drawer>
       </Box>
-      <Box sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+      <Box sx={{ flexGrow: 1, py: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar />
         {children}
       </Box>

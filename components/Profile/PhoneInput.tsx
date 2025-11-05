@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { TextField, Typography } from "@mui/material";
+import { Stack, TextField, Typography } from "@mui/material";
 
 type Props = {
   title: string;
@@ -15,13 +15,14 @@ const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
   }, [initPhoneNumber]);
 
   return (
-    <>
-      <Typography variant="h6">{title}</Typography>
+    <Stack spacing={2}>
+      <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+        {title}
+      </Typography>
       <TextField
-        label="09012345678"
+        label={title}
         variant="outlined"
         required={required}
-        margin="normal"
         value={num}
         type="tel"
         onChange={(e) => {
@@ -30,7 +31,7 @@ const PhoneInput = ({ title, onChange, initPhoneNumber, required }: Props) => {
         }}
         helperText="ハイフン(-)無しで入力してください"
       />
-    </>
+    </Stack>
   );
 };
 

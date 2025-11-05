@@ -24,9 +24,8 @@ const RegisterStepLayout = ({
   const currentPath = router.asPath;
 
   const steps = [
-    { label: "公開プロフィール", value: "public", path: `/register/public` },
-    { label: "本人情報", value: "personal", path: `/register/personal` },
-    { label: "緊急連絡先", value: "emergency", path: `/register/emergency` },
+    { label: "公開情報", value: "public", path: `/register/public` },
+    { label: "個人情報", value: "personal", path: `/register/personal` },
     { label: "Discord連携", value: "discord", path: `/register/discord` },
     { label: "自己紹介", value: "introduction", path: `/register/introduction` },
   ];
@@ -41,7 +40,7 @@ const RegisterStepLayout = ({
       <PageHead title={title} />
       <Container sx={{ my: 2 }}>
         <Box sx={{ mb: 3 }}>
-          <Stepper activeStep={getCurrentStep()}>
+          <Stepper activeStep={getCurrentStep()} alternativeLabel>
             {steps.map((step) => (
               <Step key={step.value}>
                 <StepLabel>{step.label}</StepLabel>

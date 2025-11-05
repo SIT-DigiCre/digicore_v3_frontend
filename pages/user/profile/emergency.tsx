@@ -42,7 +42,9 @@ const EmergencyProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Typography variant="h5">緊急連絡先</Typography>
+        <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+          緊急連絡先
+        </Typography>
         <EmergencyContactForm
           profile={privateProfile}
           onProfileChange={handleProfileChange}
