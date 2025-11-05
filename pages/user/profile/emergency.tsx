@@ -21,12 +21,12 @@ const EmergencyProfilePage = () => {
     }
   }, [authState, router]);
 
+  useEffect(() => {
+    setEditProfile(privateProfile);
+  }, [privateProfile]);
+
   const handleSave = () => {
-    updateProfile(editProfile).then((result) => {
-      if (result) {
-        // 保存成功時の処理
-      }
-    });
+    updateProfile(editProfile);
   };
 
   const handleProfileChange = (profile: UserPrivateProfile) => {
@@ -47,7 +47,7 @@ const EmergencyProfilePage = () => {
         </Typography>
         <EmergencyContactForm
           initialProfile={privateProfile}
-          profile={privateProfile}
+          profile={editProfile}
           onProfileChange={handleProfileChange}
           onSave={handleSave}
           showSaveButton={true}

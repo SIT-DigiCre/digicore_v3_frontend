@@ -21,6 +21,10 @@ const PersonalProfilePage = () => {
     }
   }, [authState, router]);
 
+  useEffect(() => {
+    setEditProfile(privateProfile);
+  }, [privateProfile]);
+
   const handleSave = () => {
     updateProfile(editProfile);
   };
@@ -43,7 +47,7 @@ const PersonalProfilePage = () => {
         </Typography>
         <PersonalInfoForm
           initialProfile={privateProfile}
-          profile={privateProfile}
+          profile={editProfile}
           onProfileChange={handleProfileChange}
           onSave={handleSave}
           showSaveButton={true}
