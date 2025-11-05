@@ -55,11 +55,7 @@ const RegisterStepLayout = ({
           <Button variant="outlined" onClick={onPrev} disabled={getCurrentStep() === 0}>
             前へ
           </Button>
-          <Button
-            variant="contained"
-            onClick={onNext}
-            disabled={nextDisabled || getCurrentStep() === steps.length - 1}
-          >
+          <Button variant="contained" onClick={onNext} disabled={nextDisabled}>
             次へ
           </Button>
         </Stack>
