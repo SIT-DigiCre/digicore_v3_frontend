@@ -220,6 +220,20 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
       return (
         <>
           <Heading level={2}>部費の振込について</Heading>
+          <Box>
+            <Typography>
+              手数料抜きで2000円の部費を<b>3週間以内</b>
+              に、下記の口座に振り込んでください。デジクリの口座はゆうちょ銀行です。
+            </Typography>
+            <Typography>
+              部費の振込が完了した際はデジコア上の
+              <Link href="/user/form/payment">部費振込報告フォーム</Link>
+              から振込完了報告をする必要があります
+            </Typography>
+            <Typography>
+              期限を過ぎても振込完了報告がされない場合、メールにて会計から確認の連絡が届きます。それらに反応が無い場合、デジコアやMattermost、Discordのアカウント制限がかかります。
+            </Typography>
+          </Box>
           <TransferClubFeeView />
           <Box textAlign="center">
             <Button

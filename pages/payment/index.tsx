@@ -15,8 +15,8 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Heading from "../../components/Common/Heading";
 
+import Heading from "../../components/Common/Heading";
 import { usePayments } from "../../hook/payment/usePayments";
 import { Payment } from "../../interfaces/payment";
 const modalStyle = {
