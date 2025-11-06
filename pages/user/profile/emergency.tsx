@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 
+import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import EmergencyContactForm from "../../../components/Profile/EmergencyContactForm";
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
@@ -42,9 +43,7 @@ const EmergencyProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Typography level={3} sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
-          緊急連絡先
-        </Typography>
+        <Heading level={3}>緊急連絡先</Heading>
         <EmergencyContactForm
           initialProfile={privateProfile}
           profile={editProfile}

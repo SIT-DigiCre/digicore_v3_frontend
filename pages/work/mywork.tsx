@@ -29,9 +29,7 @@ const MyWorkPage = () => {
       />
       <Grid>
         <div>
-          <Heading level={1} className="d-inlineblock">
-            My Work
-          </Heading>
+          <Heading level={2}>My Work</Heading>
           <div style={{ float: "right" }}>
             <Button
               variant="contained"

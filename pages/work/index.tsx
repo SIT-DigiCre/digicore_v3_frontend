@@ -29,9 +29,7 @@ const WorkIndexPage = () => {
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Work" }]} />
       <Grid>
         <div>
-          <Heading level={1} className="d-inlineblock">
-            Work一覧
-          </Heading>
+          <Heading level={2}>Work一覧</Heading>
           <div style={{ float: "right" }}>
             <Button
               variant="contained"

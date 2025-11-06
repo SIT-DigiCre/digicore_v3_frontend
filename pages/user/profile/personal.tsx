@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 
+import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import PersonalInfoForm from "../../../components/Profile/PersonalInfoForm";
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
@@ -42,9 +43,7 @@ const PersonalProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Typography level={3} sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
-          本人情報
-        </Typography>
+        <Heading level={3}>本人情報</Heading>
         <PersonalInfoForm
           initialProfile={privateProfile}
           profile={editProfile}

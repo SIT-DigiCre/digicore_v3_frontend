@@ -96,7 +96,7 @@ const BudgetPage = ({ modeStr }: Props) => {
       />
       <Grid>
         <div>
-          <Heading level={1} className="d-inlineblock">
+          <Heading level={2}>
             {modeStr === "admin" ? "自分の稟議（管理者用）" : "自分の稟議"}
           </Heading>
           <div style={{ float: "right" }}>
