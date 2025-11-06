@@ -2,8 +2,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
-import Heading from "../../components/Common/Heading";
 
+import Heading from "../../components/Common/Heading";
 import { FileBrowserModal } from "../../components/File/FileBrowser";
 import { FileUploader } from "../../components/File/FileUploader";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";

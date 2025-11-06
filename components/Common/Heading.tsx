@@ -23,13 +23,13 @@ const Heading: React.FC<HeadingProps> = ({ level, children }) => {
       );
     case 3:
       return (
-        <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
+        <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
           {children}
         </Typography>
       );
     default:
       return (
-        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
+        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold", mb: 2 }}>
           {children}
         </Typography>
       );

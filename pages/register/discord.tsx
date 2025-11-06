@@ -55,7 +55,12 @@ const RegisterDiscordProfilePage = () => {
           からアカウント作成を行いましょう。大学のメールアドレスで作る必要はありません！
         </Typography>
         <Box mt={10} textAlign="center">
-          <Button href={discord.loginUrl} variant="contained">
+          <Button
+            href={discord.loginUrl}
+            variant="contained"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Discord連携
           </Button>
         </Box>
