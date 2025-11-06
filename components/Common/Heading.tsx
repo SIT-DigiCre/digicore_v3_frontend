@@ -17,7 +17,7 @@ const Heading: React.FC<HeadingProps> = ({ level, children }) => {
       );
     case 2:
       return (
-        <Typography variant="h2" sx={{ fontSize: "2rem", fontWeight: "bold" }}>
+        <Typography variant="h2" sx={{ fontSize: "2rem", fontWeight: "bold", mb: 2 }}>
           {children}
         </Typography>
       );
