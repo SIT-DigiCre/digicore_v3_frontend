@@ -20,6 +20,7 @@ export const useUserProfiles: UseUserProfiles = () => {
   const [offsetNum, setOffsetNum] = useState(0);
   const seed = useRecoilValue(userListSeed);
   const [isOver, setIsOver] = useState(false);
+
   const getNew = async (num: number) => {
     if (authState.isLoading || !authState.isLogined) return;
     try {
@@ -33,14 +34,16 @@ export const useUserProfiles: UseUserProfiles = () => {
       setUsers(users.concat(resUsers));
       removeError("userprofiles-get-fail");
     } catch {
-      setNewError({ name: "userprofiles-get-fail", message: "ユーザー一覧の取得に失敗しました" });
+      setNewError({ name: "userprofiles-get-fail", message: "部員一覧の取得に失敗しました" });
     }
   };
+
   useEffect(() => {
     (async () => {
       getNew(0);
     })();
   }, [authState]);
+
   const requestMoreProfiles = () => {
     if (isOver) return;
     setOffsetNum(offsetNum + 100);
@@ -48,6 +51,7 @@ export const useUserProfiles: UseUserProfiles = () => {
       getNew(offsetNum + 100);
     })();
   };
+
   return {
     userProfiles: users,
     requestMoreProfiles: requestMoreProfiles,

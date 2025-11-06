@@ -5,10 +5,8 @@ import { Button, Grid, Typography } from "@mui/material";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import PageHead from "../../../components/Common/PageHead";
-import {
-  PrivateParentProfileEditor,
-  PrivatePersonalProfileEditor,
-} from "../../../components/Profile/PrivateProfileEditor";
+import { PrivateParentProfileEditor } from "../../../components/Profile/PrivateParentProfileEditor";
+import { PrivatePersonalProfileEditor } from "../../../components/Profile/PrivatePersonalProfileEditor";
 import TransferAccountView from "../../../components/Register/TransferAccountView";
 import { useActiveLimit } from "../../../hook/profile/useActiveLimit";
 import { useAuthState } from "../../../hook/useAuthState";

@@ -18,7 +18,6 @@ import {
   Typography,
 } from "@mui/material";
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
 import { MattermostRegister } from "../../components/Mattermost/Register";
 import TransferAccountView from "../../components/Register/TransferAccountView";
@@ -30,7 +29,6 @@ const JoinedPage = () => {
     <>
       <PageHead title="デジクリへようこそ" />
       <Container>
-        <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Joined" }]} />
         <Grid>
           <h2>デジクリへようこそ</h2>
         </Grid>

@@ -1,4 +1,5 @@
 import axiosBase from "axios";
+
 import { baseURL, baseURLForServerSide } from "./common";
 
 export const axios = axiosBase.create({

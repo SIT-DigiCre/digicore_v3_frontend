@@ -1,20 +1,27 @@
 import Head from "next/head";
-type Props = {
+import { useEffect } from "react";
+
+import { usePageTitle } from "../../hook/usePageTitle";
+
+interface PageHeadProps {
   title: string;
   description?: string;
   imgUrl?: string;
-};
-const PageHead = ({ title, description, imgUrl }: Props) => {
+}
+
+export default function PageHead({ title, description, imgUrl }: PageHeadProps) {
+  const { setTitle } = usePageTitle();
+
+  useEffect(() => {
+    setTitle(title);
+    return () => setTitle("デジクリ");
+  }, [title, setTitle]);
+
   return (
     <Head>
-      <title>{title + " - デジコア3"}</title>
-      <meta property="og:title" content={title + " - デジコア3"} />
-      <meta
-        property="og:description"
-        content={description ? description : "芝浦工業大学デジクリのグループウェア"}
-      />
-      {imgUrl ? <meta property="og:image" content={imgUrl} /> : <></>}
+      <title>{title}</title>
+      {description && <meta name="description" content={description} />}
+      {imgUrl && <meta property="og:image" content={imgUrl} />}
     </Head>
   );
-};
-export default PageHead;
+}

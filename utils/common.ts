@@ -6,7 +6,7 @@ export const baseURLForServerSide =
 const objectSort = (obj) => {
   if (!obj) return obj;
   const sorted = Object.entries(obj).sort();
-  for (let i in sorted) {
+  for (const i in sorted) {
     const val = sorted[i][1];
     if (typeof val === "object") {
       sorted[i][1] = objectSort(val);
@@ -14,7 +14,7 @@ const objectSort = (obj) => {
   }
   return sorted;
 };
-export const objectEquals = (a: any, b: any): boolean => {
+export const objectEquals = (a: unknown, b: unknown): boolean => {
   const aJSON = JSON.stringify(objectSort(a));
   const bJSON = JSON.stringify(objectSort(b));
   return aJSON === bJSON;

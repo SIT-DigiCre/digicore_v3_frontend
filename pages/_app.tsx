@@ -36,7 +36,7 @@ const AppRoot = ({ Component, pageProps }) => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <AppBar>
-        <Container component="main" sx={{ minHeight: "65vh" }}>
+        <Container component="main" sx={{ minHeight: "65vh", p: 0 }}>
           <ErrorView />
           <Component {...pageProps} />
         </Container>

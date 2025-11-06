@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -29,6 +30,7 @@ import {
 } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
+import { usePageTitle } from "../../hook/usePageTitle";
 
 const drawerWidth = 240;
 
@@ -48,6 +50,7 @@ export default function AppBar({ children, window }: AppBarProps) {
   const [isClosing, setIsClosing] = useState(false);
   const { authState } = useAuthState();
   const router = useRouter();
+  const { title } = usePageTitle();
 
   const isMenuItemActive = (href: string): boolean => {
     if (href === "/") {
@@ -80,7 +83,7 @@ export default function AppBar({ children, window }: AppBarProps) {
       label: "ホーム",
     },
     {
-      href: "/user/profile",
+      href: "/user/profile/public",
       icon: <ManageAccountsIcon />,
       label: "プロフィール",
     },
@@ -90,14 +93,9 @@ export default function AppBar({ children, window }: AppBarProps) {
       label: "イベント",
     },
     {
-      href: "/setting",
-      icon: <SettingsIcon />,
-      label: "設定",
-    },
-    {
-      href: "/user",
+      href: "/member",
       icon: <PeopleAltIcon />,
-      label: "ユーザー",
+      label: "部員一覧",
     },
     {
       href: "/work",
@@ -114,6 +112,11 @@ export default function AppBar({ children, window }: AppBarProps) {
       icon: <ReceiptLongIcon />,
       label: "稟議",
     },
+    {
+      href: "/setting",
+      icon: <SettingsIcon />,
+      label: "設定",
+    },
   ];
 
   const loginItem: MenuItem = {
@@ -124,7 +127,25 @@ export default function AppBar({ children, window }: AppBarProps) {
 
   const drawer = (
     <div role="navigation" aria-label="メインメニュー">
-      <Toolbar />
+      <Toolbar sx={{ justifyContent: "center" }}>
+        <Link
+          href="/"
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            fontWeight: 800,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            src="/image/digicre-logo.webp"
+            alt="デジクリ Digital Creation Circle"
+            width={180}
+            height={60}
+          />
+        </Link>
+      </Toolbar>
       <Divider />
       <List role="menu" aria-label="メニュー項目">
         {authState.isLogined ? (
@@ -210,7 +231,7 @@ export default function AppBar({ children, window }: AppBarProps) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h1" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            デジクリ
+            {title}
           </Typography>
         </Toolbar>
       </MuiAppBar>
@@ -249,7 +270,7 @@ export default function AppBar({ children, window }: AppBarProps) {
           {drawer}
         </Drawer>
       </Box>
-      <Box sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+      <Box sx={{ flexGrow: 1, py: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
         <Toolbar />
         {children}
       </Box>
