@@ -22,7 +22,7 @@ import {
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { MattermostRegister } from "../../components/Mattermost/Register";
-import TransferAccountView from "../../components/Register/TransferAccountView";
+import TransferClubFeeView from "../../components/Register/TransferClubFeeView";
 import { useJoinData } from "../../hook/user/useJoinData";
 
 const JoinedPage = () => {
@@ -219,7 +219,8 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
     case 4:
       return (
         <>
-          <TransferAccountView />
+          <Heading level={2}>部費の振込について</Heading>
+          <TransferClubFeeView />
           <Box textAlign="center">
             <Button
               variant="contained"

@@ -17,11 +17,11 @@ import {
 
 import Heading from "../Common/Heading";
 
-const TransferAccountView = () => {
+const TransferClubFeeView = () => {
   const [isCopied, setIsCopied] = useState(false);
+
   return (
     <>
-      <Heading level={2}>部費の振込について</Heading>
       <Box>
         <Typography>
           手数料抜きで2000円の部費を<b>3週間以内</b>
@@ -107,4 +107,4 @@ const TransferAccountView = () => {
   );
 };
 
-export default TransferAccountView;
+export default TransferClubFeeView;

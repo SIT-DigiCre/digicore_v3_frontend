@@ -8,7 +8,7 @@ import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
 import { PrivateParentProfileEditor } from "../../../components/Profile/PrivateParentProfileEditor";
 import { PrivatePersonalProfileEditor } from "../../../components/Profile/PrivatePersonalProfileEditor";
-import TransferAccountView from "../../../components/Register/TransferAccountView";
+import TransferClubFeeView from "../../../components/Register/TransferClubFeeView";
 import { useActiveLimit } from "../../../hook/profile/useActiveLimit";
 import { useAuthState } from "../../../hook/useAuthState";
 import { getFiscalYear } from "../../../utils/date-util";
@@ -106,7 +106,7 @@ const ContinuePage = () => {
       ) : (
         <>
           {checkStatus(activeLimit) === "部費入金待ち" ? (
-            <TransferAccountView />
+            <TransferClubFeeView />
           ) : (
             <Typography>継続処理は完了しています。今年度もデジクリしていきましょう！</Typography>
           )}
