@@ -4,10 +4,12 @@ import { useEffect } from "react";
 
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
+
 type Props = {
   code: string;
   isLoginFailed;
 };
+
 const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   const { setCallbackCode } = useDiscordLogin();
   const router = useRouter();

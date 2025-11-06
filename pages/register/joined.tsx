@@ -5,8 +5,9 @@ import {
   Box,
   Button,
   Container,
-  Grid,
+  Link,
   Paper,
+  Stack,
   Step,
   StepLabel,
   Stepper,
@@ -30,10 +31,7 @@ const JoinedPage = () => {
     <>
       <PageHead title="デジクリへようこそ" />
       <Container>
-        <Grid>
-          <Heading level={2}>デジクリへようこそ</Heading>
-        </Grid>
-        <Stepper activeStep={step} style={{ marginBottom: "10px", overflow: "auto" }}>
+        <Stepper activeStep={step} alternativeLabel sx={{ mb: 4 }}>
           <Step>
             <StepLabel>ようこそ</StepLabel>
           </Step>
@@ -64,20 +62,21 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
   switch (step) {
     case 0:
       return (
-        <Box textAlign="center">
-          <Typography>
-            これで入部処理は完了です。あと少しです。続いてデジクリで使っているSNSの登録を行いましょう。
-          </Typography>
+        <Stack spacing={8} alignItems="center">
+          <Box>
+            <Typography>これで入部処理は完了です。</Typography>
+            <Typography>あと少しです！</Typography>
+            <Typography>続いてデジクリで使っているSNSの登録を行いましょう。</Typography>
+          </Box>
           <Button
             variant="contained"
             onClick={() => {
               setStep(1);
             }}
-            sx={{ mt: 2 }}
           >
             次へ
           </Button>
-        </Box>
+        </Stack>
       );
     case 1:
       return (
@@ -104,20 +103,17 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
     case 2:
       return (
         <Box textAlign="center">
-          <Typography>
-            Mattermostへの登録が完了しました。
-            <br />
-            続いてアプリのインストールを行いましょう。
-          </Typography>
-          <Typography marginTop={2}>
-            <a href="https://mattermost.com/apps/" target="_blank" rel="noreferrer">
+          <Typography>Mattermostへの登録が完了しました。</Typography>
+          <Typography>続いてアプリのインストールを行いましょう。</Typography>
+          <Typography mt={2}>
+            <Link href="https://mattermost.com/apps/" target="_blank" rel="noopener noreferrer">
               アプリの取得はこちらから
-            </a>
+            </Link>
           </Typography>
-          <Typography marginTop={2}>
+          <Typography mt={2}>
             アプリ起動後、以下のように設定し、先ほど作成したアカウントでログインください
           </Typography>
-          <TableContainer component={Paper} sx={{ maxWidth: 250, margin: "10px auto" }}>
+          <TableContainer component={Paper} sx={{ maxWidth: 250, my: 2, mx: "auto" }}>
             <Table>
               <TableBody>
                 <TableRow>
@@ -144,24 +140,32 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
       );
     case 3:
       return (
-        <Box textAlign="center">
-          <Typography>
-            Discordでは、VC（ボイスチャット）を使用した雑談や趣味の交流、作品の途中経過などを投稿しています。
-          </Typography>
-          <Typography marginTop={2}>
-            ※かならず先ほど登録したDiscordアカウントで登録してください
-          </Typography>
-          <Button href={joinData.discordUrl} variant="contained" target="_blank">
-            Discordの招待URLを開く
-          </Button>
-          <Typography marginTop={2}>
-            本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
-          </Typography>
-          <Typography marginTop={1}>
-            夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
-          </Typography>
-          <Heading level={3}>主なVoiceChatやTextChat</Heading>
-          <TableContainer component={Paper} sx={{ maxWidth: 500, margin: "10px auto" }}>
+        <Stack spacing={2}>
+          <Stack spacing={2}>
+            <Typography>
+              Discordでは、VC（ボイスチャット）を使用した雑談や趣味の交流、作品の途中経過などを投稿しています。
+            </Typography>
+            <Typography>
+              本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
+            </Typography>
+            <Typography>
+              夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Button
+              href={joinData?.discordUrl}
+              variant="contained"
+              target="_blank"
+              rel="noopener noreferrer"
+              disabled={!joinData?.discordUrl}
+            >
+              Discordの招待URLを開く
+            </Button>
+            <Typography>※かならず先ほど登録したDiscordアカウントで登録してください</Typography>
+          </Stack>
+          <Heading level={3}>主なボイスチャンネルやテキストチャット</Heading>
+          <TableContainer component={Paper} sx={{ maxWidth: 500, my: 2, mx: "auto" }}>
             <Table>
               <TableBody>
                 <TableRow>
@@ -199,16 +203,18 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setStep(4);
-            }}
-            sx={{ mt: 2 }}
-          >
-            次へ
-          </Button>
-        </Box>
+          <Stack direction="row" justifyContent="flex-end">
+            <Button
+              variant="contained"
+              onClick={() => {
+                setStep(4);
+              }}
+              sx={{ mt: 2 }}
+            >
+              次へ
+            </Button>
+          </Stack>
+        </Stack>
       );
     case 4:
       return (
@@ -222,7 +228,7 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
               }}
               sx={{ mt: 2 }}
             >
-              Homeへ
+              ホームへ
             </Button>
           </Box>
         </>
