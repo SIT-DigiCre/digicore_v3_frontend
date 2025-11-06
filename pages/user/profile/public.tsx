@@ -57,7 +57,7 @@ const PublicProfilePage = () => {
   return (
     <EditorTabLayout>
       <div>
-        <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+        <Typography level={3} sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
           公開情報（他の部員も見れる情報）
         </Typography>
         <Stack spacing={4} py={4}>

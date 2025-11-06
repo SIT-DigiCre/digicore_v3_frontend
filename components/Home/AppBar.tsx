@@ -26,11 +26,11 @@ import {
   ListItemText,
   AppBar as MuiAppBar,
   Toolbar,
-  Typography,
 } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
 import { usePageTitle } from "../../hook/usePageTitle";
+import Heading from "../Common/Heading";
 
 const drawerWidth = 240;
 
@@ -230,9 +230,7 @@ export default function AppBar({ children, window }: AppBarProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h1" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
-            {title}
-          </Typography>
+          <Heading level={1}>{title}</Heading>
         </Toolbar>
       </MuiAppBar>
       <Box

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Box, Stack, Typography } from "@mui/material";
 
+import Heading from "../components/Common/Heading";
 import PageHead from "../components/Common/PageHead";
 import { useAuthState } from "../hook/useAuthState";
 
@@ -19,11 +20,11 @@ const IndexPage = () => {
       <PageHead title="Home" />
       <Stack spacing={2}>
         <Box>
-          <h1>ようこそ、デジコア3.1へ</h1>
+          <Heading level={1}>ようこそ、デジコア3.1へ</Heading>
           <p>デジコア3.1は開発途上のアプリケーションです。優しい気持ちで接してみてください</p>
         </Box>
         <Box>
-          <h2>使いそうな項目</h2>
+          <Heading level={2}>使いそうな項目</Heading>
           <Typography>
             <Link href="/register/joined">入部完了ページ</Link>
             ：部費の入金先やMattermost、Discordへの参加リンクがあります

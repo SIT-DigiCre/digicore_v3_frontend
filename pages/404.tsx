@@ -14,7 +14,7 @@ const NotFoundPage = () => {
         sx={{ minHeight: "100vh" }}
       >
         <Grid size={12} textAlign="center">
-          <Typography variant="h2" component="h1">
+          <Typography level={2} component="h1">
             404
           </Typography>
           <Typography>ページが見つかりません</Typography>

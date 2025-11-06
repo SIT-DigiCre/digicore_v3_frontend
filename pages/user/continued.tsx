@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { Grid, Typography } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
 
@@ -18,11 +19,11 @@ const ContinuedPage = () => {
       <PageHead title="継続完了" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Continued" }]} />
       <Grid>
-        <h2>継続処理完了</h2>
+        <Heading level={2}>継続処理完了</Heading>
         <Typography>これで継続処理は完了です。</Typography>
       </Grid>
       <Grid>
-        <h3>部費の振込について</h3>
+        <Heading level={3}>部費の振込について</Heading>
         <Typography>
           手数料抜きで2000円の部費を<b>3週間以内</b>
           に、下記の口座に振り込んでください。デジクリの口座はゆうちょ銀行です。
@@ -40,7 +41,7 @@ const ContinuedPage = () => {
           <Typography>口座番号:8175758 預金種目:普通預金</Typography>
         </Grid>
         <Grid>
-          <h4>振込方法と手数料</h4>
+          <Heading variant="h4">振込方法と手数料</Heading>
           <Grid style={{ marginLeft: "30px" }}>
             <ol>
               <li>

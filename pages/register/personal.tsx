@@ -51,7 +51,7 @@ const RegisterPersonalProfilePage = () => {
     >
       <Stack spacing={4} mb={8}>
         <Box>
-          <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+          <Typography level={3} sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
             本人情報
           </Typography>
           <PersonalInfoForm
@@ -62,7 +62,7 @@ const RegisterPersonalProfilePage = () => {
           />
         </Box>
         <Box>
-          <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+          <Typography level={3} sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
             緊急連絡先
           </Typography>
           <EmergencyContactForm

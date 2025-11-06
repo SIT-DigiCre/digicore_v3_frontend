@@ -51,7 +51,7 @@ const UserProfilePage = ({ id }: Props) => {
             <Grid size={{ xs: 12, sm: 8 }}>
               <Box textAlign={{ xs: "center", sm: "left" }}>
                 <Typography
-                  variant="h3"
+                  level={3}
                   component="h1"
                   gutterBottom
                   sx={{

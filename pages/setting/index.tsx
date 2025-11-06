@@ -1,6 +1,7 @@
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useDarkMode } from "../../hook/useDarkMode";
 import { DarkMode } from "../../interfaces";
@@ -12,10 +13,10 @@ const SettingPage = () => {
     <>
       <PageHead title="ユーザー設定" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Setting" }]} />
-      <h1>ユーザー設定</h1>
+      <Heading level={1}>ユーザー設定</Heading>
       <hr />
       <Grid>
-        <h3>ダークモード設定</h3>
+        <Heading level={3}>ダークモード設定</Heading>
         <p>この設定はブラウザに保存されます</p>
         <FormControl sx={{ marginTop: 1 }}>
           <InputLabel id="demo-simple-select-label">モード</InputLabel>

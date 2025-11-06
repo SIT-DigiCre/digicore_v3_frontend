@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import Heading from "../../components/Common/Heading";
 import MarkdownEditor from "../../components/Common/MarkdownEditor";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
@@ -49,7 +50,7 @@ const RegisterIntroductionProfilePage = () => {
       nextDisabled={false}
     >
       <div>
-        <h2>自己紹介ページ文章</h2>
+        <Heading level={2}>自己紹介ページ文章</Heading>
         <MarkdownEditor
           value={editUserIntro.md}
           onChange={(e) => {

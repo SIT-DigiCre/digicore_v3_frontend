@@ -13,11 +13,13 @@ import {
   Typography,
 } from "@mui/material";
 
+import Heading from "../Common/Heading";
+
 const TransferAccountView = () => {
   const [copyed, setCopyed] = useState(false);
   return (
     <>
-      <h3>部費の振込について</h3>
+      <Heading level={3}>部費の振込について</Heading>
       <Typography>
         手数料抜きで2000円の部費を<b>3週間以内</b>
         に、下記の口座に振り込んでください。デジクリの口座はゆうちょ銀行です。
@@ -82,7 +84,7 @@ const TransferAccountView = () => {
         </Button>
       </Grid>
       <Grid>
-        <h4>振込方法と手数料</h4>
+        <Heading level={4}>振込方法と手数料</Heading>
         <Grid style={{ marginLeft: "30px" }}>
           <ol>
             <li>

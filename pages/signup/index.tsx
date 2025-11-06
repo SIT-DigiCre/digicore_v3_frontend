@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Google } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useRegisterData } from "../../hook/useRegisterData";
 
@@ -18,7 +19,7 @@ const RegisterPage = () => {
           width={333}
           height={111}
         />
-        <Typography variant="h4">デジコア登録ページ</Typography>
+        <Heading level={2}>デジコア登録ページ</Heading>
         <Typography variant="body1" sx={{ mb: 4 }}>
           デジクリの入部もこちらからできます
         </Typography>

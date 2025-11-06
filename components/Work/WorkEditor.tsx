@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Button, Grid, IconButton, List, ListItem, TextField } from "@mui/material";
+import Heading from "../Common/Heading";
 
 import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
@@ -63,7 +64,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
         />
       </Grid>
       <Grid sx={{ marginTop: 3 }}>
-        <h3>説明</h3>
+        <Heading level={3}>説明</Heading>
         <MarkdownEditor
           value={description}
           onChange={(value) => {
@@ -72,7 +73,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
         />
       </Grid>
       <Grid sx={{ marginTop: 3 }}>
-        <h3>ファイル</h3>
+        <Heading level={3}>ファイル</Heading>
         <List>
           {files.map((fileId) => (
             <ListItem
@@ -108,7 +109,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
         />
       </Grid>
       <Grid sx={{ marginTop: 3 }}>
-        <h3>タグ</h3>
+        <Heading level={3}>タグ</Heading>
         {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
         <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
       </Grid>

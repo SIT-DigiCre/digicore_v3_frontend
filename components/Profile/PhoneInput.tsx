@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 
-import { Stack, TextField, Typography } from "@mui/material";
+import { Stack, TextField } from "@mui/material";
+
+import Heading from "../Common/Heading";
 
 type Props = {
   title: string;
@@ -17,9 +19,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
 
   return (
     <Stack spacing={2}>
-      <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-        {title}
-      </Typography>
+      <Heading level={4}>{title}</Heading>
       <TextField
         label={title}
         variant="outlined"

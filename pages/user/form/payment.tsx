@@ -21,6 +21,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
 import { usePayment } from "../../../hook/user/usePayment";
 import { PaymentHistory } from "../../../interfaces/form";
@@ -64,7 +65,7 @@ const PaymentPage = () => {
     <>
       <PageHead title="部費振込報告" />
       <Grid>
-        <h2>部費振り込み完了報告フォーム</h2>
+        <Heading level={2}>部費振り込み完了報告フォーム</Heading>
         <Typography>
           振り込みは済みましたか？振込先は <Link href="/register/joined">こちら</Link>
           のページをご覧下さい。
@@ -86,7 +87,7 @@ const PaymentPage = () => {
           aria-describedby="modal-modal-description"
         >
           <Box sx={modalStyle}>
-            <h3>{getFiscalYear(new Date())}年度用</h3>
+            <Heading level={3}>{getFiscalYear(new Date())}年度用</Heading>
             <FormControl margin="normal">
               <InputLabel htmlFor="name">振込名義</InputLabel>
               <Input
@@ -110,7 +111,7 @@ const PaymentPage = () => {
         </Modal>
       </Grid>
       <Grid>
-        <h3>記録</h3>
+        <Heading level={3}>記録</Heading>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 300 }} aria-label="simple table">
             <TableHead>

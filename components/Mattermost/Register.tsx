@@ -76,7 +76,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     <>
       <Grid container my={2}>
         <Grid size={12}>
-          <Typography align="center" variant="h3" fontSize={50}>
+          <Typography align="center" level={3} fontSize={50}>
             <Image alt="Mattermost" src="/image/mattermost_icon.png" width={40} height={40} />
             Mattermost 登録
           </Typography>

@@ -25,6 +25,7 @@ import { BudgetFileView } from "../../components/Budget/BudgetFileView";
 import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useBudget } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
@@ -242,7 +243,7 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
       {modeStr === "edit" ? (
         <>
           <Grid>
-            <h1>{budgetDetail.name}</h1>
+            <Heading level={1}>{budgetDetail.name}</Heading>
             <Chip
               label={statusDisplay[budgetDetail.status]}
               color={budgetStatusColor[budgetDetail.status]}
@@ -253,7 +254,7 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
       ) : (
         <>
           <Grid>
-            <h1>{budgetDetail.name}</h1>
+            <Heading level={1}>{budgetDetail.name}</Heading>
             <div>
               <Chip
                 label={statusDisplay[budgetDetail.status]}

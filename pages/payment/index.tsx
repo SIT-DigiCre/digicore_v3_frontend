@@ -15,6 +15,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import Heading from "../../components/Common/Heading";
 
 import { usePayments } from "../../hook/payment/usePayments";
 import { Payment } from "../../interfaces/payment";
@@ -36,7 +37,7 @@ const PaymentPage = () => {
   return (
     <>
       <Grid>
-        <h1>支払い一覧</h1>
+        <Heading level={1}>支払い一覧</Heading>
         <hr />
       </Grid>
       <Grid container>

@@ -11,6 +11,7 @@ import {
   ListItem,
   TextField,
 } from "@mui/material";
+import Heading from "../Common/Heading";
 
 import { BudgetDetail, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
 import { FileObject } from "../../interfaces/file";
@@ -164,7 +165,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
   return (
     <>
       <Grid sx={{ marginTop: 3 }}>
-        <h3>基本情報</h3>
+        <Heading level={3}>基本情報</Heading>
       </Grid>
       {editableFields[initBudget.status].name ? (
         <Grid sx={{ marginTop: 3 }}>
@@ -228,7 +229,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
       <Divider sx={{ marginTop: 3 }} />
 
       <Grid sx={{ marginTop: 3 }}>
-        <h3>金額</h3>
+        <Heading level={3}>金額</Heading>
       </Grid>
       {editableFields[initBudget.status].budget ? (
         <Grid sx={{ marginTop: 3 }}>
@@ -285,7 +286,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
       <Divider sx={{ marginTop: 3 }} />
 
       <Grid sx={{ marginTop: 3 }}>
-        <h3>備考</h3>
+        <Heading level={3}>備考</Heading>
       </Grid>
       {editableFields[initBudget.status].remark ? (
         <Grid sx={{ marginTop: 3 }}>
@@ -307,7 +308,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
           <Divider sx={{ marginTop: 3 }} />
 
           <Grid sx={{ marginTop: 3 }}>
-            <h3>領収書</h3>
+            <Heading level={3}>領収書</Heading>
             <List>
               {files.map((fileId) => (
                 <ListItem

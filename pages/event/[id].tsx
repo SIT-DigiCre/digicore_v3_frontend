@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { Alert, Box, Stack } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
@@ -27,7 +28,7 @@ const EventPage = ({ id }: EventPageProps) => {
           { text: eventDetail.name },
         ]}
       />
-      <h1>{eventDetail.name}イベント予約フォーム</h1>
+      <Heading level={1}>{eventDetail.name}イベント予約フォーム</Heading>
       {eventDetail.reservated && (
         <Alert severity="info" sx={{ mb: 2 }}>
           既にあなたは予約済みです

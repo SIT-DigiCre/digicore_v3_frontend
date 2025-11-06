@@ -42,7 +42,7 @@ const PersonalProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
+        <Typography level={3} sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
           本人情報
         </Typography>
         <PersonalInfoForm

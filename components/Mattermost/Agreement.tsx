@@ -4,13 +4,13 @@ import { useState } from "react";
 
 import {
   Button,
-  Container,
-  Grid,
-  Typography,
-  FormGroup,
-  FormControlLabel,
   Checkbox,
   colors,
+  Container,
+  FormControlLabel,
+  FormGroup,
+  Grid,
+  Typography,
 } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
@@ -18,6 +18,7 @@ import PageHead from "../../components/Common/PageHead";
 import { useAuthState } from "../../hook/useAuthState";
 import { MattermostDisplayPage } from "../../interfaces/mattermost";
 import { User } from "../../interfaces/user";
+import Heading from "../Common/Heading";
 
 type Props = {
   displayPageSetter: (page: MattermostDisplayPage) => void;
@@ -42,12 +43,8 @@ export const MattermostAgreement = ({ displayPageSetter }: Props) => {
       <PageHead title="Mattermost 移行用特設ページ" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Mattermost" }]} />
       <Grid margin={2}>
-        <Typography variant="h4" align="center" noWrap={true}>
-          Mattermost
-        </Typography>
-        <Typography variant="h4" align="center" noWrap={true}>
-          移行用特設ページ
-        </Typography>
+        <Heading level={4}>Mattermost</Heading>
+        <Heading level={4}>移行用特設ページ</Heading>
       </Grid>
       <Grid margin={2}>
         <Typography align="center">

@@ -2,6 +2,7 @@ import { Button, Stack, TextField, Typography } from "@mui/material";
 
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
+import Heading from "../Common/Heading";
 
 import PhoneInput from "./PhoneInput";
 
@@ -66,9 +67,7 @@ const EmergencyContactForm = ({
         initialPhoneNumber={profile.parentHomephoneNumber}
       />
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-          保護者住所
-        </Typography>
+        <Heading level={4}>保護者住所</Heading>
         <Stack direction="row" spacing={2}>
           <TextField
             label="保護者住所"

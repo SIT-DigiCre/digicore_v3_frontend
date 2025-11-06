@@ -18,6 +18,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { MattermostRegister } from "../../components/Mattermost/Register";
 import TransferAccountView from "../../components/Register/TransferAccountView";
@@ -30,7 +31,7 @@ const JoinedPage = () => {
       <PageHead title="デジクリへようこそ" />
       <Container>
         <Grid>
-          <h2>デジクリへようこそ</h2>
+          <Heading level={2}>デジクリへようこそ</Heading>
         </Grid>
         <Stepper activeStep={step} style={{ marginBottom: "10px", overflow: "auto" }}>
           <Step>
@@ -159,9 +160,7 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
           <Typography marginTop={1}>
             夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
           </Typography>
-          <Typography variant="h3" fontSize={20} marginTop={2}>
-            主なVoiceChatやTextChat
-          </Typography>
+          <Heading level={3}>主なVoiceChatやTextChat</Heading>
           <TableContainer component={Paper} sx={{ maxWidth: 500, margin: "10px auto" }}>
             <Table>
               <TableBody>

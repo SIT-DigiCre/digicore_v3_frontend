@@ -2,6 +2,7 @@ import { Container, Grid, Typography } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import PageHead from "../../components/Common/PageHead";
+import Heading from "../Common/Heading";
 
 export const MattermostRegisterComplete = () => {
   return (
@@ -9,12 +10,8 @@ export const MattermostRegisterComplete = () => {
       <PageHead title="Mattermost アカウント登録完了" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Mattermost" }]} />
       <Grid margin={2}>
-        <Typography variant="h4" align="center" noWrap={true}>
-          Mattermost
-        </Typography>
-        <Typography variant="h4" align="center" noWrap={true}>
-          アカウント登録完了
-        </Typography>
+        <Heading level={4}>Mattermost</Heading>
+        <Heading level={4}>アカウント登録完了</Heading>
       </Grid>
       <Grid margin={2}>
         <Typography align="center">Mattermost アカウントの作成に成功しました</Typography>
