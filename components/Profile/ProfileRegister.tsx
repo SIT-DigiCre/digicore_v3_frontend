@@ -12,7 +12,7 @@ const ProfileRegister = () => {
   useEffect(() => {
     if (!authState.isLogined) return;
 
-    // 既存のロジックを保持しつつ、適切なタブにリダイレクト
+    // 入力状況に応じて、適切なタブにリダイレクト
     if (authState.user.username !== authState.user.studentNumber) {
       if (privateProfile.firstName !== "") {
         if (authState.user.discordUserId !== "") {
