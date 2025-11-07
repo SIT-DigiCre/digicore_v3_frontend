@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { Stack, Typography } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import { useAuthState } from "../../hook/useAuthState";
 import { useRegisterData } from "../../hook/useRegisterData";
 
@@ -24,7 +25,7 @@ const LoginCallbackPage = ({ code }: Props) => {
 
   return (
     <Stack alignItems="center" mt={20}>
-      <Typography variant="h4">登録処理中...</Typography>
+      <Heading level={4}>登録処理中...</Heading>
       <Typography variant="body1">
         （この画面が長時間出る場合は登録からやり直して下さい）
       </Typography>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@mui/material";
 
+import Heading from "../../../components/Common/Heading";
 import MarkdownEditor from "../../../components/Common/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
@@ -39,7 +40,7 @@ const IntroductionProfilePage = () => {
   return (
     <EditorTabLayout>
       <div>
-        <h2>自己紹介ページ文章</h2>
+        <Heading level={2}>自己紹介ページ文章</Heading>
         <MarkdownEditor
           value={editUserIntro.md}
           onChange={(e) => {

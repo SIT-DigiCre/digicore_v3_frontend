@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 
-import { Grid } from "@mui/material";
-
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import WorkEditor from "../../components/Work/WorkEditor";
 import { useWorks } from "../../hook/work/useWork";
@@ -26,10 +25,7 @@ const WorkCreatePage = () => {
       <Breadcrumbs
         links={[{ text: "Home", href: "/" }, { text: "User", href: "/work" }, { text: "新規作成" }]}
       />
-      <Grid>
-        <h1>Work新規作成</h1>
-        <hr />
-      </Grid>
+      <Heading level={2}>Work新規作成</Heading>
       <WorkEditor onSubmit={onSubmit} />
     </>
   );

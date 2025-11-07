@@ -14,6 +14,7 @@ import {
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
 import { useWorks } from "../../hook/work/useWork";
@@ -28,7 +29,7 @@ const WorkIndexPage = () => {
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "Work" }]} />
       <Grid>
         <div>
-          <h1 className="d-inlineblock">Work一覧</h1>
+          <Heading level={2}>Work一覧</Heading>
           <div style={{ float: "right" }}>
             <Button
               variant="contained"

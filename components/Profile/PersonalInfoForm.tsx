@@ -12,6 +12,7 @@ import {
 
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
+import Heading from "../Common/Heading";
 
 import NameInput from "./NameInput";
 import PhoneInput from "./PhoneInput";
@@ -40,9 +41,7 @@ const PersonalInfoForm = ({
   return (
     <Stack spacing={4}>
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-          氏名
-        </Typography>
+        <Heading level={4}>氏名</Heading>
         <Stack spacing={2}>
           <NameInput
             firstNameTitle="名字"
@@ -74,9 +73,7 @@ const PersonalInfoForm = ({
       </Stack>
       <Box>
         <Stack spacing={2}>
-          <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-            性別
-          </Typography>
+          <Heading level={4}>性別</Heading>
           <Typography variant="body2" sx={{ margin: 0 }}>
             戸籍上のものを入力してください
           </Typography>
@@ -109,9 +106,7 @@ const PersonalInfoForm = ({
         />
       </Box>
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-          住所
-        </Typography>
+        <Heading level={4}>住所</Heading>
         <TextField
           label="住所"
           fullWidth

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useWorks } from "../../hook/work/useWork";
 
@@ -28,7 +29,7 @@ const MyWorkPage = () => {
       />
       <Grid>
         <div>
-          <h1 className="d-inlineblock">My Work</h1>
+          <Heading level={2}>My Work</Heading>
           <div style={{ float: "right" }}>
             <Button
               variant="contained"

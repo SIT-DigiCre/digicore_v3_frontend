@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Google } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useLoginData } from "../../hook/useLoginData";
 const LoginPage = () => {
@@ -18,7 +19,7 @@ const LoginPage = () => {
           width={333}
           height={111}
         />
-        <Typography variant="h4">DigiCore v3</Typography>
+        <Heading level={2}>DigiCore v3</Heading>
         <Box my={10}>
           <Button variant="contained" startIcon={<Google aria-label="Google" />} href={loginUrl}>
             ログインする

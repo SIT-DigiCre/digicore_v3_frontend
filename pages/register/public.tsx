@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import { FileBrowserModal } from "../../components/File/FileBrowser";
 import { FileUploader } from "../../components/File/FileUploader";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
@@ -65,7 +66,7 @@ const RegisterPublicProfilePage = () => {
       }
     >
       <div>
-        <h2>公開情報（他の部員も見れる情報）</h2>
+        <Heading level={2}>公開情報（他の部員も見れる情報）</Heading>
         <Stack spacing={4} py={4}>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2} alignItems="center">

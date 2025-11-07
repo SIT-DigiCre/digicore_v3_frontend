@@ -5,8 +5,9 @@ import {
   Box,
   Button,
   Container,
-  Grid,
+  Link,
   Paper,
+  Stack,
   Step,
   StepLabel,
   Stepper,
@@ -18,9 +19,10 @@ import {
   Typography,
 } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { MattermostRegister } from "../../components/Mattermost/Register";
-import TransferAccountView from "../../components/Register/TransferAccountView";
+import TransferClubFeeView from "../../components/Register/TransferClubFeeView";
 import { useJoinData } from "../../hook/user/useJoinData";
 
 const JoinedPage = () => {
@@ -29,10 +31,7 @@ const JoinedPage = () => {
     <>
       <PageHead title="デジクリへようこそ" />
       <Container>
-        <Grid>
-          <h2>デジクリへようこそ</h2>
-        </Grid>
-        <Stepper activeStep={step} style={{ marginBottom: "10px", overflow: "auto" }}>
+        <Stepper activeStep={step} alternativeLabel sx={{ mb: 4 }}>
           <Step>
             <StepLabel>ようこそ</StepLabel>
           </Step>
@@ -63,20 +62,21 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
   switch (step) {
     case 0:
       return (
-        <Box textAlign="center">
-          <Typography>
-            これで入部処理は完了です。あと少しです。続いてデジクリで使っているSNSの登録を行いましょう。
-          </Typography>
+        <Stack spacing={8} alignItems="center">
+          <Box>
+            <Typography>これで入部処理は完了です。</Typography>
+            <Typography>あと少しです！</Typography>
+            <Typography>続いてデジクリで使っているSNSの登録を行いましょう。</Typography>
+          </Box>
           <Button
             variant="contained"
             onClick={() => {
               setStep(1);
             }}
-            sx={{ mt: 2 }}
           >
             次へ
           </Button>
-        </Box>
+        </Stack>
       );
     case 1:
       return (
@@ -103,20 +103,17 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
     case 2:
       return (
         <Box textAlign="center">
-          <Typography>
-            Mattermostへの登録が完了しました。
-            <br />
-            続いてアプリのインストールを行いましょう。
-          </Typography>
-          <Typography marginTop={2}>
-            <a href="https://mattermost.com/apps/" target="_blank" rel="noreferrer">
+          <Typography>Mattermostへの登録が完了しました。</Typography>
+          <Typography>続いてアプリのインストールを行いましょう。</Typography>
+          <Typography mt={2}>
+            <Link href="https://mattermost.com/apps/" target="_blank" rel="noopener noreferrer">
               アプリの取得はこちらから
-            </a>
+            </Link>
           </Typography>
-          <Typography marginTop={2}>
+          <Typography mt={2}>
             アプリ起動後、以下のように設定し、先ほど作成したアカウントでログインください
           </Typography>
-          <TableContainer component={Paper} sx={{ maxWidth: 250, margin: "10px auto" }}>
+          <TableContainer component={Paper} sx={{ maxWidth: 250, my: 2, mx: "auto" }}>
             <Table>
               <TableBody>
                 <TableRow>
@@ -143,26 +140,32 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
       );
     case 3:
       return (
-        <Box textAlign="center">
-          <Typography>
-            Discordでは、VC（ボイスチャット）を使用した雑談や趣味の交流、作品の途中経過などを投稿しています。
-          </Typography>
-          <Typography marginTop={2}>
-            ※かならず先ほど登録したDiscordアカウントで登録してください
-          </Typography>
-          <Button href={joinData.discordUrl} variant="contained" target="_blank">
-            Discordの招待URLを開く
-          </Button>
-          <Typography marginTop={2}>
-            本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
-          </Typography>
-          <Typography marginTop={1}>
-            夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
-          </Typography>
-          <Typography variant="h3" fontSize={20} marginTop={2}>
-            主なVoiceChatやTextChat
-          </Typography>
-          <TableContainer component={Paper} sx={{ maxWidth: 500, margin: "10px auto" }}>
+        <Stack spacing={2}>
+          <Stack spacing={2}>
+            <Typography>
+              Discordでは、VC（ボイスチャット）を使用した雑談や趣味の交流、作品の途中経過などを投稿しています。
+            </Typography>
+            <Typography>
+              本日から参加可能です! 是非VC（ボイスチャット）などに参加して交流しましょう!
+            </Typography>
+            <Typography>
+              夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
+            </Typography>
+          </Stack>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Button
+              href={joinData?.discordUrl}
+              variant="contained"
+              target="_blank"
+              rel="noopener noreferrer"
+              disabled={!joinData?.discordUrl}
+            >
+              Discordの招待URLを開く
+            </Button>
+            <Typography>※かならず先ほど登録したDiscordアカウントで登録してください</Typography>
+          </Stack>
+          <Heading level={3}>主なボイスチャンネルやテキストチャット</Heading>
+          <TableContainer component={Paper} sx={{ maxWidth: 500, my: 2, mx: "auto" }}>
             <Table>
               <TableBody>
                 <TableRow>
@@ -200,21 +203,38 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
               </TableBody>
             </Table>
           </TableContainer>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setStep(4);
-            }}
-            sx={{ mt: 2 }}
-          >
-            次へ
-          </Button>
-        </Box>
+          <Stack direction="row" justifyContent="flex-end">
+            <Button
+              variant="contained"
+              onClick={() => {
+                setStep(4);
+              }}
+              sx={{ mt: 2 }}
+            >
+              次へ
+            </Button>
+          </Stack>
+        </Stack>
       );
     case 4:
       return (
         <>
-          <TransferAccountView />
+          <Heading level={2}>部費の振込について</Heading>
+          <Box>
+            <Typography>
+              手数料抜きで2000円の部費を<b>3週間以内</b>
+              に、下記の口座に振り込んでください。デジクリの口座はゆうちょ銀行です。
+            </Typography>
+            <Typography>
+              部費の振込が完了した際はデジコア上の
+              <Link href="/user/form/payment">部費振込報告フォーム</Link>
+              から振込完了報告をする必要があります
+            </Typography>
+            <Typography>
+              期限を過ぎても振込完了報告がされない場合、メールにて会計から確認の連絡が届きます。それらに反応が無い場合、デジコアやMattermost、Discordのアカウント制限がかかります。
+            </Typography>
+          </Box>
+          <TransferClubFeeView />
           <Box textAlign="center">
             <Button
               variant="contained"
@@ -223,7 +243,7 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
               }}
               sx={{ mt: 2 }}
             >
-              Homeへ
+              ホームへ
             </Button>
           </Box>
         </>

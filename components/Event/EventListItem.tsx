@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Card, CardContent } from "@mui/material";
 
 import { DigicreEvent } from "../../interfaces/event";
+import Heading from "../Common/Heading";
 import MarkdownView from "../Common/MarkdownView";
 
 type Props = {
@@ -19,7 +20,7 @@ const EventListItem = ({ event }: Props) => {
       className="clickable-gray"
     >
       <CardContent>
-        <h3>{event.name}</h3>
+        <Heading level={3}>{event.name}</Heading>
         <MarkdownView md={event.description ? event.description : ""} />
       </CardContent>
     </Card>

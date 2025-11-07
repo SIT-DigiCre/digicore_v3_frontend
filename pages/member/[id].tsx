@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { School as SchoolIcon } from "@mui/icons-material";
 import { Avatar, Box, Chip, Container, Grid, Paper, Typography } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
 import { useIntroduction } from "../../hook/profile/useIntroduction";
@@ -50,18 +51,7 @@ const UserProfilePage = ({ id }: Props) => {
 
             <Grid size={{ xs: 12, sm: 8 }}>
               <Box textAlign={{ xs: "center", sm: "left" }}>
-                <Typography
-                  variant="h3"
-                  component="h1"
-                  gutterBottom
-                  sx={{
-                    fontWeight: "bold",
-                    color: "primary.main",
-                    fontSize: { xs: "2rem", sm: "2.5rem" },
-                  }}
-                >
-                  {profile.username}
-                </Typography>
+                <Heading level={2}>{profile.username}</Heading>
 
                 {profile.shortIntroduction && (
                   <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>

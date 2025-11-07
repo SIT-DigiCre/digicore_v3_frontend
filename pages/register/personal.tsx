@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 
+import Heading from "../../components/Common/Heading";
 import EmergencyContactForm from "../../components/Profile/EmergencyContactForm";
 import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
@@ -51,9 +52,7 @@ const RegisterPersonalProfilePage = () => {
     >
       <Stack spacing={4} mb={8}>
         <Box>
-          <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
-            本人情報
-          </Typography>
+          <Heading level={3}>本人情報</Heading>
           <PersonalInfoForm
             initialProfile={privateProfile}
             profile={editProfile}
@@ -62,9 +61,7 @@ const RegisterPersonalProfilePage = () => {
           />
         </Box>
         <Box>
-          <Typography variant="h3" sx={{ fontSize: "1.5rem", fontWeight: "bold", mb: 2 }}>
-            緊急連絡先
-          </Typography>
+          <Heading level={3}>緊急連絡先</Heading>
           <EmergencyContactForm
             initialProfile={privateProfile}
             profile={editProfile}

@@ -4,10 +4,11 @@ import { useState } from "react";
 import { Button, Grid, Typography } from "@mui/material";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
+import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
 import { PrivateParentProfileEditor } from "../../../components/Profile/PrivateParentProfileEditor";
 import { PrivatePersonalProfileEditor } from "../../../components/Profile/PrivatePersonalProfileEditor";
-import TransferAccountView from "../../../components/Register/TransferAccountView";
+import TransferClubFeeView from "../../../components/Register/TransferClubFeeView";
 import { useActiveLimit } from "../../../hook/profile/useActiveLimit";
 import { useAuthState } from "../../../hook/useAuthState";
 import { getFiscalYear } from "../../../utils/date-util";
@@ -33,9 +34,7 @@ const ContinuePage = () => {
       <PageHead title="継続確認フォーム" />
       <Breadcrumbs links={[{ text: "Home", href: "/" }, { text: "継続確認フォーム" }]} />
       <Grid sx={{ mt: 2 }}>
-        <Typography variant="h2" fontSize={30}>
-          継続確認フォーム
-        </Typography>
+        <Heading level={2}>継続確認フォーム</Heading>
         <Typography>
           既存でデジクリ部員の方が継続をするフォームです。
           <br />
@@ -57,24 +56,18 @@ const ContinuePage = () => {
         <Grid sx={{ mt: 2 }}>
           {check ? (
             <>
-              <Typography variant="h3" fontSize={24}>
-                緊急連絡先の再確認
-              </Typography>
+              <Heading level={3}>緊急連絡先の再確認</Heading>
               <Typography>
                 緊急連絡先に変更がないかを再確認してください。変更がある場合は、修正を加え保存ボタンを押してください。
               </Typography>
               <hr />
               <Grid sx={{ mt: 2, mb: 1 }}>
-                <Typography variant="h4" fontSize={20}>
-                  自身の連絡先
-                </Typography>
+                <Heading level={4}>自身の連絡先</Heading>
                 <PrivatePersonalProfileEditor />
               </Grid>
               <hr />
               <Grid sx={{ mt: 2, mb: 1 }}>
-                <Typography variant="h4" fontSize={20}>
-                  保護者の連絡先
-                </Typography>
+                <Heading level={4}>保護者の連絡先</Heading>
                 <PrivateParentProfileEditor />
               </Grid>
               <hr />
@@ -113,7 +106,7 @@ const ContinuePage = () => {
       ) : (
         <>
           {checkStatus(activeLimit) === "部費入金待ち" ? (
-            <TransferAccountView />
+            <TransferClubFeeView />
           ) : (
             <Typography>継続処理は完了しています。今年度もデジクリしていきましょう！</Typography>
           )}

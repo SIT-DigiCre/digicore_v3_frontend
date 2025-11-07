@@ -6,6 +6,7 @@ import { Avatar, Grid } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import ChipList from "../../components/Common/ChipList";
+import Heading from "../../components/Common/Heading";
 import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
 import WorkEditor from "../../components/Work/WorkEditor";
@@ -82,7 +83,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
       ) : (
         <>
           <Grid>
-            <h1>{workDetail.name}</h1>
+            <Heading level={1}>{workDetail.name}</Heading>
             {workDetail.authors
               ? workDetail.authors.map((a) => (
                   <div

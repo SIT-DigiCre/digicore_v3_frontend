@@ -16,6 +16,7 @@ import {
 
 import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
 import Breadcrumbs from "../../components/Common/Breadcrumb";
+import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useBudgets } from "../../hook/budget/useBudget";
 import { BudgetClass, BudgetStatus } from "../../interfaces/budget";
@@ -95,9 +96,9 @@ const BudgetPage = ({ modeStr }: Props) => {
       />
       <Grid>
         <div>
-          <h1 className="d-inlineblock">
+          <Heading level={2}>
             {modeStr === "admin" ? "自分の稟議（管理者用）" : "自分の稟議"}
-          </h1>
+          </Heading>
           <div style={{ float: "right" }}>
             {modeStr === "admin" ? (
               <Button

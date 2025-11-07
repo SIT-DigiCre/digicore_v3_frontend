@@ -1,5 +1,6 @@
 import { Button, Grid, Typography } from "@mui/material";
 
+import Heading from "../components/Common/Heading";
 import PageHead from "../components/Common/PageHead";
 
 const NotFoundPage = () => {
@@ -14,9 +15,7 @@ const NotFoundPage = () => {
         sx={{ minHeight: "100vh" }}
       >
         <Grid size={12} textAlign="center">
-          <Typography variant="h2" component="h1">
-            404
-          </Typography>
+          <Heading level={2}>404</Heading>
           <Typography>ページが見つかりません</Typography>
           <Button variant="contained" href="/">
             Home へ戻る
