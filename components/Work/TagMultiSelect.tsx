@@ -1,13 +1,5 @@
-import {
-  Chip,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  SelectChangeEvent,
-  Stack,
-} from "@mui/material";
+import { Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Stack } from "@mui/material";
+import Select from "@mui/material/Select";
 
 import { useWorkTags } from "../../hook/work/useWorkTag";
 
@@ -18,23 +10,24 @@ type Props = {
 
 const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
   const { workTags } = useWorkTags();
-  const handleOnChange = (e: SelectChangeEvent<string[]>) => {
-    const value = e.target.value;
-    if (typeof value === "string") {
-      onChange([value]);
-    } else {
-      onChange(value);
-    }
-  };
-  if (workTags.length === 0) return <></>;
+
+  if (workTags.length === 0) return null;
+
   return (
     <FormControl>
       <InputLabel id="multiple-tag-label">タグ</InputLabel>
       <Select
         labelId="multiple-tag-label"
-        multiple
+        multiple={true}
         value={selectedTags}
-        onChange={handleOnChange}
+        onChange={(event) => {
+          const value = event.target.value;
+          if (typeof value === "string") {
+            onChange([value]);
+          } else {
+            onChange(value);
+          }
+        }}
         input={<OutlinedInput label="タグ" />}
         renderValue={(selected) => (
           <Stack direction="row" spacing={1}>
