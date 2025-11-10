@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "type-check": "tsc",
-    "lint": "next lint --fix",
+    "lint": "eslint . --fix",
     "format": "prettier --write \"./**/*.{ts,tsx}\""
   },
   "dependencies": {
@@ -27,16 +27,18 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "9.34.0",
     "@next/eslint-plugin-next": "^16.0.1",
     "@types/node": "24.10.0",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.1",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "prettier": "3.6.2",
-    "typescript": "5.9.3"
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.42.0"
   }
 }
