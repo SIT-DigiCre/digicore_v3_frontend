@@ -2,7 +2,7 @@ import React from "react";
 
 import { Typography } from "@mui/material";
 
-export type HeadingProps = {
+type HeadingProps = {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   children: React.ReactNode;
 };

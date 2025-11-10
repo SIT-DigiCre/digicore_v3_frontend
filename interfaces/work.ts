@@ -1,4 +1,4 @@
-export type WorkAuthor = {
+type WorkAuthor = {
   userId: string;
   name: string;
   iconUrl: string;
@@ -13,7 +13,7 @@ export type Work = {
   authors: WorkAuthor[];
   tags: WorkTag[];
 };
-export type WorkFile = {
+type WorkFile = {
   fileId: string;
   name: string;
 };

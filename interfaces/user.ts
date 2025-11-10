@@ -34,5 +34,3 @@ export const DEFAULT_USER_PRIVATE_PROFILE: UserPrivateProfile = {
   parentName: "",
   phoneNumber: "",
 };
-
-export type FullUser = User & UserPrivateProfile;
