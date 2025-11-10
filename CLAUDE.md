@@ -14,11 +14,13 @@
 ## 開発コマンド
 
 **セットアップ:**
+
 ```bash
 pnpm install
 ```
 
 **開発:**
+
 ```bash
 pnpm dev          # 開発サーバー起動
 pnpm build        # 本番用ビルド
@@ -33,28 +35,32 @@ pnpm format       # Prettierでコード整形
 ## アーキテクチャ概要
 
 ### 状態管理
+
 - **Recoil**でグローバル状態管理
 - `/atom/userAtom.ts`にグローバルatom: `authState`, `errorState`, `darkModeState`, `userListSeed`
 - `/hook/`ディレクトリにコンポーネント固有の状態ロジック用カスタムフック
 
 ### データ取得
-- **SWR**でAPIコールとキャッシュ
+
 - `/utils/axios.ts`で設定されたAxiosインスタンス
   - `axios`: クライアントサイド用
   - `serverSideAxios`: サーバーサイド用
 - `/utils/common.ts`でベースURL設定
 
 ### UIフレームワーク
+
 - **Material-UI (MUI)**でコンポーネントとテーマ
 - `useDarkMode`フックでダーク・ライトモード対応
 - `_app.tsx`でグローバルテーマプロバイダー設定
 
 ### ルーティング・ページ
+
 - **Next.js Pages Router**使用（App Routerではない）
 - `/pages/`内のページコンポーネント、`[id].tsx`等の動的ルート
 - 共通ページ構造: PageHeadコンポーネントでタイトルとメタタグ設定
 
 ### コンポーネント構成
+
 ```
 /components/
 ├── Budget/     # 予算管理コンポーネント
@@ -70,11 +76,13 @@ pnpm format       # Prettierでコード整形
 ```
 
 ### 型定義
+
 - `/interfaces/`ディレクトリに全インターフェース
 - 主要型: `User`, `UserPrivateProfile`, APIレスポンス型
 - 共通型は`/interfaces/index.ts`からインポート
 
 ### 認証
+
 - JWTトークンをlocalStorageに保存
 - `useAuthState`フックでログイン状態管理
 - 認証失敗時は自動的にログインページにリダイレクト
@@ -83,17 +91,20 @@ pnpm format       # Prettierでコード整形
 ## 開発ガイドライン
 
 ### コードスタイル
+
 - ESLintで強制されるインポート順序: builtin → external → parent → sibling → index → object → type
 - インポートグループ間は必ず改行
 - console.logは禁止（console.warn/errorは可）
 
 ### ブランチ命名
+
 - 新機能: `feat/(機能名)`
 - 機能改善: `enhance/(機能名)`
 - バグ修正: `fix/(機能名)`
 - 機能名はケバブケースを使用
 
 ### コンポーネントパターン
+
 - 全てのprops型にTypeScriptインターフェースを使用
 - Material-UIコンポーネントとテーマを活用
 - 複雑な状態ロジックはカスタムフックを使用
@@ -101,6 +112,7 @@ pnpm format       # Prettierでコード整形
 - グローバルエラー表示にErrorViewコンポーネントを使用
 
 ### API連携
+
 - `/hook/`内のカスタムフックでSWRを使用したデータ取得
 - 全てのAPIコールは設定済みAxiosインスタンス経由
 - グローバルエラー状態システムでエラーハンドリング
