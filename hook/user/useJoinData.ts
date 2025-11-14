@@ -15,7 +15,7 @@ export const useJoinData = () => {
       setNewError({
         name: "no-register",
         message:
-          "緊急連絡先やDiscordの登録が正常に済んでいません。先に登録が完了していることを確認してください。",
+          "Discordの登録が正常に済んでいません。先に登録が完了していることを確認してください。",
       });
       return;
     }
