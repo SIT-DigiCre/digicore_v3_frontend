@@ -3,7 +3,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "next",
-    "build": "next build",
+    "build": "next typegen && next build",
     "start": "next start",
     "type-check": "tsc",
     "lint": "eslint . --fix",
