@@ -3,35 +3,52 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
 import { userListSeed } from "../../atom/userAtom";
-import { User } from "../../interfaces/user";
-import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
+type UserProfile = {
+  userId: string;
+  username: string;
+  iconUrl: string;
+  shortIntroduction: string;
+};
+
 type UseUserProfiles = () => {
-  userProfiles: User[];
+  userProfiles: UserProfile[];
   requestMoreProfiles: () => void;
+  isOver: boolean;
 };
 
 export const useUserProfiles: UseUserProfiles = () => {
   const { authState } = useAuthState();
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<UserProfile[]>([]);
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
   const seed = useRecoilValue(userListSeed);
   const [isOver, setIsOver] = useState(false);
 
-  const getNew = async (num: number) => {
+  const getNew = async () => {
     if (authState.isLoading || !authState.isLogined) return;
     try {
-      const res = await axios.get(`/user?offset=${num}&seed=${seed}`, {
+      const { data } = await apiClient.GET("/user", {
+        params: {
+          query: {
+            offset: offsetNum,
+            seed: seed,
+          },
+        },
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
-      const resUsers: User[] = res.data.users;
-      if (resUsers.length === 0) setIsOver(true);
-      setUsers(users.concat(resUsers));
+      // 1ページあたり100件のユーザー情報が返ってくるため、これより少なければ最後のページに達したと判断する
+      if (data.users.length < 100) {
+        setIsOver(true);
+      }
+      const newUsers = [...users, ...data.users];
+      setUsers(newUsers);
+      setOffsetNum(newUsers.length);
       removeError("userprofiles-get-fail");
     } catch {
       setNewError({ name: "userprofiles-get-fail", message: "部員一覧の取得に失敗しました" });
@@ -40,20 +57,20 @@ export const useUserProfiles: UseUserProfiles = () => {
 
   useEffect(() => {
     (async () => {
-      getNew(0);
+      getNew();
     })();
   }, [authState]);
 
   const requestMoreProfiles = () => {
     if (isOver) return;
-    setOffsetNum(offsetNum + 100);
     (async () => {
-      getNew(offsetNum + 100);
+      getNew();
     })();
   };
 
   return {
     userProfiles: users,
     requestMoreProfiles: requestMoreProfiles,
+    isOver: isOver,
   };
 };
