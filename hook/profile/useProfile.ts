@@ -11,6 +11,7 @@ export const useMyProfile: UseMyProfile = () => {
   const [profile, setProfile] = useState<User>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   useEffect(() => {
     (async () => {
       if (!authState.isLogined) return;
@@ -28,6 +29,7 @@ export const useMyProfile: UseMyProfile = () => {
       }
     })();
   }, [authState]);
+
   const update = async (profile: User) => {
     try {
       await axios.put(`/user/me`, profile, {

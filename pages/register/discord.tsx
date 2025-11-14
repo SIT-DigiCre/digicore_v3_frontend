@@ -5,18 +5,14 @@ import { Box, Button, Link, Typography } from "@mui/material";
 
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
+import { useMyProfile } from "../../hook/profile/useProfile";
 import { useAuthState } from "../../hook/useAuthState";
 
 const RegisterDiscordProfilePage = () => {
   const router = useRouter();
   const { authState } = useAuthState();
   const discord = useDiscordLogin();
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
+  const [myProfile] = useMyProfile();
 
   useEffect(() => {
     if (localStorage.getItem("reg_discord") == null) {
@@ -41,7 +37,7 @@ const RegisterDiscordProfilePage = () => {
       title="プロフィール登録"
       onNext={handleNext}
       onPrev={handlePrev}
-      nextDisabled={false}
+      nextDisabled={myProfile.discordUserId === ""}
     >
       <Box my={2}>
         <Typography>
@@ -56,10 +52,10 @@ const RegisterDiscordProfilePage = () => {
         </Typography>
         <Box mt={10} textAlign="center">
           <Button
-            href={discord.loginUrl}
+            onClick={() => {
+              router.push(discord.loginUrl);
+            }}
             variant="contained"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             Discord連携
           </Button>
