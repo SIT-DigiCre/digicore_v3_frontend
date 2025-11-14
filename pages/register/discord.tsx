@@ -5,14 +5,12 @@ import { Box, Button, Link, Typography } from "@mui/material";
 
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useDiscordLogin } from "../../hook/profile/useDiscordLogin";
-import { useMyProfile } from "../../hook/profile/useProfile";
 import { useAuthState } from "../../hook/useAuthState";
 
 const RegisterDiscordProfilePage = () => {
   const router = useRouter();
   const { authState } = useAuthState();
   const discord = useDiscordLogin();
-  const [myProfile] = useMyProfile();
 
   useEffect(() => {
     if (localStorage.getItem("reg_discord") == null) {
@@ -37,7 +35,7 @@ const RegisterDiscordProfilePage = () => {
       title="プロフィール登録"
       onNext={handleNext}
       onPrev={handlePrev}
-      nextDisabled={myProfile.discordUserId === ""}
+      nextDisabled={false}
     >
       <Box my={2}>
         <Typography>
