@@ -2,19 +2,19 @@ export type BudgetClass = "festival" | "fixed" | "project" | "outside" | "room";
 
 export type BudgetStatus = "pending" | "reject" | "approve" | "bought" | "paid";
 
-export type BudgetProposer = {
+type BudgetProposer = {
   userId: string;
   username: string;
   iconUrl: string;
 };
 
-export type BudgetApprover = {
+type BudgetApprover = {
   userId: string;
   username: string;
   iconUrl: string;
 };
 
-export type BudgetFile = {
+type BudgetFile = {
   fileId: string;
   name: string;
 };

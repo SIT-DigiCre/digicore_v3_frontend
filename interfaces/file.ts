@@ -27,11 +27,11 @@ export type FileKind =
   | "exe"
   | "apk"
   | "other";
-export const imageExts = ["jpeg", "jpg", "png", "gif"];
-export const videoExts = ["mp4"];
-export const textExts = ["txt"]; //後でプログラムコードなども追加する
-export const audioExts = ["mp3", "wav", "m4a"];
-export const singleKinds = ["zip", "pdf", "pptx", "docx", "xlsx", "exe", "apk"];
+const imageExts = ["jpeg", "jpg", "png", "gif"];
+const videoExts = ["mp4"];
+const textExts = ["txt"]; //後でプログラムコードなども追加する
+const audioExts = ["mp3", "wav", "m4a"];
+const singleKinds = ["zip", "pdf", "pptx", "docx", "xlsx", "exe", "apk"];
 export const getFileKind = (ext: string): FileKind => {
   if (imageExts.includes(ext.toLocaleLowerCase())) return "image";
   if (videoExts.includes(ext.toLocaleLowerCase())) return "video";

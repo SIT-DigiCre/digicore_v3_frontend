@@ -43,5 +43,3 @@ export const PrivateParentProfileEditor = ({
     />
   );
 };
-
-export default PrivateParentProfileEditor;
