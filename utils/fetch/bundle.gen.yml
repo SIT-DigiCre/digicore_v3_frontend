@@ -1,0 +1,2920 @@
+openapi: 3.0.3
+info:
+  version: 3.1.0
+  title: Digicore
+servers:
+  - url: 'https://coreapi3.digicre.net/'
+tags:
+  - name: auth
+    description: Authentication system
+  - name: user
+    description: User system
+  - name: event
+    description: Event system
+  - name: tool
+    description: Tool system
+  - name: storage
+    description: Storage system
+  - name: work
+    description: Work system
+  - name: group
+    description: Group system
+  - name: budget
+    description: Budget system
+  - name: payment
+    description: Payment system (need 'account' permission)
+  - name: status
+    description: Status system
+  - name: mattermost
+    description: Mattermost system
+paths:
+  /status:
+    get:
+      tags:
+        - status
+      description: Server status check
+      responses:
+        '200':
+          description: All Systems Operational
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStatus'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /status/club_room:
+    get:
+      tags:
+        - status
+      description: Get club room status
+      responses:
+        '200':
+          description: Success get club room status page
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStatusClubRoom'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - status
+      description: Update club room status
+      requestBody:
+        description: club room status
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutStatusClubRoom'
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /signup:
+    get:
+      tags:
+        - auth
+      description: Get signup URL
+      responses:
+        '200':
+          description: Signup URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetSignup'
+  /signup/callback:
+    post:
+      tags:
+        - auth
+      description: Verify auth
+      requestBody:
+        description: Auth information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostSignupCallback'
+      responses:
+        '200':
+          description: Success signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostSignupCallback'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /login:
+    get:
+      tags:
+        - auth
+      description: Get login URL
+      responses:
+        '200':
+          description: Login URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetLogin'
+  /login/callback:
+    post:
+      tags:
+        - auth
+      description: Verify auth
+      requestBody:
+        description: Auth information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostLoginCallback'
+      responses:
+        '200':
+          description: Success signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostLoginCallback'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user:
+    get:
+      tags:
+        - user
+      description: Get user list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: seed
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get user list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUser'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}':
+    get:
+      tags:
+        - user
+      description: Get user id's profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get user id's profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserUserId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}/introduction':
+    get:
+      tags:
+        - user
+      description: Get my introduction
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get my introduction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserUserIdIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me:
+    get:
+      tags:
+        - user
+      description: Get my profile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMe'
+      responses:
+        '200':
+          description: Success update my profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/renewal:
+    put:
+      tags:
+        - user
+      description: Renewal active limit
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/discord:
+    get:
+      tags:
+        - user
+      description: Get discord login URL
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Discord login URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeDiscord'
+  /user/me/discord/callback:
+    put:
+      tags:
+        - user
+      description: Verify discord auth
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Auth information
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMeDiscordCallback'
+      responses:
+        '200':
+          description: Success signup
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMe'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/introduction:
+    get:
+      tags:
+        - user
+      description: Get my introduction
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my introduction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my introduction
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My introduction
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMeIntroduction'
+      responses:
+        '200':
+          description: Success update my introduction
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMeIntroduction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/private:
+    get:
+      tags:
+        - user
+      description: Get my private profile
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePrivate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my profile
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My profile
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMePrivate'
+      responses:
+        '200':
+          description: Success update my private profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePrivate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /user/me/payment:
+    get:
+      tags:
+        - user
+      description: Get my payment
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Success get my payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - user
+      description: Update my payment
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: My payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutUserMePayment'
+      responses:
+        '200':
+          description: Success update my payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /payment:
+    get:
+      tags:
+        - payment
+      description: Get payment list
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: year
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get payment list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/payment/{paymentId}':
+    get:
+      tags:
+        - payment
+      description: Get user payment
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - payment
+      description: Check user payment
+      security:
+        - BearerAuth:
+            - account
+      parameters:
+        - name: paymentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Check user payment
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutPaymentPaymentId'
+      responses:
+        '200':
+          description: Success check user payment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /tool:
+    get:
+      tags:
+        - tool
+      description: Get tool URL
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Tool URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetTool'
+  /event:
+    get:
+      tags:
+        - event
+      description: Get event list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get event list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEvent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}':
+    get:
+      tags:
+        - event
+      description: Get event
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/{reservationId}':
+    get:
+      tags:
+        - event
+      description: Get event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/{reservationId}/me':
+    put:
+      tags:
+        - event
+      description: Create my event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: My event reservation
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutEventEventIdReservationIdMe'
+      responses:
+        '200':
+          description: Success create my event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - event
+      description: Delete my event reservation
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success delete my event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /storage/myfile:
+    get:
+      tags:
+        - storage
+      description: Get file list
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: file list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorageMyfile'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - storage
+      description: Post file
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Upload file
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostStorageMyfile'
+      responses:
+        '200':
+          description: Create file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorageFileId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/storage/{fileId}':
+    get:
+      tags:
+        - storage
+      description: Get file
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: fileId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get file
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetStorageFileId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /mattermost/create_user:
+    post:
+      tags:
+        - mattermost
+      description: Create mattermost account
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Mattermost account
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostMattermostCreateuser'
+      responses:
+        '200':
+          description: Success to create mattermost account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostMattermostCreateuser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /work/work:
+    get:
+      tags:
+        - work
+      description: Get work list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: authorId
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: work list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWork'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - work
+      description: Post work
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create work
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostWorkWork'
+      responses:
+        '200':
+          description: Create work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}':
+    get:
+      tags:
+        - work
+      description: Get work
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - work
+      description: Update work
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update work
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutWorkWorkWorkId'
+      responses:
+        '200':
+          description: Create work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - work
+      description: Delete work
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}/public':
+    get:
+      tags:
+        - work
+      description: Get work(public)
+      parameters:
+        - name: workId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get work
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWorkWorkIdPublic'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /work/tag:
+    get:
+      tags:
+        - work
+      description: Get tag list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: tag list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTag'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - work
+      description: Post tag
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Create tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostWorkTag'
+      responses:
+        '200':
+          description: Create tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/tag/{tagId}':
+    get:
+      tags:
+        - work
+      description: Get tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Get tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - work
+      description: Update tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Update tag
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutWorkTagTagId'
+      responses:
+        '200':
+          description: Update tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - work
+      description: Delete tag
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tagId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /group:
+    get:
+      tags:
+        - group
+      description: Get group list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: seed
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Success get group list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroup'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - group
+      description: Create new group
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroup'
+      responses:
+        '200':
+          description: Success create group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}':
+    get:
+      tags:
+        - group
+      description: Get group id's profile
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get group id's profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroupGroupId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}/user':
+    post:
+      tags:
+        - group
+      description: Add user to group
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostGroupGroupIdUser'
+      responses:
+        '200':
+          description: Success add user to group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroupGroupIdUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}/join':
+    post:
+      tags:
+        - group
+      description: Join to group
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: groupId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success join to group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostGroupGroupIdJoin'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /budget:
+    get:
+      tags:
+        - budget
+      description: Get budget list
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
+        - name: proposerId
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success budget list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudget'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    post:
+      tags:
+        - budget
+      description: Create budget
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostBudget'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}':
+    get:
+      tags:
+        - budget
+      description: Get budget
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_pending':
+    put:
+      tags:
+        - budget
+      description: Update budget(status pending)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPending'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - budget
+      description: Delete budget(status pending)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_approve':
+    put:
+      tags:
+        - budget
+      description: Update budget(status approve)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusApprove'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - budget
+      description: Delete budget(status approve)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_bought':
+    put:
+      tags:
+        - budget
+      description: Update budget(status bought)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusBought'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_paid':
+    put:
+      tags:
+        - budget
+      description: Update budget(status paid)
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPaid'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/admin':
+    put:
+      tags:
+        - budget
+      description: Update budget by admin
+      security:
+        - BearerAuth:
+            - admin
+      parameters:
+        - name: budgetId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Budget
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdAdmin'
+      responses:
+        '200':
+          description: Success update budget
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+components:
+  schemas:
+    ResGetStatus:
+      required:
+        - status
+      properties:
+        status:
+          type: boolean
+    ReqPutStatusClubRoom:
+      required:
+        - lock
+        - token
+      properties:
+        lock:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: ロック状態
+        token:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証トーク
+    ResGetStatusClubRoom:
+      required:
+        - lock
+      properties:
+        lock:
+          type: boolean
+    ResGetSignup:
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    ReqPostSignupCallback:
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証コード
+    ResPostSignupCallback:
+      required:
+        - jwt
+      properties:
+        jwt:
+          type: string
+    ResGetLogin:
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    ReqPostLoginCallback:
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証コード
+    ResPostLoginCallback:
+      required:
+        - jwt
+      properties:
+        jwt:
+          type: string
+    ResGetTool:
+      required:
+        - discordUrl
+      properties:
+        discordUrl:
+          type: string
+    ResGetUser:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetUserObjectUser'
+    ResGetUserObjectUser:
+      required:
+        - userId
+        - username
+        - iconUrl
+        - shortIntroduction
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+        shortIntroduction:
+          type: string
+    ResGetUserUserId:
+      required:
+        - userId
+        - username
+        - studentNumber
+        - iconUrl
+        - schoolGrade
+        - discordUserId
+        - shortIntroduction
+        - activeLimit
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        studentNumber:
+          type: string
+        iconUrl:
+          type: string
+        schoolGrade:
+          type: integer
+        discordUserId:
+          type: string
+        shortIntroduction:
+          type: string
+        activeLimit:
+          type: string
+    ResGetUserUserIdIntroduction:
+      required:
+        - introduction
+      properties:
+        introduction:
+          type: string
+    ResGetUserMe:
+      required:
+        - userId
+        - username
+        - studentNumber
+        - iconUrl
+        - schoolGrade
+        - discordUserId
+        - shortIntroduction
+        - activeLimit
+        - isAdmin
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        studentNumber:
+          type: string
+        iconUrl:
+          type: string
+        schoolGrade:
+          type: integer
+        discordUserId:
+          type: string
+        shortIntroduction:
+          type: string
+        activeLimit:
+          type: string
+        isAdmin:
+          type: boolean
+    ReqPutUserMe:
+      required:
+        - username
+        - iconUrl
+        - schoolGrade
+        - shortIntroduction
+      properties:
+        username:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: ユーザー名
+        iconUrl:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: アイコンURL
+        schoolGrade:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=9'
+            ja: 学年
+        shortIntroduction:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 短い自己紹介
+    ResGetUserMeIntroduction:
+      required:
+        - introduction
+      properties:
+        introduction:
+          type: string
+    ReqPutUserMeIntroduction:
+      required:
+        - introduction
+      properties:
+        introduction:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: null
+            ja: 自己紹介
+    ResGetUserMePrivate:
+      required:
+        - lastName
+        - lastNameKana
+        - firstName
+        - firstNameKana
+        - isMale
+        - phoneNumber
+        - address
+        - parentName
+        - parentCellphoneNumber
+        - parentHomephoneNumber
+        - parentAddress
+      properties:
+        lastName:
+          type: string
+        lastNameKana:
+          type: string
+        firstName:
+          type: string
+        firstNameKana:
+          type: string
+        isMale:
+          type: boolean
+        phoneNumber:
+          type: string
+        address:
+          type: string
+        parentName:
+          type: string
+        parentCellphoneNumber:
+          type: string
+        parentHomephoneNumber:
+          type: string
+        parentAddress:
+          type: string
+    ReqPutUserMePrivate:
+      required:
+        - lastName
+        - lastNameKana
+        - firstName
+        - firstNameKana
+        - isMale
+        - phoneNumber
+        - address
+        - parentName
+        - parentCellphoneNumber
+        - parentAddress
+      properties:
+        lastName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名字
+        lastNameKana:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名字(カナ)
+        firstName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名前
+        firstNameKana:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 名前(カナ)
+        isMale:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: null
+            ja: 性別
+        phoneNumber:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,phonenumber'
+            ja: 電話番号
+        address:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 住所
+        parentName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 緊急連絡先氏名
+        parentCellphoneNumber:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,phonenumber'
+            ja: 緊急連絡先携帯電話番号
+        parentHomephoneNumber:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: phonenumber
+            ja: 緊急連絡先固定電話番号
+        parentAddress:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 緊急連絡先住所
+    ResGetUserMePayment:
+      required:
+        - histories
+      properties:
+        histories:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetUserMePaymentObjectHistory'
+    ResGetUserMePaymentObjectHistory:
+      required:
+        - year
+        - transferName
+        - checked
+        - updatedAt
+      properties:
+        year:
+          type: integer
+        transferName:
+          type: string
+        checked:
+          type: boolean
+        updatedAt:
+          type: string
+    ReqPutUserMePayment:
+      required:
+        - transferName
+      properties:
+        transferName:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: 振込名義
+    ResGetUserMeDiscord:
+      required:
+        - url
+      properties:
+        url:
+          type: string
+    ReqPutUserMeDiscordCallback:
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 認証コード
+    ResGetEvent:
+      required:
+        - events
+      properties:
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetEventObjectEvent'
+    ResGetEventObjectEvent:
+      required:
+        - eventId
+        - name
+        - description
+        - calendarView
+        - reservable
+        - reservated
+      properties:
+        eventId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        calendarView:
+          type: boolean
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+    ResGetEventEventId:
+      required:
+        - eventId
+        - name
+        - description
+        - calendarView
+        - reservable
+        - reservated
+        - reservations
+      properties:
+        eventId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        calendarView:
+          type: boolean
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetEventEventIdObjectReservation'
+    ResGetEventEventIdObjectReservation:
+      required:
+        - reservationId
+        - name
+        - description
+        - startDate
+        - finishDate
+        - reservable
+        - reservated
+        - reservationFinishDate
+        - reservationStartDate
+        - capacity
+        - freeCapacity
+      properties:
+        reservationId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+        finishDate:
+          type: string
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+        reservationFinishDate:
+          type: string
+        reservationStartDate:
+          type: string
+        capacity:
+          type: integer
+        freeCapacity:
+          type: integer
+    ResGetEventEventIdReservationId:
+      required:
+        - eventId
+        - reservationId
+        - name
+        - description
+        - reservable
+        - reservated
+        - startDate
+        - finishDate
+        - reservationFinishDate
+        - reservationStartDate
+        - capacity
+        - freeCapacity
+        - users
+      properties:
+        eventId:
+          type: string
+        reservationId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        startDate:
+          type: string
+        finishDate:
+          type: string
+        reservable:
+          type: boolean
+        reservated:
+          type: boolean
+        reservationFinishDate:
+          type: string
+        reservationStartDate:
+          type: string
+        capacity:
+          type: integer
+        freeCapacity:
+          type: integer
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetEventEventIdReservationIdObjectUser'
+    ResGetEventEventIdReservationIdObjectUser:
+      required:
+        - userId
+        - userIcon
+        - name
+        - comment
+        - url
+        - createdAt
+      properties:
+        userId:
+          type: string
+        userIcon:
+          type: string
+        name:
+          type: string
+        comment:
+          type: string
+        url:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          description: ユーザーの登録日時
+    ReqPutEventEventIdReservationIdMe:
+      required:
+        - comment
+        - url
+      properties:
+        comment:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=255
+            ja: コメント
+        url:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: max=255
+            ja: URL
+    ResGetStorageMyfile:
+      required:
+        - files
+      properties:
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetStorageMyfileObjectFile'
+    ResGetStorageMyfileObjectFile:
+      required:
+        - fileId
+        - userId
+        - name
+        - kSize
+        - extension
+        - isPublic
+        - createdAt
+        - updatedAt
+      properties:
+        fileId:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        kSize:
+          type: string
+        extension:
+          type: string
+        isPublic:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+    ReqPostStorageMyfile:
+      required:
+        - name
+        - file
+        - isPublic
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=255'
+            ja: ファイル名
+        file:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,max=104857600'
+            ja: ファイル
+        isPublic:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            validate: null
+            ja: 公開
+    ResGetStorageFileId:
+      required:
+        - fileId
+        - userId
+        - name
+        - kSize
+        - extension
+        - isPublic
+        - createdAt
+        - updatedAt
+        - url
+      properties:
+        fileId:
+          type: string
+        userId:
+          type: string
+        name:
+          type: string
+        kSize:
+          type: string
+        extension:
+          type: string
+        isPublic:
+          type: boolean
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        url:
+          type: string
+    ReqPostMattermostCreateuser:
+      required:
+        - username
+        - nickname
+        - password
+      properties:
+        username:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=22'
+            ja: ユーザー名
+        nickname:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=22'
+            ja: ニックネーム
+        password:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=8,max=64'
+            ja: パスワード
+    ResPostMattermostCreateuser:
+      required:
+        - username
+      properties:
+        username:
+          type: string
+    ResGetWorkWork:
+      required:
+        - works
+      properties:
+        works:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWork'
+    ResGetWorkWorkObjectWork:
+      required:
+        - workId
+        - name
+        - authors
+        - tags
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectAuthor'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectTag'
+    ResGetWorkWorkObjectWorkObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkObjectWorkObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPostWorkWork:
+      required:
+        - name
+        - description
+        - authors
+        - files
+        - tags
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 作品名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+        authors:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: 作者
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+        tags:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: タグ
+    ResGetWorkWorkWorkIdPublic:
+      required:
+        - workId
+        - name
+        - description
+        - authors
+        - tags
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
+        fileUrl:
+          type: string
+        fileName:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+    ResGetWorkWorkWorkIdPublicObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkWorkIdPublicObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ResGetWorkWorkWorkId:
+      required:
+        - workId
+        - name
+        - description
+        - authors
+        - files
+        - tags
+      properties:
+        workId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        authors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
+    ResGetWorkWorkWorkIdObjectAuthor:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetWorkWorkWorkIdObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ResGetWorkWorkWorkIdObjectFile:
+      required:
+        - fileId
+        - name
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+    ReqPutWorkWorkWorkId:
+      required:
+        - name
+        - description
+        - authors
+        - files
+        - tags
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 作品名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+        authors:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: 作者
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+        tags:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: タグ
+    ResGetWorkTag:
+      required:
+        - tags
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetWorkTagObjectTag'
+    ResGetWorkTagObjectTag:
+      required:
+        - tagId
+        - name
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+    ReqPostWorkTag:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タグ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+    ResGetWorkTagTagId:
+      required:
+        - tagId
+        - name
+        - description
+      properties:
+        tagId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+    ReqPutWorkTagTagId:
+      required:
+        - name
+        - description
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タグ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 説明
+    ResGetGroup:
+      required:
+        - groups
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetGroupObjectGroup'
+    ResGetGroupObjectGroup:
+      required:
+        - groupId
+        - name
+        - userCount
+        - joinable
+        - joined
+      properties:
+        groupId:
+          type: string
+        name:
+          type: string
+        userCount:
+          type: integer
+        joinable:
+          type: boolean
+        joined:
+          type: boolean
+    ResGetGroupGroupId:
+      required:
+        - groupId
+        - name
+        - description
+        - userCount
+        - joinable
+        - joined
+        - users
+      properties:
+        groupId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        userCount:
+          type: integer
+        joinable:
+          type: boolean
+        joined:
+          type: boolean
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetGroupGroupIdObjectUser'
+    ResGetGroupGroupIdObjectUser:
+      required:
+        - userId
+        - userIcon
+        - name
+      properties:
+        userId:
+          type: string
+        userIcon:
+          type: string
+        name:
+          type: string
+    ReqPostGroup:
+      required:
+        - name
+        - description
+        - joinable
+        - isAdminGroup
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=255'
+            ja: グループ名
+        description:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=1,max=1000'
+            ja: グループの説明
+        joinable:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: 参加可能フラグ
+        isAdminGroup:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: 管理者グループフラグ
+    ResPostGroup:
+      required:
+        - groupId
+        - name
+        - description
+        - joinable
+        - userCount
+      properties:
+        groupId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        joinable:
+          type: boolean
+        userCount:
+          type: integer
+    ReqPostGroupGroupIdUser:
+      required:
+        - userId
+      properties:
+        userId:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'required,uuid'
+            ja: ユーザーID
+    ResPostGroupGroupIdUser:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ResPostGroupGroupIdJoin:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+    ResGetBudget:
+      required:
+        - budgets
+      properties:
+        budgets:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBudgetObjectBudget'
+    ResGetBudgetObjectBudget:
+      required:
+        - budgetId
+        - Proposer
+        - name
+        - class
+        - status
+        - settlement
+        - budget
+        - updatedAt
+      properties:
+        budgetId:
+          type: string
+        proposer:
+          $ref: '#/components/schemas/ResGetBudgetObjectBudgetObjectproposer'
+        name:
+          type: string
+        class:
+          type: string
+        status:
+          type: string
+        settlement:
+          type: integer
+        budget:
+          type: integer
+        updatedAt:
+          type: string
+    ResGetBudgetObjectBudgetObjectproposer:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBudgetBudgetId:
+      required:
+        - budgetId
+        - name
+        - class
+        - status
+        - proposer
+        - budget
+        - settlement
+        - purpose
+        - mattermostUrl
+        - remark
+        - approver
+        - files
+        - createdAt
+        - approvedAt
+        - updatedAt
+      properties:
+        budgetId:
+          type: string
+        name:
+          type: string
+        class:
+          type: string
+        status:
+          type: string
+        proposer:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectProposer'
+        approver:
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectApprover'
+        budget:
+          type: integer
+        settlement:
+          type: integer
+        purpose:
+          type: string
+        mattermostUrl:
+          type: string
+        remark:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectFile'
+        createdAt:
+          type: string
+        approvedAt:
+          type: string
+        updatedAt:
+          type: string
+    ResGetBudgetBudgetIdObjectFile:
+      required:
+        - fileId
+        - name
+      properties:
+        fileId:
+          type: string
+        name:
+          type: string
+    ResGetBudgetBudgetIdObjectApprover:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ResGetBudgetBudgetIdObjectProposer:
+      required:
+        - userId
+        - username
+        - iconUrl
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        iconUrl:
+          type: string
+    ReqPostBudget:
+      required:
+        - name
+        - class
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 名前
+        class:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: oneof=festival fixed project outside room
+            ja: 分類
+    ReqPutBudgetBudgetIdStatusApprove:
+      required:
+        - settlement
+        - remark
+        - bought
+        - files
+      properties:
+        settlement:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            ja: 決算
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+        bought:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: 購入済み
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdStatusBought:
+      required:
+        - settlement
+        - remark
+        - files
+      properties:
+        settlement:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            ja: 決算
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdStatusPaid:
+      required:
+        - remark
+      properties:
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+    ReqPutBudgetBudgetIdStatusPending:
+      required:
+        - name
+        - budget
+        - purpose
+        - mattermostUrl
+        - remark
+        - files
+      properties:
+        name:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 名前
+        budget:
+          type: integer
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 予算
+        purpose:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 目的
+        mattermostUrl:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: Mattermost投稿URL
+        remark:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+        files:
+          type: array
+          items:
+            type: string
+          x-oapi-codegen-extra-tags:
+            validate: 'dive,uuid'
+            ja: ファイル
+    ReqPutBudgetBudgetIdAdmin:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: oneof=reject approve paid
+            ja: ステータス
+    ResGetPayment:
+      required:
+        - payments
+      properties:
+        payments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetPaymentObjectPayment'
+    ResGetPaymentObjectPayment:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - note
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        checked:
+          type: boolean
+        note:
+          type: string
+    ResGetPaymentPaymentId:
+      required:
+        - paymentId
+        - userId
+        - studentNumber
+        - transferName
+        - checked
+        - note
+      properties:
+        paymentId:
+          type: string
+        userId:
+          type: string
+        studentNumber:
+          type: string
+        transferName:
+          type: string
+        note:
+          type: string
+    ReqPutPaymentPaymentId:
+      required:
+        - checked
+        - note
+      properties:
+        checked:
+          type: boolean
+          x-oapi-codegen-extra-tags:
+            ja: チェック
+        note:
+          type: string
+          x-oapi-codegen-extra-tags:
+            ja: 備考
+    Error:
+      required:
+        - level
+        - message
+      properties:
+        level:
+          type: string
+        message:
+          type: string
+    Success:
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+  responses:
+    BadRequest:
+      description: 'Validation error, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: 'Authentication error, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: 'Resource does not exist, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    InternalServer:
+      description: 'System error, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BlankSuccess:
+      description: Success response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Success'
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

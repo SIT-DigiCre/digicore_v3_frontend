@@ -1,7 +1,9 @@
 import {
   Avatar,
+  Button,
   Link,
   Paper,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -14,7 +16,7 @@ import PageHead from "../../components/Common/PageHead";
 import { useUserProfiles } from "../../hook/user/useUserProfiles";
 
 const UserIndexPage = () => {
-  const { userProfiles } = useUserProfiles();
+  const { userProfiles, requestMoreProfiles, isOver } = useUserProfiles();
 
   return (
     <>
@@ -43,6 +45,11 @@ const UserIndexPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} my={2}>
+        <Button variant="contained" onClick={() => requestMoreProfiles()} disabled={isOver}>
+          もっと見る
+        </Button>
+      </Stack>
     </>
   );
 };
