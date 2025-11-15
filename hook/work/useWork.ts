@@ -1,41 +1,56 @@
 import { useEffect, useState } from "react";
 
-import { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
+
+import type { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 
 type UseWork = (workId: string) => {
   workDetail: WorkDetail;
   updateWork: (workRequest: WorkRequest) => Promise<boolean>;
   deleteWork: () => Promise<boolean>;
 };
+
 export const useWork: UseWork = (workId) => {
   const [work, setWork] = useState<WorkDetail>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   useEffect(() => {
     (async () => {
       if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/work/work/${workId}`, {
+        const { data } = await apiClient.GET("/work/work/{workId}", {
+          params: {
+            path: {
+              workId,
+            },
+          },
           headers: {
-            Authorization: "Bearer " + authState.token,
+            Authorization: `Bearer ${authState.token}`,
           },
         });
-        const workDetail: WorkDetail = res.data;
-        setWork(workDetail);
+        setWork(data);
         removeError("workdetail-get-fail");
       } catch {
         setNewError({ name: "workdetail-get-fail", message: "Workの取得に失敗しました" });
       }
     })();
   }, [authState]);
-  const updateWork = async (workRequest: WorkRequest): Promise<boolean> => {
+
+  const updateWork = async (updatedWork: WorkRequest) => {
     try {
-      await axios.put(`/work/work/${workId}`, workRequest, {
+      await apiClient.PUT("/work/work/{workId}", {
+        params: {
+          path: {
+            workId,
+          },
+        },
+        body: updatedWork,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("work-put-fail");
@@ -45,11 +60,17 @@ export const useWork: UseWork = (workId) => {
       return false;
     }
   };
-  const deleteWork = async (): Promise<boolean> => {
+
+  const deleteWork = async () => {
     try {
-      await axios.delete(`/work/work/${workId}`, {
+      await apiClient.DELETE("/work/work/{workId}", {
+        params: {
+          path: {
+            workId,
+          },
+        },
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("work-delete-fail");
@@ -59,8 +80,14 @@ export const useWork: UseWork = (workId) => {
       return false;
     }
   };
-  return { workDetail: work, updateWork, deleteWork };
+
+  return {
+    workDetail: work,
+    updateWork,
+    deleteWork,
+  };
 };
+
 // autherIdを指定すると指定したユーザーIDのWorkを取得する
 // autherIdに"my"を指定すると自ユーザーのWorkを取得する
 // autherIdに何も入れないと全ユーザーのWorkを取得する
@@ -76,6 +103,7 @@ export const useWorks: UseWorks = (authorId) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
+
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
     try {
@@ -101,12 +129,15 @@ export const useWorks: UseWorks = (authorId) => {
       setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
     }
   };
+
   useEffect(() => {
     loadWork(0);
   }, [authState]);
+
   const loadMore = () => {
     loadWork(offsetNum + 10);
   };
+
   const createWork = async (workRequest: WorkRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
     try {
@@ -122,6 +153,7 @@ export const useWorks: UseWorks = (authorId) => {
       return "error";
     }
   };
+
   const deleteWork = async (id: string): Promise<boolean> => {
     try {
       await axios.delete(`/work/work/${id}`, {
@@ -136,6 +168,7 @@ export const useWorks: UseWorks = (authorId) => {
       return false;
     }
   };
+
   return {
     works: works,
     loadMore: loadMore,
