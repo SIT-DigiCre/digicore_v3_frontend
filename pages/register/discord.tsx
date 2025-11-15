@@ -13,12 +13,6 @@ const RegisterDiscordProfilePage = () => {
   const discord = useDiscordLogin();
 
   useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
-
-  useEffect(() => {
     if (localStorage.getItem("reg_discord") == null) {
       localStorage.setItem("reg_discord", "true");
     }
@@ -56,10 +50,10 @@ const RegisterDiscordProfilePage = () => {
         </Typography>
         <Box mt={10} textAlign="center">
           <Button
-            href={discord.loginUrl}
+            onClick={() => {
+              router.push(discord.loginUrl);
+            }}
             variant="contained"
-            target="_blank"
-            rel="noopener noreferrer"
           >
             Discord連携
           </Button>

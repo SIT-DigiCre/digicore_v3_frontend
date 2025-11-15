@@ -23,7 +23,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
           setTimeout(() => {
             refresh().then(() => {
               localStorage.removeItem("reg_discord");
-              router.push("/user/profile?register=true");
+              router.push("/register/discord");
             });
           }, 1000);
         } else {
