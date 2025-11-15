@@ -11,7 +11,7 @@ type Props = {
 const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
   const { workTags } = useWorkTags();
 
-  if (workTags.length === 0) return null;
+  if (!workTags || workTags.length === 0) return null;
 
   return (
     <FormControl>

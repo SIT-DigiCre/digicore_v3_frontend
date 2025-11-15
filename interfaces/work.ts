@@ -1,11 +1,16 @@
 type WorkAuthor = {
   userId: string;
-  name: string;
+  username: string;
   iconUrl: string;
 };
 
 export type WorkTag = {
   tagId: string;
+  name: string;
+};
+
+export type WorkFile = {
+  fileId: string;
   name: string;
 };
 
@@ -20,19 +25,9 @@ export type WorkDetail = {
   workId: string;
   name: string;
   description: string;
-  authors: {
-    userId: string;
-    username: string;
-    iconUrl: string;
-  }[];
-  files: {
-    fileId: string;
-    name: string;
-  }[];
-  tags: {
-    tagId: string;
-    name: string;
-  }[];
+  authors: WorkAuthor[];
+  files: WorkFile[];
+  tags: WorkTag[];
 };
 
 export type WorkTagDetail = WorkTag & {

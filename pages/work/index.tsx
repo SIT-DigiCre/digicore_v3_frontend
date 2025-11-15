@@ -9,7 +9,6 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Fab,
   Grid,
   Stack,
 } from "@mui/material";
@@ -56,7 +55,7 @@ const WorkIndexPage = () => {
                           {w.authors ? (
                             <>
                               {w.authors.map((a) => (
-                                <Avatar key={a.userId} src={a.iconUrl} alt={a.name} />
+                                <Avatar key={a.userId} src={a.iconUrl} alt={a.username} />
                               ))}
                             </>
                           ) : (
@@ -81,16 +80,6 @@ const WorkIndexPage = () => {
       <Stack sx={{ textAlign: "center" }}>
         <Button onClick={() => loadMore()}>もっと見る</Button>
       </Stack>
-      <Fab
-        color="primary"
-        aria-label="add"
-        onClick={() => {
-          router.push(`/work/new`);
-        }}
-        sx={{ position: "fixed", bottom: 24, right: 24 }}
-      >
-        <AddIcon />
-      </Fab>
     </>
   );
 };

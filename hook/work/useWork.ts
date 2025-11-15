@@ -99,7 +99,7 @@ type UseWorks = (authorId?: string | "my") => {
 };
 
 export const useWorks: UseWorks = (authorId) => {
-  const [works, setWorks] = useState<Work[]>([]);
+  const [works, setWorks] = useState<Omit<WorkDetail, "description" | "files">[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
@@ -107,22 +107,22 @@ export const useWorks: UseWorks = (authorId) => {
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
     try {
-      const res = await axios.get(
-        `/work/work?offset=${n}${
-          authorId
-            ? authorId === "my"
-              ? `&authorId=${authState.user.userId!}`
-              : `&authorId=${authorId}`
-            : ""
-        }`,
-        {
-          headers: {
-            Authorization: "Bearer " + authState.token,
+      const { data } = await apiClient.GET("/work/work", {
+        params: {
+          query: {
+            offset: n,
+            authorId: authorId
+              ? authorId === "my"
+                ? authState.user.userId!
+                : authorId
+              : undefined,
           },
         },
-      );
-      const newWorks: Work[] = res.data.works;
-      setWorks(works.concat(newWorks));
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      setWorks(data.works);
       removeError("works-get-fail");
       setOffsetNum(n);
     } catch {

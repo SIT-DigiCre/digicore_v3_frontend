@@ -3,17 +3,17 @@ import { useEffect, useRef, useState } from "react";
 import { FileObject, getFileKind } from "../../interfaces/file";
 import ElementResizeListener from "../Common/ElementResizeListener";
 
-type Props = {
+type FileViewProps = {
   file: FileObject;
   width?: number;
 };
-const FileView = ({ file, width }: Props) => {
+
+const FileView = ({ file, width }: FileViewProps) => {
   const contentRef: React.RefObject<HTMLDivElement> = useRef(null);
   const [contentWidth, setContentWidth] = useState(100);
   const [contentHight, setContentHight] = useState(100);
-  const onResize = (event: Event) => {
-    // eslint-disable-next-line no-console
-    console.log(event);
+
+  const onResize = () => {
     setContentWidth(contentRef.current.getBoundingClientRect().width);
     setContentHight((contentRef.current.getBoundingClientRect().width * 10) / 16);
   };
@@ -22,6 +22,7 @@ const FileView = ({ file, width }: Props) => {
     setContentWidth(contentRef.current.getBoundingClientRect().width);
     setContentHight((contentRef.current.getBoundingClientRect().width * 10) / 16);
   }, []);
+
   const getFileTag = () => {
     switch (getFileKind(file.extension)) {
       case "image":
@@ -57,6 +58,7 @@ const FileView = ({ file, width }: Props) => {
         return <a href={file.url}>{file.name}</a>;
     }
   };
+
   return (
     <div ref={contentRef} style={{ width: "100%" }}>
       <ElementResizeListener onResize={onResize} />
