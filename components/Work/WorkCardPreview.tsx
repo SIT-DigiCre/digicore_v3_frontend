@@ -17,5 +17,5 @@ export const WorkCardPreview = ({ id }: Props) => {
     return <MarkdownView md={workDetail.description.substring(0, 120)} />;
   }
 
-  return <WorkFileView fileId={workDetail.files[0].fileId} previewLimit={true} />;
+  return <WorkFileView fileId={workDetail.files[0].fileId} />;
 };
