@@ -3,7 +3,6 @@ import FileView from "../File/FileView";
 
 type WorkFileViewProps = {
   fileId: string;
-  previewLimit?: boolean;
 };
 
 export const WorkFileView = ({ fileId }: WorkFileViewProps) => {
