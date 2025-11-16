@@ -51,7 +51,6 @@ const WorkIndexPage = () => {
                     component={Link}
                     href={`/work/${w.workId}`}
                     className="clickable-gray"
-                    key={w.workId}
                   >
                     <CardHeader
                       title={w.name}
