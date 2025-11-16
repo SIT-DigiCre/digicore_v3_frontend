@@ -88,9 +88,9 @@ export const useWork: UseWork = (workId) => {
   };
 };
 
-// autherIdを指定すると指定したユーザーIDのWorkを取得する
-// autherIdに"my"を指定すると自ユーザーのWorkを取得する
-// autherIdに何も入れないと全ユーザーのWorkを取得する
+// authorIdを指定すると指定したユーザーIDのWorkを取得する
+// authorIdに"my"を指定すると自ユーザーのWorkを取得する
+// authorIdに何も入れないと全ユーザーのWorkを取得する
 type UseWorks = (authorId?: string | "my") => {
   works: Work[];
   isOver: boolean;
