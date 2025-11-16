@@ -57,15 +57,9 @@ const WorkIndexPage = () => {
                       title={w.name}
                       avatar={
                         <AvatarGroup>
-                          {w.authors ? (
-                            <>
-                              {w.authors.map((a) => (
-                                <Avatar key={a.userId} src={a.iconUrl} alt={a.username} />
-                              ))}
-                            </>
-                          ) : (
-                            ""
-                          )}
+                          {w.authors.map((a) => (
+                            <Avatar key={a.userId} src={a.iconUrl} alt={a.username} />
+                          ))}
                         </AvatarGroup>
                       }
                     ></CardHeader>

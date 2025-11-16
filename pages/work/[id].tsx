@@ -17,20 +17,23 @@ import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
 import { isAxiosError, serverSideAxios } from "../../utils/axios";
 
-type Props = {
+type WorkDetailPageProps = {
   id: string;
   modeStr?: string;
   workPublic?: WorkPublic;
 };
+
 type WorkPublicAuthor = {
   userId: string;
   username: string;
   iconUrl: string;
 };
+
 type WorkPublicTag = {
   tagId: string;
   name: string;
 };
+
 type WorkPublic = {
   workId: string;
   name: string;
@@ -40,16 +43,19 @@ type WorkPublic = {
   fileName: string;
   tags: WorkPublicTag[];
 };
-const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
+
+const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
   const { workDetail, updateWork, deleteWork } = useWork(id);
   const { authState } = useAuthState();
   const router = useRouter();
+
   const onSubmit = (workRequest: WorkRequest) => {
     updateWork(workRequest).then((result) => {
       if (!result) return;
       router.push(`/work/${id}`);
     });
   };
+
   const onClickDelete = () => {
     deleteWork().then((result) => {
       if (!result) return;
@@ -61,12 +67,21 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
     return (
       <Head>
         <meta property="og:title" content={workPublic.name} />
-        <meta property="og:description" content={workPublic.description} />
-        <meta property="og:url" content={"https://core3.digicre.net/work/" + workPublic.workId} />
-        <meta property="og:image" content={workPublic.fileUrl} />
+        <meta
+          property="og:description"
+          content={workPublic.authors.map((a) => a.username).join(", ")}
+        />
+        <meta property="og:url" content={`https://core3.digicre.net/work/${workPublic.workId}`} />
+        <meta property="og:image" content="https://core3.digicre.net/image/digicore.png" />
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="デジコアWork" />
-        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta property="og:site_name" content="デジコア" />
+        <meta name="twitter:title" content={workPublic.name} />
+        <meta
+          name="twitter:description"
+          content={workPublic.authors.map((a) => a.username).join(", ")}
+        />
+        <meta name="twitter:image" content="https://core3.digicre.net/image/digicore.png" />
+        <meta name="twitter:card" content="summary" />
       </Head>
     );
   }

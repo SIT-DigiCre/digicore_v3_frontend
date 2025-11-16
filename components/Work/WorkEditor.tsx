@@ -108,15 +108,13 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
           onSelected={onFileSelected}
         />
       </Box>
-      <Stack>
-        {tags && tags.length > 0 && (
-          <>
-            <Heading level={3}>タグ</Heading>
-            {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
-            <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
-          </>
-        )}
-      </Stack>
+      {tags && tags.length > 0 && (
+        <Box>
+          <Heading level={3}>タグ</Heading>
+          {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
+          <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
+        </Box>
+      )}
       <Box>
         <Heading level={3}>作品説明</Heading>
         <MarkdownEditor
