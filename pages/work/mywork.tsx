@@ -1,14 +1,25 @@
 import Link from "next/link";
 
 import { Add, FilterList } from "@mui/icons-material";
-import { List, ListItem, ListItemButton, ListItemText, Stack, Typography } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Stack,
+} from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
+import ChipList from "../../components/Common/ChipList";
 import PageHead from "../../components/Common/PageHead";
+import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
 import { useWorks } from "../../hook/work/useWork";
 
 const MyWorkPage = () => {
-  const { works } = useWorks("my");
+  const { works, loadMore, isOver } = useWorks("my");
 
   return (
     <>
@@ -21,26 +32,54 @@ const MyWorkPage = () => {
           投稿する
         </ButtonLink>
       </Stack>
-      <Stack>
-        {works && works.length > 0 ? (
-          <List>
-            {works.map((w) => (
-              <ListItem key={w.workId}>
-                <ListItemButton component={Link} href={`/work/${w.workId}`}>
-                  <ListItemText
-                    secondary={w.authors.map((a) => a.username).join(", ")}
-                    primary={w.name}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <Typography>
-            まだあなたの作品はありません。作品を作ってどんどん投稿していこう!!
-          </Typography>
-        )}
+      <Stack spacing={2}>
+        <Grid container>
+          {works ? (
+            <>
+              {works.map((w) => (
+                <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
+                  <Card
+                    sx={{
+                      width: "100%",
+                      display: "inline-block",
+                      m: 0.5,
+                      height: "100%",
+                      textDecoration: "none",
+                      color: "inherit",
+                    }}
+                    component={Link}
+                    href={`/work/${w.workId}`}
+                    className="clickable-gray"
+                    key={w.workId}
+                  >
+                    <CardHeader
+                      title={w.name}
+                      avatar={
+                        <AvatarGroup>
+                          {w.authors.map((a) => (
+                            <Avatar key={a.userId} src={a.iconUrl} alt={a.username} />
+                          ))}
+                        </AvatarGroup>
+                      }
+                    ></CardHeader>
+                    <CardContent>
+                      <WorkCardPreview id={w.workId} />
+                      {w.tags && <ChipList chipList={w.tags.map((t) => t.name)} />}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </>
+          ) : (
+            <p>Workがねぇ...</p>
+          )}
+        </Grid>
       </Stack>
+      {!isOver && (
+        <Stack alignItems="center" my={2}>
+          <Button onClick={() => loadMore()}>もっと見る</Button>
+        </Stack>
+      )}
     </>
   );
 };
