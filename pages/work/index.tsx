@@ -1,7 +1,7 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 
+import { FilterList } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
-import PersonIcon from "@mui/icons-material/Person";
 import {
   Avatar,
   AvatarGroup,
@@ -20,19 +20,18 @@ import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
 import { useWorks } from "../../hook/work/useWork";
 
 const WorkIndexPage = () => {
-  const { works, loadMore } = useWorks();
-  const router = useRouter();
+  const { works, loadMore, isOver } = useWorks();
 
   return (
     <>
       <PageHead title="作品一覧" />
-      <Stack>
-        <Stack spacing={2} my={2} direction="row" justifyContent="flex-end">
+      <Stack spacing={2}>
+        <Stack spacing={2} direction="row" justifyContent="space-between">
+          <ButtonLink href="/work/mywork" startIcon={<FilterList />} variant="text">
+            自分の作品を見る
+          </ButtonLink>
           <ButtonLink href="/work/new" startIcon={<AddIcon />}>
             投稿する
-          </ButtonLink>
-          <ButtonLink href="/work/mywork" startIcon={<PersonIcon />}>
-            自分の作品を見る
           </ButtonLink>
         </Stack>
         <Grid container>
@@ -41,10 +40,16 @@ const WorkIndexPage = () => {
               {works.map((w) => (
                 <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
                   <Card
-                    sx={{ width: "100%", display: "inline-block", m: 0.5, height: "100%" }}
-                    onClick={() => {
-                      router.push(`/work/${w.workId}`);
+                    sx={{
+                      width: "100%",
+                      display: "inline-block",
+                      m: 0.5,
+                      height: "100%",
+                      textDecoration: "none",
+                      color: "inherit",
                     }}
+                    component={Link}
+                    href={`/work/${w.workId}`}
                     className="clickable-gray"
                     key={w.workId}
                   >
@@ -66,7 +71,7 @@ const WorkIndexPage = () => {
                     ></CardHeader>
                     <CardContent>
                       <WorkCardPreview id={w.workId} />
-                      {w.tags ? <ChipList chipList={w.tags.map((t) => t.name)} /> : ""}
+                      {w.tags && <ChipList chipList={w.tags.map((t) => t.name)} />}
                     </CardContent>
                   </Card>
                 </Grid>
@@ -77,9 +82,11 @@ const WorkIndexPage = () => {
           )}
         </Grid>
       </Stack>
-      <Stack sx={{ textAlign: "center" }}>
-        <Button onClick={() => loadMore()}>もっと見る</Button>
-      </Stack>
+      {!isOver && (
+        <Stack alignItems="center" my={2}>
+          <Button onClick={() => loadMore()}>もっと見る</Button>
+        </Stack>
+      )}
     </>
   );
 };

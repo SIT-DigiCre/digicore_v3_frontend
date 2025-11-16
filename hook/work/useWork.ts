@@ -93,9 +93,9 @@ export const useWork: UseWork = (workId) => {
 // autherIdに何も入れないと全ユーザーのWorkを取得する
 type UseWorks = (authorId?: string | "my") => {
   works: Work[];
+  isOver: boolean;
   loadMore: () => void;
   createWork: (workRequest: WorkRequest) => Promise<string>;
-  deleteWork: (id: string) => Promise<boolean>;
 };
 
 export const useWorks: UseWorks = (authorId) => {
@@ -103,6 +103,7 @@ export const useWorks: UseWorks = (authorId) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
+  const [isOver, setIsOver] = useState(false);
 
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
@@ -122,7 +123,13 @@ export const useWorks: UseWorks = (authorId) => {
           Authorization: `Bearer ${authState.token}`,
         },
       });
-      setWorks(data.works);
+      // 1ページあたり10件のWorkが返ってくるため、これより少なければ最後のページに達したと判断する
+      if (data.works.length < 10) {
+        setIsOver(true);
+      }
+
+      setWorks((currentWorks) => [...currentWorks, ...data.works]);
+
       removeError("works-get-fail");
       setOffsetNum(n);
     } catch {
@@ -131,8 +138,10 @@ export const useWorks: UseWorks = (authorId) => {
   };
 
   useEffect(() => {
-    loadWork(0);
-  }, [authState]);
+    if (authState.isLogined) {
+      loadWork(0);
+    }
+  }, [authState.isLogined]);
 
   const loadMore = () => {
     loadWork(offsetNum + 10);
@@ -154,25 +163,10 @@ export const useWorks: UseWorks = (authorId) => {
     }
   };
 
-  const deleteWork = async (id: string): Promise<boolean> => {
-    try {
-      await axios.delete(`/work/work/${id}`, {
-        headers: {
-          Authorization: "Bearer " + authState.token,
-        },
-      });
-      removeError("work-delete-fail");
-      return true;
-    } catch {
-      setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
-      return false;
-    }
-  };
-
   return {
     works: works,
+    isOver: isOver,
     loadMore: loadMore,
     createWork: createWork,
-    deleteWork: deleteWork,
   };
 };
