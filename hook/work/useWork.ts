@@ -38,7 +38,7 @@ export const useWork: UseWork = (workId) => {
         setNewError({ name: "workdetail-get-fail", message: "Workの取得に失敗しました" });
       }
     })();
-  }, [authState]);
+  }, [authState.isLogined, authState.token]);
 
   const updateWork = async (updatedWork: WorkRequest) => {
     try {
