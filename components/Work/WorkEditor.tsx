@@ -14,12 +14,12 @@ import { FileBrowserModal } from "../File/FileBrowser";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
 
-type Props = {
+type WorkEditorProps = {
   onSubmit: (work: WorkRequest) => void;
   initWork?: WorkDetail;
 };
 
-const WorkEditor = ({ onSubmit, initWork }: Props) => {
+const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   const { authState } = useAuthState();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -100,7 +100,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
           }}
           startIcon={<Add />}
         >
-          ファイルの追加
+          ファイルを追加する
         </Button>
         <FileBrowserModal
           open={isOpenFileBrowser}
