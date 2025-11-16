@@ -79,7 +79,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
                 secondaryAction={
                   <IconButton
                     edge="end"
-                    aria-label="delete"
+                    aria-label="削除する"
                     onClick={() => {
                       setFiles(files.filter((f) => f !== fileId));
                     }}
@@ -88,7 +88,7 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
                   </IconButton>
                 }
               >
-                {fileId && <WorkListItem fileId={fileId} />}
+                <WorkListItem fileId={fileId} />
               </ListItem>
             ))}
           </List>
@@ -108,13 +108,11 @@ const WorkEditor = ({ onSubmit, initWork }: Props) => {
           onSelected={onFileSelected}
         />
       </Box>
-      {tags && tags.length > 0 && (
-        <Box>
-          <Heading level={3}>タグ</Heading>
-          {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
-          <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
-        </Box>
-      )}
+      <Box>
+        <Heading level={3}>タグ</Heading>
+        {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
+        <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
+      </Box>
       <Box>
         <Heading level={3}>作品説明</Heading>
         <MarkdownEditor
