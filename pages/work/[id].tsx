@@ -56,11 +56,12 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     });
   };
 
-  const onClickDelete = () => {
-    deleteWork().then((result) => {
-      if (!result) return;
+  const onClickDelete = async () => {
+    const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
+    if (res) {
+      await deleteWork();
       router.push(`/work`);
-    });
+    }
   };
 
   if (!authState.isLogined) {
