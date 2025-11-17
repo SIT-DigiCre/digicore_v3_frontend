@@ -1,7 +1,9 @@
 import { useRouter } from "next/router";
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import Heading from "../../components/Common/Heading";
+import { ArrowBack } from "@mui/icons-material";
+import { Stack } from "@mui/material";
+
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import WorkEditor from "../../components/Work/WorkEditor";
 import { useWorks } from "../../hook/work/useWork";
@@ -21,11 +23,12 @@ const WorkCreatePage = () => {
 
   return (
     <>
-      <PageHead title="Work新規作成" />
-      <Breadcrumbs
-        links={[{ text: "Home", href: "/" }, { text: "User", href: "/work" }, { text: "新規作成" }]}
-      />
-      <Heading level={2}>Work新規作成</Heading>
+      <PageHead title="作品を投稿する" />
+      <Stack direction="row" spacing={2} justifyContent="space-between">
+        <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
+          作品一覧に戻る
+        </ButtonLink>
+      </Stack>
       <WorkEditor onSubmit={onSubmit} />
     </>
   );

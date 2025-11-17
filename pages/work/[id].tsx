@@ -2,9 +2,10 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { Avatar, Grid } from "@mui/material";
+import { ArrowBack, Delete } from "@mui/icons-material";
+import { Avatar, Box, Button, Stack } from "@mui/material";
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import Heading from "../../components/Common/Heading";
 import MarkdownView from "../../components/Common/MarkdownView";
@@ -16,20 +17,23 @@ import { useWork } from "../../hook/work/useWork";
 import { WorkRequest } from "../../interfaces/work";
 import { isAxiosError, serverSideAxios } from "../../utils/axios";
 
-type Props = {
+type WorkDetailPageProps = {
   id: string;
   modeStr?: string;
   workPublic?: WorkPublic;
 };
+
 type WorkPublicAuthor = {
   userId: string;
   username: string;
   iconUrl: string;
 };
+
 type WorkPublicTag = {
   tagId: string;
   name: string;
 };
+
 type WorkPublic = {
   workId: string;
   name: string;
@@ -39,10 +43,12 @@ type WorkPublic = {
   fileName: string;
   tags: WorkPublicTag[];
 };
-const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
-  const { workDetail, updateWork } = useWork(id);
+
+const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
+  const { workDetail, updateWork, deleteWork } = useWork(id);
   const { authState } = useAuthState();
   const router = useRouter();
+
   const onSubmit = (workRequest: WorkRequest) => {
     updateWork(workRequest).then((result) => {
       if (!result) return;
@@ -50,16 +56,33 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
     });
   };
 
+  const onClickDelete = async () => {
+    const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
+    if (res) {
+      await deleteWork();
+      router.push(`/work`);
+    }
+  };
+
   if (!authState.isLogined) {
     return (
       <Head>
         <meta property="og:title" content={workPublic.name} />
-        <meta property="og:description" content={workPublic.description} />
-        <meta property="og:url" content={"https://core3.digicre.net/work/" + workPublic.workId} />
-        <meta property="og:image" content={workPublic.fileUrl} />
+        <meta
+          property="og:description"
+          content={workPublic.authors.map((a) => a.username).join(", ")}
+        />
+        <meta property="og:url" content={`https://core3.digicre.net/work/${workPublic.workId}`} />
+        <meta property="og:image" content="https://core3.digicre.net/image/digicore.png" />
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="デジコアWork" />
-        <meta name="twitter:card" content="summary_large_image"></meta>
+        <meta property="og:site_name" content="デジコア" />
+        <meta name="twitter:title" content={workPublic.name} />
+        <meta
+          name="twitter:description"
+          content={workPublic.authors.map((a) => a.username).join(", ")}
+        />
+        <meta name="twitter:image" content="https://core3.digicre.net/image/digicore.png" />
+        <meta name="twitter:card" content="summary" />
       </Head>
     );
   }
@@ -69,52 +92,64 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: Props) => {
   return (
     <>
       <PageHead title={workDetail.name} />
-      <Breadcrumbs
-        links={[
-          { text: "Home", href: "/" },
-          { text: "Work", href: "/work" },
-          { text: workDetail.name },
-        ]}
-      />
+      <Stack direction="row" spacing={2} justifyContent="space-between">
+        <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
+          作品一覧に戻る
+        </ButtonLink>
+        {workDetail.authors.map((a) => a.userId).includes(authState.user.userId) && (
+          <Button variant="contained" color="error" onClick={onClickDelete} startIcon={<Delete />}>
+            削除する
+          </Button>
+        )}
+      </Stack>
       {modeStr === "edit" ? (
-        <>
-          <WorkEditor onSubmit={onSubmit} initWork={workDetail} />
-        </>
+        <WorkEditor onSubmit={onSubmit} initWork={workDetail} />
       ) : (
-        <>
-          <Grid>
-            <Heading level={1}>{workDetail.name}</Heading>
-            {workDetail.authors
-              ? workDetail.authors.map((a) => (
-                  <div
-                    onClick={() => {
-                      router.push(`/user/${a.userId}`);
-                    }}
-                    className="clickable d-inlineblock"
+        <Stack direction="column" spacing={2} my={2}>
+          <Box>
+            <Heading level={3}>作者</Heading>
+            <Stack direction="row" spacing={2} flexWrap="wrap">
+              {workDetail.authors &&
+                workDetail.authors.map((a) => (
+                  <ButtonLink
+                    startIcon={<Avatar src={a.iconUrl} className="d-inlineblock" />}
+                    href={`/user/${a.userId}`}
                     key={a.userId}
+                    variant="text"
                   >
-                    <Avatar src={a.iconUrl} className="d-inlineblock" />
-                  </div>
-                ))
-              : ""}
-            {workDetail.tags ? <ChipList chipList={workDetail.tags.map((t) => t.name)} /> : ""}
-
-            <hr />
-          </Grid>
-          <Grid sx={{ marginTop: 3 }}>
-            <MarkdownView md={workDetail.description} />
-          </Grid>
-          <Grid sx={{ marginTop: 3 }}>
-            {workDetail.files
-              ? workDetail.files.map((f) => <WorkFileView key={f.fileId} fileId={f.fileId} />)
-              : ""}
-          </Grid>
-        </>
+                    {a.username}
+                  </ButtonLink>
+                ))}
+            </Stack>
+          </Box>
+          {workDetail.tags && (
+            <Box>
+              <Heading level={3}>タグ</Heading>
+              <ChipList chipList={workDetail.tags.map((t) => t.name)} />
+            </Box>
+          )}
+          {workDetail.description && (
+            <Box>
+              <Heading level={3}>作品説明</Heading>
+              <MarkdownView md={workDetail.description} />
+            </Box>
+          )}
+          {workDetail.files && workDetail.files.length > 0 && (
+            <Box>
+              <Heading level={3}>ファイル</Heading>
+              {workDetail.files.map((f) => (
+                <WorkFileView key={f.fileId} fileId={f.fileId} />
+              ))}
+            </Box>
+          )}
+        </Stack>
       )}
     </>
   );
 };
+
 export default WorkDetailPage;
+
 export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
   try {
     const id = params?.id;

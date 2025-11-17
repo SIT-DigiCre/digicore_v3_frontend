@@ -1,41 +1,56 @@
 import { useEffect, useState } from "react";
 
-import { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
+
+import type { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 
 type UseWork = (workId: string) => {
   workDetail: WorkDetail;
   updateWork: (workRequest: WorkRequest) => Promise<boolean>;
   deleteWork: () => Promise<boolean>;
 };
+
 export const useWork: UseWork = (workId) => {
   const [work, setWork] = useState<WorkDetail>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   useEffect(() => {
     (async () => {
       if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/work/work/${workId}`, {
+        const { data } = await apiClient.GET("/work/work/{workId}", {
+          params: {
+            path: {
+              workId,
+            },
+          },
           headers: {
-            Authorization: "Bearer " + authState.token,
+            Authorization: `Bearer ${authState.token}`,
           },
         });
-        const workDetail: WorkDetail = res.data;
-        setWork(workDetail);
+        setWork(data);
         removeError("workdetail-get-fail");
       } catch {
         setNewError({ name: "workdetail-get-fail", message: "Workの取得に失敗しました" });
       }
     })();
-  }, [authState]);
-  const updateWork = async (workRequest: WorkRequest): Promise<boolean> => {
+  }, [authState.isLogined, authState.token]);
+
+  const updateWork = async (updatedWork: WorkRequest) => {
     try {
-      await axios.put(`/work/work/${workId}`, workRequest, {
+      await apiClient.PUT("/work/work/{workId}", {
+        params: {
+          path: {
+            workId,
+          },
+        },
+        body: updatedWork,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("work-put-fail");
@@ -45,11 +60,17 @@ export const useWork: UseWork = (workId) => {
       return false;
     }
   };
-  const deleteWork = async (): Promise<boolean> => {
+
+  const deleteWork = async () => {
     try {
-      await axios.delete(`/work/work/${workId}`, {
+      await apiClient.DELETE("/work/work/{workId}", {
+        params: {
+          path: {
+            workId,
+          },
+        },
         headers: {
-          Authorization: "bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("work-delete-fail");
@@ -59,54 +80,73 @@ export const useWork: UseWork = (workId) => {
       return false;
     }
   };
-  return { workDetail: work, updateWork, deleteWork };
+
+  return {
+    workDetail: work,
+    updateWork,
+    deleteWork,
+  };
 };
-// autherIdを指定すると指定したユーザーIDのWorkを取得する
-// autherIdに"my"を指定すると自ユーザーのWorkを取得する
-// autherIdに何も入れないと全ユーザーのWorkを取得する
+
+// authorIdを指定すると指定したユーザーIDのWorkを取得する
+// authorIdに"my"を指定すると自ユーザーのWorkを取得する
+// authorIdに何も入れないと全ユーザーのWorkを取得する
 type UseWorks = (authorId?: string | "my") => {
   works: Work[];
+  isOver: boolean;
   loadMore: () => void;
   createWork: (workRequest: WorkRequest) => Promise<string>;
-  deleteWork: (id: string) => Promise<boolean>;
 };
 
 export const useWorks: UseWorks = (authorId) => {
-  const [works, setWorks] = useState<Work[]>([]);
+  const [works, setWorks] = useState<Omit<WorkDetail, "description" | "files">[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
+  const [isOver, setIsOver] = useState(false);
+
   const loadWork = async (n: number) => {
     if (!authState.isLogined) return;
     try {
-      const res = await axios.get(
-        `/work/work?offset=${n}${
-          authorId
-            ? authorId === "my"
-              ? `&authorId=${authState.user.userId!}`
-              : `&authorId=${authorId}`
-            : ""
-        }`,
-        {
-          headers: {
-            Authorization: "Bearer " + authState.token,
+      const { data } = await apiClient.GET("/work/work", {
+        params: {
+          query: {
+            offset: n,
+            authorId: authorId
+              ? authorId === "my"
+                ? authState.user.userId!
+                : authorId
+              : undefined,
           },
         },
-      );
-      const newWorks: Work[] = res.data.works;
-      setWorks(works.concat(newWorks));
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      // 1ページあたり10件のWorkが返ってくるため、これより少なければ最後のページに達したと判断する
+      if (data.works.length < 10) {
+        setIsOver(true);
+      }
+
+      setWorks((currentWorks) => [...currentWorks, ...data.works]);
+
       removeError("works-get-fail");
       setOffsetNum(n);
     } catch {
       setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
     }
   };
+
   useEffect(() => {
-    loadWork(0);
-  }, [authState]);
+    if (authState.isLogined) {
+      loadWork(0);
+    }
+  }, [authState.isLogined]);
+
   const loadMore = () => {
     loadWork(offsetNum + 10);
   };
+
   const createWork = async (workRequest: WorkRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
     try {
@@ -122,24 +162,11 @@ export const useWorks: UseWorks = (authorId) => {
       return "error";
     }
   };
-  const deleteWork = async (id: string): Promise<boolean> => {
-    try {
-      await axios.delete(`/work/work/${id}`, {
-        headers: {
-          Authorization: "Bearer " + authState.token,
-        },
-      });
-      removeError("work-delete-fail");
-      return true;
-    } catch {
-      setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
-      return false;
-    }
-  };
+
   return {
     works: works,
+    isOver: isOver,
     loadMore: loadMore,
     createWork: createWork,
-    deleteWork: deleteWork,
   };
 };
