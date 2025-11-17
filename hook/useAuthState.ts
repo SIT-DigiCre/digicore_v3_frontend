@@ -64,6 +64,7 @@ export const useAuthState: UseAuthState = () => {
       token: undefined,
     });
     localStorage.removeItem("jwt");
+    router.push("/login");
   };
 
   const onLogin = (token: string) => {
