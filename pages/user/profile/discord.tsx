@@ -1,6 +1,7 @@
+import Link from "next/link";
 import { useEffect } from "react";
 
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
