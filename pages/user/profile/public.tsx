@@ -1,4 +1,4 @@
-import router from "next/router";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
@@ -15,6 +15,7 @@ import { User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 
 const PublicProfilePage = () => {
+  const router = useRouter();
   const { authState } = useAuthState();
   const [userProfile, updateProfile] = useMyProfile();
   const { myFileInfos } = useMyFiles();
