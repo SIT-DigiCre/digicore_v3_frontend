@@ -37,7 +37,7 @@ const PaymentPage = () => {
   return (
     <>
       <Grid>
-        <Heading level={1}>支払い一覧</Heading>
+        <Heading level={2}>支払い一覧</Heading>
         <hr />
       </Grid>
       <Grid container>

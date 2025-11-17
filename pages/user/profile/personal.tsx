@@ -35,7 +35,7 @@ const PersonalProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Heading level={3}>本人情報</Heading>
+        <Heading level={2}>本人情報</Heading>
         <PersonalInfoForm
           initialProfile={privateProfile}
           profile={editProfile}

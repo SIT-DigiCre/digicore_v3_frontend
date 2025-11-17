@@ -32,7 +32,7 @@ const IntroductionProfilePage = () => {
   return (
     <EditorTabLayout>
       <div>
-        <Heading level={2}>自己紹介ページ文章</Heading>
+        <Heading level={2}>自己紹介</Heading>
         <MarkdownEditor
           value={editUserIntro.md}
           onChange={(e) => {

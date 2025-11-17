@@ -14,7 +14,7 @@ const WorkTagIndexPage = () => {
 
   return (
     <>
-      <PageHead title="WorkTag一覧" />
+      <PageHead title="作品タグ一覧" />
       <div>
         <div>
           <Button variant="contained" onClick={() => setCreateModal(true)}>

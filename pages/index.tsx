@@ -8,11 +8,13 @@ import PageHead from "../components/Common/PageHead";
 const IndexPage = () => {
   return (
     <>
-      <PageHead title="Home" />
+      <PageHead title="ホーム" />
       <Stack spacing={2}>
         <Box>
-          <Heading level={1}>ようこそ、デジコア3.1へ</Heading>
-          <p>デジコア3.1は開発途上のアプリケーションです。優しい気持ちで接してみてください</p>
+          <Heading level={2}>ようこそ、デジコア3.1へ</Heading>
+          <Typography>
+            デジコア3.1は開発途上のアプリケーションです。優しい気持ちで接してみてください
+          </Typography>
         </Box>
         <Box>
           <Heading level={2}>使いそうな項目</Heading>

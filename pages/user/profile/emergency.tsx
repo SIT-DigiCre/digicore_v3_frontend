@@ -35,7 +35,7 @@ const EmergencyProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Heading level={3}>緊急連絡先</Heading>
+        <Heading level={2}>緊急連絡先</Heading>
         <EmergencyContactForm
           initialProfile={privateProfile}
           profile={editProfile}

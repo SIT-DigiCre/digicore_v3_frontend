@@ -11,13 +11,13 @@ const Heading: React.FC<HeadingProps> = ({ level, children }) => {
   switch (level) {
     case 1:
       return (
-        <Typography variant="h1" sx={{ fontSize: "1.75rem", fontWeight: "bold" }}>
+        <Typography variant="h1" sx={{ fontSize: "1.5rem", fontWeight: "bold" }}>
           {children}
         </Typography>
       );
     case 2:
       return (
-        <Typography variant="h2" sx={{ fontSize: "2rem", fontWeight: "bold", mb: 2 }}>
+        <Typography variant="h2" sx={{ fontSize: "1.75rem", fontWeight: "bold", mb: 2 }}>
           {children}
         </Typography>
       );
