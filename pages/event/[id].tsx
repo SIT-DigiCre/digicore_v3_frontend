@@ -4,9 +4,9 @@ import { Alert, Box, Stack } from "@mui/material";
 
 import Breadcrumbs from "../../components/Common/Breadcrumb";
 import Heading from "../../components/Common/Heading";
-import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
+import MarkdownView from "../../components/Markdown/MarkdownView";
 import useEventDetail from "../../hook/event/useEventDetail";
 
 type EventPageProps = {
