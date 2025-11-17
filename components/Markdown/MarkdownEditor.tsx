@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
+import { type ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import CodeIcon from "@mui/icons-material/Code";
 import EditIcon from "@mui/icons-material/Edit";
@@ -13,11 +13,12 @@ import LinkIcon from "@mui/icons-material/Link";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
 
-import { FileObject } from "../../interfaces/file";
 import { FileBrowserModal } from "../File/FileBrowser";
 
 import MarkdownToolbar, { type ActionButtonProps } from "./MarkdownToolbar";
 import MarkdownView from "./MarkdownView";
+
+import type { FileObject } from "../../interfaces/file";
 
 type MarkdownEditorProps = {
   value: string;
@@ -34,6 +35,10 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
 
   const showEditor = !isMobile || mobileViewMode === "editor";
   const showPreview = !isMobile || mobileViewMode === "preview";
+
+  useEffect(() => {
+    setMd(value);
+  }, [value]);
 
   const onChangeMd = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setMd(e.target.value);
@@ -180,6 +185,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
             <textarea
               ref={textareaRef}
               placeholder="ここにテキストを入力してください"
+              aria-label="マークダウンエディタ"
               value={md}
               onChange={onChangeMd}
               style={{
