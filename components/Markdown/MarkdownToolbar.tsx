@@ -2,25 +2,14 @@ import { IconButton, Stack, Tooltip, useTheme } from "@mui/material";
 
 import type { SvgIconComponent } from "@mui/icons-material";
 
-export type ToolbarAction = {
+export type ActionButtonProps = {
   key: string;
   label: string;
   icon: SvgIconComponent;
   onClick: () => void;
 };
 
-type MarkdownToolbarProps = {
-  actions: ToolbarAction[];
-};
-
-export type SelectionRange = { start: number; end: number };
-
-export type SelectionResult = {
-  text: string;
-  selection?: SelectionRange;
-};
-
-const ActionButton = ({ icon: Icon, label, onClick }: ToolbarAction) => {
+const ActionButton = ({ icon: Icon, label, onClick }: ActionButtonProps) => {
   const theme = useTheme();
   const borderColor =
     theme.palette.mode === "dark" ? theme.palette.grey[800] : theme.palette.grey[300];
@@ -46,6 +35,10 @@ const ActionButton = ({ icon: Icon, label, onClick }: ToolbarAction) => {
       </IconButton>
     </Tooltip>
   );
+};
+
+type MarkdownToolbarProps = {
+  actions: ActionButtonProps[];
 };
 
 const MarkdownToolbar = ({ actions }: MarkdownToolbarProps) => {

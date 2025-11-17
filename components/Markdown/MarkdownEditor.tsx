@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
 
 import CodeIcon from "@mui/icons-material/Code";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,7 +16,7 @@ import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
 import { FileObject } from "../../interfaces/file";
 import { FileBrowserModal } from "../File/FileBrowser";
 
-import MarkdownToolbar, { type ToolbarAction } from "./MarkdownToolbar";
+import MarkdownToolbar, { type ActionButtonProps } from "./MarkdownToolbar";
 import MarkdownView from "./MarkdownView";
 
 type MarkdownEditorProps = {
@@ -27,13 +27,9 @@ type MarkdownEditorProps = {
 const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const textFieldElement = useRef<HTMLTextAreaElement>(null);
-  const mdPreviewDivElement = useRef<HTMLDivElement>(null);
   const [md, setMd] = useState<string>(value);
   const [mobileViewMode, setMobileViewMode] = useState<"editor" | "preview">("editor");
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
-  const openFileBrowser = useCallback(() => setIsOpenFileBrowser(true), []);
-  const closeFileBrowser = useCallback(() => setIsOpenFileBrowser(false), []);
 
   const showEditor = !isMobile || mobileViewMode === "editor";
   const showPreview = !isMobile || mobileViewMode === "preview";
@@ -47,26 +43,25 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
     if (isMobile && mobileViewMode === "preview") {
       setMobileViewMode("editor");
     }
-    return textFieldElement.current;
   }, [isMobile, mobileViewMode]);
 
   const onFileSelected = (file: FileObject) => {
-    closeFileBrowser();
-    if (!ensureEditorVisible()) return;
+    setIsOpenFileBrowser(false);
+    ensureEditorVisible();
     const result = `![${file.name}](${file.url})\n`;
     setMd((m) => m + result);
   };
 
   const insertBlock = useCallback(
     (text: string) => {
-      if (!ensureEditorVisible()) return;
+      ensureEditorVisible();
       setMd((m) => m + text);
     },
     [ensureEditorVisible],
   );
 
-  const toolbarActions = useMemo<ToolbarAction[]>(() => {
-    const actions: ToolbarAction[] = [
+  const toolbarActions = useMemo<ActionButtonProps[]>(() => {
+    const actions: ActionButtonProps[] = [
       {
         key: "heading",
         label: "見出し (H3)",
@@ -119,7 +114,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
         key: "image",
         label: "画像を挿入",
         icon: ImageIcon,
-        onClick: openFileBrowser,
+        onClick: () => setIsOpenFileBrowser(true),
       },
     ];
 
@@ -133,13 +128,13 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
     }
 
     return actions;
-  }, [ensureEditorVisible, isMobile, mobileViewMode, openFileBrowser]);
+  }, [ensureEditorVisible, isMobile, mobileViewMode]);
 
   return (
     <>
       <FileBrowserModal
         open={isOpenFileBrowser}
-        onCancel={closeFileBrowser}
+        onCancel={() => setIsOpenFileBrowser(false)}
         onSelected={onFileSelected}
         onlyFileKind="image"
       />
@@ -151,7 +146,6 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               placeholder="ここにテキストを入力してください"
               value={md}
               onChange={onChangeMd}
-              ref={textFieldElement}
               style={{
                 height: isMobile ? 260 : 500,
                 width: "100%",
@@ -184,7 +178,6 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
                   theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[100],
                 padding: "1rem",
               }}
-              ref={mdPreviewDivElement}
             >
               <MarkdownView md={md} />
             </Box>
