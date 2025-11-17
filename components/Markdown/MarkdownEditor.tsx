@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useRef, useState } from "react";
 
 import CodeIcon from "@mui/icons-material/Code";
 import EditIcon from "@mui/icons-material/Edit";
@@ -30,6 +30,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   const [md, setMd] = useState<string>(value);
   const [mobileViewMode, setMobileViewMode] = useState<"editor" | "preview">("editor");
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const showEditor = !isMobile || mobileViewMode === "editor";
   const showPreview = !isMobile || mobileViewMode === "preview";
@@ -45,20 +46,54 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
     }
   }, [isMobile, mobileViewMode]);
 
-  const onFileSelected = (file: FileObject) => {
-    setIsOpenFileBrowser(false);
-    ensureEditorVisible();
-    const result = `![${file.name}](${file.url})\n`;
-    setMd((m) => m + result);
-  };
-
   const insertBlock = useCallback(
     (text: string) => {
       ensureEditorVisible();
-      setMd((m) => m + text);
+      textareaRef.current?.focus();
+
+      const textarea = textareaRef.current;
+
+      if (!textarea) {
+        setMd((prev) => {
+          const updated = prev + text;
+          onChange(updated);
+          return updated;
+        });
+        return;
+      }
+
+      const currentValue = textarea.value;
+      const selectionStart = textarea.selectionStart ?? currentValue.length;
+      const selectionEnd = textarea.selectionEnd ?? currentValue.length;
+      const lineStart = currentValue.lastIndexOf("\n", selectionStart - 1) + 1;
+      const isCurrentLineEmpty = selectionStart === selectionEnd && selectionStart === lineStart;
+      const insertText =
+        text.startsWith("\n") && isCurrentLineEmpty ? text.replace(/^\n/, "") : text;
+
+      setMd((prev) => {
+        const before = prev.slice(0, selectionStart);
+        const after = prev.slice(selectionEnd);
+        const nextValue = `${before}${insertText}${after}`;
+        const caretPosition = selectionStart + insertText.length;
+
+        requestAnimationFrame(() => {
+          if (textareaRef.current) {
+            textareaRef.current.selectionStart = caretPosition;
+            textareaRef.current.selectionEnd = caretPosition;
+          }
+        });
+
+        onChange(nextValue);
+        return nextValue;
+      });
     },
-    [ensureEditorVisible],
+    [ensureEditorVisible, onChange],
   );
+
+  const onFileSelected = (file: FileObject) => {
+    setIsOpenFileBrowser(false);
+    insertBlock(`![${file.name}](${file.url})\n`);
+  };
 
   const toolbarActions = useMemo<ActionButtonProps[]>(() => {
     const actions: ActionButtonProps[] = [
@@ -128,7 +163,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
     }
 
     return actions;
-  }, [ensureEditorVisible, isMobile, mobileViewMode]);
+  }, [insertBlock, isMobile, mobileViewMode]);
 
   return (
     <>
@@ -143,6 +178,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
         <Stack direction="row" gap={2}>
           <Box sx={{ flex: 1, display: showEditor ? "block" : "none" }}>
             <textarea
+              ref={textareaRef}
               placeholder="ここにテキストを入力してください"
               value={md}
               onChange={onChangeMd}
