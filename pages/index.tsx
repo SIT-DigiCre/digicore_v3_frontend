@@ -4,17 +4,8 @@ import { Box, Stack, Typography } from "@mui/material";
 
 import Heading from "../components/Common/Heading";
 import PageHead from "../components/Common/PageHead";
-import { useAuthState } from "../hook/useAuthState";
 
 const IndexPage = () => {
-  const { authState } = useAuthState();
-  if (!authState.isLogined)
-    return (
-      <>
-        <PageHead title="Home 未ログイン" />
-        <p>未ログイン状態です。ログインしてください。</p>
-      </>
-    );
   return (
     <>
       <PageHead title="Home" />
