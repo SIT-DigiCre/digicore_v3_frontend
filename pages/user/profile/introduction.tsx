@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { Button } from "@mui/material";
@@ -10,16 +9,9 @@ import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
 import { useAuthState } from "../../../hook/useAuthState";
 
 const IntroductionProfilePage = () => {
-  const router = useRouter();
   const { authState } = useAuthState();
   const [userIntro, updateIntro] = useMyIntroduction();
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   useEffect(() => {
     setEditUserIntro({ md: (" " + userIntro).slice(1) });

@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import router from "next/router";
 import { useEffect, useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
@@ -15,18 +15,11 @@ import { User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 
 const PublicProfilePage = () => {
-  const router = useRouter();
   const { authState } = useAuthState();
   const [userProfile, updateProfile] = useMyProfile();
   const { myFileInfos } = useMyFiles();
   const [editUserProfile, setEditUserProfile] = useState<User>(userProfile);
   const [openFileModal, setOpenFileModal] = useState(false);
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   useEffect(() => {
     setEditUserProfile(userProfile);

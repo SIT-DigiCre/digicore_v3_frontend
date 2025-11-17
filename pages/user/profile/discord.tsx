@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useEffect } from "react";
 
 import { Box, Button, Link, Typography } from "@mui/material";
@@ -8,15 +7,8 @@ import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
 
 const DiscordProfilePage = () => {
-  const router = useRouter();
   const { authState } = useAuthState();
   const discord = useDiscordLogin();
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;

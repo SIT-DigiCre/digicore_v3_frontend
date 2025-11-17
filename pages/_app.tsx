@@ -45,7 +45,8 @@ const AppRoot = ({ Component, pageProps }) => {
           <ErrorView />
           {authState.isLogined ||
           pathname.startsWith("/login") ||
-          pathname.startsWith("/signup") ? (
+          pathname.startsWith("/signup") ||
+          pathname.startsWith("/register") ? (
             <Component {...pageProps} />
           ) : (
             <Stack alignItems="center" mt={20}>
