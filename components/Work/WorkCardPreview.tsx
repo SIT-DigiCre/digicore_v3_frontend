@@ -1,5 +1,5 @@
 import { useWork } from "../../hook/work/useWork";
-import MarkdownView from "../Common/MarkdownView";
+import MarkdownView from "../Markdown/MarkdownView";
 
 import { WorkFileView } from "./WorkFileView";
 

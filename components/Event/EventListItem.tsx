@@ -4,7 +4,7 @@ import { Card, CardContent } from "@mui/material";
 
 import { DigicreEvent } from "../../interfaces/event";
 import Heading from "../Common/Heading";
-import MarkdownView from "../Common/MarkdownView";
+import MarkdownView from "../Markdown/MarkdownView";
 
 type Props = {
   event: DigicreEvent;
