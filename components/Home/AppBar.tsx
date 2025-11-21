@@ -83,7 +83,7 @@ export default function AppBar({ children, window }: AppBarProps) {
       label: "ホーム",
     },
     {
-      href: "/user/profile/public",
+      href: "/user/profile",
       icon: <ManageAccountsIcon />,
       label: "プロフィール",
     },
