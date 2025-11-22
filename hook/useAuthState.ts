@@ -27,6 +27,8 @@ export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useRecoilState(authState);
   const { removeError } = useErrorState();
   const router = useRouter();
+  const isPublicPage =
+    router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
   const getUserInfo = async (token: string, refresh: boolean): Promise<User> => {
     try {
@@ -46,7 +48,7 @@ export const useAuthState: UseAuthState = () => {
       removeError("autologin-fail");
       return user;
     } catch {
-      if (!router.pathname.startsWith("/login") && !router.pathname.startsWith("/signup")) {
+      if (!isPublicPage) {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
         router.push("/login");
       }
@@ -64,6 +66,7 @@ export const useAuthState: UseAuthState = () => {
       token: undefined,
     });
     localStorage.removeItem("jwt");
+    router.push("/login");
   };
 
   const onLogin = (token: string) => {

@@ -1,7 +1,8 @@
+import Link from "next/link";
+
 import {
   Avatar,
   Button,
-  Link,
   Paper,
   Stack,
   Table,

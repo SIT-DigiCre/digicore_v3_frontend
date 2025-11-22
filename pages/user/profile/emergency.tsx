@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { Stack } from "@mui/material";
@@ -11,16 +10,9 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { UserPrivateProfile } from "../../../interfaces/user";
 
 const EmergencyProfilePage = () => {
-  const router = useRouter();
   const { authState } = useAuthState();
   const [privateProfile, updateProfile] = usePrivateProfile(false);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   useEffect(() => {
     setEditProfile(privateProfile);
@@ -43,7 +35,7 @@ const EmergencyProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Heading level={3}>緊急連絡先</Heading>
+        <Heading level={2}>緊急連絡先</Heading>
         <EmergencyContactForm
           initialProfile={privateProfile}
           profile={editProfile}

@@ -22,12 +22,6 @@ const RegisterPublicProfilePage = () => {
   const [openFileModal, setOpenFileModal] = useState(false);
 
   useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
-
-  useEffect(() => {
     setEditUserProfile(userProfile);
   }, [userProfile]);
 

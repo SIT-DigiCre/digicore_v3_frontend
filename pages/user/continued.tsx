@@ -1,5 +1,3 @@
-import { useRouter } from "next/router";
-
 import { Container, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
@@ -9,9 +7,7 @@ import { useAuthState } from "../../hook/useAuthState";
 
 const ContinuedPage = () => {
   const { authState } = useAuthState();
-  const router = useRouter();
   if (authState.isLoading) return <p>読み込み中...</p>;
-  if (!authState.isLogined) router.push("/login");
 
   return (
     <>

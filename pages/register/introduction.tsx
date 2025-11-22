@@ -14,12 +14,6 @@ const RegisterIntroductionProfilePage = () => {
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
 
   useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
-
-  useEffect(() => {
     setEditUserIntro({ md: (" " + userIntro).slice(1) });
   }, [userIntro]);
 

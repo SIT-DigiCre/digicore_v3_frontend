@@ -62,8 +62,8 @@ const PaymentPage = () => {
 
   return (
     <>
-      <PageHead title="部費振込報告" />
-      <Heading level={2}>部費振り込み完了報告フォーム</Heading>
+      <PageHead title="部費振込" />
+      <Heading level={2}>振込完了報告</Heading>
       <Stack spacing={4}>
         <Stack spacing={2} alignItems="center" my={4}>
           <Button
@@ -76,7 +76,7 @@ const PaymentPage = () => {
           </Button>
         </Stack>
         <Box>
-          <Heading level={3}>振込記録</Heading>
+          <Heading level={2}>振込記録</Heading>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 300 }} aria-label="simple table">
               <TableHead>
@@ -110,7 +110,7 @@ const PaymentPage = () => {
           </TableContainer>
         </Box>
         <Box>
-          <Heading level={3}>口座情報</Heading>
+          <Heading level={2}>口座情報</Heading>
           <TransferClubFeeView />
         </Box>
       </Stack>

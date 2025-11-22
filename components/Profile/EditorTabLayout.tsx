@@ -17,7 +17,7 @@ const EditorTabLayout = ({ children, title = "プロフィール編集" }: Edito
   const basePath = "/user/profile";
 
   const steps = [
-    { label: "公開プロフィール", value: "public", path: `${basePath}/public` },
+    { label: "公開情報", value: "public", path: `${basePath}/public` },
     { label: "本人情報", value: "personal", path: `${basePath}/personal` },
     { label: "緊急連絡先", value: "emergency", path: `${basePath}/emergency` },
     { label: "Discord連携", value: "discord", path: `${basePath}/discord` },
