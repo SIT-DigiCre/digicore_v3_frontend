@@ -36,6 +36,7 @@ const AppRoot = ({ Component, pageProps }) => {
       }),
     [isDarkMode],
   );
+  const isPublicPage = pathname.startsWith("/login") || pathname.startsWith("/signup");
 
   return (
     <ThemeProvider theme={theme}>
@@ -43,10 +44,7 @@ const AppRoot = ({ Component, pageProps }) => {
       <AppBar>
         <Container component="main" sx={{ minHeight: "65vh", p: 0, px: 2 }}>
           <ErrorView />
-          {authState.isLogined ||
-          pathname.startsWith("/login") ||
-          pathname.startsWith("/signup") ||
-          pathname.startsWith("/register") ? (
+          {authState.isLogined || isPublicPage ? (
             <Component {...pageProps} />
           ) : (
             <Stack alignItems="center" mt={20}>
