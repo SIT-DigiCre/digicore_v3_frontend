@@ -1,6 +1,6 @@
-# CLAUDE.md
+# AGENTS.md
 
-このファイルはClaude Code（claude.ai/code）がこのリポジトリで作業する際のガイダンスを提供します。
+このファイルはAI Agentsがこのリポジトリで作業する際のガイダンスを提供します。
 
 **重要：このプロジェクトで作業する際は、ユーザーとの対話で常に日本語を使用してください。**
 
@@ -28,6 +28,7 @@ pnpm start        # 本番サーバー起動
 pnpm type-check   # TypeScript型チェック実行
 pnpm lint         # ESLintチェック（自動修正付き）
 pnpm format       # Prettierでコード整形
+pnpm generate     # OpenAPIスキーマから型定義を生成
 ```
 
 **重要：** `pnpm`のみを使用してください。`npm`を使用すると`pnpm-lock.yaml`が破損します。
@@ -42,10 +43,13 @@ pnpm format       # Prettierでコード整形
 
 ### データ取得
 
-- `/utils/axios.ts`で設定されたAxiosインスタンス
-  - `axios`: クライアントサイド用
-  - `serverSideAxios`: サーバーサイド用
+- **openapi-fetch**で型付きAPIクライアントを使用
+- `/utils/fetch/client.ts`で設定されたAPIクライアント
+  - `apiClient`: クライアントサイド用
+  - `serverSideApiClient`: サーバーサイド用
+- `/utils/fetch/api.d.ts`にOpenAPIスキーマから生成された型定義
 - `/utils/common.ts`でベースURL設定
+- OpenAPIスキーマは`/utils/fetch/bundle.gen.yml`に定義
 
 ### UIフレームワーク
 
@@ -113,7 +117,9 @@ pnpm format       # Prettierでコード整形
 
 ### API連携
 
-- `/hook/`内のカスタムフックでSWRを使用したデータ取得
-- 全てのAPIコールは設定済みAxiosインスタンス経由
+- `/hook/`内のカスタムフックでデータ取得
+- 全てのAPIコールは型付きAPIクライアント（`apiClient`/`serverSideApiClient`）経由
+- OpenAPIスキーマから生成された型定義により、エンドポイントとリクエスト/レスポンスの型安全性を保証
 - グローバルエラー状態システムでエラーハンドリング
 - リクエストヘッダーでBearer Token認証
+- OpenAPIスキーマ更新時は`pnpm generate`で型定義を再生成
