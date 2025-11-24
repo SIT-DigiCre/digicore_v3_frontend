@@ -381,40 +381,35 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                   </TableCell>
                   <TableCell>{dayjs(budgetDetail.updatedAt).format("YYYY/MM/DD HH:mm")}</TableCell>
                 </TableRow>
-                {budgetDetail.status === "approve" ||
+                {(budgetDetail.status === "approve" ||
                   budgetDetail.status === "bought" ||
-                  (budgetDetail.status === "paid" && (
-                    <>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          承認者
-                        </TableCell>
-                        <TableCell>
-                          {budgetDetail.approver.username ||
-                            `(${classDisplay[budgetDetail.class]}のため自動承認)`}
-                        </TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell component="th" scope="row">
-                          承認日時
-                        </TableCell>
-                        <TableCell>
-                          {dayjs(budgetDetail.approvedAt || budgetDetail.createdAt).format(
-                            "YYYY/MM/DD HH:mm:ss",
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    </>
-                  ))}
-                {budgetDetail.status === "approve" ||
-                  budgetDetail.status === "bought" ||
-                  (budgetDetail.status === "paid" && (
+                  budgetDetail.status === "paid") && (
+                  <>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        承認者
+                      </TableCell>
+                      <TableCell>
+                        {budgetDetail.approver.username ||
+                          `(${classDisplay[budgetDetail.class]}のため自動承認)`}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell component="th" scope="row">
+                        承認日時
+                      </TableCell>
+                      <TableCell>
+                        {dayjs(budgetDetail.approvedAt || budgetDetail.createdAt).format(
+                          "YYYY/MM/DD HH:mm:ss",
+                        )}
+                      </TableCell>
+                    </TableRow>
                     <TableRow>
                       <TableCell component="th" scope="row">
                         領収書
                       </TableCell>
                       <TableCell>
-                        <Stack spacing={1}>
+                        <Stack spacing={1} maxWidth="min(500px, 50vw)">
                           {budgetDetail.files &&
                             budgetDetail.files.map((f) => (
                               <BudgetFileView fileId={f.fileId} key={f.fileId} />
@@ -422,7 +417,8 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                         </Stack>
                       </TableCell>
                     </TableRow>
-                  ))}
+                  </>
+                )}
               </TableBody>
             </Table>
           </TableContainer>

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Close } from "@mui/icons-material";
+import { Add, Close } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -12,6 +12,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
 } from "@mui/material";
 
@@ -103,9 +104,16 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
             ))}
           </Select>
         </FormControl>
-        <Button variant="contained" sx={{ margin: 2 }} onClick={onClickCreate}>
-          作成する
-        </Button>
+        <Stack direction="row" justifyContent="flex-end" mt={2}>
+          <Button
+            variant="contained"
+            onClick={onClickCreate}
+            disabled={inputName == "" || inputClass == undefined}
+            startIcon={<Add />}
+          >
+            作成する
+          </Button>
+        </Stack>
       </DialogContent>
     </Dialog>
   );
