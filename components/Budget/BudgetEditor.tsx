@@ -256,30 +256,30 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
           )}
         </Box>
       )}
-      {(initBudget.class === "festival" || initBudget.class === "fixed") && (
-        <Box>
-          <Heading level={3}>購入金額</Heading>
-          {editableFields[initBudget.status].settlement ? (
-            <TextField
-              required
-              type="number"
-              label="購入金額"
-              InputProps={{
-                endAdornment: <InputAdornment position="end">円</InputAdornment>,
-              }}
-              defaultValue=""
-              value={settlementStr}
-              helperText={errors.settlement}
-              error={!!errors.settlement}
-              onChange={(e) => {
-                handleOnChange("settlement", setSettlementStr, e.target.value);
-              }}
-            />
-          ) : (
-            initBudget.status === "paid" && <Typography>購入金額: {settlementStr} 円</Typography>
-          )}
-        </Box>
-      )}
+      <Box>
+        <Heading level={3}>購入金額</Heading>
+        {editableFields[initBudget.status].settlement ? (
+          <TextField
+            required
+            type="number"
+            label="購入金額"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">円</InputAdornment>,
+            }}
+            defaultValue=""
+            value={settlementStr}
+            helperText={errors.settlement}
+            error={!!errors.settlement}
+            onChange={(e) => {
+              handleOnChange("settlement", setSettlementStr, e.target.value);
+            }}
+          />
+        ) : initBudget.status === "paid" ? (
+          <Typography>購入金額: {settlementStr} 円</Typography>
+        ) : (
+          <Typography>承認後に購入金額を設定してください</Typography>
+        )}
+      </Box>
       {editableFields[initBudget.status].remark && (
         <Box>
           <Heading level={3}>備考</Heading>
