@@ -1,8 +1,8 @@
 import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useState } from "react";
 
-import { Add, FilterList } from "@mui/icons-material";
+import { Add, ArrowBack, FilterList } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -13,6 +13,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 
@@ -27,7 +28,6 @@ type MyBudgetPageProps = {
 };
 
 const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
-  const router = useRouter();
   const { budgets, loadMore, isOver } = useBudgets("my");
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
 
@@ -43,15 +43,9 @@ const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
       <Stack spacing={2}>
         <Stack direction="row" spacing={2} justifyContent="space-between">
           {modeStr === "admin" ? (
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() => {
-                router.push(`/budget`);
-              }}
-            >
+            <ButtonLink href="/budget" startIcon={<ArrowBack />}>
               通常モードに戻る
-            </Button>
+            </ButtonLink>
           ) : (
             <ButtonLink href="/budget" startIcon={<FilterList />} variant="text">
               稟議一覧を見る
@@ -69,70 +63,64 @@ const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
             </Button>
           )}
         </Stack>
-        <TableContainer>
-          <Table sx={{ minWidth: 650 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>表題</TableCell>
-                <TableCell>状況</TableCell>
-                <TableCell>種別</TableCell>
-                <TableCell>予定金額</TableCell>
-                <TableCell>購入金額</TableCell>
-                <TableCell>申請者</TableCell>
-                <TableCell>最終更新日</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {budgets ? (
-                <>
-                  {budgets.map((budget) => (
-                    <TableRow
-                      key={budget.budgetId}
-                      onClick={
-                        modeStr === "admin"
-                          ? () => {
-                              router.push(`/budget/${budget.budgetId}?mode=admin`);
-                            }
-                          : () => {
-                              router.push(`/budget/${budget.budgetId}`);
-                            }
-                      }
-                      className="clickable-gray"
-                    >
-                      <TableCell>
+        {budgets && budgets.length > 0 ? (
+          <TableContainer>
+            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>表題</TableCell>
+                  <TableCell>状況</TableCell>
+                  <TableCell>種別</TableCell>
+                  <TableCell>予定金額</TableCell>
+                  <TableCell>購入金額</TableCell>
+                  <TableCell>申請者</TableCell>
+                  <TableCell>最終更新日</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {budgets.map((budget) => (
+                  <TableRow key={budget.budgetId}>
+                    <TableCell>
+                      <Link
+                        href={
+                          modeStr === "admin"
+                            ? `/budget/${budget.budgetId}?mode=admin`
+                            : `/budget/${budget.budgetId}`
+                        }
+                      >
                         {budget.name.length > 20 ? budget.name.substring(0, 20) + "…" : budget.name}
-                      </TableCell>
-                      <TableCell>
-                        <Chip
-                          label={statusDisplay[budget.status]}
-                          color={budgetStatusColor[budget.status]}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>{classDisplay[budget.class]}</TableCell>
-                      <TableCell>
-                        {budget.class === "festival" || budget.class === "fixed"
-                          ? "-"
-                          : `${budget.budget} 円`}
-                      </TableCell>
-                      <TableCell>
-                        {budget.status === "pending" || budget.status === "reject"
-                          ? "-"
-                          : `${budget.settlement} 円`}
-                      </TableCell>
-                      <TableCell>{budget.proposer.username}</TableCell>
-                      <TableCell title={budget.updatedAt}>
-                        {dayjs(budget.updatedAt).format("YYYY/M/D H:mm")}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </>
-              ) : (
-                <TableRow>稟議がありません</TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
+                      </Link>
+                    </TableCell>
+                    <TableCell>
+                      <Chip
+                        label={statusDisplay[budget.status]}
+                        color={budgetStatusColor[budget.status]}
+                        size="small"
+                      />
+                    </TableCell>
+                    <TableCell>{classDisplay[budget.class]}</TableCell>
+                    <TableCell>
+                      {budget.class === "festival" || budget.class === "fixed"
+                        ? "-"
+                        : `${budget.budget} 円`}
+                    </TableCell>
+                    <TableCell>
+                      {budget.status === "pending" || budget.status === "reject"
+                        ? "-"
+                        : `${budget.settlement} 円`}
+                    </TableCell>
+                    <TableCell>{budget.proposer.username}</TableCell>
+                    <TableCell title={budget.updatedAt}>
+                      {dayjs(budget.updatedAt).format("YYYY/MM/DD HH:mm:ss")}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography>稟議がありません</Typography>
+        )}
       </Stack>
       {!isOver && (
         <Stack alignItems="center" my={2}>

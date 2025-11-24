@@ -112,7 +112,7 @@ const BudgetPage = ({ modeStr }: BudgetPageProps) => {
                     </TableCell>
                     <TableCell>{budget.proposer.username}</TableCell>
                     <TableCell title={budget.updatedAt}>
-                      {dayjs(budget.updatedAt).format("YYYY/M/D H:mm")}
+                      {dayjs(budget.updatedAt).format("YYYY/MM/DD HH:mm:ss")}
                     </TableCell>
                   </TableRow>
                 ))}

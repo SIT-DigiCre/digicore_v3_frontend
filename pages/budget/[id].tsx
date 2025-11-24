@@ -373,13 +373,17 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                   <TableCell component="th" scope="row">
                     申請日時
                   </TableCell>
-                  <TableCell>{dayjs(budgetDetail.createdAt).format("YYYY/MM/DD HH:mm")}</TableCell>
+                  <TableCell>
+                    {dayjs(budgetDetail.createdAt).format("YYYY/MM/DD HH:mm:ss")}
+                  </TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell component="th" scope="row">
                     更新日時
                   </TableCell>
-                  <TableCell>{dayjs(budgetDetail.updatedAt).format("YYYY/MM/DD HH:mm")}</TableCell>
+                  <TableCell>
+                    {dayjs(budgetDetail.updatedAt).format("YYYY/MM/DD HH:mm:ss")}
+                  </TableCell>
                 </TableRow>
                 {(budgetDetail.status === "approve" ||
                   budgetDetail.status === "bought" ||
