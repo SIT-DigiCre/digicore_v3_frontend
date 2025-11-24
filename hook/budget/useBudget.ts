@@ -297,8 +297,10 @@ export const useBudgets: UseBudgets = (proposerId) => {
       if (data) {
         removeError("budget-post-fail");
         return data.budgetId;
+      } else {
+        setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
+        return "error";
       }
-      return "error";
     } catch {
       setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
       return "error";
