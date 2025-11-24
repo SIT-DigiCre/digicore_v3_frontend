@@ -24,7 +24,7 @@ export const AdminRejectDialog = ({ open, onClose, onConfirm, name }: AdminRejec
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
         <Typography>稟議「{name}」を却下しますか？</Typography>
         <Typography>変更後は元に戻すことができません！</Typography>
         <Button variant="contained" color="error" sx={{ marginY: 3 }} onClick={onConfirm}>

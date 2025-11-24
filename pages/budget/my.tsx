@@ -125,7 +125,7 @@ const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
       {!isOver && (
         <Stack alignItems="center" my={2}>
           <Button variant="contained" onClick={() => loadMore()}>
-            Load More
+            もっと見る
           </Button>
         </Stack>
       )}

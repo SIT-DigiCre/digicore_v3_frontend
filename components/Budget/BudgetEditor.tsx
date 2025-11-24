@@ -335,7 +335,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
       )}
       <Box sx={{ marginTop: 6, marginBottom: 3, textAlign: "center" }}>
         {initBudget.status === "reject" ? (
-          <p>この稟議は却下されているため、これ以上編集することができません。</p>
+          <Typography>この稟議は却下されているため、これ以上編集することができません。</Typography>
         ) : (
           <Button
             variant="contained"

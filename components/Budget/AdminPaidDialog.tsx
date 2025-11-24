@@ -39,7 +39,7 @@ export const AdminPaidDialog = ({
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
         <Typography>稟議「{name}」を支払い完了に切り替えますか？</Typography>
         <Typography>変更後は元に戻すことができません！</Typography>
         {filesMissing && (

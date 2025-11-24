@@ -1,5 +1,5 @@
 import { Close } from "@mui/icons-material";
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 
 type AdminApproveDialogProps = {
   open: boolean;
@@ -24,9 +24,9 @@ export const AdminApproveDialog = ({ open, onClose, onConfirm, name }: AdminAppr
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
-        <p>稟議「{name}」を承認しますか？</p>
-        <p>変更後は元に戻すことができません！</p>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
+        <Typography>稟議「{name}」を承認しますか？</Typography>
+        <Typography>変更後は元に戻すことができません！</Typography>
         <Button variant="contained" color="success" sx={{ marginY: 3 }} onClick={onConfirm}>
           承認する
         </Button>

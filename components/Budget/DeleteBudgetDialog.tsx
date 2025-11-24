@@ -24,7 +24,7 @@ export const DeleteBudgetDialog = ({ open, onClose, onConfirm, name }: DeleteBud
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
         <Typography>本当に稟議「{name}」を削除しますか？</Typography>
         <Typography>削除後は元に戻すことができません！</Typography>
         <Button variant="contained" color="error" sx={{ marginY: 3 }} onClick={onConfirm}>
