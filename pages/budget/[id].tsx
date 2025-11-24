@@ -2,12 +2,11 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { ArrowBack, ErrorOutline, WarningAmber } from "@mui/icons-material";
+import { ArrowBack, Check, Delete, Edit, ErrorOutline, WarningAmber } from "@mui/icons-material";
 import LaunchIcon from "@mui/icons-material/Launch";
 import {
   Button,
   Chip,
-  Grid,
   IconButton,
   Stack,
   Table,
@@ -26,7 +25,6 @@ import { BudgetFileView } from "../../components/Budget/BudgetFileView";
 import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
 import { ButtonLink } from "../../components/Common/ButtonLink";
-import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useBudget } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
@@ -143,8 +141,7 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
     }
   };
 
-  if (!authState.isLogined) return <></>;
-  if (!budgetDetail) return <p>Loading...</p>;
+  if (!budgetDetail) return <p>読み込み中...</p>;
 
   return (
     <>
@@ -157,8 +154,12 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
         >
           稟議一覧に戻る
         </ButtonLink>
+        <Chip
+          label={statusDisplay[budgetDetail.status]}
+          color={budgetStatusColor[budgetDetail.status]}
+        />
       </Stack>
-      {modeStr === "admin" ? (
+      {modeStr === "admin" && (
         <>
           <AdminApproveDialog
             open={openAdminApproveDialog}
@@ -180,8 +181,6 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
             filesMissing={budgetDetail.files.length === 0}
           />
         </>
-      ) : (
-        <></>
       )}
       <MarkAsBoughtDialog
         open={openMarkAsBoughtDialog}
@@ -197,110 +196,88 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
       />
 
       {modeStr === "edit" ? (
-        <>
-          <Grid>
-            <Heading level={1}>{budgetDetail.name}</Heading>
-            <Chip
-              label={statusDisplay[budgetDetail.status]}
-              color={budgetStatusColor[budgetDetail.status]}
-            />
-          </Grid>
-          <BudgetEditor onSubmit={onSubmit} initBudget={budgetDetail} />
-        </>
+        <BudgetEditor onSubmit={onSubmit} initBudget={budgetDetail} />
       ) : (
-        <>
-          <Grid>
-            <Heading level={1}>{budgetDetail.name}</Heading>
-            <div>
-              <Chip
-                label={statusDisplay[budgetDetail.status]}
-                color={budgetStatusColor[budgetDetail.status]}
-              />
-              {modeStr === "admin" ? (
-                <>
-                  {budgetDetail.status === "pending" ? (
-                    <>
-                      <Stack spacing={3} direction="row" sx={{ marginTop: 3 }}>
-                        <Button
-                          variant="contained"
-                          color="success"
-                          onClick={() => {
-                            setOpenAdminApproveDialog(true);
-                          }}
-                        >
-                          承認
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => {
-                            setOpenAdminRejectDialog(true);
-                          }}
-                        >
-                          却下
-                        </Button>
-                      </Stack>
-                    </>
-                  ) : budgetDetail.status === "bought" ? (
-                    <>
-                      <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
-                        <Button
-                          variant="contained"
-                          onClick={() => {
-                            setOpenAdminPaidDialog(true);
-                          }}
-                        >
-                          支払い完了にする
-                        </Button>
-                        {budgetDetail.files.length === 0 && (
-                          <Stack spacing={0.5} direction="row" alignItems="center" color="#d32f2f">
-                            <ErrorOutline color="error" fontSize="small" />
-                            <p>この稟議には領収書が添付されていません</p>
-                          </Stack>
-                        )}
-                      </Stack>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </>
-              ) : authState.user.userId === budgetDetail.proposer.userId ? (
-                // 通常モード かつ 編集権限がある場合
-                <>
-                  <div style={{ float: "right" }}>
-                    <Stack spacing={3} direction="row">
+        <Stack direction="column" spacing={2} my={2}>
+          <div>
+            {modeStr === "admin" ? (
+              <>
+                {budgetDetail.status === "pending" ? (
+                  <Stack spacing={3} direction="row" mt={3} justifyContent="center">
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => {
+                        setOpenAdminApproveDialog(true);
+                      }}
+                    >
+                      承認する
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="error"
+                      onClick={() => {
+                        setOpenAdminRejectDialog(true);
+                      }}
+                    >
+                      却下する
+                    </Button>
+                  </Stack>
+                ) : (
+                  budgetDetail.status === "bought" && (
+                    <Stack direction="row" mt={3} gap={2} flexWrap="wrap" justifyContent="center">
                       <Button
                         variant="contained"
                         onClick={() => {
-                          router.push(`/budget/${budgetDetail.budgetId}?mode=edit`);
+                          setOpenAdminPaidDialog(true);
                         }}
                       >
-                        編集
+                        支払い完了にする
                       </Button>
-                      {(budgetDetail.status === "pending" || budgetDetail.status === "approve") && (
-                        <>
-                          <Button
-                            variant="contained"
-                            color="error"
-                            onClick={() => {
-                              setOpenDeleteBudgetDialog(true);
-                            }}
-                          >
-                            削除
-                          </Button>
-                        </>
+                      {budgetDetail.files.length === 0 && (
+                        <Stack spacing={0.5} direction="row" alignItems="center" color="#d32f2f">
+                          <ErrorOutline color="error" fontSize="small" />
+                          <p>この稟議には領収書が添付されていません</p>
+                        </Stack>
                       )}
                     </Stack>
-                  </div>
-                </>
-              ) : (
-                <></>
-              )}
-              {budgetDetail.status === "approve" &&
-              authState.user.userId === budgetDetail.proposer.userId ? (
+                  )
+                )}
+              </>
+            ) : (
+              authState.user.userId === budgetDetail.proposer.userId && (
+                // 通常モード かつ 編集権限がある場合
+                <Stack spacing={3} direction="row" justifyContent="flex-end">
+                  <ButtonLink
+                    href={`/budget/${budgetDetail.budgetId}?mode=edit`}
+                    variant="contained"
+                    startIcon={<Edit />}
+                  >
+                    編集する
+                  </ButtonLink>
+                  {(budgetDetail.status === "pending" || budgetDetail.status === "approve") && (
+                    <>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        startIcon={<Delete />}
+                        onClick={() => {
+                          setOpenDeleteBudgetDialog(true);
+                        }}
+                      >
+                        削除する
+                      </Button>
+                    </>
+                  )}
+                </Stack>
+              )
+            )}
+            {budgetDetail.status === "approve" &&
+              authState.user.userId === budgetDetail.proposer.userId && (
                 <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
                   <Button
                     variant="contained"
+                    startIcon={<Check />}
                     onClick={() => {
                       setOpenMarkAsBoughtDialog(true);
                     }}
@@ -315,138 +292,141 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                     </Stack>
                   )}
                 </Stack>
-              ) : (
-                <></>
               )}
-            </div>
-          </Grid>
-          <Grid container sx={{ marginTop: 3 }}>
-            <TableContainer>
-              <hr />
-              <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-                <TableBody>
-                  <TableRow>
-                    <TableCell>種別</TableCell>
-                    <TableCell>{classDisplay[budgetDetail.class]}</TableCell>
-                  </TableRow>
-                  {budgetDetail.class === "outside" ||
+          </div>
+          <TableContainer>
+            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+              <TableBody>
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    種別
+                  </TableCell>
+                  <TableCell>{classDisplay[budgetDetail.class]}</TableCell>
+                </TableRow>
+                {budgetDetail.class === "outside" ||
                   budgetDetail.class === "project" ||
-                  budgetDetail.class === "room" ? (
+                  (budgetDetail.class === "room" && (
                     <>
                       <TableRow>
-                        <TableCell>利用目的</TableCell>
+                        <TableCell component="th" scope="row">
+                          利用目的
+                        </TableCell>
                         <TableCell>{budgetDetail.purpose}</TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>予定金額</TableCell>
+                        <TableCell component="th" scope="row">
+                          予定金額
+                        </TableCell>
                         <TableCell>{budgetDetail.budget} 円</TableCell>
                       </TableRow>
                     </>
-                  ) : (
-                    <></>
-                  )}
-                  {budgetDetail.status === "approve" ||
+                  ))}
+                {budgetDetail.status === "approve" ||
                   budgetDetail.status === "bought" ||
-                  budgetDetail.status === "paid" ? (
+                  (budgetDetail.status === "paid" && (
                     <TableRow>
-                      <TableCell>購入金額</TableCell>
+                      <TableCell component="th" scope="row">
+                        購入金額
+                      </TableCell>
                       <TableCell>{budgetDetail.settlement} 円</TableCell>
                     </TableRow>
-                  ) : (
-                    <></>
-                  )}
-                  <TableRow>
-                    <TableCell>備考</TableCell>
-                    <TableCell>{budgetDetail.remark}</TableCell>
-                  </TableRow>
-                  {budgetDetail.class === "outside" ||
+                  ))}
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    備考
+                  </TableCell>
+                  <TableCell>{budgetDetail.remark}</TableCell>
+                </TableRow>
+                {budgetDetail.class === "outside" ||
                   budgetDetail.class === "project" ||
-                  budgetDetail.class === "room" ? (
+                  (budgetDetail.class === "room" && (
                     <TableRow>
-                      <TableCell>スレッド</TableCell>
+                      <TableCell component="th" scope="row">
+                        スレッド
+                      </TableCell>
                       <TableCell>
                         {budgetDetail.mattermostUrl &&
-                        new URL(budgetDetail.mattermostUrl).hostname === "mm.digicre.net" ? (
-                          <IconButton
-                            size="small"
-                            title="Mattermostで開く"
-                            onClick={() =>
-                              router.push(
-                                budgetDetail.mattermostUrl.replace(/^http[s]?:/, "mattermost:"),
-                              )
-                            }
-                          >
-                            <LaunchIcon />
-                          </IconButton>
-                        ) : (
-                          <></>
-                        )}
+                          new URL(budgetDetail.mattermostUrl).hostname === "mm.digicre.net" && (
+                            <IconButton
+                              size="small"
+                              title="Mattermostで開く"
+                              onClick={() =>
+                                router.push(
+                                  budgetDetail.mattermostUrl.replace(/^http[s]?:/, "mattermost:"),
+                                )
+                              }
+                            >
+                              <LaunchIcon />
+                            </IconButton>
+                          )}
                       </TableCell>
                     </TableRow>
-                  ) : (
-                    <></>
-                  )}
+                  ))}
 
-                  <TableRow>
-                    <TableCell>申請者</TableCell>
-                    <TableCell>{budgetDetail.proposer.username}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>申請日時</TableCell>
-                    <TableCell>{dayjs(budgetDetail.createdAt).format("YYYY/M/D H:mm")}</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell>更新日時</TableCell>
-                    <TableCell>{dayjs(budgetDetail.updatedAt).format("YYYY/M/D H:mm")}</TableCell>
-                  </TableRow>
-                  {budgetDetail.status === "approve" ||
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    申請者
+                  </TableCell>
+                  <TableCell>{budgetDetail.proposer.username}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    申請日時
+                  </TableCell>
+                  <TableCell>{dayjs(budgetDetail.createdAt).format("YYYY/MM/DD HH:mm")}</TableCell>
+                </TableRow>
+                <TableRow>
+                  <TableCell component="th" scope="row">
+                    更新日時
+                  </TableCell>
+                  <TableCell>{dayjs(budgetDetail.updatedAt).format("YYYY/MM/DD HH:mm")}</TableCell>
+                </TableRow>
+                {budgetDetail.status === "approve" ||
                   budgetDetail.status === "bought" ||
-                  budgetDetail.status === "paid" ? (
+                  (budgetDetail.status === "paid" && (
                     <>
                       <TableRow>
-                        <TableCell>承認者</TableCell>
+                        <TableCell component="th" scope="row">
+                          承認者
+                        </TableCell>
                         <TableCell>
                           {budgetDetail.approver.username ||
                             `(${classDisplay[budgetDetail.class]}のため自動承認)`}
                         </TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell>承認日時</TableCell>
+                        <TableCell component="th" scope="row">
+                          承認日時
+                        </TableCell>
                         <TableCell>
                           {dayjs(budgetDetail.approvedAt || budgetDetail.createdAt).format(
-                            "YYYY/M/D H:mm:ss",
+                            "YYYY/MM/DD HH:mm:ss",
                           )}
                         </TableCell>
                       </TableRow>
                     </>
-                  ) : (
-                    <></>
-                  )}
-                  {budgetDetail.status === "approve" ||
+                  ))}
+                {budgetDetail.status === "approve" ||
                   budgetDetail.status === "bought" ||
-                  budgetDetail.status === "paid" ? (
+                  (budgetDetail.status === "paid" && (
                     <TableRow>
-                      <TableCell>領収書</TableCell>
+                      <TableCell component="th" scope="row">
+                        領収書
+                      </TableCell>
                       <TableCell>
                         <Stack spacing={1}>
-                          {budgetDetail.files ? (
+                          {budgetDetail.files &&
                             budgetDetail.files.map((f) => (
                               <BudgetFileView fileId={f.fileId} key={f.fileId} />
-                            ))
-                          ) : (
-                            <></>
-                          )}
+                            ))}
                         </Stack>
                       </TableCell>
                     </TableRow>
-                  ) : (
-                    <></>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Grid>
-        </>
+                  ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Stack>
       )}
     </>
   );

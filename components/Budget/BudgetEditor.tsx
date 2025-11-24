@@ -1,15 +1,17 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+import { Add, Save } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
+  Box,
   Button,
-  Divider,
-  Grid,
   IconButton,
   InputAdornment,
   List,
   ListItem,
+  Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 
 import { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
@@ -17,17 +19,12 @@ import { FileObject } from "../../interfaces/file";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 
-import type { paths } from "../../utils/fetch/api.d";
-
 import BudgetListItem from "./BudgetListItem";
+
+import type { paths } from "../../utils/fetch/api.d";
 
 type BudgetDetailResponse =
   paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
-
-type Props = {
-  onSubmit: (budget: PutBudgetRequest) => void;
-  initBudget?: BudgetDetailResponse;
-};
 
 type Fields = "name" | "purpose" | "budget" | "settlement" | "mattermostUrl" | "remark" | "files";
 
@@ -37,6 +34,11 @@ type FieldFlags = {
 
 type ValidationErrors = {
   [K in Fields]?: string;
+};
+
+type BudgetEditorProps = {
+  onSubmit: (budget: PutBudgetRequest) => void;
+  initBudget?: BudgetDetailResponse;
 };
 
 // status毎の編集可能なフィールドを定義 (trueで編集可能を表す)
@@ -77,7 +79,7 @@ const isInt = (s?: string) => {
   return /^-?\d+$/.test(s);
 };
 
-const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
+const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
   const [name, setName] = useState("");
   const [budgetStr, setBudgetStr] = useState("");
   const [mattermostUrl, setMattermostUrl] = useState("");
@@ -85,6 +87,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
   const [remark, setRemark] = useState("");
   const [settlementStr, setSettlementStr] = useState("");
   const [files, setFiles] = useState<string[]>([]);
+
   useEffect(() => {
     if (!initBudget) return;
     setName(initBudget.name);
@@ -123,6 +126,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
     }
     return true;
   };
+
   const handleOnChange = (
     field: Fields,
     setState: Dispatch<SetStateAction<typeof value>>,
@@ -137,6 +141,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
       setErrors({ ...errors, [field]: null });
     }
   };
+
   // 入力可能な必須項目がすべて valid のとき true
   const isAllValid =
     (!editableFields[initBudget.status].name || validateField("name", name) === true) &&
@@ -148,10 +153,12 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
   const onFileSelectCancel = () => {
     setIsOpenFileBrowser(false);
   };
+
   const onFileSelected = (f: FileObject) => {
     setIsOpenFileBrowser(false);
     setFiles([...files, f.fileId]);
   };
+
   const onClickSave = () => {
     if (!isAllValid) return;
 
@@ -167,13 +174,12 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
     };
     onSubmit(budgetRequest);
   };
+
   return (
-    <>
-      <Grid sx={{ marginTop: 3 }}>
-        <Heading level={3}>基本情報</Heading>
-      </Grid>
-      {editableFields[initBudget.status].name ? (
-        <Grid sx={{ marginTop: 3 }}>
+    <Stack spacing={2} my={2}>
+      <Box>
+        <Heading level={3}>稟議名</Heading>
+        {editableFields[initBudget.status].name ? (
           <TextField
             required
             label="稟議名"
@@ -185,37 +191,34 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
               handleOnChange("name", setName, e.target.value);
             }}
           />
-        </Grid>
-      ) : (
-        <Grid sx={{ marginTop: 3 }}>
-          <p>稟議名: {name}</p>
-        </Grid>
-      )}
-      {editableFields[initBudget.status].purpose ? (
-        <Grid sx={{ marginTop: 3 }}>
-          <TextField
-            required
-            fullWidth
-            label="利用目的"
-            defaultValue=""
-            value={purpose}
-            helperText={errors.purpose}
-            error={!!errors.purpose}
-            onChange={(e) => {
-              handleOnChange("purpose", setPurpose, e.target.value);
-            }}
-          />
-        </Grid>
-      ) : initBudget.class === "festival" || initBudget.class === "fixed" ? (
+        ) : (
+          <Typography>{name}</Typography>
+        )}
+      </Box>
+      {initBudget.class !== "festival" && initBudget.class !== "fixed" && (
         // 学園祭費または固定費用のときは省略する
-        <></>
-      ) : (
-        <Grid sx={{ marginTop: 3 }}>
-          <p>利用目的: {purpose}</p>
-        </Grid>
+        <Box>
+          <Heading level={3}>利用目的</Heading>
+          {editableFields[initBudget.status].purpose ? (
+            <TextField
+              required
+              fullWidth
+              label="利用目的"
+              defaultValue=""
+              value={purpose}
+              helperText={errors.purpose}
+              error={!!errors.purpose}
+              onChange={(e) => {
+                handleOnChange("purpose", setPurpose, e.target.value);
+              }}
+            />
+          ) : (
+            <Typography>{purpose}</Typography>
+          )}
+        </Box>
       )}
-      {editableFields[initBudget.status].mattermostUrl ? (
-        <Grid sx={{ marginTop: 3 }}>
+      {editableFields[initBudget.status].mattermostUrl && (
+        <Box>
           <TextField
             fullWidth
             label="MattermostのURL"
@@ -226,18 +229,12 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
               handleOnChange("mattermostUrl", setMattermostUrl, e.target.value);
             }}
           />
-        </Grid>
-      ) : (
-        <></>
+        </Box>
       )}
-
-      <Divider sx={{ marginTop: 3 }} />
-
-      <Grid sx={{ marginTop: 3 }}>
-        <Heading level={3}>金額</Heading>
-      </Grid>
-      {editableFields[initBudget.status].budget ? (
-        <Grid sx={{ marginTop: 3 }}>
+      {initBudget.class !== "festival" && initBudget.class !== "fixed" && (
+        <Box>
+          <Heading level={3}>予定金額</Heading>
+          editableFields[initBudget.status].budget ? (
           <TextField
             required
             type="number"
@@ -253,17 +250,12 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
               handleOnChange("budget", setBudgetStr, e.target.value);
             }}
           />
-        </Grid>
-      ) : initBudget.class === "festival" || initBudget.class === "fixed" ? (
-        // 学園祭費または固定費用の場合は省略する
-        <></>
-      ) : (
-        <Grid sx={{ marginTop: 3 }}>
-          <p>予定金額: {budgetStr} 円</p>
-        </Grid>
+          ) : (<Typography>予定金額: {budgetStr} 円</Typography>){" "}
+        </Box>
       )}
-      {editableFields[initBudget.status].settlement ? (
-        <Grid sx={{ marginTop: 3 }}>
+      <Box>
+        <Heading level={3}>購入金額</Heading>
+        {editableFields[initBudget.status].settlement ? (
           <TextField
             required
             type="number"
@@ -279,22 +271,13 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
               handleOnChange("settlement", setSettlementStr, e.target.value);
             }}
           />
-        </Grid>
-      ) : initBudget.status === "paid" ? (
-        <Grid sx={{ marginTop: 3 }}>
-          <p>購入金額: {settlementStr} 円</p>
-        </Grid>
-      ) : (
-        <></>
-      )}
-
-      <Divider sx={{ marginTop: 3 }} />
-
-      <Grid sx={{ marginTop: 3 }}>
-        <Heading level={3}>備考</Heading>
-      </Grid>
-      {editableFields[initBudget.status].remark ? (
-        <Grid sx={{ marginTop: 3 }}>
+        ) : (
+          initBudget.status === "paid" && <Typography>購入金額: {settlementStr} 円</Typography>
+        )}
+      </Box>
+      {editableFields[initBudget.status].remark && (
+        <Box>
+          <Heading level={3}>備考</Heading>
           <TextField
             fullWidth
             label="備考"
@@ -304,64 +287,62 @@ const BudgetEditor = ({ onSubmit, initBudget }: Props) => {
               handleOnChange("remark", setRemark, e.target.value);
             }}
           />
-        </Grid>
-      ) : (
-        <></>
+        </Box>
       )}
-      {editableFields[initBudget.status].files ? (
-        <>
-          <Divider sx={{ marginTop: 3 }} />
-
-          <Grid sx={{ marginTop: 3 }}>
-            <Heading level={3}>領収書</Heading>
-            <List>
-              {files.map((fileId) => (
-                <ListItem
-                  key={fileId}
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => {
-                        setFiles(files.filter((f) => f !== fileId));
-                      }}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  }
-                >
-                  {fileId ? <BudgetListItem fileId={fileId} /> : <></>}
-                </ListItem>
-              ))}
-            </List>
-            <Button
-              variant="contained"
-              onClick={() => {
-                setIsOpenFileBrowser(true);
-              }}
-            >
-              ファイルの追加
-            </Button>
-            <FileBrowserModal
-              open={isOpenFileBrowser}
-              onCancel={onFileSelectCancel}
-              onSelected={onFileSelected}
-            />
-          </Grid>
-        </>
-      ) : (
-        <></>
+      {editableFields[initBudget.status].files && (
+        <Box>
+          <Heading level={3}>領収書</Heading>
+          <List>
+            {files.map((fileId) => (
+              <ListItem
+                key={fileId}
+                secondaryAction={
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => {
+                      setFiles(files.filter((f) => f !== fileId));
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                }
+              >
+                {fileId && <BudgetListItem fileId={fileId} />}
+              </ListItem>
+            ))}
+          </List>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setIsOpenFileBrowser(true);
+            }}
+            startIcon={<Add />}
+          >
+            ファイルの追加
+          </Button>
+          <FileBrowserModal
+            open={isOpenFileBrowser}
+            onCancel={onFileSelectCancel}
+            onSelected={onFileSelected}
+          />
+        </Box>
       )}
-      <Grid sx={{ marginTop: 6, marginBottom: 3, textAlign: "center" }}>
+      <Box sx={{ marginTop: 6, marginBottom: 3, textAlign: "center" }}>
         {initBudget.status === "reject" ? (
           <p>この稟議は却下されているため、これ以上編集することができません。</p>
         ) : (
-          <Button variant="contained" onClick={onClickSave} disabled={!isAllValid}>
-            save
+          <Button
+            variant="contained"
+            onClick={onClickSave}
+            disabled={!isAllValid}
+            startIcon={<Save />}
+          >
+            保存する
           </Button>
         )}
-      </Grid>
-    </>
+      </Box>
+    </Stack>
   );
 };
 

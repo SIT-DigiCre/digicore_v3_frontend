@@ -6,13 +6,16 @@ import FileView from "../File/FileView";
 type WorkFileViewProps = {
   fileId: string;
 };
+
 export const BudgetFileView = ({ fileId }: WorkFileViewProps) => {
   const file = useFile(fileId);
   const contentRef: React.RefObject<HTMLDivElement> = useRef(null);
+
   useEffect(() => {
     if (!contentRef.current) return;
   }, [contentRef]);
-  if (!file)
+
+  if (!file) {
     return (
       <div
         ref={contentRef}
@@ -21,8 +24,10 @@ export const BudgetFileView = ({ fileId }: WorkFileViewProps) => {
           textAlign: "center",
         }}
       >
-        <p>Loading...</p>
+        <p>読み込み中...</p>
       </div>
     );
+  }
+
   return <FileView file={file} />;
 };
