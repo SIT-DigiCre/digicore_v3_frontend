@@ -23,12 +23,6 @@ const PublicProfilePage = () => {
   const [openFileModal, setOpenFileModal] = useState(false);
 
   useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
-
-  useEffect(() => {
     setEditUserProfile(userProfile);
   }, [userProfile]);
 
@@ -58,7 +52,8 @@ const PublicProfilePage = () => {
   return (
     <EditorTabLayout>
       <div>
-        <Heading level={3}>公開情報（他の部員も見れる情報）</Heading>
+        <Heading level={2}>公開情報</Heading>
+        <Typography>ここで設定した情報は、他の部員も閲覧できます。</Typography>
         <Stack spacing={4} py={4}>
           <Stack spacing={2}>
             <Stack direction="row" spacing={2} alignItems="center">

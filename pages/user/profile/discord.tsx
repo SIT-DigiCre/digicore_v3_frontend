@@ -1,22 +1,16 @@
-import { useRouter } from "next/router";
+import Link from "next/link";
 import { useEffect } from "react";
 
-import { Box, Button, Link, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
+import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
 
 const DiscordProfilePage = () => {
-  const router = useRouter();
   const { authState } = useAuthState();
   const discord = useDiscordLogin();
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -32,6 +26,7 @@ const DiscordProfilePage = () => {
   return (
     <EditorTabLayout>
       <Box my={2}>
+        <Heading level={2}>Discord連携</Heading>
         <Typography>
           デジクリではDiscordサーバーを所有しています。正規の部員のみがDiscordサーバーに入れるようにアカウントと連携が必要です。
         </Typography>

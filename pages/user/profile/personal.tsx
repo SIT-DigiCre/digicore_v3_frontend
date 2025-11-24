@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import { Stack } from "@mui/material";
@@ -11,16 +10,9 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { UserPrivateProfile } from "../../../interfaces/user";
 
 const PersonalProfilePage = () => {
-  const router = useRouter();
   const { authState } = useAuthState();
   const [privateProfile, updateProfile] = usePrivateProfile(false);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
-
-  useEffect(() => {
-    if (!authState.isLoading && !authState.isLogined) {
-      router.push("/login");
-    }
-  }, [authState, router]);
 
   useEffect(() => {
     setEditProfile(privateProfile);
@@ -43,7 +35,7 @@ const PersonalProfilePage = () => {
   return (
     <EditorTabLayout>
       <Stack spacing={2}>
-        <Heading level={3}>本人情報</Heading>
+        <Heading level={2}>本人情報</Heading>
         <PersonalInfoForm
           initialProfile={privateProfile}
           profile={editProfile}

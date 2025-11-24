@@ -1,8 +1,9 @@
 import { GetServerSideProps } from "next";
 
+import { ArrowBack } from "@mui/icons-material";
 import { Alert, Box, Stack } from "@mui/material";
 
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
@@ -20,15 +21,13 @@ const EventPage = ({ id }: EventPageProps) => {
 
   return (
     <>
-      <PageHead title={eventDetail.name} />
-      <Breadcrumbs
-        links={[
-          { text: "Home", href: "/" },
-          { text: "Event", href: "/event" },
-          { text: eventDetail.name },
-        ]}
-      />
-      <Heading level={1}>{eventDetail.name}イベント予約フォーム</Heading>
+      <PageHead title="イベント詳細" />
+      <Stack mb={2} alignItems="flex-start">
+        <ButtonLink href="/event" startIcon={<ArrowBack />} variant="text">
+          イベント一覧に戻る
+        </ButtonLink>
+      </Stack>
+      <Heading level={2}>{eventDetail.name}</Heading>
       {eventDetail.reservated && (
         <Alert severity="info" sx={{ mb: 2 }}>
           既にあなたは予約済みです
