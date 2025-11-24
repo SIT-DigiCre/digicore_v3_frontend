@@ -108,7 +108,7 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
           <Button
             variant="contained"
             onClick={onClickCreate}
-            disabled={inputName == "" || inputClass == undefined}
+            disabled={inputName === "" || inputClass === undefined}
             startIcon={<Add />}
           >
             作成する
