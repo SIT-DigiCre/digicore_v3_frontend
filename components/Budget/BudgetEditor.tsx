@@ -12,16 +12,21 @@ import {
   TextField,
 } from "@mui/material";
 
-import { BudgetDetail, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
+import { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
 import { FileObject } from "../../interfaces/file";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 
+import type { paths } from "../../utils/fetch/api.d";
+
 import BudgetListItem from "./BudgetListItem";
+
+type BudgetDetailResponse =
+  paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
 
 type Props = {
   onSubmit: (budget: PutBudgetRequest) => void;
-  initBudget?: BudgetDetail;
+  initBudget?: BudgetDetailResponse;
 };
 
 type Fields = "name" | "purpose" | "budget" | "settlement" | "mattermostUrl" | "remark" | "files";

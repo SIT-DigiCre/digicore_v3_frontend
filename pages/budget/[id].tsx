@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { ErrorOutline, WarningAmber } from "@mui/icons-material";
+import { ArrowBack, ErrorOutline, WarningAmber } from "@mui/icons-material";
 import LaunchIcon from "@mui/icons-material/Launch";
 import {
   Button,
@@ -16,6 +16,7 @@ import {
   TableContainer,
   TableRow,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 import { AdminApproveDialog } from "../../components/Budget/AdminApproveDialog";
 import { AdminPaidDialog } from "../../components/Budget/AdminPaidDialog";
@@ -24,66 +25,21 @@ import BudgetEditor from "../../components/Budget/BudgetEditor";
 import { BudgetFileView } from "../../components/Budget/BudgetFileView";
 import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { useBudget } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
-import { Budget, BudgetClass, BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
+import { Budget, PutBudgetRequest } from "../../interfaces/budget";
+import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
 
-const classDisplay: {
-  [K in BudgetClass]: string;
-} = {
-  room: "部室",
-  project: "企画",
-  outside: "学外活動",
-  fixed: "固定費用",
-  festival: "学園祭",
-};
-
-const statusDisplay: {
-  [K in BudgetStatus]: string;
-} = {
-  pending: "申請中",
-  reject: "却下",
-  approve: "承認済み",
-  bought: "購入済み",
-  paid: "支払い完了",
-};
-
-const budgetStatusColor: {
-  [K in BudgetStatus]:
-    | "primary"
-    | "error"
-    | "success"
-    | "warning"
-    | "default"
-    | "secondary"
-    | "info";
-} = {
-  pending: "default",
-  reject: "error",
-  approve: "success",
-  bought: "secondary",
-  paid: "primary",
-};
-
-const dateOptions: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-};
-
-type Props = {
+type BudgetDetailPageProps = {
   id: string;
   modeStr?: string;
   budgetPublic?: Budget;
 };
 
-const BudgetDetailPage = ({ id, modeStr }: Props) => {
+const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
   const router = useRouter();
   const {
     budgetDetail,
@@ -193,15 +149,15 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
   return (
     <>
       <PageHead title={modeStr === "admin" ? `★ ${budgetDetail.name}` : budgetDetail.name} />
-      <Breadcrumbs
-        links={[
-          { text: "Home", href: "/" },
-          modeStr === "admin"
-            ? { text: "Budget (ADMIN)", href: "/budget?mode=admin" }
-            : { text: "Budget", href: "/budget" },
-          { text: budgetDetail.name },
-        ]}
-      />
+      <Stack direction="row" spacing={2} justifyContent="space-between">
+        <ButtonLink
+          href={modeStr === "admin" ? "/budget?mode=admin" : "/budget"}
+          startIcon={<ArrowBack />}
+          variant="text"
+        >
+          稟議一覧に戻る
+        </ButtonLink>
+      </Stack>
       {modeStr === "admin" ? (
         <>
           <AdminApproveDialog
@@ -437,15 +393,11 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
                   </TableRow>
                   <TableRow>
                     <TableCell>申請日時</TableCell>
-                    <TableCell>
-                      {new Date(budgetDetail.createdAt).toLocaleString("ja-JP", dateOptions)}
-                    </TableCell>
+                    <TableCell>{dayjs(budgetDetail.createdAt).format("YYYY/M/D H:mm")}</TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>更新日時</TableCell>
-                    <TableCell>
-                      {new Date(budgetDetail.updatedAt).toLocaleString("ja-JP", dateOptions)}
-                    </TableCell>
+                    <TableCell>{dayjs(budgetDetail.updatedAt).format("YYYY/M/D H:mm")}</TableCell>
                   </TableRow>
                   {budgetDetail.status === "approve" ||
                   budgetDetail.status === "bought" ||
@@ -461,9 +413,9 @@ const BudgetDetailPage = ({ id, modeStr }: Props) => {
                       <TableRow>
                         <TableCell>承認日時</TableCell>
                         <TableCell>
-                          {new Date(
-                            budgetDetail.approvedAt || budgetDetail.createdAt,
-                          ).toLocaleString("ja-JP", dateOptions)}
+                          {dayjs(budgetDetail.approvedAt || budgetDetail.createdAt).format(
+                            "YYYY/M/D H:mm:ss",
+                          )}
                         </TableCell>
                       </TableRow>
                     </>

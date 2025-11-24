@@ -2,10 +2,12 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import { FilterList } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import {
   Button,
   Chip,
-  Grid,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -13,129 +15,60 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import dayjs from "dayjs";
 
 import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
-import Breadcrumbs from "../../components/Common/Breadcrumb";
-import Heading from "../../components/Common/Heading";
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import { useBudgets } from "../../hook/budget/useBudget";
-import { BudgetClass, BudgetStatus } from "../../interfaces/budget";
+import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
 
-const dateOptions: Intl.DateTimeFormatOptions = {
-  year: "numeric",
-  month: "numeric",
-  day: "numeric",
-  hour: "2-digit",
-  minute: "2-digit",
-};
-
-const classDisplay: {
-  [K in BudgetClass]: string;
-} = {
-  room: "部室",
-  project: "企画",
-  outside: "学外活動",
-  fixed: "固定費用",
-  festival: "学園祭",
-};
-
-const statusDisplay: {
-  [K in BudgetStatus]: string;
-} = {
-  pending: "申請中",
-  reject: "却下",
-  approve: "承認済み",
-  bought: "購入済み",
-  paid: "支払い完了",
-};
-
-const budgetStatusColor: {
-  [K in BudgetStatus]:
-    | "primary"
-    | "error"
-    | "success"
-    | "warning"
-    | "default"
-    | "secondary"
-    | "info";
-} = {
-  pending: "default",
-  reject: "error",
-  approve: "success",
-  bought: "secondary",
-  paid: "primary",
-};
-
-type Props = {
+type BudgetPageProps = {
   modeStr?: string;
 };
 
-const BudgetPage = ({ modeStr }: Props) => {
+const BudgetPage = ({ modeStr }: BudgetPageProps) => {
   const router = useRouter();
-  const { budgets, loadMore } = useBudgets();
+  const { budgets, loadMore, isOver } = useBudgets();
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
-  const [showLoadMoreButton, setShowLoadMoreButton] = useState(true);
   return (
     <>
       <PageHead title={modeStr === "admin" ? "★ 稟議" : "稟議"} />
-      <Breadcrumbs
-        links={[
-          { text: "Home", href: "/" },
-          { text: modeStr === "admin" ? "Budget (ADMIN)" : "Budget" },
-        ]}
-      />
       <NewBudgetDialog
         open={openNewBudgetDialog}
         onClose={() => {
           setOpenNewBudgetDialog(false);
         }}
       />
-      <Grid>
-        <div>
-          <Heading level={2}>{modeStr === "admin" ? "稟議（管理者用）" : "稟議"}</Heading>
-          <div style={{ float: "right" }}>
-            {modeStr === "admin" ? (
-              <Button
-                variant="contained"
-                color="error"
-                sx={{ margin: "0.1rem" }}
-                onClick={() => {
-                  router.push(`/budget`);
-                }}
-              >
-                通常モードに戻る
-              </Button>
-            ) : (
-              <Button
-                variant="contained"
-                sx={{ margin: "0.1rem" }}
-                onClick={() => {
-                  setOpenNewBudgetDialog(true);
-                }}
-              >
-                新規稟議申請
-              </Button>
-            )}
+      <Stack spacing={2}>
+        <Stack spacing={2} direction="row" justifyContent="space-between">
+          {modeStr === "admin" ? (
             <Button
               variant="contained"
-              sx={{ margin: "0.1rem", marginLeft: 1 }}
-              onClick={
-                modeStr === "admin"
-                  ? () => {
-                      router.push(`/budget/my?mode=admin`);
-                    }
-                  : () => {
-                      router.push(`/budget/my`);
-                    }
-              }
+              color="error"
+              onClick={() => {
+                router.push(`/budget`);
+              }}
             >
-              自分の稟議
+              通常モードに戻る
             </Button>
-          </div>
-        </div>
-        <hr style={{ clear: "both" }} />
-      </Grid>
-      <Grid container>
+          ) : (
+            <ButtonLink href="/budget/my" startIcon={<FilterList />} variant="text">
+              自分の稟議を見る
+            </ButtonLink>
+          )}
+          {modeStr !== "admin" && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => {
+                setOpenNewBudgetDialog(true);
+              }}
+            >
+              新規稟議申請
+            </Button>
+          )}
+        </Stack>
         <TableContainer>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -189,7 +122,7 @@ const BudgetPage = ({ modeStr }: Props) => {
                       </TableCell>
                       <TableCell>{budget.proposer.username}</TableCell>
                       <TableCell title={budget.updatedAt}>
-                        {new Date(budget.updatedAt).toLocaleString("ja-JP", dateOptions)}
+                        {dayjs(budget.updatedAt).format("YYYY/M/D H:mm")}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -200,23 +133,13 @@ const BudgetPage = ({ modeStr }: Props) => {
             </TableBody>
           </Table>
         </TableContainer>
-      </Grid>
-      {showLoadMoreButton ? (
-        <Grid sx={{ textAlign: "center", marginY: 3 }}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              loadMore().then((result) => {
-                if (!result) return;
-                if (result.isLogined && result.reachedToEnd) setShowLoadMoreButton(false);
-              });
-            }}
-          >
+      </Stack>
+      {!isOver && (
+        <Stack alignItems="center" my={2}>
+          <Button variant="contained" onClick={() => loadMore()}>
             Load More
           </Button>
-        </Grid>
-      ) : (
-        <Grid sx={{ marginBottom: 3 }}></Grid>
+        </Stack>
       )}
     </>
   );
