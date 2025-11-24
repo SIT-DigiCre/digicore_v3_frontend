@@ -45,54 +45,39 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
     onChange(e.target.value);
   };
 
-  const ensureEditorVisible = useCallback(() => {
-    if (isMobile && mobileViewMode === "preview") {
-      setMobileViewMode("editor");
-    }
-  }, [isMobile, mobileViewMode]);
-
   const insertBlock = useCallback(
     (text: string) => {
-      ensureEditorVisible();
-      textareaRef.current?.focus();
-
-      const textarea = textareaRef.current;
-
-      if (!textarea) {
-        setMd((prev) => {
-          const updated = prev + text;
-          onChange(updated);
-          return updated;
-        });
-        return;
+      // モバイルでプレビューモードの場合は、まずエディターモードに切り替える
+      if (isMobile && mobileViewMode === "preview") {
+        setMobileViewMode("editor");
       }
 
-      const currentValue = textarea.value;
-      const selectionStart = textarea.selectionStart ?? currentValue.length;
-      const selectionEnd = textarea.selectionEnd ?? currentValue.length;
-      const lineStart = currentValue.lastIndexOf("\n", selectionStart - 1) + 1;
-      const isCurrentLineEmpty = selectionStart === selectionEnd && selectionStart === lineStart;
-      const insertText =
-        text.startsWith("\n") && isCurrentLineEmpty ? text.replace(/^\n/, "") : text;
+      // エディターが表示されるのを待ってから処理を実行
+      requestAnimationFrame(() => {
+        const textarea = textareaRef.current;
+        if (!textarea) return;
 
-      setMd((prev) => {
-        const before = prev.slice(0, selectionStart);
-        const after = prev.slice(selectionEnd);
-        const nextValue = `${before}${insertText}${after}`;
-        const caretPosition = selectionStart + insertText.length;
+        const currentValue = textarea.value;
+        const selectionStart = textarea.selectionStart ?? currentValue.length;
+        const lineStart = currentValue.lastIndexOf("\n", selectionStart - 1) + 1;
+        const isCurrentLineEmpty = selectionStart === lineStart;
+        // 現在の行が空の場合は、改行を削除する
+        const insertText =
+          text.startsWith("\n") && isCurrentLineEmpty ? text.replace(/^\n/, "") : text;
 
-        requestAnimationFrame(() => {
-          if (textareaRef.current) {
-            textareaRef.current.selectionStart = caretPosition;
-            textareaRef.current.selectionEnd = caretPosition;
-          }
+        setMd((prev) => {
+          const before = prev.slice(0, selectionStart);
+          const after = prev.slice(selectionStart);
+          const nextValue = `${before}${insertText}${after}`;
+
+          onChange(nextValue);
+          return nextValue;
         });
 
-        onChange(nextValue);
-        return nextValue;
+        textarea.focus();
       });
     },
-    [ensureEditorVisible, onChange],
+    [onChange, isMobile, mobileViewMode],
   );
 
   const onFileSelected = (file: FileObject) => {
