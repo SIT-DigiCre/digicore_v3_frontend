@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
-import MarkdownEditor from "../../../components/Common/MarkdownEditor";
+import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
 import { useAuthState } from "../../../hook/useAuthState";
