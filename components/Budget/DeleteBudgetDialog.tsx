@@ -1,18 +1,19 @@
 import { Close } from "@mui/icons-material";
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 
-type Props = {
+type DeleteBudgetDialogProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
   name: string;
 };
-export const DeleteBudgetDialog = ({ open, onClose, onConfirm, name }: Props) => {
+
+export const DeleteBudgetDialog = ({ open, onClose, onConfirm, name }: DeleteBudgetDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>操作の確認</DialogTitle>
+      <DialogTitle>削除操作の確認</DialogTitle>
       <IconButton
-        aria-label="close"
+        aria-label="削除操作をキャンセルする"
         onClick={onClose}
         sx={{
           position: "absolute",
@@ -23,9 +24,9 @@ export const DeleteBudgetDialog = ({ open, onClose, onConfirm, name }: Props) =>
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
-        <p>本当に稟議「{name}」を削除しますか？</p>
-        <p>削除後は元に戻すことができません！</p>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
+        <Typography>本当に稟議「{name}」を削除しますか？</Typography>
+        <Typography>削除後は元に戻すことができません！</Typography>
         <Button variant="contained" color="error" sx={{ marginY: 3 }} onClick={onConfirm}>
           削除する
         </Button>

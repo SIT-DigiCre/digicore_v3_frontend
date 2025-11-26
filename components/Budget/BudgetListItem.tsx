@@ -4,13 +4,14 @@ import { useFile } from "../../hook/file/useFile";
 import { getFileKind } from "../../interfaces/file";
 import FileKindIcon from "../File/FileKindIcon";
 
-type Props = {
+type BudgetListItemProps = {
   fileId: string;
 };
 
-const BudgetListItem = ({ fileId }: Props) => {
+const BudgetListItem = ({ fileId }: BudgetListItemProps) => {
   const file = useFile(fileId);
-  if (!file) return <p>Loading...</p>;
+  if (!file) return <p>読み込み中...</p>;
+
   return (
     <>
       {getFileKind(file.extension) === "image" ? (

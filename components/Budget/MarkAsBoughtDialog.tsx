@@ -1,18 +1,27 @@
-import { Close } from "@mui/icons-material";
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Check, Close } from "@mui/icons-material";
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 
-type Props = {
+type MarkAsBoughtDialogProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
   name: string;
 };
-export const MarkAsBoughtDialog = ({ open, onClose, onConfirm, name }: Props) => {
+
+export const MarkAsBoughtDialog = ({ open, onClose, onConfirm, name }: MarkAsBoughtDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>操作の確認</DialogTitle>
+      <DialogTitle>切り替え操作の確認</DialogTitle>
       <IconButton
-        aria-label="close"
+        aria-label="切り替え操作をキャンセルする"
         onClick={onClose}
         sx={{
           position: "absolute",
@@ -23,17 +32,19 @@ export const MarkAsBoughtDialog = ({ open, onClose, onConfirm, name }: Props) =>
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
-        <p>稟議「{name}」を購入済みに切り替えますか？</p>
-        <p>変更後は元に戻すことができません！</p>
-        <p>また購入済みにした稟議は削除できなくなります！</p>
-        <p style={{ fontSize: "small" }}>
-          <br />
-          (変更後も支払いが行われるまでは購入金額・備考・領収書の修正は可能です)
-        </p>
-        <Button variant="contained" sx={{ marginY: 3 }} onClick={onConfirm}>
-          購入済みにする
-        </Button>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
+        <Typography>稟議「{name}」を購入済みに切り替えますか？</Typography>
+        <Typography color="error">
+          変更後は元に戻すことができません。さらに、購入済みにした稟議は削除できなくなります。
+        </Typography>
+        <Typography mt={2}>
+          変更後も支払いが行われるまでは購入金額・備考・領収書の修正は可能です。
+        </Typography>
+        <Stack direction="row" justifyContent="flex-end" my={2}>
+          <Button variant="contained" onClick={onConfirm} startIcon={<Check />}>
+            購入済みにする
+          </Button>
+        </Stack>
       </DialogContent>
     </Dialog>
   );
