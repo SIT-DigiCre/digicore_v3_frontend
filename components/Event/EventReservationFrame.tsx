@@ -4,7 +4,6 @@ import { ChangeEventHandler, useState } from "react";
 import { Add, Cancel, OpenInNew } from "@mui/icons-material";
 import {
   Avatar,
-  Box,
   Button,
   Card,
   CardActions,
@@ -16,46 +15,34 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
+  Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 
 import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
-import { DigicreEventReservation } from "../../interfaces/event";
+import { useAuthState } from "../../hook/useAuthState";
 import { getTimeSpanText } from "../../utils/date-util";
+import { apiClient } from "../../utils/fetch/client";
 
-type Props = {
+import type { DigicreEventReservation } from "../../interfaces/event";
+
+type EventReservationFrameProps = {
   eventId: string;
   eventReservation: DigicreEventReservation;
-  reservation: (id: string, commentText: string, urlText: string) => Promise<boolean>;
-  cancelReservation: (id: string) => Promise<boolean>;
-};
-const modalStyle = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
 };
 
-const EventReservationFrame = ({
-  eventId,
-  eventReservation,
-  reservation,
-  cancelReservation,
-}: Props) => {
+const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFrameProps) => {
+  const { authState } = useAuthState();
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const [commentText, setCommentText] = useState("");
   const [urlText, setUrlText] = useState("");
   const { isLoading, userReservations } = useEventUserReservationList(
     eventId,
-    eventReservation.reservationId!,
+    eventReservation.reservationId,
   );
 
   const onChangeCommnetText: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -77,6 +64,40 @@ const EventReservationFrame = ({
       finishDate.isAfter(now) &&
       eventReservation.reservable
     );
+  };
+
+  const cancelReservation = async () => {
+    await apiClient.DELETE("/event/{eventId}/{reservationId}/me", {
+      params: {
+        path: {
+          eventId,
+          reservationId: eventReservation.reservationId,
+        },
+      },
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
+    });
+    router.reload();
+    return true;
+  };
+
+  const reservation = async () => {
+    await apiClient.PUT("/event/{eventId}/{reservationId}/me", {
+      params: {
+        path: {
+          eventId,
+          reservationId: eventReservation.reservationId,
+        },
+      },
+      body: {
+        comment: commentText,
+        url: urlText,
+      },
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
+    });
   };
 
   return (
@@ -128,11 +149,7 @@ const EventReservationFrame = ({
               size="small"
               color="error"
               variant="contained"
-              onClick={() => {
-                cancelReservation(eventReservation.reservationId).then(() => {
-                  router.reload();
-                });
-              }}
+              onClick={cancelReservation}
               startIcon={<Cancel />}
             >
               キャンセルする
@@ -141,7 +158,7 @@ const EventReservationFrame = ({
             <Button
               size="small"
               variant="contained"
-              disabled={!isReservable()}
+              disabled={!isReservable}
               onClick={() => setShowModal(true)}
               startIcon={<Add />}
             >
@@ -158,24 +175,36 @@ const EventReservationFrame = ({
         onClose={() => {
           setShowModal(false);
         }}
-        aria-labelledby="イベント枠予約"
-        aria-describedby={getTimeSpanText(eventReservation.startDate, eventReservation.finishDate)}
       >
-        <Box sx={modalStyle}>
-          <TextField onChange={onChangeCommnetText} value={commentText} label="コメント" />
-          <TextField onChange={onChangeUrlText} value={urlText} label="添付URL" />
-          <br />
-          <Button
-            onClick={() => {
-              reservation(eventReservation.reservationId!, commentText, urlText).then(() => {
-                router.reload();
-              });
-            }}
-          >
-            予約する
-          </Button>
-          <Button onClick={() => setShowModal(false)}>キャンセル</Button>
-        </Box>
+        <Paper
+          sx={{
+            position: "absolute" as const,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: "90%", sm: 600 },
+            maxWidth: 700,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 0,
+            outline: "none",
+          }}
+          elevation={8}
+        >
+          <Stack spacing={2} direction="column" p={3}>
+            <Stack spacing={2} direction="column">
+              <TextField onChange={onChangeCommnetText} value={commentText} label="コメント" />
+              <TextField onChange={onChangeUrlText} value={urlText} label="添付URL" />
+            </Stack>
+            <Stack spacing={2} direction="row" justifyContent="flex-end">
+              <Button onClick={() => setShowModal(false)}>キャンセル</Button>
+              <Button onClick={reservation} variant="contained" startIcon={<Add />}>
+                予約する
+              </Button>
+            </Stack>
+          </Stack>
+        </Paper>
       </Modal>
     </>
   );

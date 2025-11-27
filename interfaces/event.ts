@@ -12,10 +12,10 @@ export type DigicreEventReservation = {
   reservationId?: string;
   name: string;
   description: string;
-  startDate: Date;
-  finishDate: Date;
-  reservationStartDate: Date;
-  reservationFinishDate: Date;
+  startDate: string;
+  finishDate: string;
+  reservationStartDate: string;
+  reservationFinishDate: string;
   capacity: number;
   freeCapacity: number;
   reservable: boolean;

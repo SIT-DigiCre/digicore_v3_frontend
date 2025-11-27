@@ -1,23 +1,37 @@
-import { GetServerSideProps } from "next";
+import type { InferGetServerSidePropsType } from "next";
 
 import { ArrowBack } from "@mui/icons-material";
-import { Alert, Box, Stack } from "@mui/material";
+import { Alert, Box, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
 import MarkdownView from "../../components/Markdown/MarkdownView";
-import useEventDetail from "../../hook/event/useEventDetail";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-type EventPageProps = {
-  id?: string;
+export const getServerSideProps = async ({ params, req }) => {
+  if (!params?.id || typeof params.id !== "string") {
+    return { props: { data: null } };
+  }
+  try {
+    const client = createServerApiClient(req);
+    const res = await client.GET("/event/{eventId}", {
+      params: {
+        path: {
+          eventId: params.id,
+        },
+      },
+    });
+    return { props: { data: res.data || null } };
+  } catch (e) {
+    console.error(e);
+    return { props: { data: null } };
+  }
 };
-const EventPage = ({ id }: EventPageProps) => {
-  const { isLoading, notFound, eventDetail, reservation, cancelReservation } = useEventDetail(id);
 
-  if (notFound) return <p>指定されたイベントが見つかりませんでした</p>;
-  if (isLoading) return <p>読み込み中...</p>;
+const EventPage = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  if (!data) return <Typography>指定されたイベントが見つかりませんでした</Typography>;
 
   return (
     <>
@@ -27,47 +41,34 @@ const EventPage = ({ id }: EventPageProps) => {
           イベント一覧に戻る
         </ButtonLink>
       </Stack>
-      <Heading level={2}>{eventDetail.name}</Heading>
-      {eventDetail.reservated && (
+      <Heading level={2}>{data.name}</Heading>
+      {data.reservated && (
         <Alert severity="info" sx={{ mb: 2 }}>
           既にあなたは予約済みです
         </Alert>
       )}
-      <MarkdownView md={eventDetail.description} />
-      <Box sx={{ maxWidth: 700, mx: "auto" }}>
-        <Stack spacing={2} my={2} direction="column">
-          {eventDetail.reservations ? (
-            <>
-              {eventDetail.reservations
-                .sort((a, b) =>
-                  new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
-                )
-                .map((frame) => (
-                  <EventReservationFrame
-                    key={frame.reservationId!}
-                    eventId={id}
-                    eventReservation={frame}
-                    reservation={reservation}
-                    cancelReservation={cancelReservation}
-                  />
-                ))}
-            </>
-          ) : (
-            <p>枠はありません</p>
-          )}
-        </Stack>
-      </Box>
+      <MarkdownView md={data.description} />
+      {data.reservations ? (
+        <Box sx={{ maxWidth: 700, mx: "auto" }}>
+          <Stack spacing={2} my={2} direction="column">
+            {data.reservations
+              .sort((a, b) =>
+                new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
+              )
+              .map((frame) => (
+                <EventReservationFrame
+                  key={frame.reservationId}
+                  eventId={data.eventId}
+                  eventReservation={frame}
+                />
+              ))}
+          </Stack>
+        </Box>
+      ) : (
+        <Typography>枠はありません</Typography>
+      )}
     </>
   );
 };
 
 export default EventPage;
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  try {
-    const id = params?.id;
-    return { props: { id } };
-  } catch (error) {
-    return { props: { errors: error.message } };
-  }
-};
