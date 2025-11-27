@@ -57,7 +57,7 @@ export const useAuthState: UseAuthState = () => {
   };
 
   const refresh = async () => await getUserInfo(localStorage.getItem("jwt"), true);
-  // ローカルストレージを削除する関数
+
   const logout = () => {
     setAuth({
       isLogined: false,
@@ -66,17 +66,16 @@ export const useAuthState: UseAuthState = () => {
       token: undefined,
     });
     localStorage.removeItem("jwt");
-    // クッキーからも削除
     document.cookie = "jwt=; path=/; max-age=0";
     router.push("/login");
   };
 
   const onLogin = (token: string) => {
     localStorage.setItem("jwt", token);
-    // クッキーにも保存（サーバーサイドで使用するため）
-    // Next.js標準のdocument.cookieを使用
     const maxAge = 60 * 60 * 24 * 7; // 7日間
-    document.cookie = `jwt=${token}; path=/; max-age=${maxAge}; SameSite=Lax`;
+    const isProduction = process.env.NODE_ENV === "production";
+    const secureFlag = isProduction ? "; Secure" : "";
+    document.cookie = `jwt=${token}; path=/; max-age=${maxAge}; SameSite=Lax${secureFlag}`;
     getUserInfo(token, true);
   };
 
