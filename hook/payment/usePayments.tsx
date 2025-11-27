@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Payment } from "../../interfaces/payment";
-import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
@@ -14,18 +14,26 @@ export const usePayments: UsePayments = () => {
   const [payments, setPayments] = useState<Payment[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   useEffect(() => {
     (async () => {
       if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/payment`, {
+        const { response, data } = await apiClient.GET(`/payment`, {
           headers: {
-            Authorization: "Bearer " + authState.token,
+            Authorization: `Bearer ${authState.token}`,
           },
         });
-        const payments: Payment[] = res.data.payments;
-        setPayments(payments);
-        removeError("payments-get-fail");
+        if (response.status === 403) {
+          setNewError({
+            name: "payments-get-fail",
+            message: "この情報を表示する権限がありません",
+          });
+        } else {
+          const payments: Payment[] = (data.payments as Payment[]) || [];
+          setPayments(payments);
+          removeError("payments-get-fail");
+        }
       } catch {
         setNewError({
           name: "payments-get-fail",
@@ -34,17 +42,20 @@ export const usePayments: UsePayments = () => {
       }
     })();
   }, [authState]);
+
   const update = async (paymentId: string, checked: boolean, note: string) => {
     try {
-      await axios.put(
-        `/payment/${paymentId}`,
-        { checked: checked, note: note },
-        {
-          headers: {
-            Authorization: "Bearer " + authState.token,
+      await apiClient.PUT(`/payment/{paymentId}`, {
+        params: {
+          path: {
+            paymentId,
           },
         },
-      );
+        body: { checked: checked, note: note },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
       const index = payments.findIndex((payment) => payment.paymentId === paymentId);
       payments[index].checked = checked;
       payments[index].note = note;
