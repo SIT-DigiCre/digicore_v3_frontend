@@ -50,12 +50,11 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
     setUrlText(e.target.value);
   };
 
-  const now = dayjs();
-  const reservationStartDate = dayjs(eventReservation.reservationStartDate);
-  const reservationFinishDate = dayjs(eventReservation.reservationFinishDate);
-  const finishDate = dayjs(eventReservation.finishDate);
-
   const isReservable = () => {
+    const now = dayjs();
+    const reservationStartDate = dayjs(eventReservation.reservationStartDate);
+    const reservationFinishDate = dayjs(eventReservation.reservationFinishDate);
+    const finishDate = dayjs(eventReservation.finishDate);
     return (
       reservationStartDate.isBefore(now) &&
       reservationFinishDate.isAfter(now) &&
