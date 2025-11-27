@@ -16,22 +16,50 @@ export const getServerSideProps = async ({ params, req }) => {
   }
   try {
     const client = createServerApiClient(req);
-    const res = await client.GET("/event/{eventId}", {
+    const eventRes = await client.GET("/event/{eventId}", {
       params: {
         path: {
           eventId: params.id,
         },
       },
     });
-    return { props: { data: res.data || null } };
+    // TODO: N+1問題を解消するため、バックエンドの実装を変更する
+    const eventReservationsRes = await Promise.all(
+      eventRes.data.reservations.map(async (reservation) => {
+        return client.GET("/event/{eventId}/{reservationId}", {
+          params: {
+            path: {
+              eventId: params.id,
+              reservationId: reservation.reservationId,
+            },
+          },
+        });
+      }),
+    );
+    const eventReservations = eventRes.data.reservations.map((reservation) => {
+      return {
+        ...reservation,
+        users: eventReservationsRes.find(
+          (res) => res.data.reservationId === reservation.reservationId,
+        )?.data.users,
+      };
+    });
+    return {
+      props: {
+        event: {
+          ...eventRes.data,
+          reservations: eventReservations,
+        },
+      },
+    };
   } catch (e) {
     console.error(e);
     return { props: { data: null } };
   }
 };
 
-const EventPage = ({ data }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  if (!data) return <Typography>指定されたイベントが見つかりませんでした</Typography>;
+const EventPage = ({ event }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  if (!event) return <Typography>指定されたイベントが見つかりませんでした</Typography>;
 
   return (
     <>
@@ -41,24 +69,24 @@ const EventPage = ({ data }: InferGetServerSidePropsType<typeof getServerSidePro
           イベント一覧に戻る
         </ButtonLink>
       </Stack>
-      <Heading level={2}>{data.name}</Heading>
-      {data.reservated && (
+      <Heading level={2}>{event.name}</Heading>
+      {event.reservated && (
         <Alert severity="info" sx={{ mb: 2 }}>
           既にあなたは予約済みです
         </Alert>
       )}
-      <MarkdownView md={data.description} />
-      {data.reservations ? (
+      <MarkdownView md={event.description} />
+      {event.reservations ? (
         <Box sx={{ maxWidth: 700, mx: "auto" }}>
           <Stack spacing={2} my={2} direction="column">
-            {data.reservations
+            {event.reservations
               .sort((a, b) =>
                 new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
               )
               .map((frame) => (
                 <EventReservationFrame
                   key={frame.reservationId}
-                  eventId={data.eventId}
+                  eventId={event.eventId}
                   eventReservation={frame}
                 />
               ))}

@@ -20,6 +20,7 @@ export type DigicreEventReservation = {
   freeCapacity: number;
   reservable: boolean;
   reservated: boolean;
+  users: DigicreEventUserReservation[];
 };
 export type DigicreEventDetail = DigicreEvent & {
   reservations: DigicreEventReservation[];

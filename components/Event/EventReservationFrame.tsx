@@ -22,7 +22,6 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
 import { useAuthState } from "../../hook/useAuthState";
 import { getTimeSpanText } from "../../utils/date-util";
 import { apiClient } from "../../utils/fetch/client";
@@ -40,10 +39,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
   const router = useRouter();
   const [commentText, setCommentText] = useState("");
   const [urlText, setUrlText] = useState("");
-  const { isLoading, userReservations } = useEventUserReservationList(
-    eventId,
-    eventReservation.reservationId,
-  );
+  const [isLoading, setIsLoading] = useState(false);
 
   const onChangeCommnetText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCommentText(e.target.value);
@@ -67,6 +63,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
   };
 
   const cancelReservation = async () => {
+    setIsLoading(true);
     await apiClient.DELETE("/event/{eventId}/{reservationId}/me", {
       params: {
         path: {
@@ -79,10 +76,12 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
       },
     });
     router.reload();
+    setIsLoading(false);
     return true;
   };
 
   const reservation = async () => {
+    setIsLoading(true);
     await apiClient.PUT("/event/{eventId}/{reservationId}/me", {
       params: {
         path: {
@@ -98,6 +97,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
         Authorization: `Bearer ${authState.token}`,
       },
     });
+    setIsLoading(false);
   };
 
   return (
@@ -110,9 +110,9 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
         />
         <CardContent>
           <Typography>{eventReservation.description}</Typography>
-          {!isLoading && userReservations.length > 0 ? (
+          {eventReservation.users.length > 0 ? (
             <List>
-              {userReservations.map((userReservation) => (
+              {eventReservation.users.map((userReservation) => (
                 <ListItem
                   key={userReservation.userId!}
                   secondaryAction={
@@ -151,6 +151,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
               variant="contained"
               onClick={cancelReservation}
               startIcon={<Cancel />}
+              disabled={isLoading}
             >
               キャンセルする
             </Button>
@@ -166,7 +167,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
             </Button>
           )}
           <Typography>
-            {(userReservations || []).length} / {eventReservation.capacity}人
+            {eventReservation.users.length} / {eventReservation.capacity}人
           </Typography>
         </CardActions>
       </Card>
@@ -199,7 +200,12 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
             </Stack>
             <Stack spacing={2} direction="row" justifyContent="flex-end">
               <Button onClick={() => setShowModal(false)}>キャンセル</Button>
-              <Button onClick={reservation} variant="contained" startIcon={<Add />}>
+              <Button
+                onClick={reservation}
+                variant="contained"
+                startIcon={<Add />}
+                disabled={isLoading}
+              >
                 予約する
               </Button>
             </Stack>
