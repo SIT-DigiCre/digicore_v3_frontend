@@ -1,14 +1,18 @@
+import type { InferGetServerSidePropsType } from "next";
+
 import { Stack } from "@mui/material";
 
 import PageHead from "../../components/Common/PageHead";
 import EventListItem from "../../components/Event/EventListItem";
-import { useEventList } from "../../hook/event/useEventList";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const EventIndexPage = () => {
-  const { isLoading, events } = useEventList();
+export const getServerSideProps = async ({ req }) => {
+  const client = createServerApiClient(req);
+  const eventsRes = await client.GET("/event");
+  return { props: { events: eventsRes.data.events } };
+};
 
-  if (isLoading) return <p>読み込み中...</p>;
-
+const EventIndexPage = ({ events }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
       <PageHead title="イベント一覧" />

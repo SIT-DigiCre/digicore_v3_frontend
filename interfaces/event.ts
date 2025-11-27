@@ -1,13 +1,19 @@
-type DigicreEventBase = {
-  eventId?: string;
+export type DigicreEvent = {
+  eventId: string;
   name: string;
   description: string;
-  reservated: boolean;
-  calenderView: boolean;
-};
-export type DigicreEvent = DigicreEventBase & {
   reservable: boolean;
+  reservated: boolean;
 };
+
+type DigicreEventUserReservation = {
+  userId: string;
+  userIcon: string;
+  name: string;
+  comment: string;
+  url: string;
+};
+
 export type DigicreEventReservation = {
   reservationId?: string;
   name: string;
@@ -21,15 +27,4 @@ export type DigicreEventReservation = {
   reservable: boolean;
   reservated: boolean;
   users: DigicreEventUserReservation[];
-};
-export type DigicreEventDetail = DigicreEvent & {
-  reservations: DigicreEventReservation[];
-};
-
-export type DigicreEventUserReservation = {
-  userId: string;
-  userIcon: string;
-  name: string;
-  comment: string;
-  url: string;
 };
