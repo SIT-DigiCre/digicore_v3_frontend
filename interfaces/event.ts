@@ -6,7 +6,7 @@ export type DigicreEvent = {
   reservated: boolean;
 };
 
-type DigicreEventUserReservation = {
+export type DigicreEventUserReservation = {
   userId: string;
   userIcon: string;
   name: string;
@@ -15,7 +15,7 @@ type DigicreEventUserReservation = {
 };
 
 export type DigicreEventReservation = {
-  reservationId?: string;
+  reservationId: string;
   name: string;
   description: string;
   startDate: string;

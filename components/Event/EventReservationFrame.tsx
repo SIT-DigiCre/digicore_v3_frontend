@@ -23,6 +23,7 @@ import {
 import dayjs from "dayjs";
 
 import { useAuthState } from "../../hook/useAuthState";
+import { useErrorState } from "../../hook/useErrorState";
 import { getTimeSpanText } from "../../utils/date-util";
 import { apiClient } from "../../utils/fetch/client";
 
@@ -40,8 +41,9 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
   const [commentText, setCommentText] = useState("");
   const [urlText, setUrlText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { setNewError } = useErrorState();
 
-  const onChangeCommnetText: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onChangeCommentText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCommentText(e.target.value);
   };
   const onChangeUrlText: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -64,40 +66,71 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
 
   const cancelReservation = async () => {
     setIsLoading(true);
-    await apiClient.DELETE("/event/{eventId}/{reservationId}/me", {
-      params: {
-        path: {
-          eventId,
-          reservationId: eventReservation.reservationId,
+    try {
+      const res = await apiClient.DELETE("/event/{eventId}/{reservationId}/me", {
+        params: {
+          path: {
+            eventId,
+            reservationId: eventReservation.reservationId,
+          },
         },
-      },
-      headers: {
-        Authorization: `Bearer ${authState.token}`,
-      },
-    });
-    router.reload();
-    setIsLoading(false);
-    return true;
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      if (res.error) {
+        setNewError({
+          name: "event-reservation-cancel-fail",
+          message: res.error.message,
+        });
+      } else {
+        router.reload();
+      }
+    } catch {
+      setNewError({
+        name: "event-reservation-cancel-fail",
+        message: "イベント予約のキャンセルに失敗しました",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const reservation = async () => {
     setIsLoading(true);
-    await apiClient.PUT("/event/{eventId}/{reservationId}/me", {
-      params: {
-        path: {
-          eventId,
-          reservationId: eventReservation.reservationId,
+    try {
+      const res = await apiClient.PUT("/event/{eventId}/{reservationId}/me", {
+        params: {
+          path: {
+            eventId,
+            reservationId: eventReservation.reservationId,
+          },
         },
-      },
-      body: {
-        comment: commentText,
-        url: urlText,
-      },
-      headers: {
-        Authorization: `Bearer ${authState.token}`,
-      },
-    });
-    setIsLoading(false);
+        body: {
+          comment: commentText,
+          url: urlText,
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      if (res.error) {
+        setNewError({
+          name: "event-reservation-fail",
+          message: res.error.message,
+        });
+      } else {
+        router.reload();
+      }
+    } catch {
+      setNewError({
+        name: "event-reservation-fail",
+        message: "イベント予約に失敗しました",
+      });
+    } finally {
+      setShowModal(false);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -114,7 +147,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
             <List>
               {eventReservation.users.map((userReservation) => (
                 <ListItem
-                  key={userReservation.userId!}
+                  key={userReservation.userId}
                   secondaryAction={
                     userReservation.url.startsWith("http") && (
                       <IconButton
@@ -195,7 +228,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
         >
           <Stack spacing={2} direction="column" p={3}>
             <Stack spacing={2} direction="column">
-              <TextField onChange={onChangeCommnetText} value={commentText} label="コメント" />
+              <TextField onChange={onChangeCommentText} value={commentText} label="コメント" />
               <TextField onChange={onChangeUrlText} value={urlText} label="添付URL" />
             </Stack>
             <Stack spacing={2} direction="row" justifyContent="flex-end">

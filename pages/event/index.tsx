@@ -8,8 +8,16 @@ import { createServerApiClient } from "../../utils/fetch/client";
 
 export const getServerSideProps = async ({ req }) => {
   const client = createServerApiClient(req);
-  const eventsRes = await client.GET("/event");
-  return { props: { events: eventsRes.data.events } };
+  try {
+    const eventsRes = await client.GET("/event");
+    if (!eventsRes.data || !eventsRes.data.events) {
+      return { props: { events: [] } };
+    }
+    return { props: { events: eventsRes.data.events } };
+  } catch (error) {
+    console.error("Failed to fetch events:", error);
+    return { props: { events: [] } };
+  }
 };
 
 const EventIndexPage = ({ events }: InferGetServerSidePropsType<typeof getServerSideProps>) => {

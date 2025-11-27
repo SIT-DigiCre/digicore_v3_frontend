@@ -12,49 +12,62 @@ import { createServerApiClient } from "../../utils/fetch/client";
 
 export const getServerSideProps = async ({ params, req }) => {
   if (!params?.id || typeof params.id !== "string") {
-    return { props: { data: null } };
+    return { props: { event: null } };
   }
   try {
     const client = createServerApiClient(req);
-    const eventRes = await client.GET("/event/{eventId}", {
-      params: {
-        path: {
-          eventId: params.id,
-        },
-      },
-    });
-    // TODO: N+1問題を解消するため、バックエンドの実装を変更する
-    const eventReservationsRes = await Promise.all(
-      eventRes.data.reservations.map(async (reservation) => {
-        return client.GET("/event/{eventId}/{reservationId}", {
-          params: {
-            path: {
-              eventId: params.id,
-              reservationId: reservation.reservationId,
-            },
+    try {
+      const eventRes = await client.GET("/event/{eventId}", {
+        params: {
+          path: {
+            eventId: params.id,
           },
-        });
-      }),
-    );
-    const eventReservations = eventRes.data.reservations.map((reservation) => {
-      return {
-        ...reservation,
-        users: eventReservationsRes.find(
-          (res) => res.data.reservationId === reservation.reservationId,
-        )?.data.users,
-      };
-    });
-    return {
-      props: {
-        event: {
-          ...eventRes.data,
-          reservations: eventReservations,
         },
-      },
-    };
+      });
+      if (eventRes.error) {
+        return { props: { event: null } };
+      }
+
+      // TODO: N+1問題を解消するため、バックエンドの実装を変更する
+      const eventReservationsRes = await Promise.all(
+        eventRes.data.reservations.map(async (reservation) => {
+          return client.GET("/event/{eventId}/{reservationId}", {
+            params: {
+              path: {
+                eventId: params.id,
+                reservationId: reservation.reservationId,
+              },
+            },
+          });
+        }),
+      );
+      const eventReservations = eventRes.data.reservations.map((reservation) => {
+        return {
+          ...reservation,
+          users:
+            eventReservationsRes.find((res) => res.data.reservationId === reservation.reservationId)
+              ?.data.users || [],
+        };
+      });
+      if (eventReservationsRes.some((res) => res.error)) {
+        return { props: { event: null } };
+      }
+
+      return {
+        props: {
+          event: {
+            ...eventRes.data,
+            reservations: eventReservations,
+          },
+        },
+      };
+    } catch (e) {
+      console.error(e);
+      return { props: { event: null } };
+    }
   } catch (e) {
     console.error(e);
-    return { props: { data: null } };
+    return { props: { event: null } };
   }
 };
 
