@@ -1,32 +1,31 @@
-const getTimeText = (date: Date) => {
-  date = new Date(date);
-  return `${date.getHours() < 10 ? "0" + date.getHours() : date.getHours()}:${
-    date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
-  }`;
+import dayjs from "dayjs";
+
+const getTimeText = (date: dayjs.Dayjs) => {
+  return date.format("HH:mm");
 };
-const getDayText = (date: Date) => {
-  date = new Date(date);
+
+const getDayText = (date: dayjs.Dayjs) => {
   const dayTexts = ["日", "月", "火", "水", "木", "金", "土"];
-  return `${dayTexts[date.getDay()]}`;
+  return dayTexts[date.day()];
 };
-export const getTimeSpanText = (start: Date, end: Date) => {
-  start = new Date(start);
-  end = new Date(end);
-  if (start.getMonth() + 1 === end.getMonth() + 1) {
-    if (start.getDate() === end.getDate()) {
-      return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()}(${getDayText(
-        start,
-      )}) ${getTimeText(start)}~${getTimeText(end)}`;
+
+/**
+ * 日時の範囲をテキストで返す
+ * @param start 開始日時
+ * @param end 終了日時
+ * @returns 日時の範囲をテキストで返す
+ */
+export const getTimeSpanText = (start: string, end: string) => {
+  const startDate = dayjs(start);
+  const endDate = dayjs(end);
+
+  if (startDate.month() === endDate.month()) {
+    if (startDate.date() === endDate.date()) {
+      return `${startDate.format("YYYY/MM/DD")}(${getDayText(startDate)}) ${getTimeText(startDate)} 〜 ${getTimeText(endDate)}`;
     }
-    return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()}(${getDayText(
-      start,
-    )}) ${getTimeText(start)} ~ ${end.getDate()}(${getDayText(end)}) ${getTimeText(end)}`;
+    return `${startDate.format("YYYY/MM/DD")}(${getDayText(startDate)}) ${getTimeText(startDate)} 〜 ${endDate.date()}(${getDayText(endDate)}) ${getTimeText(endDate)}`;
   }
-  return `${start.getFullYear()}/${start.getMonth() + 1}/${start.getDate()}(${getDayText(
-    start,
-  )}) ${getTimeText(start)} ~ ${end.getMonth() + 1}/${end.getDate()}(${getDayText(
-    end,
-  )}) ${getTimeText(end)}`;
+  return `${startDate.format("YYYY/MM/DD")}(${getDayText(startDate)}) ${getTimeText(startDate)} 〜 ${endDate.format("MM/DD")}(${getDayText(endDate)}) ${getTimeText(endDate)}`;
 };
 
 //年度を計算する

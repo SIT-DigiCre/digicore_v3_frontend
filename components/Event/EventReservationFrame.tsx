@@ -4,7 +4,6 @@ import { ChangeEventHandler, useState } from "react";
 import { Add, Cancel, OpenInNew } from "@mui/icons-material";
 import {
   Avatar,
-  Box,
   Button,
   Card,
   CardActions,
@@ -16,49 +15,35 @@ import {
   ListItemIcon,
   ListItemText,
   Modal,
+  Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import useEventUserReservationList from "../../hook/event/useEventUserReservationList";
-import { DigicreEventReservation } from "../../interfaces/event";
+import { useAuthState } from "../../hook/useAuthState";
+import { useErrorState } from "../../hook/useErrorState";
 import { getTimeSpanText } from "../../utils/date-util";
+import { apiClient } from "../../utils/fetch/client";
 
-type Props = {
+import type { DigicreEventReservation } from "../../interfaces/event";
+
+type EventReservationFrameProps = {
   eventId: string;
   eventReservation: DigicreEventReservation;
-  reservation: (id: string, commentText: string, urlText: string) => Promise<boolean>;
-  cancelReservation: (id: string) => Promise<boolean>;
-};
-const modalStyle = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
 };
 
-const EventReservationFrame = ({
-  eventId,
-  eventReservation,
-  reservation,
-  cancelReservation,
-}: Props) => {
+const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFrameProps) => {
+  const { authState } = useAuthState();
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const [commentText, setCommentText] = useState("");
   const [urlText, setUrlText] = useState("");
-  const { isLoading, userReservations } = useEventUserReservationList(
-    eventId,
-    eventReservation.reservationId!,
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const { setNewError } = useErrorState();
 
-  const onChangeCommnetText: ChangeEventHandler<HTMLInputElement> = (e) => {
+  const onChangeCommentText: ChangeEventHandler<HTMLInputElement> = (e) => {
     setCommentText(e.target.value);
   };
   const onChangeUrlText: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -70,13 +55,81 @@ const EventReservationFrame = ({
     const reservationStartDate = dayjs(eventReservation.reservationStartDate);
     const reservationFinishDate = dayjs(eventReservation.reservationFinishDate);
     const finishDate = dayjs(eventReservation.finishDate);
-
     return (
       reservationStartDate.isBefore(now) &&
       reservationFinishDate.isAfter(now) &&
       finishDate.isAfter(now) &&
       eventReservation.reservable
     );
+  };
+
+  const cancelReservation = async () => {
+    setIsLoading(true);
+    try {
+      const res = await apiClient.DELETE("/event/{eventId}/{reservationId}/me", {
+        params: {
+          path: {
+            eventId,
+            reservationId: eventReservation.reservationId,
+          },
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      if (res.error) {
+        setNewError({
+          name: "event-reservation-cancel-fail",
+          message: res.error.message,
+        });
+      } else {
+        router.reload();
+      }
+    } catch {
+      setNewError({
+        name: "event-reservation-cancel-fail",
+        message: "イベント予約のキャンセルに失敗しました",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const reservation = async () => {
+    setIsLoading(true);
+    try {
+      const res = await apiClient.PUT("/event/{eventId}/{reservationId}/me", {
+        params: {
+          path: {
+            eventId,
+            reservationId: eventReservation.reservationId,
+          },
+        },
+        body: {
+          comment: commentText,
+          url: urlText,
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      if (res.error) {
+        setNewError({
+          name: "event-reservation-fail",
+          message: res.error.message,
+        });
+      } else {
+        router.reload();
+      }
+    } catch {
+      setNewError({
+        name: "event-reservation-fail",
+        message: "イベント予約に失敗しました",
+      });
+    } finally {
+      setShowModal(false);
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -89,11 +142,11 @@ const EventReservationFrame = ({
         />
         <CardContent>
           <Typography>{eventReservation.description}</Typography>
-          {!isLoading && userReservations.length > 0 ? (
+          {eventReservation.users.length > 0 ? (
             <List>
-              {userReservations.map((userReservation) => (
+              {eventReservation.users.map((userReservation) => (
                 <ListItem
-                  key={userReservation.userId!}
+                  key={userReservation.userId}
                   secondaryAction={
                     userReservation.url.startsWith("http") && (
                       <IconButton
@@ -128,12 +181,9 @@ const EventReservationFrame = ({
               size="small"
               color="error"
               variant="contained"
-              onClick={() => {
-                cancelReservation(eventReservation.reservationId).then(() => {
-                  router.reload();
-                });
-              }}
+              onClick={cancelReservation}
               startIcon={<Cancel />}
+              disabled={isLoading}
             >
               キャンセルする
             </Button>
@@ -149,7 +199,7 @@ const EventReservationFrame = ({
             </Button>
           )}
           <Typography>
-            {(userReservations || []).length} / {eventReservation.capacity}人
+            {eventReservation.users.length} / {eventReservation.capacity}人
           </Typography>
         </CardActions>
       </Card>
@@ -158,24 +208,41 @@ const EventReservationFrame = ({
         onClose={() => {
           setShowModal(false);
         }}
-        aria-labelledby="イベント枠予約"
-        aria-describedby={getTimeSpanText(eventReservation.startDate, eventReservation.finishDate)}
       >
-        <Box sx={modalStyle}>
-          <TextField onChange={onChangeCommnetText} value={commentText} label="コメント" />
-          <TextField onChange={onChangeUrlText} value={urlText} label="添付URL" />
-          <br />
-          <Button
-            onClick={() => {
-              reservation(eventReservation.reservationId!, commentText, urlText).then(() => {
-                router.reload();
-              });
-            }}
-          >
-            予約する
-          </Button>
-          <Button onClick={() => setShowModal(false)}>キャンセル</Button>
-        </Box>
+        <Paper
+          sx={{
+            position: "absolute" as const,
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { xs: "90%", sm: 600 },
+            maxWidth: 700,
+            bgcolor: "background.paper",
+            borderRadius: 2,
+            boxShadow: 24,
+            p: 0,
+            outline: "none",
+          }}
+          elevation={8}
+        >
+          <Stack spacing={2} direction="column" p={3}>
+            <Stack spacing={2} direction="column">
+              <TextField onChange={onChangeCommentText} value={commentText} label="コメント" />
+              <TextField onChange={onChangeUrlText} value={urlText} label="添付URL" />
+            </Stack>
+            <Stack spacing={2} direction="row" justifyContent="flex-end">
+              <Button onClick={() => setShowModal(false)}>キャンセル</Button>
+              <Button
+                onClick={reservation}
+                variant="contained"
+                startIcon={<Add />}
+                disabled={isLoading}
+              >
+                予約する
+              </Button>
+            </Stack>
+          </Stack>
+        </Paper>
       </Modal>
     </>
   );
