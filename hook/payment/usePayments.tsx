@@ -30,8 +30,7 @@ export const usePayments: UsePayments = () => {
             message: "この情報を表示する権限がありません",
           });
         } else {
-          const payments: Payment[] = (data.payments as Payment[]) || [];
-          setPayments(payments);
+          setPayments(data.payments);
           removeError("payments-get-fail");
         }
       } catch {

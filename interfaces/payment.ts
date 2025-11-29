@@ -2,6 +2,6 @@ export type Payment = {
   paymentId: string;
   studentNumber: string;
   transferName: string;
-  checked: boolean;
+  checked?: boolean;
   note: string;
 };
