@@ -7,6 +7,7 @@ export type User = {
   discordUserId: string;
   shortIntroduction: string;
   activeLimit?: string;
+  isAdmin: boolean;
 };
 export type UserPrivateProfile = {
   address: string;
