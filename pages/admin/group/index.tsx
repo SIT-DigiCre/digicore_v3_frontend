@@ -59,7 +59,7 @@ const AdminGroupIndexPage = ({
     <>
       <PageHead title="グループ管理" />
       <Stack spacing={2}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" width="100%">
           <Heading level={2}>グループ一覧</Heading>
           <Button
             variant="contained"
@@ -76,9 +76,8 @@ const AdminGroupIndexPage = ({
               <TableHead>
                 <TableRow>
                   <TableCell>グループ名</TableCell>
-                  <TableCell>参加可能</TableCell>
-                  <TableCell>参加状況</TableCell>
-                  <TableCell>種類</TableCell>
+                  <TableCell>参加可否</TableCell>
+                  <TableCell>あなた</TableCell>
                   <TableCell>メンバー数</TableCell>
                 </TableRow>
               </TableHead>
@@ -102,13 +101,6 @@ const AdminGroupIndexPage = ({
                         size="small"
                       />
                     </TableCell>
-                    <TableCell>
-                      {"isAdminGroup" in group && group.isAdminGroup ? (
-                        <Chip label="管理者グループ" color="warning" size="small" />
-                      ) : (
-                        <Chip label="一般グループ" color="default" size="small" />
-                      )}
-                    </TableCell>
                     <TableCell>{group.userCount}</TableCell>
                   </TableRow>
                 ))}
@@ -130,4 +122,3 @@ const AdminGroupIndexPage = ({
 };
 
 export default AdminGroupIndexPage;
-
