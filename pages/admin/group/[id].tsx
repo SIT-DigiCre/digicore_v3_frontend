@@ -3,13 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { ArrowBack, Delete, PersonAdd } from "@mui/icons-material";
+import { ArrowBack, PersonAdd } from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Button,
   Chip,
-  IconButton,
   Paper,
   Stack,
   Table,
@@ -25,7 +24,6 @@ import { ButtonLink } from "../../../components/Common/ButtonLink";
 import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
 import AddUserDialog from "../../../components/Group/AddUserDialog";
-import DeleteUserDialog from "../../../components/Group/DeleteUserDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps = async ({ req, params }) => {
@@ -61,23 +59,6 @@ const AdminGroupDetailPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
-  const [deleteUserDialogState, setDeleteUserDialogState] = useState<{
-    open: boolean;
-    userId: string;
-    userName: string;
-  }>({
-    open: false,
-    userId: "",
-    userName: "",
-  });
-
-  const handleDeleteUser = (userId: string, userName: string) => {
-    setDeleteUserDialogState({
-      open: true,
-      userId,
-      userName,
-    });
-  };
 
   return (
     <>
@@ -125,7 +106,6 @@ const AdminGroupDetailPage = ({
                   <TableRow>
                     <TableCell></TableCell>
                     <TableCell>名前</TableCell>
-                    {group.joined && <TableCell>操作</TableCell>}
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -139,18 +119,6 @@ const AdminGroupDetailPage = ({
                       <TableCell>
                         <Link href={`/member/${user.userId}`}>{user.name}</Link>
                       </TableCell>
-                      {group.joined && (
-                        <TableCell>
-                          <IconButton
-                            aria-label="メンバーを削除"
-                            color="error"
-                            size="small"
-                            onClick={() => handleDeleteUser(user.userId, user.name)}
-                          >
-                            <Delete />
-                          </IconButton>
-                        </TableCell>
-                      )}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -167,21 +135,6 @@ const AdminGroupDetailPage = ({
         onClose={() => setIsAddUserDialogOpen(false)}
         onSuccess={() => router.reload()}
         groupId={group.groupId}
-      />
-
-      <DeleteUserDialog
-        open={deleteUserDialogState.open}
-        onClose={() =>
-          setDeleteUserDialogState({
-            open: false,
-            userId: "",
-            userName: "",
-          })
-        }
-        onSuccess={() => router.reload()}
-        groupId={group.groupId}
-        userId={deleteUserDialogState.userId}
-        userName={deleteUserDialogState.userName}
       />
     </>
   );
