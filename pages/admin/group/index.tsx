@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -22,7 +22,7 @@ import PageHead from "../../../components/Common/PageHead";
 import NewGroupDialog from "../../../components/Group/NewGroupDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const client = createServerApiClient(req);
 
   try {

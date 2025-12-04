@@ -21,7 +21,7 @@ const AccessControl = ({ children }: AccessControlProps) => {
       <Stack>
         <Heading level={2}>ログインが必要です</Heading>
         <Typography>
-          ログインが必要です。
+          このページはデジクリの部員のみが閲覧できます。
           <Link href="/login">ログインページ</Link>
           にアクセスしてログインしてください。
         </Typography>
@@ -29,7 +29,7 @@ const AccessControl = ({ children }: AccessControlProps) => {
     );
   }
 
-  const isAdmin = authState.user.isAdmin;
+  const isAdmin = authState?.user?.isAdmin ?? false;
   const isAdminPage = router.pathname.startsWith("/admin");
   if (!isAdmin && isAdminPage) {
     return (

@@ -1,13 +1,10 @@
-import type { InferGetServerSidePropsType } from "next";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState } from "react";
 
-import { ArrowBack, PersonAdd } from "@mui/icons-material";
+import { ArrowBack } from "@mui/icons-material";
 import {
   Avatar,
   Box,
-  Button,
   Chip,
   Paper,
   Stack,
@@ -26,7 +23,7 @@ import PageHead from "../../../components/Common/PageHead";
 import AddUserDialog from "../../../components/Group/AddUserDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps = async ({ req, params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
   const client = createServerApiClient(req);
   const groupId = params?.id as string;
 
@@ -57,9 +54,6 @@ export const getServerSideProps = async ({ req, params }) => {
 const AdminGroupDetailPage = ({
   group,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-  const [isAddUserDialogOpen, setIsAddUserDialogOpen] = useState(false);
-
   return (
     <>
       <PageHead title={group.name} />
@@ -68,15 +62,7 @@ const AdminGroupDetailPage = ({
           <ButtonLink href="/admin/group" startIcon={<ArrowBack />} variant="text">
             グループ一覧に戻る
           </ButtonLink>
-          {group.joined && (
-            <Button
-              variant="contained"
-              startIcon={<PersonAdd />}
-              onClick={() => setIsAddUserDialogOpen(true)}
-            >
-              メンバーを追加
-            </Button>
-          )}
+          {group.joined && <AddUserDialog groupId={group.groupId} />}
         </Stack>
         <Box>
           <Heading level={2}>グループ情報</Heading>
@@ -129,13 +115,6 @@ const AdminGroupDetailPage = ({
           )}
         </Box>
       </Stack>
-
-      <AddUserDialog
-        open={isAddUserDialogOpen}
-        onClose={() => setIsAddUserDialogOpen(false)}
-        onSuccess={() => router.reload()}
-        groupId={group.groupId}
-      />
     </>
   );
 };
