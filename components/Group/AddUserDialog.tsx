@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 
 import { Close, PersonAdd } from "@mui/icons-material";
 import {
@@ -36,15 +36,11 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
   const [selectedUser, setSelectedUser] = useState<UserOption | null>(null);
   const [userOptions, setUserOptions] = useState<UserOption[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [inputValue, setInputValue] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
-
-  useEffect(() => {
-    if (isDialogOpen && authState.isLogined && authState.token) {
-      loadUsers();
-    }
-  }, [isDialogOpen, authState.isLogined, authState.token]);
 
   const loadUsers = async () => {
     if (!authState.isLogined || !authState.token) return;
@@ -77,7 +73,13 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
   };
 
   const handleClose = () => {
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+      debounceTimerRef.current = null;
+    }
     setSelectedUser(null);
+    setInputValue("");
+    setUserOptions([]);
     setIsDialogOpen(false);
   };
 
@@ -155,8 +157,31 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
                 getOptionLabel={(option) => option.username}
                 loading={isLoadingUsers}
                 value={selectedUser}
-                onChange={(_, newValue) => setSelectedUser(newValue)}
-                disabled={isSubmitting || isLoadingUsers}
+                inputValue={inputValue}
+                onInputChange={(_, newInputValue, reason) => {
+                  if (reason !== "input") return;
+
+                  setInputValue(newInputValue);
+
+                  if (debounceTimerRef.current) {
+                    clearTimeout(debounceTimerRef.current);
+                  }
+
+                  // 0文字以上入力されたとき1秒デバウンスしてユーザー一覧を取得して更新する
+                  if (newInputValue.length > 0) {
+                    debounceTimerRef.current = setTimeout(() => {
+                      loadUsers();
+                    }, 1000);
+                  } else {
+                    setUserOptions([]);
+                  }
+                }}
+                onChange={(_, newValue) => {
+                  setSelectedUser(newValue);
+                  setInputValue(newValue?.username || "");
+                }}
+                disabled={isSubmitting}
+                loadingText="ユーザー一覧を取得中..."
                 renderOption={(props, option) => (
                   <li {...props} key={option.userId}>
                     <Stack direction="row" spacing={1} alignItems="center">

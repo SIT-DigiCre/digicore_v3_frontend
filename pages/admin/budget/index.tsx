@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 
 import {
   Chip,
-  Pagination,
+  Paper,
   Stack,
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import {
 import dayjs from "dayjs";
 
 import PageHead from "../../../components/Common/PageHead";
+import Pagination from "../../../components/Common/Pagination";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
@@ -36,16 +37,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req, query }) => 
       },
     });
     if (!budgetsRes.data || !budgetsRes.data.budgets) {
-      return { props: { budgets: [], currentPage: 1, hasNextPage: false } };
+      return { props: { budgets: [], currentPage: 1, hasNextPage: false, hasPreviousPage: false } };
     }
 
     const budgets = budgetsRes.data.budgets;
     const hasNextPage = budgets.length === ITEMS_PER_PAGE;
+    const hasPreviousPage = page > 1;
 
-    return { props: { budgets, currentPage: page, hasNextPage } };
+    return { props: { budgets, currentPage: page, hasNextPage, hasPreviousPage } };
   } catch (error) {
     console.error("Failed to fetch budgets:", error);
-    return { props: { budgets: [], currentPage: 1, hasNextPage: false } };
+    return { props: { budgets: [], currentPage: 1, hasNextPage: false, hasPreviousPage: false } };
   }
 };
 
@@ -53,17 +55,9 @@ const AdminBudgetIndexPage = ({
   budgets,
   currentPage,
   hasNextPage,
+  hasPreviousPage,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
-
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, page: number) => {
-    router.push({
-      pathname: router.pathname,
-      query: { page },
-    });
-  };
-
-  const totalPages = hasNextPage ? currentPage + 1 : currentPage;
 
   return (
     <>
@@ -71,8 +65,8 @@ const AdminBudgetIndexPage = ({
       <Stack spacing={2}>
         {budgets && budgets.length > 0 ? (
           <>
-            <TableContainer>
-              <Table sx={{ minWidth: 650 }}>
+            <TableContainer component={Paper}>
+              <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell>表題</TableCell>
@@ -119,10 +113,15 @@ const AdminBudgetIndexPage = ({
             </TableContainer>
             <Stack alignItems="center">
               <Pagination
-                count={totalPages}
                 page={currentPage}
-                onChange={handlePageChange}
-                color="primary"
+                hasPreviousPage={hasPreviousPage}
+                hasNextPage={hasNextPage}
+                onChange={(page) =>
+                  router.push({
+                    pathname: router.pathname,
+                    query: { page },
+                  })
+                }
               />
             </Stack>
           </>
