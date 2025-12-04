@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 
 import { Close, PersonAdd } from "@mui/icons-material";
 import {
@@ -37,7 +37,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
   const [userOptions, setUserOptions] = useState<UserOption[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
@@ -89,43 +89,32 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
       return;
     }
 
-    if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "add-user-auth", message: "ログインが必要です" });
-      return;
-    }
-
-    setIsSubmitting(true);
-
     try {
-      const response = await apiClient.POST("/group/{groupId}/user", {
-        params: {
-          path: {
-            groupId,
+      startTransition(async () => {
+        const response = await apiClient.POST("/group/{groupId}/user", {
+          params: {
+            path: {
+              groupId,
+            },
           },
-        },
-        body: {
-          userId: selectedUser.userId,
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+          body: {
+            userId: selectedUser.userId,
+          },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        });
+
+        if (response.error) {
+          const errorMessage = response.error.message || "ユーザーの追加に失敗しました";
+          setNewError({ name: "add-user-error", message: errorMessage });
+          return;
+        }
       });
-
-      if (response.error) {
-        const errorMessage = response.error.message || "ユーザーの追加に失敗しました";
-        setNewError({ name: "add-user-error", message: errorMessage });
-        setIsSubmitting(false);
-        return;
-      }
-
-      setIsSubmitting(false);
-      setSelectedUser(null);
-      setIsDialogOpen(false);
       await router.replace(router.asPath);
     } catch (error) {
       console.error("Error adding user to group:", error);
       setNewError({ name: "add-user-error", message: "ユーザーの追加に失敗しました" });
-      setIsSubmitting(false);
     }
   };
 
@@ -139,7 +128,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
         <IconButton
           aria-label="メンバー追加をやめる"
           onClick={handleClose}
-          disabled={isSubmitting}
+          disabled={isPending}
           sx={{
             position: "absolute",
             right: 12,
@@ -180,7 +169,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
                   setSelectedUser(newValue);
                   setInputValue(newValue?.username || "");
                 }}
-                disabled={isSubmitting}
+                disabled={isPending}
                 loadingText="ユーザー一覧を取得中..."
                 renderOption={(props, option) => (
                   <li {...props} key={option.userId}>
@@ -199,13 +188,13 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
             </FormControl>
 
             <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
-              <Button variant="outlined" onClick={handleClose} disabled={isSubmitting}>
+              <Button variant="outlined" onClick={handleClose} disabled={isPending}>
                 キャンセル
               </Button>
               <Button
                 variant="contained"
                 onClick={handleSubmit}
-                disabled={isSubmitting || !selectedUser}
+                disabled={isPending || !selectedUser}
                 startIcon={<PersonAdd />}
               >
                 追加する

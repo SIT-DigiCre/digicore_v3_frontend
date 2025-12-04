@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useTransition } from "react";
 
 import { Add, Close } from "@mui/icons-material";
 import {
@@ -30,12 +30,12 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
   const [description, setDescription] = useState("");
   const [joinable, setJoinable] = useState(true);
   const [isAdminGroup, setIsAdminGroup] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
 
   const handleClose = () => {
-    if (isSubmitting) return;
+    if (isPending) return;
     setName("");
     setDescription("");
     setJoinable(true);
@@ -54,35 +54,32 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
-      const response = await apiClient.POST("/group", {
-        body: {
-          name: name.trim(),
-          description: description.trim(),
-          joinable,
-          isAdminGroup,
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
-      });
+      startTransition(async () => {
+        const response = await apiClient.POST("/group", {
+          body: {
+            name: name.trim(),
+            description: description.trim(),
+            joinable,
+            isAdminGroup,
+          },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        });
 
-      if (response.error) {
-        const errorMessage =
-          response.error.message || "グループの作成に失敗しました";
-        setNewError({ name: "new-group-error", message: errorMessage });
-        setIsSubmitting(false);
-        return;
-      }
+        if (response.error) {
+          const errorMessage = response.error.message || "グループの作成に失敗しました";
+          setNewError({ name: "new-group-error", message: errorMessage });
+          return;
+        }
+      });
 
       handleClose();
       onSuccess();
     } catch (error) {
       console.error("Error creating group:", error);
       setNewError({ name: "new-group-error", message: "グループの作成に失敗しました" });
-      setIsSubmitting(false);
     }
   };
 
@@ -92,7 +89,7 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
       <IconButton
         aria-label="グループ作成をやめる"
         onClick={handleClose}
-        disabled={isSubmitting}
+        disabled={isPending}
         sx={{
           position: "absolute",
           right: 12,
@@ -111,7 +108,7 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
               variant="outlined"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              disabled={isSubmitting}
+              disabled={isPending}
             />
           </FormControl>
 
@@ -124,7 +121,7 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              disabled={isSubmitting}
+              disabled={isPending}
             />
           </FormControl>
 
@@ -133,7 +130,7 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
               <Checkbox
                 checked={joinable}
                 onChange={(e) => setJoinable(e.target.checked)}
-                disabled={isSubmitting}
+                disabled={isPending}
               />
             }
             label="参加可能にする"
@@ -145,7 +142,7 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
               <Checkbox
                 checked={isAdminGroup}
                 onChange={(e) => setIsAdminGroup(e.target.checked)}
-                disabled={isSubmitting}
+                disabled={isPending}
               />
             }
             label="管理者グループにする"
@@ -155,13 +152,13 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
           </FormHelperText>
 
           <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={handleClose} disabled={isSubmitting}>
+            <Button variant="outlined" onClick={handleClose} disabled={isPending}>
               キャンセル
             </Button>
             <Button
               variant="contained"
               onClick={handleSubmit}
-              disabled={isSubmitting || !name.trim() || !description.trim()}
+              disabled={isPending || !name.trim() || !description.trim()}
               startIcon={<Add />}
             >
               作成する
@@ -174,4 +171,3 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
 };
 
 export default NewGroupDialog;
-

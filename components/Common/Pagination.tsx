@@ -1,5 +1,3 @@
-import type { FC } from "react";
-
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 
@@ -10,7 +8,12 @@ type PaginationProps = {
   onChange: (page: number) => void;
 };
 
-const Pagination: FC<PaginationProps> = ({ page, hasPreviousPage, hasNextPage, onChange }) => {
+const Pagination: React.FC<PaginationProps> = ({
+  page,
+  hasPreviousPage,
+  hasNextPage,
+  onChange,
+}) => {
   const handlePrevClick = () => {
     if (!hasPreviousPage) return;
     onChange(page - 1);
