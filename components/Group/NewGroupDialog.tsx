@@ -67,16 +67,14 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
             Authorization: `Bearer ${authState.token}`,
           },
         });
-
+        handleClose();
         if (response.error) {
           const errorMessage = response.error.message || "グループの作成に失敗しました";
           setNewError({ name: "new-group-error", message: errorMessage });
           return;
         }
+        onSuccess();
       });
-
-      handleClose();
-      onSuccess();
     } catch (error) {
       console.error("Error creating group:", error);
       setNewError({ name: "new-group-error", message: "グループの作成に失敗しました" });

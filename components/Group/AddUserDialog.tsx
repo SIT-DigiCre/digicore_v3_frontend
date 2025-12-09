@@ -110,8 +110,8 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
           setNewError({ name: "add-user-error", message: errorMessage });
           return;
         }
+        await router.replace(router.asPath);
       });
-      await router.replace(router.asPath);
     } catch (error) {
       console.error("Error adding user to group:", error);
       setNewError({ name: "add-user-error", message: "ユーザーの追加に失敗しました" });
