@@ -113,7 +113,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
                 workDetail.authors.map((a) => (
                   <ButtonLink
                     startIcon={<Avatar src={a.iconUrl} className="d-inlineblock" />}
-                    href={`/user/${a.userId}`}
+                    href={`/member/${a.userId}`}
                     key={a.userId}
                     variant="text"
                   >
