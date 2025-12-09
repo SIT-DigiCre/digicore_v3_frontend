@@ -11,6 +11,7 @@ import Heading from "../Common/Heading";
 import MarkdownEditor from "../Common/MarkdownEditor";
 import { FileBrowserModal } from "../File/FileBrowser";
 
+import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
 
@@ -21,6 +22,7 @@ type WorkEditorProps = {
 
 const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   const { authState } = useAuthState();
+  const [authors, setAuthors] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -28,7 +30,11 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
 
   useEffect(() => {
-    if (!initWork) return;
+    if (!initWork) {
+      setAuthors([authState.user.userId!]);
+      return;
+    }
+    setAuthors(initWork.authors.map((a) => a.userId));
     setName(initWork.name);
     setDescription(initWork.description);
     setTags(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
@@ -48,7 +54,7 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
     const workRequest: WorkRequest = {
       name: name,
       description: description,
-      authors: [authState.user.userId!],
+      authors: authors,
       tags: tags,
       files: files,
     };
@@ -57,6 +63,13 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
 
   return (
     <Stack spacing={2} my={2}>
+      <Box>
+        <Heading level={3}>作者</Heading>
+        <AuthorMultiSelect
+          selectedAuthorIds={authors}
+          onChange={(authors) => setAuthors(authors)}
+        />
+      </Box>
       <Box>
         <Heading level={3}>作品名</Heading>
         <TextField
