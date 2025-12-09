@@ -7,7 +7,7 @@ import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
-type UserProfile = {
+export type UserProfile = {
   userId: string;
   username: string;
   iconUrl: string;
