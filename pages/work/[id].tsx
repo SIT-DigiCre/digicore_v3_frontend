@@ -2,7 +2,7 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { ArrowBack, Delete } from "@mui/icons-material";
+import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { Avatar, Box, Button, Stack } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
@@ -56,6 +56,10 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     });
   };
 
+  const onClickEdit = () => {
+    router.push(`/work/${id}?mode=edit`);
+  };
+
   const onClickDelete = async () => {
     const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
     if (res) {
@@ -97,9 +101,26 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
           作品一覧に戻る
         </ButtonLink>
         {workDetail.authors.map((a) => a.userId).includes(authState.user.userId) && (
-          <Button variant="contained" color="error" onClick={onClickDelete} startIcon={<Delete />}>
-            削除する
-          </Button>
+          <Stack direction="row" spacing={2}>
+            {modeStr === "edit" ? null : (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={onClickEdit}
+                startIcon={<Edit />}
+              >
+                編集する
+              </Button>
+            )}
+            <Button
+              variant="contained"
+              color="error"
+              onClick={onClickDelete}
+              startIcon={<Delete />}
+            >
+              削除する
+            </Button>
+          </Stack>
         )}
       </Stack>
       {modeStr === "edit" ? (
