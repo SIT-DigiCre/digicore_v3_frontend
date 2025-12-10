@@ -3,11 +3,12 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
-import { Avatar, Box, Button, Stack } from "@mui/material";
+import { Avatar, Box, IconButton, Stack } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import Heading from "../../components/Common/Heading";
+import { IconButtonLink } from "../../components/Common/IconButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import WorkEditor from "../../components/Work/WorkEditor";
@@ -56,10 +57,6 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     });
   };
 
-  const onClickEdit = () => {
-    router.push(`/work/${id}?mode=edit`);
-  };
-
   const onClickDelete = async () => {
     const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
     if (res) {
@@ -101,25 +98,15 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
           作品一覧に戻る
         </ButtonLink>
         {workDetail.authors.map((a) => a.userId).includes(authState.user.userId) && (
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={1}>
             {modeStr !== "edit" && (
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={onClickEdit}
-                startIcon={<Edit />}
-              >
-                編集する
-              </Button>
+              <IconButtonLink href={`/work/${id}?mode=edit`} ariaLabel="編集する">
+                <Edit />
+              </IconButtonLink>
             )}
-            <Button
-              variant="contained"
-              color="error"
-              onClick={onClickDelete}
-              startIcon={<Delete />}
-            >
-              削除する
-            </Button>
+            <IconButton aria-label="削除する" onClick={onClickDelete}>
+              <Delete />
+            </IconButton>
           </Stack>
         )}
       </Stack>
