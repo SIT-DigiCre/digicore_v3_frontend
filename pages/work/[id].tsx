@@ -102,7 +102,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
         </ButtonLink>
         {workDetail.authors.map((a) => a.userId).includes(authState.user.userId) && (
           <Stack direction="row" spacing={2}>
-            {modeStr === "edit" ? null : (
+            {modeStr !== "edit" && (
               <Button
                 variant="contained"
                 color="primary"
