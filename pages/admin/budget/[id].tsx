@@ -140,7 +140,7 @@ const AdminbudgetPage = ({ budgetId, budget }: PageProps) => {
           )
         )}
 
-        <TableContainer sx={{ mt: 3 }}>
+        <TableContainer>
           <Table size="small" aria-label="a dense table">
             <TableBody>
               <TableRow>

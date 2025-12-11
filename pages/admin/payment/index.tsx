@@ -1,10 +1,12 @@
 import { useState } from "react";
 
+import { ArrowBack } from "@mui/icons-material";
 import {
   Box,
   Button,
   Checkbox,
   Modal,
+  Stack,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
 import { usePayments } from "../../../hook/payment/usePayments";
 import { Payment } from "../../../interfaces/payment";
@@ -26,44 +29,56 @@ const AdminPaymentPage = () => {
   return (
     <>
       <PageHead title="[管理者用] 部費振込一覧" />
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>学籍番号</TableCell>
-              <TableCell>支払い名義</TableCell>
-              <TableCell>確認</TableCell>
-              <TableCell>備考</TableCell>
-              <TableCell>詳細</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {payments.map((payment) => (
-              <TableRow key={payment.paymentId}>
-                <TableCell>{payment.studentNumber}</TableCell>
-                <TableCell>{payment.transferName}</TableCell>
-                <TableCell>
-                  {payment.checked ? (
-                    <span style={{ color: "green" }}>済</span>
-                  ) : (
-                    <span style={{ color: "red" }}>未</span>
-                  )}
-                </TableCell>
-                <TableCell>{payment.note}</TableCell>
-                <TableCell>
-                  <Button
-                    onClick={() => {
-                      updateTargetPayment(payment);
-                    }}
-                  >
-                    詳細
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+
+      <Stack spacing={2}>
+        <Stack direction="row" justifyContent="flex-start" width="100%">
+          <ButtonLink href="/admin" startIcon={<ArrowBack />} variant="text">
+            管理者用ポータルに戻る
+          </ButtonLink>
+        </Stack>
+        {payments && payments.length > 0 ? (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>学籍番号</TableCell>
+                  <TableCell>支払い名義</TableCell>
+                  <TableCell>確認</TableCell>
+                  <TableCell>備考</TableCell>
+                  <TableCell>詳細</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {payments.map((payment) => (
+                  <TableRow key={payment.paymentId}>
+                    <TableCell>{payment.studentNumber}</TableCell>
+                    <TableCell>{payment.transferName}</TableCell>
+                    <TableCell>
+                      {payment.checked ? (
+                        <span style={{ color: "green" }}>済</span>
+                      ) : (
+                        <span style={{ color: "red" }}>未</span>
+                      )}
+                    </TableCell>
+                    <TableCell>{payment.note}</TableCell>
+                    <TableCell>
+                      <Button
+                        onClick={() => {
+                          updateTargetPayment(payment);
+                        }}
+                      >
+                        詳細
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        ) : (
+          <Typography my={2}>部費振込情報がありません</Typography>
+        )}
+      </Stack>
       <Modal
         open={targetPayment !== undefined}
         onClose={() => {

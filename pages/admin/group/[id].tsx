@@ -6,7 +6,6 @@ import {
   Avatar,
   Box,
   Chip,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -86,7 +85,7 @@ const AdminGroupDetailPage = ({
         <Box width="100%">
           <Heading level={2}>メンバー一覧</Heading>
           {group.users && group.users.length > 0 ? (
-            <TableContainer component={Paper}>
+            <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
