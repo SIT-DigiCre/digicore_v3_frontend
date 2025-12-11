@@ -3,11 +3,10 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { ArrowBack, ErrorOutline, WarningAmber } from "@mui/icons-material";
-import LaunchIcon from "@mui/icons-material/Launch";
 import {
   Button,
   Chip,
-  IconButton,
+  Link,
   Stack,
   Table,
   TableBody,
@@ -193,15 +192,9 @@ const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
                   <TableCell>
                     {budget.mattermostUrl &&
                       new URL(budget.mattermostUrl).hostname === "mm.digicre.net" && (
-                        <IconButton
-                          size="small"
-                          title="Mattermostで開く"
-                          onClick={() =>
-                            router.push(budget.mattermostUrl.replace(/^http[s]?:/, "mattermost:"))
-                          }
-                        >
-                          <LaunchIcon />
-                        </IconButton>
+                        <Link href={budget.mattermostUrl} target="_blank">
+                          {budget.mattermostUrl}
+                        </Link>
                       )}
                   </TableCell>
                 </TableRow>
