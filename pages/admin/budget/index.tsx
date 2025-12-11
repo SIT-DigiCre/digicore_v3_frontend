@@ -2,9 +2,9 @@ import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
+import { ArrowBack } from "@mui/icons-material";
 import {
   Chip,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
+import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
 import Pagination from "../../../components/Common/Pagination";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
@@ -61,11 +62,16 @@ const AdminBudgetIndexPage = ({
 
   return (
     <>
-      <PageHead title="★ 稟議（管理者用）" />
+      <PageHead title="[管理者用] 稟議一覧" />
+      <Stack direction="row" justifyContent="flex-start" width="100%">
+        <ButtonLink href="/admin" startIcon={<ArrowBack />} variant="text">
+          管理者用ポータルに戻る
+        </ButtonLink>
+      </Stack>
       <Stack spacing={2}>
         {budgets && budgets.length > 0 ? (
           <>
-            <TableContainer component={Paper}>
+            <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
