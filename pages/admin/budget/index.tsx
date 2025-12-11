@@ -4,7 +4,6 @@ import { useRouter } from "next/router";
 
 import {
   Chip,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -61,11 +60,11 @@ const AdminBudgetIndexPage = ({
 
   return (
     <>
-      <PageHead title="★ 稟議（管理者用）" />
+      <PageHead title="[管理者用] 稟議一覧" />
       <Stack spacing={2}>
         {budgets && budgets.length > 0 ? (
           <>
-            <TableContainer component={Paper}>
+            <TableContainer>
               <Table>
                 <TableHead>
                   <TableRow>
