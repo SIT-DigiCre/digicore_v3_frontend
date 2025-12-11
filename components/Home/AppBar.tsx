@@ -9,7 +9,6 @@ import {
   Drawer as MuiDrawer,
   Stack,
   Toolbar,
-  Typography,
 } from "@mui/material";
 
 import { usePageTitle } from "../../hook/usePageTitle";
@@ -120,15 +119,6 @@ export default function AppBar({ children, window }: AppBarProps) {
           <ErrorView />
           {children}
         </Container>
-        <footer style={{ textAlign: "center", padding: "2rem 0" }}>
-          <Typography>
-            <a href="https://intercom.help/icons8-7fb7577e8170/en/articles/5534926-universal-multimedia-licensing-agreement-for-icons8">
-              Icons8 License
-            </a>
-          </Typography>
-          <Typography>&copy; 2022-2025</Typography>
-          <Typography>芝浦工業大学 デジクリ</Typography>
-        </footer>
       </Box>
     </Stack>
   );
