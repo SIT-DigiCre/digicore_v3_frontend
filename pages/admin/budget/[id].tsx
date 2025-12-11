@@ -30,14 +30,14 @@ import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
 import type { paths } from "../../../utils/fetch/api.d";
 
-type budgetResponse =
+type BudgetResponse =
   paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export const getServerSideProps: GetServerSideProps<{
   budgetId: string;
-  budget: budgetResponse;
+  budget: BudgetResponse;
 }> = async ({ params, req }) => {
   const idParam = params?.id;
   const budgetId = typeof idParam === "string" ? idParam : "";
@@ -67,7 +67,7 @@ export const getServerSideProps: GetServerSideProps<{
   }
 };
 
-const AdminbudgetPage = ({ budgetId, budget }: PageProps) => {
+const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
   const router = useRouter();
   const { authState } = useAuthState();
 
@@ -303,4 +303,4 @@ const AdminbudgetPage = ({ budgetId, budget }: PageProps) => {
   );
 };
 
-export default AdminbudgetPage;
+export default AdminBudgetDetailPage;

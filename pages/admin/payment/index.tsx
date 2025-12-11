@@ -5,6 +5,7 @@ import {
   Box,
   Button,
   Checkbox,
+  Chip,
   Modal,
   Stack,
   Table,
@@ -55,9 +56,9 @@ const AdminPaymentPage = () => {
                     <TableCell>{payment.transferName}</TableCell>
                     <TableCell>
                       {payment.checked ? (
-                        <span style={{ color: "green" }}>済</span>
+                        <Chip label="確認済" color="success" />
                       ) : (
-                        <span style={{ color: "red" }}>未</span>
+                        <Chip label="未確認" color="error" />
                       )}
                     </TableCell>
                     <TableCell>{payment.note}</TableCell>
@@ -79,64 +80,70 @@ const AdminPaymentPage = () => {
           <Typography my={2}>部費振込情報がありません</Typography>
         )}
       </Stack>
-      <Modal
-        open={targetPayment !== undefined}
-        onClose={() => {
-          updateTargetPayment(undefined);
-        }}
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
+      {!!targetPayment && (
+        <Modal
+          open={!!targetPayment}
+          onClose={() => {
+            updateTargetPayment(undefined);
           }}
         >
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            支払い詳細
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            支払い番号: {targetPayment?.paymentId}
-            <br />
-            学籍番号: {targetPayment?.studentNumber}
-            <br />
-            支払い名義: {targetPayment?.transferName}
-            <br />
-            確認:{" "}
-            <Checkbox
-              checked={targetPayment?.checked}
-              onChange={() => {
-                updateTargetPayment({ ...targetPayment, checked: !targetPayment?.checked });
-              }}
-            />
-            <br />
-            備考:{" "}
-            <TextField
-              fullWidth
-              value={targetPayment?.note}
-              onChange={(e) => {
-                updateTargetPayment({ ...targetPayment, note: e.target.value });
-              }}
-            />
-            <br />
-            <Button
-              onClick={() => {
-                updatePayments(targetPayment.paymentId, targetPayment.checked, targetPayment.note);
-                updateTargetPayment(undefined);
-              }}
-              variant="contained"
-            >
-              保存
-            </Button>
-          </Typography>
-        </Box>
-      </Modal>
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+              width: 400,
+              bgcolor: "background.paper",
+              border: "2px solid #000",
+              boxShadow: 24,
+              p: 4,
+            }}
+          >
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              支払い詳細
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              支払い番号: {targetPayment.paymentId}
+              <br />
+              学籍番号: {targetPayment.studentNumber}
+              <br />
+              支払い名義: {targetPayment.transferName}
+              <br />
+              確認:{" "}
+              <Checkbox
+                checked={targetPayment.checked}
+                onChange={() => {
+                  updateTargetPayment({ ...targetPayment, checked: !targetPayment.checked });
+                }}
+              />
+              <br />
+              備考:{" "}
+              <TextField
+                fullWidth
+                value={targetPayment.note}
+                onChange={(e) => {
+                  updateTargetPayment({ ...targetPayment, note: e.target.value });
+                }}
+              />
+              <br />
+              <Button
+                onClick={() => {
+                  updatePayments(
+                    targetPayment.paymentId,
+                    targetPayment.checked,
+                    targetPayment.note,
+                  );
+                  updateTargetPayment(undefined);
+                }}
+                variant="contained"
+              >
+                保存
+              </Button>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
     </>
   );
 };
