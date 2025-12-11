@@ -56,7 +56,7 @@ const AdminGroupDetailPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   return (
     <>
-      <PageHead title={group.name} />
+      <PageHead title="[管理者用] グループ詳細" />
       <Stack spacing={2} alignItems="flex-start">
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start" width="100%">
           <ButtonLink href="/admin/group" startIcon={<ArrowBack />} variant="text">
@@ -65,7 +65,7 @@ const AdminGroupDetailPage = ({
           {group.joined && <AddUserDialog groupId={group.groupId} />}
         </Stack>
         <Box>
-          <Heading level={2}>グループ情報</Heading>
+          <Heading level={2}>{group.name}</Heading>
           <Typography color="text.secondary" mb={2}>
             {group.description}
           </Typography>

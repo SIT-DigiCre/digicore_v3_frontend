@@ -57,7 +57,7 @@ const AdminGroupIndexPage = ({
 
   return (
     <>
-      <PageHead title="グループ管理" />
+      <PageHead title="[管理者用] グループ一覧" />
       <Stack spacing={2}>
         <Stack direction="row" justifyContent="space-between" alignItems="flex-start" width="100%">
           <Heading level={2}>グループ一覧</Heading>

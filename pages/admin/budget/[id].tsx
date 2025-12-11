@@ -141,7 +141,7 @@ const AdminbudgetPage = ({ budgetId, budget }: PageProps) => {
         )}
 
         <TableContainer sx={{ mt: 3 }}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <Table size="small" aria-label="a dense table">
             <TableBody>
               <TableRow>
                 <TableCell component="th" scope="row">
