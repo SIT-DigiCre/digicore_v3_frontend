@@ -95,15 +95,15 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
     label: "ログイン",
   };
 
-  const adminItem: MenuItem = {
-    href: "/admin",
-    icon: <AdminPanelSettingsIcon />,
-    label: "管理者",
-  };
-
   if (authState.user?.isAdmin) {
+    const adminItem: MenuItem = {
+      href: "/admin",
+      icon: <AdminPanelSettingsIcon />,
+      label: "管理者",
+    };
     menuItems.push(adminItem);
   }
+
   return (
     <Stack role="navigation" aria-label="メインメニュー" sx={{ height: "100%" }}>
       <Toolbar sx={{ justifyContent: "center" }}>
@@ -184,7 +184,7 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
         )}
       </List>
       <footer style={{ display: "flex", flexDirection: "column", padding: "1rem" }}>
-        <small>&copy; 2022-2025 </small>
+        <small>&copy; 2022 - {new Date().getFullYear()} </small>
         <small> 芝浦工業大学 デジクリ</small>
       </footer>
     </Stack>
