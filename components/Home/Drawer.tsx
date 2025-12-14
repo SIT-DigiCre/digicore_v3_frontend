@@ -13,13 +13,13 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
 import {
-  Box,
   Divider,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Stack,
   Toolbar,
 } from "@mui/material";
 
@@ -95,17 +95,17 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
     label: "ログイン",
   };
 
-  const adminItem: MenuItem = {
-    href: "/admin",
-    icon: <AdminPanelSettingsIcon />,
-    label: "管理者",
-  };
-
   if (authState.user?.isAdmin) {
+    const adminItem: MenuItem = {
+      href: "/admin",
+      icon: <AdminPanelSettingsIcon />,
+      label: "管理者",
+    };
     menuItems.push(adminItem);
   }
+
   return (
-    <Box role="navigation" aria-label="メインメニュー">
+    <Stack role="navigation" aria-label="メインメニュー" sx={{ height: "100%" }}>
       <Toolbar sx={{ justifyContent: "center" }}>
         <Link
           href="/"
@@ -126,7 +126,7 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
         </Link>
       </Toolbar>
       <Divider />
-      <List role="menu" aria-label="メニュー項目">
+      <List role="menu" aria-label="メニュー項目" sx={{ flexGrow: 1 }}>
         {authState.isLogined ? (
           menuItems.map((item) => (
             <ListItem key={item.href} disablePadding>
@@ -183,7 +183,11 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
           </ListItem>
         )}
       </List>
-    </Box>
+      <footer style={{ display: "flex", flexDirection: "column", padding: "1rem" }}>
+        <small>&copy; 2022 - {new Date().getFullYear()} </small>
+        <small> 芝浦工業大学 デジクリ</small>
+      </footer>
+    </Stack>
   );
 };
 
