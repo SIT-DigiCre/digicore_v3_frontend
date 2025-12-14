@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { AdminPanelSettings, Groups } from "@mui/icons-material";
+import { CurrencyYen, Groups, ReceiptLong } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 
 import PageHead from "../../components/Common/PageHead";
@@ -8,7 +8,7 @@ import PageHead from "../../components/Common/PageHead";
 const AdminPage = () => {
   return (
     <>
-      <PageHead title="管理者ページ" />
+      <PageHead title="[管理者用] ポータル" />
       <Stack spacing={2}>
         <Typography>このページは幹部およびインフラ担当のみが閲覧できます。</Typography>
         <Stack direction="row" spacing={2}>
@@ -16,17 +16,20 @@ const AdminPage = () => {
             component={Link}
             href="/admin/budget"
             variant="contained"
-            startIcon={<AdminPanelSettings />}
+            startIcon={<ReceiptLong />}
           >
             稟議管理
           </Button>
+          <Button component={Link} href="/admin/group" variant="contained" startIcon={<Groups />}>
+            グループ管理
+          </Button>
           <Button
             component={Link}
-            href="/admin/group"
+            href="/admin/payment"
             variant="contained"
-            startIcon={<Groups />}
+            startIcon={<CurrencyYen />}
           >
-            グループ管理
+            部費振込管理
           </Button>
         </Stack>
       </Stack>
