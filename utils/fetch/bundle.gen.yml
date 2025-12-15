@@ -2,8 +2,6 @@ openapi: 3.0.3
 info:
   version: 3.1.0
   title: Digicore
-servers:
-  - url: 'https://coreapi3.digicre.net/'
 tags:
   - name: auth
     description: Authentication system
@@ -175,6 +173,34 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/search:
+    get:
+      tags:
+        - user
+      description: Search users by username
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: query
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+            maxLength: 10
+      responses:
+        '200':
+          description: Success search users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/user/{userId}':
     get:
       tags:
@@ -221,6 +247,58 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetUserUserIdIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}/group':
+    get:
+      tags:
+        - user
+      description: Get groups which the specified user joined
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get groups which the specified user joined
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetGroup'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}/work':
+    get:
+      tags:
+        - user
+      description: Get works which the specified user is included as author
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get works which the specified user is included as author
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetWorkWork'
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -2446,6 +2524,7 @@ components:
         - userCount
         - joinable
         - joined
+        - isAdminGroup
       properties:
         groupId:
           type: string
@@ -2457,6 +2536,8 @@ components:
           type: boolean
         joined:
           type: boolean
+        isAdminGroup:
+          type: boolean
     ResGetGroupGroupId:
       required:
         - groupId
@@ -2465,6 +2546,7 @@ components:
         - userCount
         - joinable
         - joined
+        - isAdminGroup
         - users
       properties:
         groupId:
@@ -2478,6 +2560,8 @@ components:
         joinable:
           type: boolean
         joined:
+          type: boolean
+        isAdminGroup:
           type: boolean
         users:
           type: array
