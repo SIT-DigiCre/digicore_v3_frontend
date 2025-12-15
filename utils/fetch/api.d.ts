@@ -304,6 +304,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Search users by username */
+        get: {
+            parameters: {
+                query: {
+                    query: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success search users */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUser"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/user/{userId}": {
         parameters: {
             query?: never;
@@ -371,6 +412,88 @@ export interface paths {
                     };
                     content: {
                         "application/json": components["schemas"]["ResGetUserUserIdIntroduction"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/{userId}/group": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get groups which the specified user joined */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get groups which the specified user joined */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetGroup"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/{userId}/work": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get works which the specified user is included as author */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get works which the specified user is included as author */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWork"];
                     };
                 };
                 403: components["responses"]["Unauthorized"];
@@ -2504,6 +2627,7 @@ export interface components {
             userCount: number;
             joinable: boolean;
             joined: boolean;
+            isAdminGroup: boolean;
         };
         ResGetGroupGroupId: {
             groupId: string;
@@ -2512,6 +2636,7 @@ export interface components {
             userCount: number;
             joinable: boolean;
             joined: boolean;
+            isAdminGroup: boolean;
             users: components["schemas"]["ResGetGroupGroupIdObjectUser"][];
         };
         ResGetGroupGroupIdObjectUser: {
