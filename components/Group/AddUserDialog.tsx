@@ -47,7 +47,12 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
 
     setIsLoadingUsers(true);
     try {
-      const response = await apiClient.GET("/user", {
+      const response = await apiClient.GET("/user/search", {
+        params: {
+          query: {
+            query: inputValue,
+          },
+        },
         headers: {
           Authorization: `Bearer ${authState.token}`,
         },
