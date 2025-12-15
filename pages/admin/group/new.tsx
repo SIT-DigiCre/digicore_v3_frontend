@@ -1,31 +1,26 @@
+import { useRouter } from "next/router";
 import { useState, useTransition } from "react";
 
-import { Add, Close } from "@mui/icons-material";
+import { Add, ArrowBack } from "@mui/icons-material";
 import {
   Button,
   Checkbox,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   FormControl,
   FormControlLabel,
   FormHelperText,
-  IconButton,
   Stack,
   TextField,
 } from "@mui/material";
 
-import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
-import { apiClient } from "../../utils/fetch/client";
+import { ButtonLink } from "../../../components/Common/ButtonLink";
+import Heading from "../../../components/Common/Heading";
+import PageHead from "../../../components/Common/PageHead";
+import { useAuthState } from "../../../hook/useAuthState";
+import { useErrorState } from "../../../hook/useErrorState";
+import { apiClient } from "../../../utils/fetch/client";
 
-type NewGroupDialogProps = {
-  open: boolean;
-  onClose: () => void;
-  onSuccess: () => void;
-};
-
-const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
+const AdminGroupNewPage = () => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [joinable, setJoinable] = useState(true);
@@ -33,15 +28,6 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
   const [isPending, startTransition] = useTransition();
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
-
-  const handleClose = () => {
-    if (isPending) return;
-    setName("");
-    setDescription("");
-    setJoinable(true);
-    setIsAdminGroup(false);
-    onClose();
-  };
 
   const handleSubmit = async () => {
     if (!name.trim() || !description.trim()) {
@@ -60,20 +46,19 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
           body: {
             name: name.trim(),
             description: description.trim(),
-            joinable,
             isAdminGroup,
+            joinable: !isAdminGroup && joinable,
           },
           headers: {
             Authorization: `Bearer ${authState.token}`,
           },
         });
-        handleClose();
         if (response.error) {
           const errorMessage = response.error.message || "グループの作成に失敗しました";
           setNewError({ name: "new-group-error", message: errorMessage });
           return;
         }
-        onSuccess();
+        router.push("/admin/group");
       });
     } catch (error) {
       console.error("Error creating group:", error);
@@ -82,22 +67,15 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>新規グループ作成</DialogTitle>
-      <IconButton
-        aria-label="グループ作成をやめる"
-        onClick={handleClose}
-        disabled={isPending}
-        sx={{
-          position: "absolute",
-          right: 12,
-          top: 12,
-          color: (theme) => theme.palette.grey[500],
-        }}
-      >
-        <Close />
-      </IconButton>
-      <DialogContent dividers>
+    <>
+      <PageHead title="[管理者用] 新規グループ作成" />
+      <Stack spacing={2}>
+        <Stack direction="row" justifyContent="flex-start" width="100%">
+          <ButtonLink href="/admin/group" startIcon={<ArrowBack />} variant="text">
+            グループ一覧に戻る
+          </ButtonLink>
+        </Stack>
+        <Heading level={2}>新規グループ作成</Heading>
         <Stack spacing={2} sx={{ mt: 1 }}>
           <FormControl fullWidth>
             <TextField
@@ -123,36 +101,42 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
             />
           </FormControl>
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={joinable}
-                onChange={(e) => setJoinable(e.target.checked)}
-                disabled={isPending}
-              />
-            }
-            label="参加可能にする"
-          />
-          <FormHelperText>チェックを外すと、メンバーからの自発的な参加はできません</FormHelperText>
+          <FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={isAdminGroup}
+                  onChange={(e) => setIsAdminGroup(e.target.checked)}
+                  disabled={isPending}
+                />
+              }
+              label="管理者グループにする"
+            />
+            <FormHelperText>
+              管理者グループは管理者のみが作成でき、自発的な参加はできません。
+            </FormHelperText>
+          </FormControl>
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={isAdminGroup}
-                onChange={(e) => setIsAdminGroup(e.target.checked)}
-                disabled={isPending}
-              />
-            }
-            label="管理者グループにする"
-          />
-          <FormHelperText>
-            管理者グループは管理者のみが作成でき、自発的な参加はできません
-          </FormHelperText>
+          <FormControl>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={!isAdminGroup && joinable}
+                  onChange={(e) => setJoinable(e.target.checked)}
+                  disabled={isPending || isAdminGroup}
+                />
+              }
+              label="参加可能にする"
+            />
+            <FormHelperText>
+              チェックを外すと、メンバーからの自発的な参加はできません。
+            </FormHelperText>
+          </FormControl>
 
-          <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={handleClose} disabled={isPending}>
+          <Stack direction="row" justifyContent="space-between" spacing={2} sx={{ mt: 2 }}>
+            <ButtonLink variant="outlined" href="/admin/group">
               キャンセル
-            </Button>
+            </ButtonLink>
             <Button
               variant="contained"
               onClick={handleSubmit}
@@ -163,9 +147,9 @@ const NewGroupDialog = ({ open, onClose, onSuccess }: NewGroupDialogProps) => {
             </Button>
           </Stack>
         </Stack>
-      </DialogContent>
-    </Dialog>
+      </Stack>
+    </>
   );
 };
 
-export default NewGroupDialog;
+export default AdminGroupNewPage;
