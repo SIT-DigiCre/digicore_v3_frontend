@@ -1,3 +1,4 @@
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
@@ -17,12 +18,28 @@ import {
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
 import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog";
-import { usePayments } from "../../../hook/payment/usePayments";
 import { Payment } from "../../../interfaces/payment";
+import { createServerApiClient } from "../../../utils/fetch/client";
 
-const AdminPaymentPage = () => {
-  const [payments, updatePayments] = usePayments();
-  const [targetPayment, updateTargetPayment] = useState<Payment>();
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const paymentsRes = await client.GET("/payment");
+
+    if (!paymentsRes.data || !paymentsRes.data.payments) {
+      return { props: { payments: [] } };
+    }
+
+    return { props: { payments: paymentsRes.data.payments } };
+  } catch (error) {
+    console.error("Failed to fetch payments:", error);
+    return { props: { payments: [] } };
+  }
+};
+
+const AdminPaymentPage = ({ payments }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [targetPayment, updateTargetPayment] = useState<Payment | null>(null);
 
   return (
     <>
@@ -83,14 +100,7 @@ const AdminPaymentPage = () => {
           payment={targetPayment}
           open={!!targetPayment}
           onClose={() => {
-            updateTargetPayment(undefined);
-          }}
-          onSave={async (paymentId, checked, note) => {
-            const success = await updatePayments(paymentId, checked, note);
-            if (success) {
-              updateTargetPayment(undefined);
-            }
-            return success;
+            updateTargetPayment(null);
           }}
         />
       )}

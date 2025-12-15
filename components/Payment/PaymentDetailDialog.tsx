@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { useState, useTransition } from "react";
 
 import { Close, Save } from "@mui/icons-material";
@@ -14,43 +15,57 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useAuthState } from "../../hook/useAuthState";
+import { useErrorState } from "../../hook/useErrorState";
 import { Payment } from "../../interfaces/payment";
+import { apiClient } from "../../utils/fetch/client";
 
 type PaymentDetailDialogProps = {
   payment: Payment;
   open: boolean;
   onClose: () => void;
-  onSave: (paymentId: string, checked: boolean, note: string) => Promise<boolean>;
 };
 
-const PaymentDetailDialog = ({ payment, open, onClose, onSave }: PaymentDetailDialogProps) => {
+const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProps) => {
+  const router = useRouter();
   const [checked, setChecked] = useState(payment.checked ?? false);
   const [note, setNote] = useState(payment.note);
   const [isPending, startTransition] = useTransition();
-
-  const handleClose = () => {
-    if (!isPending) {
-      setChecked(payment.checked ?? false);
-      setNote(payment.note);
-      onClose();
-    }
-  };
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
 
   const handleSave = async () => {
     startTransition(async () => {
-      const success = await onSave(payment.paymentId, checked, note);
-      if (success) {
+      try {
+        await apiClient.PUT(`/payment/{paymentId}`, {
+          params: {
+            path: {
+              paymentId: payment.paymentId,
+            },
+          },
+          body: { checked: checked, note: note },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        });
+        removeError("payments-update-fail");
+        await router.replace(router.asPath);
         onClose();
+      } catch {
+        setNewError({
+          name: "payments-update-fail",
+          message: "支払情報の更新に失敗しました",
+        });
       }
     });
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>支払い詳細</DialogTitle>
       <IconButton
         aria-label="ダイアログを閉じる"
-        onClick={handleClose}
+        onClick={onClose}
         disabled={isPending}
         sx={{
           position: "absolute",
@@ -106,7 +121,7 @@ const PaymentDetailDialog = ({ payment, open, onClose, onSave }: PaymentDetailDi
           />
 
           <Stack direction="row" justifyContent="space-between" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={handleClose} disabled={isPending}>
+            <Button variant="outlined" onClick={onClose} disabled={isPending}>
               キャンセル
             </Button>
             <Button
