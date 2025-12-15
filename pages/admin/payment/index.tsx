@@ -2,11 +2,8 @@ import { useState } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
 import {
-  Box,
   Button,
-  Checkbox,
   Chip,
-  Modal,
   Stack,
   Table,
   TableBody,
@@ -14,12 +11,12 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
+import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog";
 import { usePayments } from "../../../hook/payment/usePayments";
 import { Payment } from "../../../interfaces/payment";
 
@@ -67,6 +64,7 @@ const AdminPaymentPage = () => {
                         onClick={() => {
                           updateTargetPayment(payment);
                         }}
+                        aria-label={`${payment.studentNumber}の詳細を表示`}
                       >
                         詳細
                       </Button>
@@ -80,69 +78,21 @@ const AdminPaymentPage = () => {
           <Typography my={2}>部費振込情報がありません</Typography>
         )}
       </Stack>
-      {!!targetPayment && (
-        <Modal
+      {targetPayment && (
+        <PaymentDetailDialog
+          payment={targetPayment}
           open={!!targetPayment}
           onClose={() => {
             updateTargetPayment(undefined);
           }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              border: "2px solid #000",
-              boxShadow: 24,
-              p: 4,
-            }}
-          >
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              支払い詳細
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              支払い番号: {targetPayment.paymentId}
-              <br />
-              学籍番号: {targetPayment.studentNumber}
-              <br />
-              支払い名義: {targetPayment.transferName}
-              <br />
-              確認:{" "}
-              <Checkbox
-                checked={targetPayment.checked}
-                onChange={() => {
-                  updateTargetPayment({ ...targetPayment, checked: !targetPayment.checked });
-                }}
-              />
-              <br />
-              備考:{" "}
-              <TextField
-                fullWidth
-                value={targetPayment.note}
-                onChange={(e) => {
-                  updateTargetPayment({ ...targetPayment, note: e.target.value });
-                }}
-              />
-              <br />
-              <Button
-                onClick={() => {
-                  updatePayments(
-                    targetPayment.paymentId,
-                    targetPayment.checked,
-                    targetPayment.note,
-                  );
-                  updateTargetPayment(undefined);
-                }}
-                variant="contained"
-              >
-                保存
-              </Button>
-            </Typography>
-          </Box>
-        </Modal>
+          onSave={async (paymentId, checked, note) => {
+            const success = await updatePayments(paymentId, checked, note);
+            if (success) {
+              updateTargetPayment(undefined);
+            }
+            return success;
+          }}
+        />
       )}
     </>
   );
