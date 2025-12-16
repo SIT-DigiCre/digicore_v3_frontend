@@ -49,16 +49,18 @@ const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps
   };
 
   return (
-    <Stack spacing={2}>
-      <Heading level={2}>本人情報</Heading>
-      <PersonalInfoForm
-        initialProfile={privateProfile}
-        profile={editProfile}
-        onProfileChange={handleProfileChange}
-        onSave={handleSave}
-        showSaveButton={true}
-      />
-    </Stack>
+    <>
+      <Stack spacing={2}>
+        <Heading level={2}>本人情報の設定</Heading>
+        <PersonalInfoForm
+          initialProfile={privateProfile}
+          profile={editProfile}
+          onProfileChange={handleProfileChange}
+          onSave={handleSave}
+          showSaveButton={true}
+        />
+      </Stack>
+    </>
   );
 };
 

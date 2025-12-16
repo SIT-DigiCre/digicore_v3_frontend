@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
+import PageHead from "../../../components/Common/PageHead";
 import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
@@ -45,6 +46,7 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
 
   return (
     <>
+      <PageHead title="自己紹介" />
       <Heading level={2}>自己紹介</Heading>
       <MarkdownEditor
         value={editUserIntro.md}

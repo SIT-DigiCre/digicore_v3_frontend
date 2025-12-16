@@ -49,16 +49,18 @@ const EmergencyProfilePage = ({ initialPrivateProfile }: EmergencyProfilePagePro
   };
 
   return (
-    <Stack spacing={2}>
-      <Heading level={2}>緊急連絡先</Heading>
-      <EmergencyContactForm
-        initialProfile={privateProfile}
-        profile={editProfile}
-        onProfileChange={handleProfileChange}
-        onSave={handleSave}
-        showSaveButton={true}
-      />
-    </Stack>
+    <>
+      <Stack spacing={2}>
+        <Heading level={2}>緊急連絡先の設定</Heading>
+        <EmergencyContactForm
+          initialProfile={privateProfile}
+          profile={editProfile}
+          onProfileChange={handleProfileChange}
+          onSave={handleSave}
+          showSaveButton={true}
+        />
+      </Stack>
+    </>
   );
 };
 
