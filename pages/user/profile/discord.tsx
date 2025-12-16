@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
 import { ReactElement, useEffect } from "react";
 
@@ -9,14 +9,14 @@ import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
   try {
     const discordRes = await client.GET("/user/me/discord");
 
     if (!discordRes.data) {
-      return { props: { loginUrl: "" } };
+      return { props: { loginUrl: "" } } as const;
     }
 
     return { props: { loginUrl: discordRes.data.url } };

@@ -1,6 +1,6 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Stack } from "@mui/material";
 
@@ -9,23 +9,23 @@ import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import PersonalInfoForm from "../../../components/Profile/PersonalInfoForm";
 import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
-import { UserPrivateProfile } from "../../../interfaces/user";
+import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../../interfaces/user";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
   try {
     const privateRes = await client.GET("/user/me/private");
 
     if (!privateRes.data) {
-      return { props: { initialPrivateProfile: null } };
+      return { props: { initialPrivateProfile: DEFAULT_USER_PRIVATE_PROFILE } } as const;
     }
 
-    return { props: { initialPrivateProfile: privateRes.data } };
+    return { props: { initialPrivateProfile: privateRes.data } } as const;
   } catch (error) {
     console.error("Failed to fetch my private profile:", error);
-    return { props: { initialPrivateProfile: null } };
+    return { props: { initialPrivateProfile: DEFAULT_USER_PRIVATE_PROFILE } } as const;
   }
 };
 
@@ -34,14 +34,7 @@ type PersonalProfilePageProps = InferGetServerSidePropsType<typeof getServerSide
 const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [privateProfile, setPrivateProfile] = useState<UserPrivateProfile | null>(
-    initialPrivateProfile,
-  );
-  const [editProfile, setEditProfile] = useState<UserPrivateProfile | null>(initialPrivateProfile);
-
-  useEffect(() => {
-    setEditProfile(privateProfile);
-  }, [privateProfile]);
+  const [editProfile, setEditProfile] = useState<UserPrivateProfile>(initialPrivateProfile);
 
   const handleSave = async () => {
     if (!editProfile) return;
@@ -61,7 +54,6 @@ const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps
       return;
     }
     removeError("privateprofile-update-fail");
-    setPrivateProfile(editProfile);
   };
 
   const handleProfileChange = (profile: UserPrivateProfile) => {
@@ -73,7 +65,7 @@ const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps
       <Stack spacing={2}>
         <Heading level={2}>本人情報の設定</Heading>
         <PersonalInfoForm
-          initialProfile={privateProfile}
+          initialProfile={initialPrivateProfile}
           profile={editProfile}
           onProfileChange={handleProfileChange}
           onSave={handleSave}

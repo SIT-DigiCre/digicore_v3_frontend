@@ -9,6 +9,7 @@ export type User = {
   activeLimit?: string;
   isAdmin: boolean;
 };
+
 export type UserPrivateProfile = {
   address: string;
   firstName: string;
@@ -22,6 +23,7 @@ export type UserPrivateProfile = {
   parentName: string;
   phoneNumber: string;
 };
+
 export const DEFAULT_USER_PRIVATE_PROFILE: UserPrivateProfile = {
   address: "",
   firstName: "",

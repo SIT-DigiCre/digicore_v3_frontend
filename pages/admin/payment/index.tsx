@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
@@ -21,7 +21,7 @@ import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog
 import { Payment } from "../../../interfaces/payment";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
   try {

@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
 
 import { ArrowBack } from "@mui/icons-material";
@@ -22,7 +22,13 @@ import PageHead from "../../../components/Common/PageHead";
 import AddUserDialog from "../../../components/Group/AddUserDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps: GetServerSideProps = async ({ req, params }) => {
+export const getServerSideProps = async ({
+  req,
+  params,
+}: {
+  req: NextApiRequest;
+  params: { id: string };
+}) => {
   const client = createServerApiClient(req);
   const groupId = params?.id as string;
 

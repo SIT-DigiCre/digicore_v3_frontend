@@ -1,7 +1,7 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 
@@ -17,20 +17,20 @@ import { User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
   try {
     const profileRes = await client.GET("/user/me");
 
     if (!profileRes.data) {
-      return { props: { initialUserProfile: null } };
+      return { props: { initialUserProfile: null } } as const;
     }
 
-    return { props: { initialUserProfile: profileRes.data } };
+    return { props: { initialUserProfile: profileRes.data } } as const;
   } catch (error) {
     console.error("Failed to fetch my profile:", error);
-    return { props: { initialUserProfile: null } };
+    return { props: { initialUserProfile: null } } as const;
   }
 };
 
@@ -41,13 +41,8 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
   const { myFileInfos } = useMyFiles();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [userProfile, setUserProfile] = useState<User | null>(initialUserProfile);
   const [editUserProfile, setEditUserProfile] = useState<User | null>(initialUserProfile);
   const [openFileModal, setOpenFileModal] = useState(false);
-
-  useEffect(() => {
-    setEditUserProfile(userProfile);
-  }, [userProfile]);
 
   const handleNext = () => {
     router.push("/user/profile/personal");
@@ -79,7 +74,6 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
       return;
     }
     removeError("profile-update-fail");
-    setUserProfile(editUserProfile);
     handleNext();
   };
 
@@ -129,11 +123,11 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
           variant="outlined"
           required
           helperText={
-            userProfile.studentNumber === editUserProfile.username
+            initialUserProfile.studentNumber === editUserProfile.username
               ? "ユーザー名を学番以外で設定しましょう!"
               : "ハンドルネームなどを指定しましょう"
           }
-          error={userProfile.studentNumber === editUserProfile.username}
+          error={initialUserProfile.studentNumber === editUserProfile.username}
           margin="normal"
           fullWidth
           onChange={(e) => {
@@ -157,7 +151,7 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
           <Button
             variant="contained"
             disabled={
-              objectEquals(userProfile, editUserProfile) ||
+              objectEquals(initialUserProfile, editUserProfile) ||
               editUserProfile.iconUrl === "" ||
               editUserProfile.username === "" ||
               editUserProfile.shortIntroduction === ""

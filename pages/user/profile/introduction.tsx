@@ -1,6 +1,6 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType } from "next";
 import type { ReactElement } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Button, Stack } from "@mui/material";
 
@@ -11,20 +11,20 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req }) => {
   const client = createServerApiClient(req);
 
   try {
     const introRes = await client.GET("/user/me/introduction");
 
     if (!introRes.data) {
-      return { props: { initialIntroduction: "" } };
+      return { props: { initialIntroduction: "" } } as const;
     }
 
-    return { props: { initialIntroduction: introRes.data.introduction ?? "" } };
+    return { props: { initialIntroduction: introRes.data.introduction ?? "" } } as const;
   } catch (error) {
     console.error("Failed to fetch my introduction:", error);
-    return { props: { initialIntroduction: "" } };
+    return { props: { initialIntroduction: "" } } as const;
   }
 };
 
@@ -33,12 +33,7 @@ type IntroductionProfilePageProps = InferGetServerSidePropsType<typeof getServer
 const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePageProps) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [userIntro, setUserIntro] = useState<string>(initialIntroduction);
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>({ md: initialIntroduction });
-
-  useEffect(() => {
-    setEditUserIntro({ md: (" " + userIntro).slice(1) });
-  }, [userIntro]);
 
   const handleSave = async () => {
     if (!authState.isLogined || !authState.token) {
@@ -59,7 +54,6 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
       return;
     }
     removeError("introduction-update-fail");
-    setUserIntro(editUserIntro.md);
   };
 
   return (
@@ -74,9 +68,8 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
       <Stack direction="row" spacing={2} justifyContent="flex-end">
         <Button
           variant="contained"
-          disabled={userIntro === editUserIntro.md}
+          disabled={initialIntroduction === editUserIntro.md}
           onClick={handleSave}
-          sx={{ mt: 2 }}
         >
           保存する
         </Button>

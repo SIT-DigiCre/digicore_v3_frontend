@@ -1,4 +1,4 @@
-import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -27,17 +27,15 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-import type { paths } from "../../../utils/fetch/api.d";
-
-type BudgetResponse =
-  paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
-
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-export const getServerSideProps: GetServerSideProps<{
-  budgetId: string;
-  budget: BudgetResponse;
-}> = async ({ params, req }) => {
+export const getServerSideProps = async ({
+  params,
+  req,
+}: {
+  params: { id: string };
+  req: NextApiRequest;
+}) => {
   const idParam = params?.id;
   const budgetId = typeof idParam === "string" ? idParam : "";
   if (!budgetId) return { notFound: true };

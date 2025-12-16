@@ -6,13 +6,13 @@ import Heading from "../Common/Heading";
 
 import PhoneInput from "./PhoneInput";
 
-interface EmergencyContactFormProps {
+type EmergencyContactFormProps = {
   initialProfile: UserPrivateProfile;
   profile: UserPrivateProfile;
   onProfileChange: (profile: UserPrivateProfile) => void;
   onSave?: () => void;
   showSaveButton?: boolean;
-}
+};
 
 const EmergencyContactForm = ({
   initialProfile,
