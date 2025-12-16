@@ -1,11 +1,8 @@
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { useState } from "react";
 
 import { Add, ArrowBack } from "@mui/icons-material";
 import {
-  Button,
   Chip,
   Stack,
   Table,
@@ -20,7 +17,6 @@ import {
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
-import NewGroupDialog from "../../../components/Group/NewGroupDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -49,13 +45,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 const AdminGroupIndexPage = ({
   groups,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const router = useRouter();
-  const [isNewGroupDialogOpen, setIsNewGroupDialogOpen] = useState(false);
-
-  const handleRefresh = () => {
-    router.replace(router.asPath);
-  };
-
   return (
     <>
       <PageHead title="[管理者用] グループ一覧" />
@@ -73,13 +62,9 @@ const AdminGroupIndexPage = ({
             width="100%"
           >
             <Heading level={2}>グループ一覧</Heading>
-            <Button
-              variant="contained"
-              startIcon={<Add />}
-              onClick={() => setIsNewGroupDialogOpen(true)}
-            >
+            <ButtonLink href="/admin/group/new" variant="contained" startIcon={<Add />}>
               新規グループ作成
-            </Button>
+            </ButtonLink>
           </Stack>
 
           {groups && groups.length > 0 ? (
@@ -124,12 +109,6 @@ const AdminGroupIndexPage = ({
           )}
         </Stack>
       </Stack>
-
-      <NewGroupDialog
-        open={isNewGroupDialogOpen}
-        onClose={() => setIsNewGroupDialogOpen(false)}
-        onSuccess={handleRefresh}
-      />
     </>
   );
 };

@@ -1,12 +1,10 @@
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { useState } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
 import {
-  Box,
   Button,
-  Checkbox,
   Chip,
-  Modal,
   Stack,
   Table,
   TableBody,
@@ -14,18 +12,34 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
   Typography,
 } from "@mui/material";
 
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
-import { usePayments } from "../../../hook/payment/usePayments";
+import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog";
 import { Payment } from "../../../interfaces/payment";
+import { createServerApiClient } from "../../../utils/fetch/client";
 
-const AdminPaymentPage = () => {
-  const [payments, updatePayments] = usePayments();
-  const [targetPayment, updateTargetPayment] = useState<Payment>();
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const paymentsRes = await client.GET("/payment");
+
+    if (!paymentsRes.data || !paymentsRes.data.payments) {
+      return { props: { payments: [] } };
+    }
+
+    return { props: { payments: paymentsRes.data.payments } };
+  } catch (error) {
+    console.error("Failed to fetch payments:", error);
+    return { props: { payments: [] } };
+  }
+};
+
+const AdminPaymentPage = ({ payments }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const [targetPayment, updateTargetPayment] = useState<Payment | null>(null);
 
   return (
     <>
@@ -67,6 +81,7 @@ const AdminPaymentPage = () => {
                         onClick={() => {
                           updateTargetPayment(payment);
                         }}
+                        aria-label={`${payment.studentNumber}の詳細を表示`}
                       >
                         詳細
                       </Button>
@@ -80,69 +95,14 @@ const AdminPaymentPage = () => {
           <Typography my={2}>部費振込情報がありません</Typography>
         )}
       </Stack>
-      {!!targetPayment && (
-        <Modal
+      {targetPayment && (
+        <PaymentDetailDialog
+          payment={targetPayment}
           open={!!targetPayment}
           onClose={() => {
-            updateTargetPayment(undefined);
+            updateTargetPayment(null);
           }}
-        >
-          <Box
-            sx={{
-              position: "absolute",
-              top: "50%",
-              left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: 400,
-              bgcolor: "background.paper",
-              border: "2px solid #000",
-              boxShadow: 24,
-              p: 4,
-            }}
-          >
-            <Typography id="modal-modal-title" variant="h6" component="h2">
-              支払い詳細
-            </Typography>
-            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              支払い番号: {targetPayment.paymentId}
-              <br />
-              学籍番号: {targetPayment.studentNumber}
-              <br />
-              支払い名義: {targetPayment.transferName}
-              <br />
-              確認:{" "}
-              <Checkbox
-                checked={targetPayment.checked}
-                onChange={() => {
-                  updateTargetPayment({ ...targetPayment, checked: !targetPayment.checked });
-                }}
-              />
-              <br />
-              備考:{" "}
-              <TextField
-                fullWidth
-                value={targetPayment.note}
-                onChange={(e) => {
-                  updateTargetPayment({ ...targetPayment, note: e.target.value });
-                }}
-              />
-              <br />
-              <Button
-                onClick={() => {
-                  updatePayments(
-                    targetPayment.paymentId,
-                    targetPayment.checked,
-                    targetPayment.note,
-                  );
-                  updateTargetPayment(undefined);
-                }}
-                variant="contained"
-              >
-                保存
-              </Button>
-            </Typography>
-          </Box>
-        </Modal>
+        />
       )}
     </>
   );

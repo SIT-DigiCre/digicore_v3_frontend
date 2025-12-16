@@ -85,6 +85,9 @@ blockquote cite {
 }
 a {
   color: #2196f3;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentcolor, transparent 40%);
+  text-underline-offset: 0.25em;
 }
 
 .d-inlineblock {

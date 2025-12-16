@@ -42,12 +42,17 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
 
-  const loadUsers = async () => {
+  const loadUsers = async (query: string) => {
     if (!authState.isLogined || !authState.token) return;
 
     setIsLoadingUsers(true);
     try {
-      const response = await apiClient.GET("/user", {
+      const response = await apiClient.GET("/user/search", {
+        params: {
+          query: {
+            query,
+          },
+        },
         headers: {
           Authorization: `Bearer ${authState.token}`,
         },
@@ -159,7 +164,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
                   // 0文字以上入力されたとき1秒デバウンスしてユーザー一覧を取得して更新する
                   if (newInputValue.length > 0) {
                     debounceTimerRef.current = setTimeout(() => {
-                      loadUsers();
+                      loadUsers(newInputValue);
                     }, 1000);
                   } else {
                     setUserOptions([]);
