@@ -84,13 +84,15 @@ const EmergencyContactForm = ({
         </Stack>
       </Stack>
       {showSaveButton && (
-        <Button
-          variant="contained"
-          disabled={objectEquals(profile, initialProfile)}
-          onClick={handleSave}
-        >
-          保存
-        </Button>
+        <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Button
+            variant="contained"
+            disabled={objectEquals(profile, initialProfile)}
+            onClick={handleSave}
+          >
+            保存する
+          </Button>
+        </Stack>
       )}
     </Stack>
   );

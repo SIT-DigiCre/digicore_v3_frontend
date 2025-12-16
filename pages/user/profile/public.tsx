@@ -68,7 +68,7 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
   };
 
   return (
-    <>
+    <Stack spacing={2}>
       <Heading level={2}>公開情報の設定</Heading>
       <Typography>ここで設定した情報は、他の部員も閲覧できます。</Typography>
       <Stack spacing={4} py={4}>
@@ -137,19 +137,21 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
           }}
           value={editUserProfile.shortIntroduction}
         />
-        <Button
-          variant="contained"
-          disabled={
-            objectEquals(userProfile, editUserProfile) ||
-            editUserProfile.username === "" ||
-            editUserProfile.shortIntroduction === ""
-          }
-          onClick={handleSave}
-        >
-          保存
-        </Button>
+        <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Button
+            variant="contained"
+            disabled={
+              objectEquals(userProfile, editUserProfile) ||
+              editUserProfile.username === "" ||
+              editUserProfile.shortIntroduction === ""
+            }
+            onClick={handleSave}
+          >
+            保存する
+          </Button>
+        </Stack>
       </Stack>
-    </>
+    </Stack>
   );
 };
 
