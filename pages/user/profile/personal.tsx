@@ -6,11 +6,9 @@ import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import PersonalInfoForm from "../../../components/Profile/PersonalInfoForm";
 import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
-import { useAuthState } from "../../../hook/useAuthState";
 import { UserPrivateProfile } from "../../../interfaces/user";
 
 const PersonalProfilePage = () => {
-  const { authState } = useAuthState();
   const [privateProfile, updateProfile] = usePrivateProfile(false);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(privateProfile);
 
@@ -25,10 +23,6 @@ const PersonalProfilePage = () => {
   const handleProfileChange = (profile: UserPrivateProfile) => {
     setEditProfile(profile);
   };
-
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
 
   if (!privateProfile) return <p>Loading...</p>;
 

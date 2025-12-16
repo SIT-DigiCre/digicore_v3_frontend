@@ -6,10 +6,8 @@ import Heading from "../../../components/Common/Heading";
 import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
-import { useAuthState } from "../../../hook/useAuthState";
 
 const IntroductionProfilePage = () => {
-  const { authState } = useAuthState();
   const [userIntro, updateIntro] = useMyIntroduction();
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
 
@@ -22,10 +20,6 @@ const IntroductionProfilePage = () => {
       updateIntro(editUserIntro.md);
     }
   };
-
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
 
   if (!editUserIntro) return <p>isLoading...</p>;
 

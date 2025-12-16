@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
-import { Box, Container, Tab, Tabs } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 
 import PageHead from "../Common/PageHead";
 
@@ -39,22 +39,20 @@ const EditorTabLayout = ({ children, title = "プロフィール編集" }: Edito
   return (
     <>
       <PageHead title={title} />
-      <Container sx={{ my: 2 }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
-          <Tabs
-            value={steps[getCurrentStep()]?.value || "public"}
-            onChange={handleTabChange}
-            variant="scrollable"
-            scrollButtons="auto"
-          >
-            {steps.map((step) => (
-              <Tab key={step.value} label={step.label} value={step.value} />
-            ))}
-          </Tabs>
-        </Box>
+      <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
+        <Tabs
+          value={steps[getCurrentStep()]?.value || "public"}
+          onChange={handleTabChange}
+          variant="scrollable"
+          scrollButtons="auto"
+        >
+          {steps.map((step) => (
+            <Tab key={step.value} label={step.label} value={step.value} />
+          ))}
+        </Tabs>
+      </Box>
 
-        <Box>{children}</Box>
-      </Container>
+      <Box>{children}</Box>
     </>
   );
 };

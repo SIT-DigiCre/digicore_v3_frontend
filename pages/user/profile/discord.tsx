@@ -6,10 +6,8 @@ import { Box, Button, Typography } from "@mui/material";
 import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
-import { useAuthState } from "../../../hook/useAuthState";
 
 const DiscordProfilePage = () => {
-  const { authState } = useAuthState();
   const discord = useDiscordLogin();
 
   useEffect(() => {
@@ -18,10 +16,6 @@ const DiscordProfilePage = () => {
       localStorage.setItem("reg_discord", "true");
     }
   }, []);
-
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
 
   return (
     <EditorTabLayout>

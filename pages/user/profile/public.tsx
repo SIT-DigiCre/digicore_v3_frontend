@@ -9,14 +9,12 @@ import { FileUploader } from "../../../components/File/FileUploader";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyFiles } from "../../../hook/file/useFile";
 import { useMyProfile } from "../../../hook/profile/useProfile";
-import { useAuthState } from "../../../hook/useAuthState";
 import { FileObject } from "../../../interfaces/file";
 import { User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 
 const PublicProfilePage = () => {
   const router = useRouter();
-  const { authState } = useAuthState();
   const [userProfile, updateProfile] = useMyProfile();
   const { myFileInfos } = useMyFiles();
   const [editUserProfile, setEditUserProfile] = useState<User>(userProfile);
@@ -42,10 +40,6 @@ const PublicProfilePage = () => {
       }
     });
   };
-
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
 
   if (!userProfile || !editUserProfile) return <p>isLoading...</p>;
 
