@@ -7,9 +7,10 @@ import { Stack } from "@mui/material";
 import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import PersonalInfoForm from "../../../components/Profile/PersonalInfoForm";
-import { usePrivateProfile } from "../../../hook/profile/usePrivateProfile";
+import { useAuthState } from "../../../hook/useAuthState";
+import { useErrorState } from "../../../hook/useErrorState";
 import { UserPrivateProfile } from "../../../interfaces/user";
-import { createServerApiClient } from "../../../utils/fetch/client";
+import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const client = createServerApiClient(req);
@@ -31,17 +32,34 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 type PersonalProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps) => {
-  const [, updateProfile] = usePrivateProfile(true);
-  const [privateProfile] = useState<UserPrivateProfile | null>(initialPrivateProfile);
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  const [privateProfile, setPrivateProfile] = useState<UserPrivateProfile | null>(initialPrivateProfile);
   const [editProfile, setEditProfile] = useState<UserPrivateProfile | null>(initialPrivateProfile);
 
   useEffect(() => {
     setEditProfile(privateProfile);
   }, [privateProfile]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editProfile) return;
-    updateProfile(editProfile);
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "privateprofile-update-fail", message: "ログインが必要です" });
+      return;
+    }
+    const response = await apiClient.PUT("/user/me/private", {
+      body: editProfile,
+      headers: { Authorization: `Bearer ${authState.token}` },
+    });
+    if (response.error) {
+      setNewError({
+        name: "privateprofile-update-fail",
+        message: response.error.message || "ユーザー情報の更新に失敗しました",
+      });
+      return;
+    }
+    removeError("privateprofile-update-fail");
+    setPrivateProfile(editProfile);
   };
 
   const handleProfileChange = (profile: UserPrivateProfile) => {

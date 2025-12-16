@@ -10,11 +10,12 @@ import { FileBrowserModal } from "../../../components/File/FileBrowser";
 import { FileUploader } from "../../../components/File/FileUploader";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyFiles } from "../../../hook/file/useFile";
-import { useMyProfile } from "../../../hook/profile/useProfile";
+import { useAuthState } from "../../../hook/useAuthState";
+import { useErrorState } from "../../../hook/useErrorState";
 import { FileObject } from "../../../interfaces/file";
 import { User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
-import { createServerApiClient } from "../../../utils/fetch/client";
+import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const client = createServerApiClient(req);
@@ -38,7 +39,8 @@ type PublicProfilePageProps = InferGetServerSidePropsType<typeof getServerSidePr
 const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
   const router = useRouter();
   const { myFileInfos } = useMyFiles();
-  const [, updateProfile] = useMyProfile();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
   const [userProfile, setUserProfile] = useState<User | null>(initialUserProfile);
   const [editUserProfile, setEditUserProfile] = useState<User | null>(initialUserProfile);
   const [openFileModal, setOpenFileModal] = useState(false);
@@ -57,14 +59,28 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
     setOpenFileModal(false);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!editUserProfile) return;
-    updateProfile(editUserProfile).then((result) => {
-      if (result) {
-        setUserProfile(editUserProfile);
-        handleNext();
-      }
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "profile-update-fail", message: "ログインが必要です" });
+      return;
+    }
+    const response = await apiClient.PUT("/user/me", {
+      body: editUserProfile,
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
     });
+    if (response.error) {
+      setNewError({
+        name: "profile-update-fail",
+        message: response.error.message || "ユーザー情報の更新に失敗しました",
+      });
+      return;
+    }
+    removeError("profile-update-fail");
+    setUserProfile(editUserProfile);
+    handleNext();
   };
 
   return (
@@ -142,6 +158,7 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
             variant="contained"
             disabled={
               objectEquals(userProfile, editUserProfile) ||
+              editUserProfile.iconUrl === "" ||
               editUserProfile.username === "" ||
               editUserProfile.shortIntroduction === ""
             }

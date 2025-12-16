@@ -7,8 +7,9 @@ import { Button, Stack } from "@mui/material";
 import Heading from "../../../components/Common/Heading";
 import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
-import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
-import { createServerApiClient } from "../../../utils/fetch/client";
+import { useAuthState } from "../../../hook/useAuthState";
+import { useErrorState } from "../../../hook/useErrorState";
+import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
   const client = createServerApiClient(req);
@@ -30,17 +31,35 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 type IntroductionProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePageProps) => {
-  const [userIntro, updateIntro] = useMyIntroduction();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  const [userIntro, setUserIntro] = useState<string>(initialIntroduction);
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>({ md: initialIntroduction });
 
   useEffect(() => {
     setEditUserIntro({ md: (" " + userIntro).slice(1) });
   }, [userIntro]);
 
-  const handleSave = () => {
-    if (editUserIntro) {
-      updateIntro(editUserIntro.md);
+  const handleSave = async () => {
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "introduction-update-fail", message: "ログインが必要です" });
+      return;
     }
+    const response = await apiClient.PUT("/user/me/introduction", {
+      body: { introduction: editUserIntro.md },
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
+    });
+    if (response.error) {
+      setNewError({
+        name: "introduction-update-fail",
+        message: response.error.message || "自己紹介情報の更新に失敗しました",
+      });
+      return;
+    }
+    removeError("introduction-update-fail");
+    setUserIntro(editUserIntro.md);
   };
 
   return (
