@@ -3,14 +3,12 @@ import { ReactNode } from "react";
 
 import { Box, Tab, Tabs } from "@mui/material";
 
-import PageHead from "../Common/PageHead";
-
 interface EditorTabLayoutProps {
   children: ReactNode;
   title?: string;
 }
 
-const EditorTabLayout = ({ children, title = "プロフィール編集" }: EditorTabLayoutProps) => {
+const EditorTabLayout = ({ children }: EditorTabLayoutProps) => {
   const router = useRouter();
   const currentPath = router.asPath;
 
@@ -38,7 +36,6 @@ const EditorTabLayout = ({ children, title = "プロフィール編集" }: Edito
 
   return (
     <>
-      <PageHead title={title} />
       <Box sx={{ borderBottom: 1, borderColor: "divider", mb: 3 }}>
         <Tabs
           value={steps[getCurrentStep()]?.value || "public"}
@@ -51,7 +48,6 @@ const EditorTabLayout = ({ children, title = "プロフィール編集" }: Edito
           ))}
         </Tabs>
       </Box>
-
       <Box>{children}</Box>
     </>
   );
