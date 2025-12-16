@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
       return { props: { initialPrivateProfile: null } };
     }
 
-    return { props: { initialPrivateProfile: privateRes.data as unknown as UserPrivateProfile } };
+    return { props: { initialPrivateProfile: privateRes.data } };
   } catch (error) {
     console.error("Failed to fetch my private profile:", error);
     return { props: { initialPrivateProfile: null } };
@@ -34,7 +34,9 @@ type PersonalProfilePageProps = InferGetServerSidePropsType<typeof getServerSide
 const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [privateProfile, setPrivateProfile] = useState<UserPrivateProfile | null>(initialPrivateProfile);
+  const [privateProfile, setPrivateProfile] = useState<UserPrivateProfile | null>(
+    initialPrivateProfile,
+  );
   const [editProfile, setEditProfile] = useState<UserPrivateProfile | null>(initialPrivateProfile);
 
   useEffect(() => {
