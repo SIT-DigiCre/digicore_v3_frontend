@@ -13,7 +13,7 @@ import { useMyFiles } from "../../../hook/file/useFile";
 import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
 import { FileObject } from "../../../interfaces/file";
-import { User } from "../../../interfaces/user";
+import { DEFAULT_USER, User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
@@ -24,13 +24,13 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const profileRes = await client.GET("/user/me");
 
     if (!profileRes.data) {
-      return { props: { initialUserProfile: null } } as const;
+      return { props: { initialUserProfile: DEFAULT_USER } } as const;
     }
 
     return { props: { initialUserProfile: profileRes.data } } as const;
   } catch (error) {
     console.error("Failed to fetch my profile:", error);
-    return { props: { initialUserProfile: null } } as const;
+    return { props: { initialUserProfile: DEFAULT_USER } } as const;
   }
 };
 
@@ -41,7 +41,7 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
   const { myFileInfos } = useMyFiles();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [editUserProfile, setEditUserProfile] = useState<User | null>(initialUserProfile);
+  const [editUserProfile, setEditUserProfile] = useState<User>(initialUserProfile);
   const [openFileModal, setOpenFileModal] = useState(false);
 
   const handleNext = () => {
@@ -92,10 +92,10 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
             >
               アイコンを設定する
             </Button>
-            {editUserProfile.iconUrl === "" ? (
+            {editUserProfile?.iconUrl === "" ? (
               <Typography color="error">アイコンを設定しましょう!</Typography>
             ) : (
-              <Avatar src={editUserProfile.iconUrl} sx={{ margin: 1 }} />
+              <Avatar src={editUserProfile?.iconUrl} sx={{ margin: 1 }} />
             )}
           </Stack>
           {myFileInfos && myFileInfos.length === 0 ? (

@@ -10,6 +10,18 @@ export type User = {
   isAdmin: boolean;
 };
 
+export const DEFAULT_USER: User = {
+  userId: "",
+  username: "",
+  studentNumber: "",
+  iconUrl: "",
+  schoolGrade: 0,
+  discordUserId: "",
+  shortIntroduction: "",
+  activeLimit: "",
+  isAdmin: false,
+};
+
 export type UserPrivateProfile = {
   address: string;
   firstName: string;
