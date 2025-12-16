@@ -44,10 +44,6 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
   const [editUserProfile, setEditUserProfile] = useState<User>(initialUserProfile);
   const [openFileModal, setOpenFileModal] = useState(false);
 
-  const handleNext = () => {
-    router.push("/user/profile/personal");
-  };
-
   const onAvatarImageSelected = (file: FileObject) => {
     if (!editUserProfile) return;
     setEditUserProfile({ ...editUserProfile, iconUrl: file.url });
@@ -74,7 +70,7 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
       return;
     }
     removeError("profile-update-fail");
-    handleNext();
+    router.push(router.asPath);
   };
 
   return (

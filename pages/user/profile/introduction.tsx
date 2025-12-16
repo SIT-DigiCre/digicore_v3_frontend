@@ -1,4 +1,5 @@
-import type { InferGetServerSidePropsType } from "next";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
@@ -11,7 +12,7 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps = async ({ req }) => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
   try {
@@ -31,6 +32,7 @@ export const getServerSideProps = async ({ req }) => {
 type IntroductionProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePageProps) => {
+  const router = useRouter();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>({ md: initialIntroduction });
@@ -54,6 +56,7 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
       return;
     }
     removeError("introduction-update-fail");
+    router.push(router.asPath);
   };
 
   return (

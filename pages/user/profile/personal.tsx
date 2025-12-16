@@ -1,4 +1,5 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
@@ -32,6 +33,7 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
 type PersonalProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps) => {
+  const router = useRouter();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(initialPrivateProfile);
@@ -54,6 +56,7 @@ const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps
       return;
     }
     removeError("privateprofile-update-fail");
+    router.push(router.asPath);
   };
 
   const handleProfileChange = (profile: UserPrivateProfile) => {
