@@ -20,13 +20,13 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const privateRes = await client.GET("/user/me/private");
 
     if (!privateRes.data) {
-      return { props: { initialPrivateProfile: DEFAULT_USER_PRIVATE_PROFILE } } as const;
+      return { props: { initialPrivateProfile: DEFAULT_USER_PRIVATE_PROFILE } };
     }
 
-    return { props: { initialPrivateProfile: privateRes.data } } as const;
+    return { props: { initialPrivateProfile: privateRes.data } };
   } catch (error) {
     console.error("Failed to fetch my private profile:", error);
-    return { props: { initialPrivateProfile: DEFAULT_USER_PRIVATE_PROFILE } } as const;
+    return { props: { initialPrivateProfile: DEFAULT_USER_PRIVATE_PROFILE } };
   }
 };
 

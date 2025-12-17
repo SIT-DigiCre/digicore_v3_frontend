@@ -24,13 +24,13 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const profileRes = await client.GET("/user/me");
 
     if (!profileRes.data) {
-      return { props: { initialUserProfile: DEFAULT_USER } } as const;
+      return { props: { initialUserProfile: DEFAULT_USER } };
     }
 
-    return { props: { initialUserProfile: profileRes.data } } as const;
+    return { props: { initialUserProfile: profileRes.data } };
   } catch (error) {
     console.error("Failed to fetch my profile:", error);
-    return { props: { initialUserProfile: DEFAULT_USER } } as const;
+    return { props: { initialUserProfile: DEFAULT_USER } };
   }
 };
 

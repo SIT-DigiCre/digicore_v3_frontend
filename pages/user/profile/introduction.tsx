@@ -19,13 +19,13 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const introRes = await client.GET("/user/me/introduction");
 
     if (!introRes.data) {
-      return { props: { initialIntroduction: "" } } as const;
+      return { props: { initialIntroduction: "" } };
     }
 
-    return { props: { initialIntroduction: introRes.data.introduction ?? "" } } as const;
+    return { props: { initialIntroduction: introRes.data.introduction ?? "" } };
   } catch (error) {
     console.error("Failed to fetch my introduction:", error);
-    return { props: { initialIntroduction: "" } } as const;
+    return { props: { initialIntroduction: "" } };
   }
 };
 

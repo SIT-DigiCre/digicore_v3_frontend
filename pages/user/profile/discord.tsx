@@ -16,7 +16,7 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const discordRes = await client.GET("/user/me/discord");
 
     if (!discordRes.data) {
-      return { props: { loginUrl: "" } } as const;
+      return { props: { loginUrl: "" } };
     }
 
     return { props: { loginUrl: discordRes.data.url } };
