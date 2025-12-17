@@ -6,7 +6,6 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
-import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
@@ -29,8 +28,6 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
 type DiscordProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 const DiscordProfilePage = ({ loginUrl }: DiscordProfilePageProps) => {
-  const discord = useDiscordLogin();
-
   useEffect(() => {
     if (typeof window === "undefined") return;
     if (localStorage.getItem("reg_discord") == null) {
@@ -53,7 +50,7 @@ const DiscordProfilePage = ({ loginUrl }: DiscordProfilePageProps) => {
           からアカウント作成を行いましょう。大学のメールアドレスで作る必要はありません！
         </Typography>
         <Box mt={10} textAlign="center">
-          <Button href={loginUrl || discord.loginUrl} variant="contained">
+          <Button href={loginUrl} variant="contained">
             Discord連携
           </Button>
         </Box>
