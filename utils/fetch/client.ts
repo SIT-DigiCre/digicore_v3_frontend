@@ -1,3 +1,5 @@
+import type { NextApiRequest } from "next";
+
 import createClient from "openapi-fetch";
 
 import { baseURL, baseURLForServerSide } from "../common";
@@ -12,7 +14,7 @@ export const apiClient = createClient<paths>({
   },
 });
 
-export const createServerApiClient = (req: { cookies?: Partial<{ [key: string]: string }> }) => {
+export const createServerApiClient = (req: NextApiRequest) => {
   const authHeaders = getAuthHeadersFromCookie(req);
   return createClient<paths>({
     baseUrl: baseURLForServerSide,
@@ -29,10 +31,8 @@ export const createServerApiClient = (req: { cookies?: Partial<{ [key: string]: 
  * @param req Next.jsのgetServerSidePropsから取得できるreqオブジェクト
  * @returns Authorizationヘッダーを含むオブジェクト（トークンがない場合は空オブジェクト）
  */
-export const getAuthHeadersFromCookie = (req?: {
-  cookies?: Partial<{ [key: string]: string }>;
-}): { Authorization?: string } => {
-  if (!req?.cookies?.jwt) {
+export const getAuthHeadersFromCookie = (req: NextApiRequest): { Authorization?: string } => {
+  if (!req.cookies.jwt) {
     return {};
   }
   return {
