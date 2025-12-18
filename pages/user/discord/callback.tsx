@@ -2,8 +2,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import { useDiscordLogin } from "../../../hook/profile/useDiscordLogin";
 import { useAuthState } from "../../../hook/useAuthState";
+import { apiClient } from "../../../utils/fetch/client";
 
 type Props = {
   code: string;
@@ -11,26 +11,32 @@ type Props = {
 };
 
 const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
-  const { setCallbackCode } = useDiscordLogin();
   const router = useRouter();
   const { authState, refresh } = useAuthState();
 
+  const onCallback = async () => {
+    if (!authState.isLogined) return;
+    await apiClient.PUT("/user/me/discord/callback", {
+      body: { code: code },
+      headers: {
+        Authorization: "Bearer " + authState.token,
+      },
+    });
+    if (localStorage.getItem("reg_discord") != null) {
+      setTimeout(() => {
+        refresh().then(() => {
+          localStorage.removeItem("reg_discord");
+          router.push("/register/discord");
+        });
+      }, 1000);
+    } else {
+      router.push("/user/profile");
+    }
+  };
+
   useEffect(() => {
     if (!authState.isLogined) return;
-    setCallbackCode(code)
-      .then(() => {
-        if (localStorage.getItem("reg_discord") != null) {
-          setTimeout(() => {
-            refresh().then(() => {
-              localStorage.removeItem("reg_discord");
-              router.push("/register/discord");
-            });
-          }, 1000);
-        } else {
-          router.push("/user/profile");
-        }
-      })
-      .catch((e) => console.error(e));
+    onCallback();
   }, [authState]);
 
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
