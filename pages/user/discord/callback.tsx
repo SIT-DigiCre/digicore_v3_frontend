@@ -16,12 +16,16 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
 
   const onCallback = async () => {
     if (!authState.isLogined) return;
-    await apiClient.PUT("/user/me/discord/callback", {
-      body: { code: code },
-      headers: {
-        Authorization: "Bearer " + authState.token,
-      },
-    });
+    try {
+      await apiClient.PUT("/user/me/discord/callback", {
+        body: { code: code },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to callback discord:", error);
+    }
     if (localStorage.getItem("reg_discord") != null) {
       setTimeout(() => {
         refresh().then(() => {
@@ -37,7 +41,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   useEffect(() => {
     if (!authState.isLogined) return;
     onCallback();
-  }, [authState]);
+  }, [authState, onCallback]);
 
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
   return <p>Discord連携作業中...（そのままお待ちください）</p>;

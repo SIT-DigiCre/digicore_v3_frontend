@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactElement } from "react";
 import { useEffect } from "react";
 
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
@@ -16,13 +16,13 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const discordRes = await client.GET("/user/me/discord");
 
     if (!discordRes.data) {
-      return { props: { loginUrl: "" } };
+      return { props: { loginUrl: null } };
     }
 
     return { props: { loginUrl: discordRes.data.url } };
   } catch (error) {
     console.error("Failed to fetch discord login url:", error);
-    return { props: { loginUrl: "" } };
+    return { props: { loginUrl: null } };
   }
 };
 
@@ -30,7 +30,6 @@ type RegisterDiscordProfilePageProps = InferGetServerSidePropsType<typeof getSer
 
 const RegisterDiscordProfilePage = ({ loginUrl }: RegisterDiscordProfilePageProps) => {
   useEffect(() => {
-    if (typeof window === "undefined") return;
     if (localStorage.getItem("reg_discord") == null) {
       localStorage.setItem("reg_discord", "true");
     }
@@ -48,11 +47,15 @@ const RegisterDiscordProfilePage = ({ loginUrl }: RegisterDiscordProfilePageProp
         </Link>
         からアカウント作成を行いましょう。大学のメールアドレスで作る必要はありません！
       </Typography>
-      <Box mt={10} textAlign="center">
-        <Button href={loginUrl} variant="contained">
-          Discord連携
-        </Button>
-      </Box>
+      {loginUrl ? (
+        <Box mt={10} textAlign="center">
+          <ButtonLink href={loginUrl} variant="contained" target="_blank" rel="noopener noreferrer">
+            Discord連携
+          </ButtonLink>
+        </Box>
+      ) : (
+        <Typography>Discordの招待URLが取得できませんでした</Typography>
+      )}
       <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ mt: 4 }}>
         <ButtonLink variant="outlined" href="/register/personal">
           前へ

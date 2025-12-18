@@ -44,13 +44,11 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
   const [openFileModal, setOpenFileModal] = useState(false);
 
   const onAvatarImageSelected = (file: FileObject) => {
-    if (!editUserProfile) return;
     setEditUserProfile({ ...editUserProfile, iconUrl: file.url });
     setOpenFileModal(false);
   };
 
   const handleNext = async () => {
-    if (!editUserProfile) return;
     if (!authState.isLogined || !authState.token) {
       setNewError({ name: "profile-update-fail", message: "ログインが必要です" });
       return;
@@ -92,10 +90,10 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
             >
               アイコンを設定する
             </Button>
-            {editUserProfile?.iconUrl === "" ? (
+            {editUserProfile.iconUrl === "" ? (
               <Typography color="error">アイコンを設定しましょう!</Typography>
             ) : (
-              <Avatar src={editUserProfile?.iconUrl} sx={{ margin: 1 }} />
+              <Avatar src={editUserProfile.iconUrl} sx={{ margin: 1 }} />
             )}
           </Stack>
           {myFileInfos && myFileInfos.length === 0 ? (

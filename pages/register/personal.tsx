@@ -43,7 +43,6 @@ const RegisterPersonalProfilePage = ({
   const [editProfile, setEditProfile] = useState<UserPrivateProfile>(initialPrivateProfile);
 
   const handleNext = async () => {
-    if (!editProfile) return;
     if (!authState.isLogined || !authState.token) {
       setNewError({ name: "privateprofile-update-fail", message: "ログインが必要です" });
       return;

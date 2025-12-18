@@ -61,9 +61,7 @@ const RegisterIntroductionProfilePage = ({
     }
     removeError("introduction-update-fail");
     // 登録完了処理
-    if (typeof window !== "undefined") {
-      sessionStorage.setItem("register", "true");
-    }
+    sessionStorage.setItem("register", "true");
     router.push("/register/joined");
   };
 
@@ -76,7 +74,7 @@ const RegisterIntroductionProfilePage = ({
         }}
       />
       <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ mt: 2 }}>
-        <ButtonLink variant="outlined" href="/register/personal">
+        <ButtonLink variant="outlined" href="/register/discord">
           前へ
         </ButtonLink>
         <Button variant="contained" onClick={handleNext}>
