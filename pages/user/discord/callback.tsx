@@ -7,7 +7,7 @@ import { apiClient } from "../../../utils/fetch/client";
 
 type Props = {
   code: string;
-  isLoginFailed;
+  isLoginFailed: boolean;
 };
 
 const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {

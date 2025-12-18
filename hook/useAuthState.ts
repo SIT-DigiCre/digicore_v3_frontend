@@ -20,7 +20,7 @@ type UseAuthState = () => {
   authState: AuthState;
   onLogin: (token: string) => void;
   logout: () => void;
-  refresh: () => Promise<User>;
+  refresh: () => Promise<User | null>;
 };
 
 export const useAuthState: UseAuthState = () => {
@@ -30,14 +30,14 @@ export const useAuthState: UseAuthState = () => {
   const isPublicPage =
     router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
-  const getUserInfo = async (token: string, refresh: boolean): Promise<User> => {
+  const getUserInfo = async (token: string, refresh: boolean): Promise<User | null> => {
     try {
       const res = await axios.get("/user/me", {
         headers: {
           Authorization: "Bearer " + token,
         },
       });
-      if (auth.isLogined && !refresh) return;
+      if (auth.isLogined && !refresh) return null;
       const user: User = res.data;
       setAuth({
         isLogined: true,
@@ -56,7 +56,11 @@ export const useAuthState: UseAuthState = () => {
     return null;
   };
 
-  const refresh = async () => await getUserInfo(localStorage.getItem("jwt"), true);
+  const refresh = async () => {
+    const token = localStorage.getItem("jwt");
+    if (!token) return null;
+    return await getUserInfo(token, true);
+  };
 
   const logout = () => {
     setAuth({
@@ -80,7 +84,9 @@ export const useAuthState: UseAuthState = () => {
   };
 
   useEffect(() => {
-    getUserInfo(localStorage.getItem("jwt"), false);
+    const token = localStorage.getItem("jwt");
+    if (!token) return;
+    getUserInfo(token, false);
   }, []);
 
   return {

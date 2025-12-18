@@ -6,7 +6,7 @@ import { useErrorState } from "./useErrorState";
 
 type UseLoginData = () => {
   loginUrl: string;
-  setCallbackCode: (string) => Promise<string>;
+  setCallbackCode: (code: string) => Promise<string | null>;
 };
 
 export const useLoginData: UseLoginData = () => {
@@ -32,7 +32,7 @@ export const useLoginData: UseLoginData = () => {
       return jwt;
     } catch (e) {
       if (isAxiosError(e)) {
-        setNewError({ name: "login-fail", message: `ログイン失敗:${e.response.data.message}` });
+        setNewError({ name: "login-fail", message: `ログイン失敗:${e.response?.data.message}` });
       }
       throw e;
     }
