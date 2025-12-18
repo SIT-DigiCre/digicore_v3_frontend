@@ -1,25 +1,15 @@
 import { useRouter } from "next/router";
 import { ReactNode } from "react";
 
-import { Box, Button, Container, Stack, Step, StepLabel, Stepper } from "@mui/material";
+import { Box, Container, Step, StepLabel, Stepper } from "@mui/material";
 
 import PageHead from "../Common/PageHead";
 
 interface RegisterStepLayoutProps {
   children: ReactNode;
-  title?: string;
-  onNext?: () => void;
-  onPrev?: () => void;
-  nextDisabled?: boolean;
 }
 
-const RegisterStepLayout = ({
-  children,
-  title = "プロフィール登録",
-  onNext,
-  onPrev,
-  nextDisabled = false,
-}: RegisterStepLayoutProps) => {
+const RegisterStepLayout = ({ children }: RegisterStepLayoutProps) => {
   const router = useRouter();
   const currentPath = router.asPath;
 
@@ -37,7 +27,7 @@ const RegisterStepLayout = ({
 
   return (
     <>
-      <PageHead title={title} />
+      <PageHead title="プロフィール登録" />
       <Container sx={{ my: 2 }}>
         <Box sx={{ mb: 3 }}>
           <Stepper activeStep={getCurrentStep()} alternativeLabel>
@@ -50,15 +40,6 @@ const RegisterStepLayout = ({
         </Box>
 
         <Box>{children}</Box>
-
-        <Stack sx={{ mt: 2, justifyContent: "space-between" }} direction="row">
-          <Button variant="outlined" onClick={onPrev} disabled={getCurrentStep() === 0}>
-            前へ
-          </Button>
-          <Button variant="contained" onClick={onNext} disabled={nextDisabled}>
-            次へ
-          </Button>
-        </Stack>
       </Container>
     </>
   );

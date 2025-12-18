@@ -1,59 +1,94 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import type { ReactElement } from "react";
+import { useState } from "react";
 
-import Heading from "../../components/Common/Heading";
+import { Button, Stack } from "@mui/material";
+
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import MarkdownEditor from "../../components/Markdown/MarkdownEditor";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
-import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useAuthState } from "../../hook/useAuthState";
+import { useErrorState } from "../../hook/useErrorState";
+import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
-const RegisterIntroductionProfilePage = () => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const introRes = await client.GET("/user/me/introduction");
+
+    if (!introRes.data) {
+      return { props: { initialIntroduction: "" } };
+    }
+
+    return { props: { initialIntroduction: introRes.data.introduction ?? "" } };
+  } catch (error) {
+    console.error("Failed to fetch my introduction:", error);
+    return { props: { initialIntroduction: "" } };
+  }
+};
+
+type RegisterIntroductionProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const RegisterIntroductionProfilePage = ({
+  initialIntroduction,
+}: RegisterIntroductionProfilePageProps) => {
   const router = useRouter();
   const { authState } = useAuthState();
-  const [userIntro, updateIntro] = useMyIntroduction();
-  const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
+  const { setNewError, removeError } = useErrorState();
+  const [editUserIntro, setEditUserIntro] = useState<{ md: string }>({
+    md: initialIntroduction,
+  });
 
-  useEffect(() => {
-    setEditUserIntro({ md: (" " + userIntro).slice(1) });
-  }, [userIntro]);
-
-  const handleNext = () => {
-    if (editUserIntro) {
-      updateIntro(editUserIntro.md);
+  const handleNext = async () => {
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "introduction-update-fail", message: "ログインが必要です" });
+      return;
     }
+    const response = await apiClient.PUT("/user/me/introduction", {
+      body: { introduction: editUserIntro.md },
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
+    });
+    if (response.error) {
+      setNewError({
+        name: "introduction-update-fail",
+        message: response.error.message || "自己紹介情報の更新に失敗しました",
+      });
+      return;
+    }
+    removeError("introduction-update-fail");
     // 登録完了処理
-    sessionStorage.setItem("register", "true");
+    if (typeof window !== "undefined") {
+      sessionStorage.setItem("register", "true");
+    }
     router.push("/register/joined");
   };
 
-  const handlePrev = () => {
-    router.push("/register/discord");
-  };
-
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
-
-  if (!editUserIntro) return <p>isLoading...</p>;
-
   return (
-    <RegisterStepLayout
-      title="プロフィール登録"
-      onNext={handleNext}
-      onPrev={handlePrev}
-      nextDisabled={false}
-    >
-      <div>
-        <Heading level={2}>自己紹介ページ文章</Heading>
-        <MarkdownEditor
-          value={editUserIntro.md}
-          onChange={(e) => {
-            setEditUserIntro({ md: e });
-          }}
-        />
-      </div>
-    </RegisterStepLayout>
+    <>
+      <MarkdownEditor
+        value={editUserIntro.md}
+        onChange={(e) => {
+          setEditUserIntro({ md: e });
+        }}
+      />
+      <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ mt: 2 }}>
+        <ButtonLink variant="outlined" href="/register/personal">
+          前へ
+        </ButtonLink>
+        <Button variant="contained" onClick={handleNext}>
+          次へ
+        </Button>
+      </Stack>
+    </>
   );
 };
+
+RegisterIntroductionProfilePage.getLayout = (page: ReactElement) => (
+  <RegisterStepLayout>{page}</RegisterStepLayout>
+);
 
 export default RegisterIntroductionProfilePage;
