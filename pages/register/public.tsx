@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
-import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
+import { ArrowForward } from "@mui/icons-material";
+import { Avatar, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
 import { FileBrowserModal } from "../../components/File/FileBrowser";
@@ -42,6 +43,7 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
   const { setNewError, removeError } = useErrorState();
   const [editUserProfile, setEditUserProfile] = useState<User>(initialUserProfile);
   const [openFileModal, setOpenFileModal] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const onAvatarImageSelected = (file: FileObject) => {
     setEditUserProfile({ ...editUserProfile, iconUrl: file.url });
@@ -49,10 +51,8 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
   };
 
   const handleNext = async () => {
-    if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "profile-update-fail", message: "ログインが必要です" });
-      return;
-    }
+    setIsPending(true);
+    removeError("profile-update-fail");
     const response = await apiClient.PUT("/user/me", {
       body: editUserProfile,
       headers: {
@@ -64,10 +64,10 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
         name: "profile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
       });
-      return;
+      setIsPending(false);
+    } else {
+      router.push("/register/personal");
     }
-    removeError("profile-update-fail");
-    router.push("/register/personal");
   };
 
   const isNextDisabled =
@@ -146,7 +146,12 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
           value={editUserProfile.shortIntroduction}
         />
         <Stack direction="row" spacing={2} justifyContent="flex-end" sx={{ mt: 2 }}>
-          <Button variant="contained" onClick={handleNext} disabled={isNextDisabled}>
+          <Button
+            variant="contained"
+            onClick={handleNext}
+            disabled={isNextDisabled || isPending}
+            endIcon={isPending ? <CircularProgress size={20} /> : <ArrowForward />}
+          >
             次へ
           </Button>
         </Stack>

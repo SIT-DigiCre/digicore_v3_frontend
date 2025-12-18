@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactElement } from "react";
 import { useEffect } from "react";
 
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { Box, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
@@ -57,10 +58,10 @@ const RegisterDiscordProfilePage = ({ loginUrl }: RegisterDiscordProfilePageProp
         <Typography>Discordの招待URLが取得できませんでした</Typography>
       )}
       <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ mt: 4 }}>
-        <ButtonLink variant="outlined" href="/register/personal">
+        <ButtonLink variant="outlined" href="/register/personal" startIcon={<ArrowBack />}>
           前へ
         </ButtonLink>
-        <ButtonLink variant="contained" href="/register/introduction">
+        <ButtonLink variant="contained" href="/register/introduction" endIcon={<ArrowForward />}>
           次へ
         </ButtonLink>
       </Stack>

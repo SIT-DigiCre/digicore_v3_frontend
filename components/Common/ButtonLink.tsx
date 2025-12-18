@@ -9,11 +9,18 @@ type Props = {
   variant?: "contained" | "outlined" | "text";
   children: React.ReactNode;
   startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+  disabled?: boolean;
 };
 
-export const ButtonLink = ({ children, variant = "contained", ...props }: Props) => {
+export const ButtonLink = ({
+  children,
+  variant = "contained",
+  disabled = false,
+  ...props
+}: Props) => {
   return (
-    <Button component={Link} variant={variant} {...props}>
+    <Button component={Link} variant={variant} disabled={disabled} {...props}>
       {children}
     </Button>
   );

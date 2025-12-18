@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
-import { Button, Stack } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import { Button, CircularProgress, Stack } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import MarkdownEditor from "../../components/Markdown/MarkdownEditor";
@@ -40,12 +41,11 @@ const RegisterIntroductionProfilePage = ({
   const [editUserIntro, setEditUserIntro] = useState<{ md: string }>({
     md: initialIntroduction,
   });
+  const [isPending, setIsPending] = useState(false);
 
   const handleNext = async () => {
-    if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "introduction-update-fail", message: "ログインが必要です" });
-      return;
-    }
+    setIsPending(true);
+    removeError("introduction-update-fail");
     const response = await apiClient.PUT("/user/me/introduction", {
       body: { introduction: editUserIntro.md },
       headers: {
@@ -57,12 +57,11 @@ const RegisterIntroductionProfilePage = ({
         name: "introduction-update-fail",
         message: response.error.message || "自己紹介情報の更新に失敗しました",
       });
-      return;
+      setIsPending(false);
+    } else {
+      sessionStorage.setItem("register", "true");
+      router.push("/register/joined");
     }
-    removeError("introduction-update-fail");
-    // 登録完了処理
-    sessionStorage.setItem("register", "true");
-    router.push("/register/joined");
   };
 
   return (
@@ -74,10 +73,15 @@ const RegisterIntroductionProfilePage = ({
         }}
       />
       <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ mt: 2 }}>
-        <ButtonLink variant="outlined" href="/register/discord">
+        <ButtonLink variant="outlined" href="/register/discord" startIcon={<ArrowBack />}>
           前へ
         </ButtonLink>
-        <Button variant="contained" onClick={handleNext}>
+        <Button
+          variant="contained"
+          onClick={handleNext}
+          disabled={isPending}
+          endIcon={isPending ? <CircularProgress size={20} /> : <ArrowForward />}
+        >
           次へ
         </Button>
       </Stack>
