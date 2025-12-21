@@ -1,3 +1,4 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -19,13 +20,34 @@ import {
   Typography,
 } from "@mui/material";
 
+import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { MattermostRegister } from "../../components/Mattermost/Register";
 import TransferClubFeeView from "../../components/Register/TransferClubFeeView";
-import { useJoinData } from "../../hook/user/useJoinData";
+import { EnvJoinAPIData } from "../../interfaces/api";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const JoinedPage = () => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const toolRes = await client.GET("/tool");
+
+    if (!toolRes.data) {
+      return { props: { joinData: { discordUrl: null } } };
+    }
+
+    return { props: { joinData: toolRes.data } };
+  } catch (error) {
+    console.error("Failed to fetch join data:", error);
+    return { props: { joinData: { discordUrl: null } } };
+  }
+};
+
+type JoinedPageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const JoinedPage = ({ joinData }: JoinedPageProps) => {
   const [step, setStep] = useState(0);
   return (
     <>
@@ -48,16 +70,21 @@ const JoinedPage = () => {
             <StepLabel>部費振込</StepLabel>
           </Step>
         </Stepper>
-        <JoinedSteps step={step} setStep={setStep} />
+        <JoinedSteps step={step} setStep={setStep} joinData={joinData} />
       </Container>
     </>
   );
 };
 
 export default JoinedPage;
-type StepsProps = { step: number; setStep: Dispatch<SetStateAction<number>> };
-const JoinedSteps = ({ step, setStep }: StepsProps) => {
-  const joinData = useJoinData();
+
+type StepsProps = {
+  step: number;
+  setStep: Dispatch<SetStateAction<number>>;
+  joinData: EnvJoinAPIData;
+};
+
+const JoinedSteps = ({ step, setStep, joinData }: StepsProps) => {
   const router = useRouter();
   switch (step) {
     case 0:
@@ -152,18 +179,21 @@ const JoinedSteps = ({ step, setStep }: StepsProps) => {
               夜に作業配信や雑談をしている部員が多いです。気兼ねなく入って雑談してみましょう。
             </Typography>
           </Stack>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Button
-              href={joinData?.discordUrl}
-              variant="contained"
-              target="_blank"
-              rel="noopener noreferrer"
-              disabled={!joinData?.discordUrl}
-            >
-              Discordの招待URLを開く
-            </Button>
-            <Typography>※かならず先ほど登録したDiscordアカウントで登録してください</Typography>
-          </Stack>
+          {joinData?.discordUrl ? (
+            <Stack direction="row" spacing={2} alignItems="center">
+              <ButtonLink
+                href={joinData.discordUrl}
+                variant="contained"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Discordの招待URLを開く
+              </ButtonLink>
+              <Typography>※かならず先ほど登録したDiscordアカウントで登録してください</Typography>
+            </Stack>
+          ) : (
+            <Typography>Discordの招待URLが取得できませんでした</Typography>
+          )}
           <Heading level={3}>主なボイスチャンネルやテキストチャット</Heading>
           <TableContainer component={Paper} sx={{ maxWidth: 500, my: 2, mx: "auto" }}>
             <Table>

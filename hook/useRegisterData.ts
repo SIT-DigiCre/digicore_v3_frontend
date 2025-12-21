@@ -6,7 +6,7 @@ import { useErrorState } from "./useErrorState";
 
 type UseRegisterData = () => {
   registerUrl: string;
-  setCallbackCode: (string) => Promise<string>;
+  setCallbackCode: (code: string) => Promise<string | null>;
 };
 
 export const useRegisterData: UseRegisterData = () => {
@@ -24,13 +24,13 @@ export const useRegisterData: UseRegisterData = () => {
       }
     })();
   }, []);
-  const setCallbackCode = async (code: string): Promise<string> => {
+  const setCallbackCode = async (code: string): Promise<string | null> => {
     try {
       const res = await axios.post("/signup/callback", { code: code });
       const jwt: string = res.data.jwt;
       return jwt;
     } catch {
-      return "";
+      return null;
     }
   };
   return {

@@ -21,9 +21,14 @@ export const useErrorState: UseErrorState = () => {
       //既存エラー
       const targetError = errors.find((e) => e.name === error.name);
       const editError = errors.filter((e) => e.name !== error.name);
+      if (!targetError) return;
       setErrors([
         ...editError,
-        { name: targetError.name, count: targetError.count + 1, message: targetError.message },
+        {
+          name: targetError.name,
+          count: (targetError.count ?? 0) + 1,
+          message: targetError.message,
+        },
       ]);
     }
   };
