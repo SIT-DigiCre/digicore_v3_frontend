@@ -31,9 +31,7 @@ type RegisterDiscordProfilePageProps = InferGetServerSidePropsType<typeof getSer
 
 const RegisterDiscordProfilePage = ({ loginUrl }: RegisterDiscordProfilePageProps) => {
   useEffect(() => {
-    if (localStorage.getItem("reg_discord") == null) {
-      localStorage.setItem("reg_discord", "true");
-    }
+    localStorage.setItem("reg_discord", "true");
   }, []);
 
   return (

@@ -30,9 +30,7 @@ type DiscordProfilePageProps = InferGetServerSidePropsType<typeof getServerSideP
 
 const DiscordProfilePage = ({ loginUrl }: DiscordProfilePageProps) => {
   useEffect(() => {
-    if (localStorage.getItem("reg_discord") == null) {
-      localStorage.setItem("reg_discord", "true");
-    }
+    localStorage.setItem("reg_discord", "false");
   }, []);
 
   return (

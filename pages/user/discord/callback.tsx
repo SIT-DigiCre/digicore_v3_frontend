@@ -12,7 +12,7 @@ type Props = {
 
 const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   const router = useRouter();
-  const { authState, refresh } = useAuthState();
+  const { authState } = useAuthState();
 
   const onCallback = async () => {
     if (!authState.isLogined) return;
@@ -26,15 +26,10 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
     } catch (error) {
       console.error("Failed to callback discord:", error);
     }
-    if (localStorage.getItem("reg_discord") != null) {
-      setTimeout(() => {
-        refresh().then(() => {
-          localStorage.removeItem("reg_discord");
-          router.push("/register/discord");
-        });
-      }, 1000);
+    if (localStorage.getItem("reg_discord") === "true") {
+      router.push("/register/introduction");
     } else {
-      router.push("/user/profile");
+      router.push("/user/profile/discord");
     }
   };
 
