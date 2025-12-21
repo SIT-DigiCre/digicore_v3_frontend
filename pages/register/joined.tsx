@@ -181,7 +181,12 @@ const JoinedSteps = ({ step, setStep, joinData }: StepsProps) => {
           </Stack>
           {joinData?.discordUrl ? (
             <Stack direction="row" spacing={2} alignItems="center">
-              <ButtonLink href={joinData.discordUrl} variant="contained">
+              <ButtonLink
+                href={joinData.discordUrl}
+                variant="contained"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Discordの招待URLを開く
               </ButtonLink>
               <Typography>※かならず先ほど登録したDiscordアカウントで登録してください</Typography>
