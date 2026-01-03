@@ -2,14 +2,15 @@ import { GetServerSideProps } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
-import { ArrowBack, Delete } from "@mui/icons-material";
-import { Avatar, Box, Button, Stack } from "@mui/material";
+import { ArrowBack, Delete, Edit } from "@mui/icons-material";
+import { Avatar, Box, IconButton, Stack } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import Heading from "../../components/Common/Heading";
-import MarkdownView from "../../components/Common/MarkdownView";
+import { IconButtonLink } from "../../components/Common/IconButtonLink";
 import PageHead from "../../components/Common/PageHead";
+import MarkdownView from "../../components/Markdown/MarkdownView";
 import WorkEditor from "../../components/Work/WorkEditor";
 import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useAuthState } from "../../hook/useAuthState";
@@ -97,9 +98,16 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
           作品一覧に戻る
         </ButtonLink>
         {workDetail.authors.map((a) => a.userId).includes(authState.user.userId) && (
-          <Button variant="contained" color="error" onClick={onClickDelete} startIcon={<Delete />}>
-            削除する
-          </Button>
+          <Stack direction="row" spacing={1}>
+            {modeStr !== "edit" && (
+              <IconButtonLink href={`/work/${id}?mode=edit`} ariaLabel="編集する">
+                <Edit />
+              </IconButtonLink>
+            )}
+            <IconButton aria-label="削除する" onClick={onClickDelete}>
+              <Delete />
+            </IconButton>
+          </Stack>
         )}
       </Stack>
       {modeStr === "edit" ? (
@@ -113,7 +121,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
                 workDetail.authors.map((a) => (
                   <ButtonLink
                     startIcon={<Avatar src={a.iconUrl} className="d-inlineblock" />}
-                    href={`/user/${a.userId}`}
+                    href={`/member/${a.userId}`}
                     key={a.userId}
                     variant="text"
                   >

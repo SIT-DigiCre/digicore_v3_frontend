@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import Heading from "../../components/Common/Heading";
-import MarkdownEditor from "../../components/Common/MarkdownEditor";
+import MarkdownEditor from "../../components/Markdown/MarkdownEditor";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useMyIntroduction } from "../../hook/profile/useIntroduction";
 import { useAuthState } from "../../hook/useAuthState";

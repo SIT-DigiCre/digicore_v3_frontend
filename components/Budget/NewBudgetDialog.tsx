@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Close } from "@mui/icons-material";
+import { Add, Close } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -12,6 +12,7 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Stack,
   TextField,
 } from "@mui/material";
 
@@ -20,10 +21,11 @@ import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
 import { BudgetClass } from "../../interfaces/budget";
 
-type Props = {
+type NewBudgetDialogProps = {
   open: boolean;
   onClose: () => void;
 };
+
 const classList: BudgetClass[] = ["room", "project", "outside", "fixed", "festival"];
 const classDisplay: {
   [K in BudgetClass]: string;
@@ -34,7 +36,8 @@ const classDisplay: {
   fixed: "固定費用",
   festival: "学園祭",
 };
-export const NewBudgetDialog = ({ open, onClose }: Props) => {
+
+export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
   const [inputName, setInputName] = useState("");
   const [inputClass, setInputClass] = useState<BudgetClass | undefined>();
   const { setNewError } = useErrorState();
@@ -59,11 +62,12 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
         });
     }
   };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>新規稟議申請</DialogTitle>
       <IconButton
-        aria-label="close"
+        aria-label="稟議申請をやめる"
         onClick={onClose}
         sx={{
           position: "absolute",
@@ -100,9 +104,16 @@ export const NewBudgetDialog = ({ open, onClose }: Props) => {
             ))}
           </Select>
         </FormControl>
-        <Button variant="contained" sx={{ margin: 2 }} onClick={onClickCreate}>
-          作成
-        </Button>
+        <Stack direction="row" justifyContent="flex-end" mt={2}>
+          <Button
+            variant="contained"
+            onClick={onClickCreate}
+            disabled={inputName === "" || inputClass === undefined}
+            startIcon={<Add />}
+          >
+            作成する
+          </Button>
+        </Stack>
       </DialogContent>
     </Dialog>
   );

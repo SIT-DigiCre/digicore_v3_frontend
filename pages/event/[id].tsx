@@ -1,23 +1,78 @@
-import { GetServerSideProps } from "next";
+import type { InferGetServerSidePropsType } from "next";
 
 import { ArrowBack } from "@mui/icons-material";
-import { Alert, Box, Stack } from "@mui/material";
+import { Alert, Box, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
-import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
-import useEventDetail from "../../hook/event/useEventDetail";
+import MarkdownView from "../../components/Markdown/MarkdownView";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-type EventPageProps = {
-  id?: string;
+export const getServerSideProps = async ({ params, req }) => {
+  if (!params?.id || typeof params.id !== "string") {
+    return { props: { event: null } };
+  }
+  try {
+    const client = createServerApiClient(req);
+    try {
+      const eventRes = await client.GET("/event/{eventId}", {
+        params: {
+          path: {
+            eventId: params.id,
+          },
+        },
+      });
+      if (eventRes.error) {
+        return { props: { event: null } };
+      }
+
+      // TODO: N+1問題を解消するため、バックエンドの実装を変更する
+      const eventReservationsRes = await Promise.all(
+        eventRes.data.reservations.map(async (reservation) => {
+          return client.GET("/event/{eventId}/{reservationId}", {
+            params: {
+              path: {
+                eventId: params.id,
+                reservationId: reservation.reservationId,
+              },
+            },
+          });
+        }),
+      );
+      const eventReservations = eventRes.data.reservations.map((reservation) => {
+        return {
+          ...reservation,
+          users:
+            eventReservationsRes.find((res) => res.data.reservationId === reservation.reservationId)
+              ?.data.users || [],
+        };
+      });
+      if (eventReservationsRes.some((res) => res.error)) {
+        return { props: { event: null } };
+      }
+
+      return {
+        props: {
+          event: {
+            ...eventRes.data,
+            reservations: eventReservations,
+          },
+        },
+      };
+    } catch (e) {
+      console.error(e);
+      return { props: { event: null } };
+    }
+  } catch (e) {
+    console.error(e);
+    return { props: { event: null } };
+  }
 };
-const EventPage = ({ id }: EventPageProps) => {
-  const { isLoading, notFound, eventDetail, reservation, cancelReservation } = useEventDetail(id);
 
-  if (notFound) return <p>指定されたイベントが見つかりませんでした</p>;
-  if (isLoading) return <p>読み込み中...</p>;
+const EventPage = ({ event }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  if (!event) return <Typography>指定されたイベントが見つかりませんでした</Typography>;
 
   return (
     <>
@@ -27,47 +82,34 @@ const EventPage = ({ id }: EventPageProps) => {
           イベント一覧に戻る
         </ButtonLink>
       </Stack>
-      <Heading level={2}>{eventDetail.name}</Heading>
-      {eventDetail.reservated && (
+      <Heading level={2}>{event.name}</Heading>
+      {event.reservated && (
         <Alert severity="info" sx={{ mb: 2 }}>
           既にあなたは予約済みです
         </Alert>
       )}
-      <MarkdownView md={eventDetail.description} />
-      <Box sx={{ maxWidth: 700, mx: "auto" }}>
-        <Stack spacing={2} my={2} direction="column">
-          {eventDetail.reservations ? (
-            <>
-              {eventDetail.reservations
-                .sort((a, b) =>
-                  new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
-                )
-                .map((frame) => (
-                  <EventReservationFrame
-                    key={frame.reservationId!}
-                    eventId={id}
-                    eventReservation={frame}
-                    reservation={reservation}
-                    cancelReservation={cancelReservation}
-                  />
-                ))}
-            </>
-          ) : (
-            <p>枠はありません</p>
-          )}
-        </Stack>
-      </Box>
+      <MarkdownView md={event.description} />
+      {event.reservations ? (
+        <Box sx={{ maxWidth: 700, mx: "auto" }}>
+          <Stack spacing={2} my={2} direction="column">
+            {event.reservations
+              .sort((a, b) =>
+                new Date(a.startDate).getTime() > new Date(b.startDate).getTime() ? 1 : -1,
+              )
+              .map((frame) => (
+                <EventReservationFrame
+                  key={frame.reservationId}
+                  eventId={event.eventId}
+                  eventReservation={frame}
+                />
+              ))}
+          </Stack>
+        </Box>
+      ) : (
+        <Typography>枠はありません</Typography>
+      )}
     </>
   );
 };
 
 export default EventPage;
-
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
-  try {
-    const id = params?.id;
-    return { props: { id } };
-  } catch (error) {
-    return { props: { errors: error.message } };
-  }
-};

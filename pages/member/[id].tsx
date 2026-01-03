@@ -4,8 +4,8 @@ import { School as SchoolIcon } from "@mui/icons-material";
 import { Avatar, Box, Chip, Container, Grid, Paper, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
-import MarkdownView from "../../components/Common/MarkdownView";
 import PageHead from "../../components/Common/PageHead";
+import MarkdownView from "../../components/Markdown/MarkdownView";
 import { useIntroduction } from "../../hook/profile/useIntroduction";
 import { useProfile } from "../../hook/profile/useProfile";
 

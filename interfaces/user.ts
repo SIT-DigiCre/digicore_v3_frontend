@@ -7,7 +7,21 @@ export type User = {
   discordUserId: string;
   shortIntroduction: string;
   activeLimit?: string;
+  isAdmin: boolean;
 };
+
+export const DEFAULT_USER: User = {
+  userId: "",
+  username: "",
+  studentNumber: "",
+  iconUrl: "",
+  schoolGrade: 0,
+  discordUserId: "",
+  shortIntroduction: "",
+  activeLimit: "",
+  isAdmin: false,
+};
+
 export type UserPrivateProfile = {
   address: string;
   firstName: string;
@@ -21,6 +35,7 @@ export type UserPrivateProfile = {
   parentName: string;
   phoneNumber: string;
 };
+
 export const DEFAULT_USER_PRIVATE_PROFILE: UserPrivateProfile = {
   address: "",
   firstName: "",

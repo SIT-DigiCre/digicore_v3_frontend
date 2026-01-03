@@ -8,8 +8,8 @@ import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
 import { WorkDetail, WorkRequest } from "../../interfaces/work";
 import Heading from "../Common/Heading";
-import MarkdownEditor from "../Common/MarkdownEditor";
 import { FileBrowserModal } from "../File/FileBrowser";
+import MarkdownEditor from "../Markdown/MarkdownEditor";
 
 import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";

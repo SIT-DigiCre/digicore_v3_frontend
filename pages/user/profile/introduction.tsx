@@ -1,55 +1,87 @@
-import { useEffect, useState } from "react";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useRouter } from "next/router";
+import type { ReactElement } from "react";
+import { useState } from "react";
 
-import { Button } from "@mui/material";
+import { Button, Stack } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
-import MarkdownEditor from "../../../components/Common/MarkdownEditor";
+import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
-import { useMyIntroduction } from "../../../hook/profile/useIntroduction";
 import { useAuthState } from "../../../hook/useAuthState";
+import { useErrorState } from "../../../hook/useErrorState";
+import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-const IntroductionProfilePage = () => {
-  const { authState } = useAuthState();
-  const [userIntro, updateIntro] = useMyIntroduction();
-  const [editUserIntro, setEditUserIntro] = useState<{ md: string }>();
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const client = createServerApiClient(req);
 
-  useEffect(() => {
-    setEditUserIntro({ md: (" " + userIntro).slice(1) });
-  }, [userIntro]);
+  try {
+    const introRes = await client.GET("/user/me/introduction");
 
-  const handleSave = () => {
-    if (editUserIntro) {
-      updateIntro(editUserIntro.md);
+    if (!introRes.data) {
+      return { props: { initialIntroduction: "" } };
     }
+
+    return { props: { initialIntroduction: introRes.data.introduction ?? "" } };
+  } catch (error) {
+    console.error("Failed to fetch my introduction:", error);
+    return { props: { initialIntroduction: "" } };
+  }
+};
+
+type IntroductionProfilePageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePageProps) => {
+  const router = useRouter();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  const [editUserIntro, setEditUserIntro] = useState<{ md: string }>({ md: initialIntroduction });
+
+  const handleSave = async () => {
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "introduction-update-fail", message: "ログインが必要です" });
+      return;
+    }
+    const response = await apiClient.PUT("/user/me/introduction", {
+      body: { introduction: editUserIntro.md },
+      headers: {
+        Authorization: `Bearer ${authState.token}`,
+      },
+    });
+    if (response.error) {
+      setNewError({
+        name: "introduction-update-fail",
+        message: response.error.message || "自己紹介情報の更新に失敗しました",
+      });
+      return;
+    }
+    removeError("introduction-update-fail");
+    router.push(router.asPath);
   };
 
-  if (authState.isLoading || !authState.isLogined) {
-    return <p>読み込み中...</p>;
-  }
-
-  if (!editUserIntro) return <p>isLoading...</p>;
-
   return (
-    <EditorTabLayout>
-      <div>
-        <Heading level={2}>自己紹介</Heading>
-        <MarkdownEditor
-          value={editUserIntro.md}
-          onChange={(e) => {
-            setEditUserIntro({ md: e });
-          }}
-        />
+    <Stack spacing={2}>
+      <Heading level={2}>自己紹介</Heading>
+      <MarkdownEditor
+        value={editUserIntro.md}
+        onChange={(e) => {
+          setEditUserIntro({ md: e });
+        }}
+      />
+      <Stack direction="row" spacing={2} justifyContent="flex-end">
         <Button
           variant="contained"
-          disabled={userIntro === editUserIntro.md}
+          disabled={initialIntroduction === editUserIntro.md}
           onClick={handleSave}
-          sx={{ mt: 2 }}
         >
-          保存
+          保存する
         </Button>
-      </div>
-    </EditorTabLayout>
+      </Stack>
+    </Stack>
   );
 };
 
+IntroductionProfilePage.getLayout = (page: ReactElement) => (
+  <EditorTabLayout>{page}</EditorTabLayout>
+);
 export default IntroductionProfilePage;

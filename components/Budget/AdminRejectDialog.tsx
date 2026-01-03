@@ -1,18 +1,19 @@
 import { Close } from "@mui/icons-material";
-import { Button, Dialog, DialogContent, DialogTitle, IconButton } from "@mui/material";
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Typography } from "@mui/material";
 
-type Props = {
+type AdminRejectDialogProps = {
   open: boolean;
   onClose: () => void;
   onConfirm: () => void;
   name: string;
 };
-export const AdminRejectDialog = ({ open, onClose, onConfirm, name }: Props) => {
+
+export const AdminRejectDialog = ({ open, onClose, onConfirm, name }: AdminRejectDialogProps) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>操作の確認</DialogTitle>
+      <DialogTitle>却下操作の確認</DialogTitle>
       <IconButton
-        aria-label="close"
+        aria-label="却下操作をキャンセルする"
         onClick={onClose}
         sx={{
           position: "absolute",
@@ -23,11 +24,11 @@ export const AdminRejectDialog = ({ open, onClose, onConfirm, name }: Props) => 
       >
         <Close />
       </IconButton>
-      <DialogContent dividers sx={{ textAlign: "center" }}>
-        <p>稟議「{name}」を却下しますか？</p>
-        <p>変更後は元に戻すことができません！</p>
+      <DialogContent dividers sx={{ maxWidth: "400px" }}>
+        <Typography>稟議「{name}」を却下しますか？</Typography>
+        <Typography>変更後は元に戻すことができません！</Typography>
         <Button variant="contained" color="error" sx={{ marginY: 3 }} onClick={onConfirm}>
-          却下
+          却下する
         </Button>
       </DialogContent>
     </Dialog>

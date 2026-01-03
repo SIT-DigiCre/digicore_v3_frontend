@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 
 import {
-  Budget,
-  BudgetDetail,
   CreateBudgetRequest,
   PutBudgetAdminRequest,
   PutBudgetStatusApproveRequest,
@@ -10,26 +8,37 @@ import {
   PutBudgetStatusPaidRequest,
   PutBudgetStatusPendingRequest,
 } from "../../interfaces/budget";
-import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
+import type { paths } from "../../utils/fetch/api.d";
+
+type BudgetDetailResponse =
+  paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
+
 export const useBudget = (budgetId: string) => {
-  const [budget, setBudget] = useState<BudgetDetail>();
+  const [budget, setBudget] = useState<BudgetDetailResponse>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
 
   const fetchBudget = async () => {
     if (!authState.isLogined) return;
     try {
-      const res = await axios.get(`/budget/${budgetId}`, {
+      const { data } = await apiClient.GET("/budget/{budgetId}", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
-      const budgetDetail: BudgetDetail = res.data;
-      setBudget(budgetDetail);
-      removeError("budgetdetail-get-fail");
+      if (data) {
+        setBudget(data);
+        removeError("budgetdetail-get-fail");
+      }
     } catch {
       setNewError({ name: "budgetdetail-get-fail", message: "稟議の取得に失敗しました" });
     }
@@ -37,23 +46,21 @@ export const useBudget = (budgetId: string) => {
 
   useEffect(() => {
     fetchBudget();
-  }, [authState]);
+  }, [authState.isLogined, authState.token]);
 
   const updateBudgetStatusPending = async (
     budgetRequest: PutBudgetStatusPendingRequest,
   ): Promise<boolean> => {
     try {
-      const body: PutBudgetStatusPendingRequest = {
-        budget: budgetRequest.budget,
-        files: budgetRequest.files,
-        mattermostUrl: budgetRequest.mattermostUrl,
-        name: budgetRequest.name,
-        purpose: budgetRequest.purpose,
-        remark: budgetRequest.remark,
-      };
-      await axios.put(`/budget/${budgetId}/status_pending`, body, {
+      await apiClient.PUT("/budget/{budgetId}/status_pending", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
+        body: budgetRequest,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-put-fail");
@@ -69,15 +76,15 @@ export const useBudget = (budgetId: string) => {
     budgetRequest: PutBudgetStatusApproveRequest,
   ): Promise<boolean> => {
     try {
-      const body: PutBudgetStatusApproveRequest = {
-        bought: budgetRequest.bought,
-        files: budgetRequest.files,
-        remark: budgetRequest.remark,
-        settlement: budgetRequest.settlement,
-      };
-      await axios.put(`/budget/${budgetId}/status_approve`, body, {
+      await apiClient.PUT("/budget/{budgetId}/status_approve", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
+        body: budgetRequest,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-put-fail");
@@ -93,14 +100,15 @@ export const useBudget = (budgetId: string) => {
     budgetRequest: PutBudgetStatusBoughtRequest,
   ): Promise<boolean> => {
     try {
-      const body: PutBudgetStatusBoughtRequest = {
-        files: budgetRequest.files,
-        remark: budgetRequest.remark,
-        settlement: budgetRequest.settlement,
-      };
-      await axios.put(`/budget/${budgetId}/status_bought`, body, {
+      await apiClient.PUT("/budget/{budgetId}/status_bought", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
+        body: budgetRequest,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-put-fail");
@@ -116,12 +124,15 @@ export const useBudget = (budgetId: string) => {
     budgetRequest: PutBudgetStatusPaidRequest,
   ): Promise<boolean> => {
     try {
-      const body: PutBudgetStatusPaidRequest = {
-        remark: budgetRequest.remark,
-      };
-      await axios.put(`/budget/${budgetId}/status_paid`, body, {
+      await apiClient.PUT("/budget/{budgetId}/status_paid", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
+        body: budgetRequest,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-put-fail");
@@ -135,12 +146,15 @@ export const useBudget = (budgetId: string) => {
 
   const updateAdminBudget = async (budgetRequest: PutBudgetAdminRequest): Promise<boolean> => {
     try {
-      const body: PutBudgetAdminRequest = {
-        status: budgetRequest.status,
-      };
-      await axios.put(`/budget/${budgetId}/admin`, body, {
+      await apiClient.PUT("/budget/{budgetId}/admin", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
+        body: budgetRequest,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-put-fail");
@@ -154,9 +168,14 @@ export const useBudget = (budgetId: string) => {
 
   const deleteBudgetStatusPending = async () => {
     try {
-      await axios.delete(`/budget/${budgetId}/status_pending`, {
+      await apiClient.DELETE("/budget/{budgetId}/status_pending", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-delete-fail");
@@ -169,9 +188,14 @@ export const useBudget = (budgetId: string) => {
 
   const deleteBudgetStatusApprove = async () => {
     try {
-      await axios.delete(`/budget/${budgetId}/status_approve`, {
+      await apiClient.DELETE("/budget/{budgetId}/status_approve", {
+        params: {
+          path: {
+            budgetId,
+          },
+        },
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       removeError("budget-delete-fail");
@@ -194,76 +218,89 @@ export const useBudget = (budgetId: string) => {
   };
 };
 
-type FetchBudgetsResult = {
-  isLogined: boolean;
-  isError?: boolean;
-  reachedToEnd?: boolean;
-};
+type BudgetListResponse =
+  paths["/budget"]["get"]["responses"]["200"]["content"]["application/json"];
+type BudgetListItem = BudgetListResponse["budgets"][number];
 
 type UseBudgets = (proposerId?: string | "my") => {
-  budgets: Budget[];
+  budgets: BudgetListItem[];
+  isOver: boolean;
   createBudget: (createBudgetRequest: CreateBudgetRequest) => Promise<string>;
-  loadMore: () => Promise<FetchBudgetsResult>;
+  loadMore: () => void;
 };
 
 export const useBudgets: UseBudgets = (proposerId) => {
-  const [budgets, setBudgets] = useState<Budget[]>([]);
+  const [budgets, setBudgets] = useState<BudgetListItem[]>([]);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [offsetNum, setOffsetNum] = useState(0);
+  const [isOver, setIsOver] = useState(false);
 
-  const fetchBudgets = async (n: number): Promise<FetchBudgetsResult> => {
-    if (!authState.isLogined) return { isLogined: false };
+  const loadBudgets = async (n: number) => {
+    if (!authState.isLogined) return;
     try {
-      const res = await axios.get(
-        `/budget?offset=${n}${
-          proposerId
-            ? proposerId === "my"
-              ? `&proposerId=${authState.user.userId!}`
-              : `&proposerId=${proposerId}`
-            : ""
-        }`,
-        {
-          headers: {
-            Authorization: "Bearer " + authState.token,
+      const { data } = await apiClient.GET("/budget", {
+        params: {
+          query: {
+            offset: n,
+            proposerId: proposerId
+              ? proposerId === "my"
+                ? authState.user.userId!
+                : proposerId
+              : undefined,
           },
         },
-      );
-      const newBudgets: Budget[] = res.data.budgets;
-      setBudgets(budgets.concat(newBudgets));
-      removeError("budgets-get-fail");
-      setOffsetNum(n);
-      return { isLogined: true, reachedToEnd: newBudgets.length < 10 };
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      if (data) {
+        // 1ページあたり10件のBudgetが返ってくるため、これより少なければ最後のページに達したと判断する
+        if (data.budgets.length < 10) {
+          setIsOver(true);
+        }
+        setBudgets((currentBudgets) => [...currentBudgets, ...data.budgets]);
+        removeError("budgets-get-fail");
+        setOffsetNum(n);
+      }
     } catch (err) {
-      if (err.response && err.response.status === 400)
-        return { isLogined: true, reachedToEnd: true, isError: true };
-
+      if (err && typeof err === "object" && "status" in err && err.status === 400) {
+        setIsOver(true);
+        return;
+      }
       setNewError({
         name: "budgets-get-fail",
         message: "稟議情報の一覧の取得に失敗しました",
       });
-      return { isLogined: true, isError: true };
     }
   };
 
   useEffect(() => {
-    fetchBudgets(0);
-  }, [authState]);
+    if (authState.isLogined) {
+      loadBudgets(0);
+    }
+  }, [authState.isLogined]);
 
   const loadMore = () => {
-    return fetchBudgets(offsetNum + 10);
+    loadBudgets(offsetNum + 10);
   };
 
   const createBudget = async (createBudgetRequest: CreateBudgetRequest): Promise<string> => {
     if (!authState.isLogined) return "ログインしてください";
     try {
-      const res = await axios.post(`/budget`, createBudgetRequest, {
+      const { data } = await apiClient.POST("/budget", {
+        body: createBudgetRequest,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
-      removeError("budget-post-fail");
-      return res.data.budgetId;
+      if (data) {
+        removeError("budget-post-fail");
+        return data.budgetId;
+      } else {
+        setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
+        return "error";
+      }
     } catch {
       setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
       return "error";
@@ -272,6 +309,7 @@ export const useBudgets: UseBudgets = (proposerId) => {
 
   return {
     budgets: budgets,
+    isOver: isOver,
     createBudget: createBudget,
     loadMore: loadMore,
   };

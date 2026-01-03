@@ -6,13 +6,13 @@ import Heading from "../Common/Heading";
 
 import PhoneInput from "./PhoneInput";
 
-interface EmergencyContactFormProps {
+type EmergencyContactFormProps = {
   initialProfile: UserPrivateProfile;
   profile: UserPrivateProfile;
   onProfileChange: (profile: UserPrivateProfile) => void;
   onSave?: () => void;
   showSaveButton?: boolean;
-}
+};
 
 const EmergencyContactForm = ({
   initialProfile,
@@ -84,13 +84,15 @@ const EmergencyContactForm = ({
         </Stack>
       </Stack>
       {showSaveButton && (
-        <Button
-          variant="contained"
-          disabled={objectEquals(profile, initialProfile)}
-          onClick={handleSave}
-        >
-          保存
-        </Button>
+        <Stack direction="row" spacing={2} justifyContent="flex-end">
+          <Button
+            variant="contained"
+            disabled={objectEquals(profile, initialProfile)}
+            onClick={handleSave}
+          >
+            保存する
+          </Button>
+        </Stack>
       )}
     </Stack>
   );
