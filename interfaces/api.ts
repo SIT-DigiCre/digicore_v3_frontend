@@ -1,7 +1,7 @@
 //招待用URL取得時の型
 
 export type EnvJoinAPIData = {
-  discordUrl: string;
+  discordUrl: string | null;
 };
 
 // file

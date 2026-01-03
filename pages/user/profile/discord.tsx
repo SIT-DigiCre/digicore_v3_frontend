@@ -2,8 +2,9 @@ import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
 import { ReactElement, useEffect } from "react";
 
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
+import { ButtonLink } from "../../../components/Common/ButtonLink";
 import Heading from "../../../components/Common/Heading";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { createServerApiClient } from "../../../utils/fetch/client";
@@ -15,13 +16,13 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const discordRes = await client.GET("/user/me/discord");
 
     if (!discordRes.data) {
-      return { props: { loginUrl: "" } };
+      return { props: { loginUrl: null } };
     }
 
     return { props: { loginUrl: discordRes.data.url } };
   } catch (error) {
     console.error("Failed to fetch discord login url:", error);
-    return { props: { loginUrl: "" } };
+    return { props: { loginUrl: null } };
   }
 };
 
@@ -29,10 +30,7 @@ type DiscordProfilePageProps = InferGetServerSidePropsType<typeof getServerSideP
 
 const DiscordProfilePage = ({ loginUrl }: DiscordProfilePageProps) => {
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (localStorage.getItem("reg_discord") == null) {
-      localStorage.setItem("reg_discord", "true");
-    }
+    localStorage.setItem("reg_discord", "false");
   }, []);
 
   return (
@@ -49,11 +47,15 @@ const DiscordProfilePage = ({ loginUrl }: DiscordProfilePageProps) => {
           </Link>
           からアカウント作成を行いましょう。大学のメールアドレスで作る必要はありません！
         </Typography>
-        <Box mt={10} textAlign="center">
-          <Button href={loginUrl} variant="contained">
-            Discord連携
-          </Button>
-        </Box>
+        {loginUrl ? (
+          <Box mt={10} textAlign="center">
+            <ButtonLink href={loginUrl} variant="contained">
+              Discord連携
+            </ButtonLink>
+          </Box>
+        ) : (
+          <Typography>Discordの招待URLが取得できませんでした</Typography>
+        )}
       </Stack>
     </>
   );
