@@ -49,12 +49,7 @@ const DiscordProfilePage = ({ loginUrl }: DiscordProfilePageProps) => {
         </Typography>
         {loginUrl ? (
           <Box mt={10} textAlign="center">
-            <ButtonLink
-              href={loginUrl}
-              variant="contained"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <ButtonLink href={loginUrl} variant="contained">
               Discord連携
             </ButtonLink>
           </Box>
