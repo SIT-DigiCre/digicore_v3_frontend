@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import { UserProfile } from "../../interfaces/user";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
@@ -22,7 +23,8 @@ export const useUserSearch = () => {
         },
       });
       setSearchResults(data.users);
-    } catch (error) {
+      removeError("user-search-fail");
+    } catch {
       setNewError({ name: "user-search-fail", message: "ユーザー検索に失敗しました" });
     }
   };

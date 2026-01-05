@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { UserProfile } from "../../interfaces/user";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
