@@ -67,6 +67,7 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
         <Heading level={3}>作者</Heading>
         <AuthorMultiSelect
           selectedAuthorIds={authors}
+          currentUserId={authState.user.userId}
           onChange={(authors) => setAuthors(authors)}
         />
       </Box>
