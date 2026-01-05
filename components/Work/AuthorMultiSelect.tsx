@@ -1,60 +1,63 @@
-import { FormControl, TextField } from "@mui/material";
-import Autocomplete from "@mui/material/Autocomplete";
-import { UserProfile, useUserProfiles } from "../../hook/user/useUserProfiles";
+import { Autocomplete, Avatar, Chip, FormControl, TextField } from "@mui/material";
+import { useProfiles } from "../../hook/profile/useProfiles";
+import { useUserSearch } from "../../hook/user/useUserSearch";
+import { UserProfile } from "../../interfaces/user";
 
 type Props = {
   selectedAuthorIds: string[];
+  currentUserId: string;
   onChange: (authorIds: string[]) => void;
 };
 
-const AuthorMultiSelect = ({ selectedAuthorIds, onChange }: Props) => {
-  const { userProfiles } = useUserProfiles();
-  if (!userProfiles || userProfiles.length === 0) return null;
-
-  const selectedAuthors = userProfiles.filter((userProfile) =>
-    selectedAuthorIds.includes(userProfile.userId),
-  );
+const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props) => {
+  const { searchResults, searchUsers } = useUserSearch();
+  const selectedAuthors = useProfiles(selectedAuthorIds);
 
   return (
     <FormControl>
-      {/* <InputLabel id="multiple-author-label">作者</InputLabel> */}
-      <Autocomplete<UserProfile>
+      <Autocomplete
         multiple
-        options={userProfiles}
-        getOptionLabel={(userProfile) => userProfile.username}
+        filterSelectedOptions
+        filterOptions={(x) => x}
         value={selectedAuthors}
-        renderInput={(params) => <TextField {...params} label="作者" />}
-      />
-      {/* <Select
-        labelId="multiple-author-label"
-        multiple={true}
-        value={selectedAuthors}
-        onChange={(event) => {
-          const value = event.target.value;
-          if (typeof value === "string") {
-            onChange([value]);
-          } else {
-            onChange(value);
-          }
+        onChange={(event, newValue) => {
+          onChange(newValue.map((author) => author.userId));
         }}
-        input={<OutlinedInput label="作者" />}
-        renderValue={(selected) => (
-          <Stack direction="row" spacing={1}>
-            {selected.map((value) => {
-              const userProfile = userProfiles.filter(
-                (userProfile) => userProfile.userId === value,
-              )[0];
-              return <Chip key={value} label={userProfile.username} />;
-            })}
-          </Stack>
+        renderValue={(value, getItemProps) =>
+          value.map((option: UserProfile, index: number) => {
+            const isCurrentUser = option.userId === currentUserId;
+            const { key, ...itemProps } = getItemProps({ index });
+            return (
+              <Chip
+                avatar={<Avatar src={option.iconUrl} />}
+                label={option.username}
+                key={key}
+                onDelete={isCurrentUser ? undefined : itemProps.onDelete}
+                {...itemProps}
+                disabled={isCurrentUser}
+              />
+            );
+          })
+        }
+        options={searchResults}
+        getOptionKey={(option) => option.userId}
+        getOptionLabel={(option) => option.username}
+        renderOption={(props, option) => (
+          <li {...props} key={option.userId}>
+            <Avatar
+              src={option.iconUrl}
+              alt={option.username}
+              sx={{ width: 24, height: 24, marginRight: 1 }}
+            />
+            {option.username}
+          </li>
         )}
-      >
-        {userProfiles.map((userProfile) => (
-          <MenuItem key={userProfile.userId} value={userProfile.userId}>
-            <span>{userProfile.username}</span>
-          </MenuItem>
-        ))}
-      </Select> */}
+        onInputChange={(event, value) => {
+          searchUsers(value);
+        }}
+        renderInput={(params) => <TextField {...params} label="作者" placeholder="作者" />}
+        sx={{ width: 500 }}
+      />
     </FormControl>
   );
 };
