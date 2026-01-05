@@ -1,13 +1,14 @@
 import { Autocomplete, Avatar, Chip, FormControl, TextField } from "@mui/material";
 import { useProfiles } from "../../hook/profile/useProfiles";
 import { useUserSearch } from "../../hook/user/useUserSearch";
-import { UserProfile } from "../../interfaces/user";
 
 type Props = {
   selectedAuthorIds: string[];
   currentUserId: string;
   onChange: (authorIds: string[]) => void;
 };
+
+const MAX_SELECTED_AUTHORS = 3;
 
 const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props) => {
   const { searchResults, searchUsers } = useUserSearch();
@@ -21,7 +22,15 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
         filterOptions={(x) => x}
         value={selectedAuthors}
         onChange={(event, newValue) => {
-          onChange(newValue.map((author) => author.userId));
+          if (newValue.length > MAX_SELECTED_AUTHORS) {
+            return;
+          }
+          const newAuthorIds = newValue.map((author) => author.userId);
+          if (newAuthorIds.length === 0) {
+            onChange([currentUserId]);
+            return;
+          }
+          onChange(newAuthorIds);
         }}
         renderValue={(value, getItemProps) =>
           value.map((option, index) => {
@@ -55,8 +64,15 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
         onInputChange={(event, value) => {
           searchUsers(value);
         }}
-        renderInput={(params) => <TextField {...params} label="作者" placeholder="作者" />}
-        sx={{ width: 500 }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="作者"
+            placeholder="作者"
+            disabled={selectedAuthorIds.length >= MAX_SELECTED_AUTHORS}
+          />
+        )}
+        sx={{ width: 600 }}
       />
     </FormControl>
   );
