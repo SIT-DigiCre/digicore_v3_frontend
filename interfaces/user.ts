@@ -22,6 +22,13 @@ export const DEFAULT_USER: User = {
   isAdmin: false,
 };
 
+export type UserProfile = {
+  userId: string;
+  username: string;
+  iconUrl: string;
+  shortIntroduction: string;
+};
+
 export type UserPrivateProfile = {
   address: string;
   firstName: string;
