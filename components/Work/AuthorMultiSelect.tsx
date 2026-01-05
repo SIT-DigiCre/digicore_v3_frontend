@@ -24,7 +24,7 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
           onChange(newValue.map((author) => author.userId));
         }}
         renderValue={(value, getItemProps) =>
-          value.map((option: UserProfile, index: number) => {
+          value.map((option, index) => {
             const isCurrentUser = option.userId === currentUserId;
             const { key, ...itemProps } = getItemProps({ index });
             return (
