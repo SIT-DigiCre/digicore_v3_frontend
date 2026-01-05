@@ -25,8 +25,6 @@ export const getServerSideProps = async ({
   if (!userId) return { notFound: true };
 
   const client = createServerApiClient(req);
-  const seed = query.seed || null;
-  const page = query.page || null;
 
   try {
     const [profileRes, introductionRes] = await Promise.all([
@@ -54,8 +52,8 @@ export const getServerSideProps = async ({
       props: {
         profile: profileRes.data,
         introduction: introductionRes.data?.introduction || null,
-        seed,
-        page,
+        seed: query.seed,
+        page: query.page,
       },
     };
   } catch (error) {

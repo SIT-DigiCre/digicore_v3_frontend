@@ -124,9 +124,7 @@ const UserIndexPage = ({
                       </TableCell>
                       <TableCell>
                         <Link
-                          href={`/member/${userProfile.userId}${
-                            seed !== undefined ? `?seed=${seed}&page=${currentPage}` : ""
-                          }`}
+                          href={`/member/${userProfile.userId}?seed=${seed}&page=${currentPage}`}
                         >
                           {userProfile.username}
                         </Link>
