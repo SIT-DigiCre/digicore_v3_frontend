@@ -6,7 +6,7 @@ import { Box, Button, IconButton, List, ListItem, Stack, TextField } from "@mui/
 
 import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
-import { WorkDetail, WorkRequest } from "../../interfaces/work";
+import { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownEditor from "../Markdown/MarkdownEditor";
@@ -22,7 +22,7 @@ type WorkEditorProps = {
 
 const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   const { authState } = useAuthState();
-  const [authors, setAuthors] = useState<string[]>([]);
+  const [authorIds, setAuthorIds] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -31,10 +31,10 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
 
   useEffect(() => {
     if (!initWork) {
-      setAuthors([authState.user.userId!]);
+      setAuthorIds([authState.user.userId!]);
       return;
     }
-    setAuthors(initWork.authors.map((a) => a.userId));
+    setAuthorIds(initWork.authors.map((a) => a.userId));
     setName(initWork.name);
     setDescription(initWork.description);
     setTags(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
@@ -54,11 +54,17 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
     const workRequest: WorkRequest = {
       name: name,
       description: description,
-      authors: authors,
+      authors: authorIds,
       tags: tags,
       files: files,
     };
     onSubmit(workRequest);
+  };
+
+  const currentUser: WorkAuthor = {
+    userId: authState.user.userId,
+    username: authState.user.username,
+    iconUrl: authState.user.iconUrl,
   };
 
   return (
@@ -66,9 +72,9 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
       <Box>
         <Heading level={3}>作者</Heading>
         <AuthorMultiSelect
-          selectedAuthorIds={authors}
-          currentUserId={authState.user.userId}
-          onChange={(authors) => setAuthors(authors)}
+          initAuthors={initWork ? initWork.authors : [currentUser]}
+          currentUser={currentUser}
+          onChange={(authors) => setAuthorIds(authors)}
         />
       </Box>
       <Box>
