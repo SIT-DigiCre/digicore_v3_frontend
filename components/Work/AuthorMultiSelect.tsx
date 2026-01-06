@@ -22,7 +22,7 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
         filterSelectedOptions
         filterOptions={(x) => x}
         value={selectedAuthors}
-        onChange={(event, newValue) => {
+        onChange={(_event, newValue) => {
           if (newValue.length > MAX_SELECTED_AUTHORS) {
             return;
           }
