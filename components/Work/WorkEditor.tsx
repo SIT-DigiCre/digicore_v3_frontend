@@ -6,11 +6,12 @@ import { Box, Button, IconButton, List, ListItem, Stack, TextField } from "@mui/
 
 import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
-import { WorkDetail, WorkRequest } from "../../interfaces/work";
+import type { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownEditor from "../Markdown/MarkdownEditor";
 
+import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
 
@@ -21,6 +22,7 @@ type WorkEditorProps = {
 
 const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   const { authState } = useAuthState();
+  const [authorIds, setAuthorIds] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState<string[]>([]);
@@ -28,7 +30,11 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
 
   useEffect(() => {
-    if (!initWork) return;
+    if (!initWork) {
+      setAuthorIds([authState.user.userId!]);
+      return;
+    }
+    setAuthorIds(initWork.authors.map((a) => a.userId));
     setName(initWork.name);
     setDescription(initWork.description);
     setTags(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
@@ -48,15 +54,29 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
     const workRequest: WorkRequest = {
       name: name,
       description: description,
-      authors: [authState.user.userId!],
+      authors: authorIds,
       tags: tags,
       files: files,
     };
     onSubmit(workRequest);
   };
 
+  const currentUser: WorkAuthor = {
+    userId: authState.user.userId,
+    username: authState.user.username,
+    iconUrl: authState.user.iconUrl,
+  };
+
   return (
     <Stack spacing={2} my={2}>
+      <Box>
+        <Heading level={3}>作者</Heading>
+        <AuthorMultiSelect
+          initAuthors={initWork ? initWork.authors : [currentUser]}
+          currentUser={currentUser}
+          onChange={(authors) => setAuthorIds(authors)}
+        />
+      </Box>
       <Box>
         <Heading level={3}>作品名</Heading>
         <TextField

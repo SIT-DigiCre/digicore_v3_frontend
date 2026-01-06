@@ -3,16 +3,10 @@ import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 
 import { userListSeed } from "../../atom/userAtom";
+import { UserProfile } from "../../interfaces/user";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
-
-type UserProfile = {
-  userId: string;
-  username: string;
-  iconUrl: string;
-  shortIntroduction: string;
-};
 
 type UseUserProfiles = () => {
   userProfiles: UserProfile[];

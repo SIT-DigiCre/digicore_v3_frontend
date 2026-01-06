@@ -1,4 +1,4 @@
-type WorkAuthor = {
+export type WorkAuthor = {
   userId: string;
   username: string;
   iconUrl: string;
