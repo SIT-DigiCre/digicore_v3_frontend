@@ -6,7 +6,7 @@ import { Box, Button, IconButton, List, ListItem, Stack, TextField } from "@mui/
 
 import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
-import { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
+import type { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownEditor from "../Markdown/MarkdownEditor";
