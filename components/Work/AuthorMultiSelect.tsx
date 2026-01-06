@@ -56,7 +56,7 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
           <li {...props} key={option.userId}>
             <Avatar
               src={option.iconUrl}
-              alt={option.username}
+              alt=""
               sx={{ width: 24, height: 24, marginRight: 1 }}
             />
             {option.username}
