@@ -73,7 +73,7 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
             disabled={selectedAuthorIds.length >= MAX_SELECTED_AUTHORS}
           />
         )}
-        sx={{ width: 600 }}
+        sx={{ minWidth: 300, flexWrap: "wrap" }}
       />
     </FormControl>
   );
