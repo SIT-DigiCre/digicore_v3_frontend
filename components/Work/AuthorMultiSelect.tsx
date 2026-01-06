@@ -62,7 +62,7 @@ const AuthorMultiSelect = ({ selectedAuthorIds, currentUserId, onChange }: Props
             {option.username}
           </li>
         )}
-        onInputChange={(event, value) => {
+        onInputChange={(_event, value) => {
           searchUsers(value);
         }}
         renderInput={(params) => (
