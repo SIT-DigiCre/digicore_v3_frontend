@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Autocomplete, Avatar, Chip, FormControl, TextField } from "@mui/material";
 
@@ -15,11 +15,7 @@ const MAX_SELECTED_AUTHORS = 3;
 
 const AuthorMultiSelect = ({ initAuthors, currentUser, onChange }: Props) => {
   const { searchResults, searchUsers } = useUserSearch();
-  const [authors, setAuthors] = useState<WorkAuthor[]>([]);
-
-  useEffect(() => {
-    setAuthors(initAuthors);
-  }, [initAuthors]);
+  const [authors, setAuthors] = useState<WorkAuthor[]>(initAuthors);
 
   const handleChange = (newAuthors: WorkAuthor[]) => {
     if (newAuthors.length > MAX_SELECTED_AUTHORS) {
