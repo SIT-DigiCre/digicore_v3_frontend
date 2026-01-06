@@ -44,9 +44,10 @@ type MarkdownToolbarProps = {
 const MarkdownToolbar = ({ actions }: MarkdownToolbarProps) => {
   return (
     <Stack direction="row" flexWrap="wrap" gap={1} alignItems="center" justifyContent="flex-start">
-      {actions.map((action) => (
-        <ActionButton key={action.key} {...action} />
-      ))}
+      {actions.map((action) => {
+        const { key, ...rest } = action;
+        return <ActionButton key={key} {...rest} />;
+      })}
     </Stack>
   );
 };
