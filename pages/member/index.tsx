@@ -1,9 +1,9 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import {
   Avatar,
-  Button,
-  Paper,
   Stack,
   Table,
   TableBody,
@@ -11,45 +11,147 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 
 import PageHead from "../../components/Common/PageHead";
-import { useUserProfiles } from "../../hook/user/useUserProfiles";
+import Pagination from "../../components/Common/Pagination";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const UserIndexPage = () => {
-  const { userProfiles, requestMoreProfiles, isOver } = useUserProfiles();
+const ITEMS_PER_PAGE = 10;
+
+export const getServerSideProps = async ({
+  req,
+  query,
+}: {
+  req: NextApiRequest;
+  query: { seed?: string; page?: string };
+}) => {
+  // seedパラメータがない場合はリダイレクト
+  if (!query.seed) {
+    const seed = Math.floor(Math.random() * 100);
+    return {
+      redirect: {
+        destination: `/member/?seed=${seed}&page=1`,
+        permanent: false,
+      },
+    };
+  }
+
+  const client = createServerApiClient(req);
+  const page = query.page ? parseInt(query.page as string, 10) : 1;
+  const offset = (page - 1) * ITEMS_PER_PAGE;
+  const seed = parseInt(query.seed as string, 10);
+
+  try {
+    const usersRes = await client.GET("/user", {
+      params: {
+        query: {
+          offset,
+          seed,
+        },
+      },
+    });
+
+    if (!usersRes.data || !usersRes.data.users) {
+      return {
+        props: {
+          users: [],
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+          seed,
+        },
+      };
+    }
+
+    const users = usersRes.data.users;
+    const hasNextPage = users.length === ITEMS_PER_PAGE;
+    const hasPreviousPage = page > 1;
+
+    return {
+      props: {
+        users,
+        currentPage: page,
+        hasNextPage,
+        hasPreviousPage,
+        seed,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch users:", error);
+    return {
+      props: {
+        users: [],
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+        seed,
+      },
+    };
+  }
+};
+
+const UserIndexPage = ({
+  users,
+  currentPage,
+  hasNextPage,
+  hasPreviousPage,
+  seed,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
 
   return (
     <>
       <PageHead title="部員一覧" />
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>名前</TableCell>
-              <TableCell>自己紹介</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {userProfiles.map((userProfile) => (
-              <TableRow key={userProfile.userId}>
-                <TableCell>
-                  <Avatar src={userProfile.iconUrl} sx={{ width: 40, height: 40 }} />
-                </TableCell>
-                <TableCell>
-                  <Link href={`/member/${userProfile.userId}`}>{userProfile.username}</Link>
-                </TableCell>
-                <TableCell>{userProfile.shortIntroduction}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Stack direction="row" justifyContent="center" alignItems="center" spacing={2} my={2}>
-        <Button variant="contained" onClick={() => requestMoreProfiles()} disabled={isOver}>
-          もっと見る
-        </Button>
+      <Stack spacing={2}>
+        {users && users.length > 0 ? (
+          <>
+            <TableContainer>
+              <Table sx={{ minWidth: 650 }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell>名前</TableCell>
+                    <TableCell>自己紹介</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {users.map((userProfile) => (
+                    <TableRow key={userProfile.userId}>
+                      <TableCell>
+                        <Avatar src={userProfile.iconUrl} sx={{ width: 40, height: 40 }} />
+                      </TableCell>
+                      <TableCell>
+                        <Link
+                          href={`/member/${userProfile.userId}?seed=${seed}&page=${currentPage}`}
+                        >
+                          {userProfile.username}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{userProfile.shortIntroduction}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <Stack alignItems="center">
+              <Pagination
+                page={currentPage}
+                hasPreviousPage={hasPreviousPage}
+                hasNextPage={hasNextPage}
+                onChange={(page) =>
+                  router.push({
+                    pathname: router.pathname,
+                    query: { seed, page },
+                  })
+                }
+              />
+            </Stack>
+          </>
+        ) : (
+          <Typography my={2}>部員がいません</Typography>
+        )}
       </Stack>
     </>
   );
