@@ -237,7 +237,7 @@ export const useBudgets: UseBudgets = (proposerId) => {
   const [isOver, setIsOver] = useState(false);
 
   const loadBudgets = async (n: number) => {
-    if (!authState.isLogined) return;
+    if (!authState.isLogined || !authState.user) return;
     try {
       const { data } = await apiClient.GET("/budget", {
         params: {

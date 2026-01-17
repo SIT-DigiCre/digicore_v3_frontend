@@ -3,7 +3,7 @@ export const baseURL =
 export const baseURLForServerSide =
   process.env.NODE_ENV === "production" ? "http://digicoreapi_v3:8000" : "http://localhost:8000";
 
-const objectSort = (obj) => {
+const objectSort = (obj: unknown): unknown => {
   if (!obj) return obj;
   const sorted = Object.entries(obj).sort();
   for (const i in sorted) {

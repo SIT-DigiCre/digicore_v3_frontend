@@ -56,6 +56,8 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
   const [openMarkAsBoughtDialog, setOpenMarkAsBoughtDialog] = useState(false);
   const [openDeleteBudgetDialog, setOpenDeleteBudgetDialog] = useState(false);
 
+  if (!budgetDetail || !authState.user) return <p>読み込み中...</p>;
+
   const onSubmit = (budgetRequest: PutBudgetRequest) => {
     switch (budgetDetail.status) {
       case "pending":
@@ -141,8 +143,6 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
     }
   };
 
-  if (!budgetDetail) return <p>読み込み中...</p>;
-
   return (
     <>
       <PageHead title={modeStr === "admin" ? `★ ${budgetDetail.name}` : budgetDetail.name} />
@@ -155,8 +155,8 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
           稟議一覧に戻る
         </ButtonLink>
         <Chip
-          label={statusDisplay[budgetDetail.status]}
-          color={budgetStatusColor[budgetDetail.status]}
+          label={statusDisplay[budgetDetail.status as keyof typeof statusDisplay]}
+          color={budgetStatusColor[budgetDetail.status as keyof typeof budgetStatusColor]}
         />
       </Stack>
       {modeStr === "admin" && (
@@ -301,7 +301,9 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                   <TableCell component="th" scope="row">
                     種別
                   </TableCell>
-                  <TableCell>{classDisplay[budgetDetail.class]}</TableCell>
+                  <TableCell>
+                    {classDisplay[budgetDetail.class as keyof typeof classDisplay]}
+                  </TableCell>
                 </TableRow>
                 {budgetDetail.class === "outside" ||
                   budgetDetail.class === "project" ||
@@ -395,7 +397,7 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                       </TableCell>
                       <TableCell>
                         {budgetDetail.approver.username ||
-                          `(${classDisplay[budgetDetail.class]}のため自動承認)`}
+                          `(${classDisplay[budgetDetail.class as keyof typeof classDisplay]}のため自動承認)`}
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -440,7 +442,9 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     const { mode } = query;
     const modeStr = typeof mode === "string" ? mode : null;
     return { props: { id, modeStr } };
-  } catch (error) {
-    return { props: { errors: error.message } };
+  } catch (error: unknown) {
+    return {
+      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
+    };
   }
 };

@@ -22,8 +22,6 @@ export const usePayment: UsePayment = () => {
         },
       });
       const histories: PaymentHistory[] = res.data.histories;
-      // eslint-disable-next-line no-console
-      console.log(histories);
       setPaymentHistories(histories);
 
       removeError("payment-get");
@@ -35,7 +33,7 @@ export const usePayment: UsePayment = () => {
     if (!authState.isLogined) return;
     getHistories();
   }, [authState]);
-  const updatePayment = async (name) => {
+  const updatePayment = async (name: string) => {
     try {
       await axios.put(
         "user/me/payment",

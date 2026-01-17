@@ -6,7 +6,7 @@ import { axios } from "../../utils/axios";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
-type UseFile = (fileId: string) => FileObject;
+type UseFile = (fileId: string) => FileObject | undefined;
 
 export const useFile: UseFile = (fileId) => {
   const [file, setFile] = useState<FileObject>();
@@ -33,7 +33,7 @@ export const useFile: UseFile = (fileId) => {
 };
 
 type UseMyFiles = () => {
-  myFileInfos: FileInfo[];
+  myFileInfos: FileInfo[] | undefined;
   uploadFile: (file: UploadFile) => Promise<FileObject | string>;
   reloadMyFileIds: () => Promise<void>;
 };
@@ -73,12 +73,12 @@ export const useMyFiles: UseMyFiles = () => {
       const fileObject: FileObject = res.data;
       removeError("myfileobject-post-fail");
       return fileObject;
-    } catch (e) {
+    } catch (e: unknown) {
       setNewError({
         name: "myfileobject-post-fail",
         message: "ファイルのアップロードに失敗しました",
       });
-      return e.response.data.error || e.message;
+      return e instanceof Error ? e.message : "An unknown error occurred";
     }
   };
 

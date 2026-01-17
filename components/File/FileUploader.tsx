@@ -45,7 +45,7 @@ type FileUploaderProps = {
 
 export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileUploaderProps) => {
   const [isOpen, setIsOpen] = useState(open);
-  const [availableExtStr, setAvailableExtStr] = useState<string>(undefined);
+  const [availableExtStr, setAvailableExtStr] = useState<string | undefined>(undefined);
   const [availableExtensions, setAvailableExtensions] = useState<string[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);

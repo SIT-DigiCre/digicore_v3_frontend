@@ -29,9 +29,11 @@ export const usePayments: UsePayments = () => {
             name: "payments-get-fail",
             message: "この情報を表示する権限がありません",
           });
-        } else {
+        } else if (data) {
           setPayments(data.payments);
           removeError("payments-get-fail");
+        } else {
+          setNewError({ name: "payments-get-fail", message: "支払情報の一覧の取得に失敗しました" });
         }
       } catch {
         setNewError({

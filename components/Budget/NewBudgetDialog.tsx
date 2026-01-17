@@ -19,7 +19,8 @@ import {
 import { useBudgets } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
-import { BudgetClass } from "../../interfaces/budget";
+
+import type { BudgetClass } from "../../interfaces/budget";
 
 type NewBudgetDialogProps = {
   open: boolean;
@@ -48,17 +49,25 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
   const onClickCreate = () => {
     const name = inputName;
     const className = inputClass;
-    if (name == "" || className == undefined) {
+    if (name === "" || className === undefined) {
       alert("稟議名が空、もしくは種別が指定されていません");
     } else {
-      createBudget({ name: name, class: className, proposerUserId: authState.user.userId })
+      if (!authState.user) return;
+      createBudget({
+        name: name,
+        class: className,
+        proposerUserId: authState.user.userId!,
+      })
         .then((budgetId) => {
           onClose();
           router.push(`/budget/${budgetId}?mode=edit`);
         })
         .catch((error) => {
           console.error("Error creating budget:", error);
-          setNewError({ name: "post-budget", message: "稟議申請に失敗しました" });
+          setNewError({
+            name: "post-budget",
+            message: "稟議申請に失敗しました",
+          });
         });
     }
   };

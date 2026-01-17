@@ -4,7 +4,8 @@ import { useMediaQuery } from "@mui/material";
 import { useRecoilState } from "recoil";
 
 import { darkModeState } from "../atom/userAtom";
-import { DarkMode } from "../interfaces";
+
+import type { DarkMode } from "../interfaces";
 
 type UseDarkMode = () => {
   isDarkMode: boolean;
@@ -16,14 +17,14 @@ export const useDarkMode: UseDarkMode = () => {
   useEffect(() => {
     try {
       const localMode = localStorage.getItem("darkmode");
-      if (localMode == null || localMode === "") return;
+      if (localMode === null || localMode === "") return;
       setDarkModeValue(localMode as DarkMode);
     } catch (err) {
       console.error(err);
     }
   }, []);
   const setDarkMode = (mode: DarkMode) => {
-    if (mode == darkModeValue) return;
+    if (mode === darkModeValue) return;
     setDarkModeValue(mode);
     localStorage.setItem("darkmode", mode);
   };

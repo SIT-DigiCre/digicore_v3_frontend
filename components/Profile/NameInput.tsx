@@ -19,8 +19,8 @@ const NameInput = ({
   const [firstName, setFirstName] = useState(initFirstName ? initFirstName : "");
   const [lastName, setLastName] = useState(initLastName ? initLastName : "");
   useEffect(() => {
-    setFirstName(initFirstName);
-    setLastName(initLastName);
+    setFirstName(initFirstName ?? "");
+    setLastName(initLastName ?? "");
   }, [initFirstName, initLastName]);
 
   return (
