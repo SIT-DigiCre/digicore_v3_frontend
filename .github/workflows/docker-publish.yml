@@ -27,8 +27,6 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 10
 
       # Login against a Docker registry except on PR
       # https://github.com/docker/login-action
