@@ -103,7 +103,9 @@ const AdminBudgetIndexPage = ({
                           size="small"
                         />
                       </TableCell>
-                      <TableCell>{classDisplay[budget.class as keyof typeof classDisplay]}</TableCell>
+                      <TableCell>
+                        {classDisplay[budget.class as keyof typeof classDisplay]}
+                      </TableCell>
                       <TableCell>
                         {budget.class === "festival" || budget.class === "fixed"
                           ? "-"

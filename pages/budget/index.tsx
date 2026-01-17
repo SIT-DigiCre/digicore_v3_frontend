@@ -142,6 +142,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const modeStr = typeof mode === "string" ? mode : null;
     return { props: { modeStr } };
   } catch (error: unknown) {
-    return { props: { errors: error instanceof Error ? error.message : "An unknown error occurred" } };
+    return {
+      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
+    };
   }
 };

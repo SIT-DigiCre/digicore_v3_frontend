@@ -126,7 +126,7 @@ export const useWorks: UseWorks = (authorId) => {
       if (!data) {
         setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
         return;
-      };
+      }
       // 1ページあたり10件のWorkが返ってくるため、これより少なければ最後のページに達したと判断する
       if (data.works.length < 10) {
         setIsOver(true);

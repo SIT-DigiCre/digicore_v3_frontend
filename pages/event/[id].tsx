@@ -10,7 +10,13 @@ import EventReservationFrame from "../../components/Event/EventReservationFrame"
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-export const getServerSideProps = async ({ params, req }: { params: { id: string }; req: NextApiRequest }) => {
+export const getServerSideProps = async ({
+  params,
+  req,
+}: {
+  params: { id: string };
+  req: NextApiRequest;
+}) => {
   if (!params?.id || typeof params.id !== "string") {
     return { props: { event: null } };
   }
@@ -45,8 +51,8 @@ export const getServerSideProps = async ({ params, req }: { params: { id: string
         return {
           ...reservation,
           users:
-            eventReservationsRes.find((res) =>
-              res.data && res.data.reservationId === reservation.reservationId
+            eventReservationsRes.find(
+              (res) => res.data && res.data.reservationId === reservation.reservationId,
             )?.data?.users || [],
         };
       });

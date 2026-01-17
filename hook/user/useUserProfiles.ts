@@ -39,7 +39,7 @@ export const useUserProfiles: UseUserProfiles = () => {
       if (!data) {
         setNewError({ name: "userprofiles-get-fail", message: "部員一覧の取得に失敗しました" });
         return;
-      };
+      }
       // 1ページあたり100件のユーザー情報が返ってくるため、これより少なければ最後のページに達したと判断する
       if (data.users.length < 100) {
         setIsOver(true);

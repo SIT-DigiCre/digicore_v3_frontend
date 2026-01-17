@@ -25,7 +25,7 @@ export const useUserSearch = () => {
       if (!data) {
         setNewError({ name: "user-search-fail", message: "ユーザー検索に失敗しました" });
         return;
-      };
+      }
       setSearchResults(data.users);
       removeError("user-search-fail");
     } catch {

@@ -143,7 +143,6 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
     }
   };
 
-
   return (
     <>
       <PageHead title={modeStr === "admin" ? `★ ${budgetDetail.name}` : budgetDetail.name} />
@@ -302,7 +301,9 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                   <TableCell component="th" scope="row">
                     種別
                   </TableCell>
-                  <TableCell>{classDisplay[budgetDetail.class as keyof typeof classDisplay]}</TableCell>
+                  <TableCell>
+                    {classDisplay[budgetDetail.class as keyof typeof classDisplay]}
+                  </TableCell>
                 </TableRow>
                 {budgetDetail.class === "outside" ||
                   budgetDetail.class === "project" ||
@@ -442,6 +443,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     const modeStr = typeof mode === "string" ? mode : null;
     return { props: { id, modeStr } };
   } catch (error: unknown) {
-    return { props: { errors: error instanceof Error ? error.message : "An unknown error occurred" } };
+    return {
+      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
+    };
   }
 };

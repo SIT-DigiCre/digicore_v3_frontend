@@ -41,7 +41,9 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const codeStr = typeof code === "string" ? code : null;
     return { props: { code: codeStr } };
   } catch (error: unknown) {
-    return { props: { errors: error instanceof Error ? error.message : "An unknown error occurred" } };
+    return {
+      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
+    };
   }
 };
 export default LoginCallbackPage;

@@ -90,7 +90,10 @@ const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
           <ButtonLink href="/admin/budget" startIcon={<ArrowBack />} variant="text">
             稟議一覧に戻る
           </ButtonLink>
-          <Chip label={statusDisplay[budget.status as keyof typeof statusDisplay]} color={budgetStatusColor[budget.status as keyof typeof budgetStatusColor]} />
+          <Chip
+            label={statusDisplay[budget.status as keyof typeof statusDisplay]}
+            color={budgetStatusColor[budget.status as keyof typeof budgetStatusColor]}
+          />
         </Stack>
 
         <Heading level={2}>{budget.name}</Heading>
@@ -225,7 +228,8 @@ const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
                       承認者
                     </TableCell>
                     <TableCell>
-                      {budget.approver.username || `(${classDisplay[budget.class as keyof typeof classDisplay]}のため自動承認)`}
+                      {budget.approver.username ||
+                        `(${classDisplay[budget.class as keyof typeof classDisplay]}のため自動承認)`}
                     </TableCell>
                   </TableRow>
                   <TableRow>
