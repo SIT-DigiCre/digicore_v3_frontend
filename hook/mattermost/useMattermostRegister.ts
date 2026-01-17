@@ -17,12 +17,12 @@ export const useMattermostRegister = (): {
       });
       removeError("mattermost-registration-error");
       return res.data;
-    } catch (err) {
+    } catch (err: unknown) {
       let errMsg = "";
-      if (err && err.response.data && err.response.data.message) {
-        errMsg = err.response.data.message;
+      if (err instanceof Error) {
+        errMsg = err.message;
       } else {
-        errMsg = err;
+        errMsg = err instanceof Error ? err.message : "An unknown error occurred";
       }
       setNewError({ name: "mattermost-registration-error", message: errMsg });
       return false;

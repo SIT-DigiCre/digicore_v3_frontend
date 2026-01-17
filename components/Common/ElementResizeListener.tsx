@@ -1,8 +1,8 @@
-import { useRef, useEffect, useCallback, RefObject } from "react";
+import { useCallback, useEffect, useRef } from "react";
 
 const ElementResizeListener = (props: { onResize: (event: Event) => void }) => {
   const rafRef = useRef(0);
-  const objectRef: RefObject<HTMLObjectElement> = useRef(null);
+  const objectRef = useRef<HTMLObjectElement>(null);
   const onResizeRef = useRef(props.onResize);
 
   onResizeRef.current = props.onResize;

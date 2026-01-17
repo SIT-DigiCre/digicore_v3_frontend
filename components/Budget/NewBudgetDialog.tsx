@@ -1,23 +1,25 @@
-import { Add, Close } from "@mui/icons-material";
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField,
-} from "@mui/material";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
+import { Add, Close } from "@mui/icons-material";
+import {
+	Button,
+	Dialog,
+	DialogContent,
+	DialogTitle,
+	FormControl,
+	IconButton,
+	InputLabel,
+	MenuItem,
+	Select,
+	Stack,
+	TextField,
+} from "@mui/material";
 
 import { useBudgets } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
+
 import type { BudgetClass } from "../../interfaces/budget";
 
 type NewBudgetDialogProps = {
@@ -56,10 +58,11 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
 		if (name === "" || className === undefined) {
 			alert("稟議名が空、もしくは種別が指定されていません");
 		} else {
+			if (!authState.user) return;
 			createBudget({
 				name: name,
 				class: className,
-				proposerUserId: authState.user.userId,
+				proposerUserId: authState.user.userId!,
 			})
 				.then((budgetId) => {
 					onClose();

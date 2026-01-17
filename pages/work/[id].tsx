@@ -50,6 +50,8 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
   const { authState } = useAuthState();
   const router = useRouter();
 
+  if (!workDetail || !authState.user) return <p>読み込み中...</p>;
+
   const onSubmit = (workRequest: WorkRequest) => {
     updateWork(workRequest).then((result) => {
       if (!result) return;
@@ -65,7 +67,8 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     }
   };
 
-  if (!authState.isLogined) {
+  // TODO: サーバーサイドでOGPが生成されるようにする
+  if (!authState.isLogined && !!workPublic) {
     return (
       <Head>
         <meta property="og:title" content={workPublic.name} />
@@ -88,7 +91,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     );
   }
 
-  if (!workDetail) return <p>読み込み中...</p>;
+  if (authState.isLogined || !authState.user) return <p>読み込み中...</p>;
 
   return (
     <>
@@ -97,7 +100,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
         <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
           作品一覧に戻る
         </ButtonLink>
-        {workDetail.authors.map((a) => a.userId).includes(authState.user.userId) && (
+        {workDetail.authors.map((a) => a.userId).includes(authState.user.userId!) && (
           <Stack direction="row" spacing={1}>
             {modeStr !== "edit" && (
               <IconButtonLink href={`/work/${id}?mode=edit`} ariaLabel="編集する">
@@ -163,7 +166,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
     const id = params?.id;
     const { mode } = query;
     const modeStr = typeof mode === "string" ? mode : null;
-    let work: WorkPublic;
+    let work: WorkPublic | undefined;
     try {
       const res = await serverSideAxios.get(`/work/work/${id}/public`);
       work = res.data;
@@ -173,7 +176,10 @@ export const getServerSideProps: GetServerSideProps = async ({ params, query }) 
       }
     }
 
-    work.description = work.description.substring(0, 100);
+    if (work?.description) {
+      work.description = work.description.substring(0, 100);
+    }
+
     return { props: { id, modeStr, workPublic: work } };
   } catch (error) {
     return { props: { errors: (error as Error).message } };

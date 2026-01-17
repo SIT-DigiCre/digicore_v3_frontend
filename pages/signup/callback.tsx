@@ -18,7 +18,9 @@ const LoginCallbackPage = ({ code }: Props) => {
 
   useEffect(() => {
     setCallbackCode(code).then((jwt) => {
-      onLogin(jwt);
+      if (jwt) {
+        onLogin(jwt);
+      }
       router.push("/register/public");
     });
   }, []);
@@ -38,8 +40,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const { code } = query;
     const codeStr = typeof code === "string" ? code : null;
     return { props: { code: codeStr } };
-  } catch (error) {
-    return { props: { errors: error.message } };
+  } catch (error: unknown) {
+    return { props: { errors: error instanceof Error ? error.message : "An unknown error occurred" } };
   }
 };
 export default LoginCallbackPage;

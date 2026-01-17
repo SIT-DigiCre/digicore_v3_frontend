@@ -29,11 +29,17 @@ const LoginCallbackPage = ({ code }: Props) => {
   useEffect(() => {
     setCallbackCode(code)
       .then((jwt) => {
-        onLogin(jwt);
+        if (jwt) {
+          onLogin(jwt);
+        }
         if (localStorage.getItem("backto")) {
           const backto = localStorage.getItem("backto");
           localStorage.removeItem("backto");
-          router.push(backto);
+          if (backto) {
+            router.push(backto);
+          } else {
+            router.push("/");
+          }
         } else {
           router.push("/");
         }
@@ -96,8 +102,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const { code } = query;
     const codeStr = typeof code === "string" ? code : null;
     return { props: { code: codeStr } };
-  } catch (error) {
-    return { props: { errors: error.message } };
+  } catch (error: unknown) {
+    return { props: { errors: error instanceof Error ? error.message : "An unknown error occurred" } };
   }
 };
 export default LoginCallbackPage;

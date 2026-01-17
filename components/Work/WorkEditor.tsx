@@ -6,7 +6,6 @@ import { Box, Button, IconButton, List, ListItem, Stack, TextField } from "@mui/
 
 import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
-import type { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownEditor from "../Markdown/MarkdownEditor";
@@ -14,6 +13,8 @@ import MarkdownEditor from "../Markdown/MarkdownEditor";
 import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
+
+import type { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
 
 type WorkEditorProps = {
   onSubmit: (work: WorkRequest) => void;
@@ -31,6 +32,7 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
 
   useEffect(() => {
     if (!initWork) {
+      if (!authState.user) return;
       setAuthorIds([authState.user.userId!]);
       return;
     }
@@ -40,6 +42,8 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
     setTags(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
     setFiles(initWork.files ? initWork.files.map((f) => f.fileId) : []);
   }, [initWork]);
+
+  if (!authState.user) return <p>読み込み中...</p>;
 
   const onFileSelectCancel = () => {
     setIsOpenFileBrowser(false);
@@ -62,7 +66,7 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
   };
 
   const currentUser: WorkAuthor = {
-    userId: authState.user.userId,
+    userId: authState.user.userId!,
     username: authState.user.username,
     iconUrl: authState.user.iconUrl,
   };

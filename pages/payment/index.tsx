@@ -22,6 +22,8 @@ import { Payment } from "../../interfaces/payment";
 const PaymentPage = () => {
   const [payments, updatePayments] = usePayments();
   const [targetPayment, updateTargetPayment] = useState<Payment>();
+  
+
 
   return (
     <>
@@ -64,6 +66,7 @@ const PaymentPage = () => {
           </TableBody>
         </Table>
       </TableContainer>
+        {targetPayment && (
       <Modal
         open={targetPayment !== undefined}
         onClose={() => {
@@ -112,7 +115,7 @@ const PaymentPage = () => {
             <br />
             <Button
               onClick={() => {
-                updatePayments(targetPayment.paymentId, targetPayment.checked, targetPayment.note);
+                updatePayments(targetPayment.paymentId, targetPayment.checked ?? false, targetPayment.note);
                 updateTargetPayment(undefined);
               }}
               variant="contained"
@@ -122,6 +125,7 @@ const PaymentPage = () => {
           </Typography>
         </Box>
       </Modal>
+      )}
     </>
   );
 };

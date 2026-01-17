@@ -94,12 +94,12 @@ const BudgetPage = ({ modeStr }: BudgetPageProps) => {
                     </TableCell>
                     <TableCell>
                       <Chip
-                        label={statusDisplay[budget.status]}
-                        color={budgetStatusColor[budget.status]}
+                        label={statusDisplay[budget.status as keyof typeof statusDisplay]}
+                        color={budgetStatusColor[budget.status as keyof typeof budgetStatusColor]}
                         size="small"
                       />
                     </TableCell>
-                    <TableCell>{classDisplay[budget.class]}</TableCell>
+                    <TableCell>{classDisplay[budget.class as keyof typeof classDisplay]}</TableCell>
                     <TableCell>
                       {budget.class === "festival" || budget.class === "fixed"
                         ? "-"
@@ -110,7 +110,7 @@ const BudgetPage = ({ modeStr }: BudgetPageProps) => {
                         ? "-"
                         : `${budget.settlement} 円`}
                     </TableCell>
-                    <TableCell>{budget.proposer.username}</TableCell>
+                    <TableCell>{budget.proposer?.username ?? "-"}</TableCell>
                     <TableCell title={budget.updatedAt}>
                       {dayjs(budget.updatedAt).format("YYYY/MM/DD HH:mm:ss")}
                     </TableCell>
@@ -141,7 +141,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
     const { mode } = query;
     const modeStr = typeof mode === "string" ? mode : null;
     return { props: { modeStr } };
-  } catch (error) {
-    return { props: { errors: error.message } };
+  } catch (error: unknown) {
+    return { props: { errors: error instanceof Error ? error.message : "An unknown error occurred" } };
   }
 };
