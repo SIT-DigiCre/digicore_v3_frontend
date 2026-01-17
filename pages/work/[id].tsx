@@ -91,7 +91,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     );
   }
 
-  if (authState.isLogined || !authState.user) return <p>読み込み中...</p>;
+  if (!authState.isLogined || !authState.user) return <p>読み込み中...</p>;
 
   return (
     <>
