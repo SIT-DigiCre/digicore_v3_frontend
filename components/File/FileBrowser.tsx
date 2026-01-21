@@ -158,13 +158,13 @@ export const FileBrowserModal = ({
 
 type FileListItemProps = {
   fileId: string;
-  onlyFileKind: FileKind;
+  onlyFileKind?: FileKind;
   onClick: (file: FileObject) => void;
 };
 
 const FileListItem = ({ fileId, onClick, onlyFileKind }: FileListItemProps) => {
   const file = useFile(fileId);
-  const getDisable = (fk: FileKind, fo: FileObject) => {
+  const getDisable = (fk?: FileKind, fo?: FileObject) => {
     if (!fk) return false;
     return fo ? getFileKind(fo.extension) !== onlyFileKind : true;
   };

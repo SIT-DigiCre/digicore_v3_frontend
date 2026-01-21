@@ -8,7 +8,7 @@ import { useErrorState } from "../useErrorState";
 import type { Work, WorkDetail, WorkRequest } from "../../interfaces/work";
 
 type UseWork = (workId: string) => {
-  workDetail: WorkDetail;
+  workDetail: WorkDetail | undefined;
   updateWork: (workRequest: WorkRequest) => Promise<boolean>;
   deleteWork: () => Promise<boolean>;
 };
@@ -106,7 +106,7 @@ export const useWorks: UseWorks = (authorId) => {
   const [isOver, setIsOver] = useState(false);
 
   const loadWork = async (n: number) => {
-    if (!authState.isLogined) return;
+    if (!authState.isLogined || !authState.user) return;
     try {
       const { data } = await apiClient.GET("/work/work", {
         params: {
@@ -123,6 +123,10 @@ export const useWorks: UseWorks = (authorId) => {
           Authorization: `Bearer ${authState.token}`,
         },
       });
+      if (!data) {
+        setNewError({ name: "works-get-fail", message: "Workの一覧の取得に失敗しました" });
+        return;
+      }
       // 1ページあたり10件のWorkが返ってくるため、これより少なければ最後のページに達したと判断する
       if (data.works.length < 10) {
         setIsOver(true);

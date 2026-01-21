@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
 import { Add, Save } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,13 +14,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
-import { FileObject } from "../../interfaces/file";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 
 import BudgetListItem from "./BudgetListItem";
 
+import type { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
+import type { FileObject } from "../../interfaces/file";
 import type { paths } from "../../utils/fetch/api.d";
 
 type BudgetDetailResponse =
@@ -38,7 +38,7 @@ type ValidationErrors = {
 
 type BudgetEditorProps = {
   onSubmit: (budget: PutBudgetRequest) => void;
-  initBudget?: BudgetDetailResponse;
+  initBudget: BudgetDetailResponse;
 };
 
 // status毎の編集可能なフィールドを定義 (trueで編集可能を表す)
@@ -66,7 +66,7 @@ const editableFields: {
     remark: true,
   },
   reject: {},
-};
+} as const;
 
 const isFilled = (s?: string) => {
   if (!s) return false;
@@ -142,13 +142,14 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
     }
   };
 
+  const currentField = editableFields[initBudget.status as keyof typeof editableFields];
+
   // 入力可能な必須項目がすべて valid のとき true
   const isAllValid =
-    (!editableFields[initBudget.status].name || validateField("name", name) === true) &&
-    (!editableFields[initBudget.status].purpose || validateField("purpose", purpose) === true) &&
-    (!editableFields[initBudget.status].budget || validateField("budget", budgetStr) === true) &&
-    (!editableFields[initBudget.status].settlement ||
-      validateField("settlement", settlementStr) === true);
+    (!currentField.name || validateField("name", name) === true) &&
+    (!currentField.purpose || validateField("purpose", purpose) === true) &&
+    (!currentField.budget || validateField("budget", budgetStr) === true) &&
+    (!currentField.settlement || validateField("settlement", settlementStr) === true);
 
   const onFileSelectCancel = () => {
     setIsOpenFileBrowser(false);
@@ -179,7 +180,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
     <Stack spacing={2} my={2}>
       <Box>
         <Heading level={3}>稟議名</Heading>
-        {editableFields[initBudget.status].name ? (
+        {currentField.name ? (
           <TextField
             required
             label="稟議名"
@@ -199,7 +200,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
         // 学園祭費または固定費用のときは省略する
         <Box>
           <Heading level={3}>利用目的</Heading>
-          {editableFields[initBudget.status].purpose ? (
+          {currentField.purpose ? (
             <TextField
               required
               fullWidth
@@ -217,7 +218,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
           )}
         </Box>
       )}
-      {editableFields[initBudget.status].mattermostUrl && (
+      {currentField.mattermostUrl && (
         <Box>
           <Heading level={3}>MattermostのURL</Heading>
           <TextField
@@ -235,7 +236,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
       {initBudget.class !== "festival" && initBudget.class !== "fixed" && (
         <Box>
           <Heading level={3}>予定金額</Heading>
-          {editableFields[initBudget.status].budget ? (
+          {currentField.budget ? (
             <TextField
               required
               type="number"
@@ -258,7 +259,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
       )}
       <Box>
         <Heading level={3}>購入金額</Heading>
-        {editableFields[initBudget.status].settlement ? (
+        {currentField.settlement ? (
           <TextField
             required
             type="number"
@@ -280,7 +281,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
           <Typography>承認後に購入金額を設定してください</Typography>
         )}
       </Box>
-      {editableFields[initBudget.status].remark && (
+      {currentField.remark && (
         <Box>
           <Heading level={3}>備考</Heading>
           <TextField
@@ -294,7 +295,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
           />
         </Box>
       )}
-      {editableFields[initBudget.status].files && (
+      {currentField.files && (
         <Box>
           <Heading level={3}>領収書</Heading>
           <List>

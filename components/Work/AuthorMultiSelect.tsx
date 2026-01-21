@@ -44,13 +44,13 @@ const AuthorMultiSelect = ({ initAuthors, currentUser, onChange }: Props) => {
         renderValue={(value, getItemProps) =>
           value.map((option, index) => {
             const isCurrentUser = option.userId === currentUser.userId;
-            const { key, ...itemProps } = getItemProps({ index });
+            const { key, onDelete, ...itemProps } = getItemProps({ index });
             return (
               <Chip
                 avatar={<Avatar src={option.iconUrl} />}
                 label={option.username}
                 key={key}
-                onDelete={isCurrentUser ? undefined : itemProps.onDelete}
+                onDelete={isCurrentUser ? undefined : onDelete}
                 {...itemProps}
                 disabled={isCurrentUser}
               />

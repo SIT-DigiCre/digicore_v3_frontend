@@ -9,16 +9,18 @@ type FileViewProps = {
 };
 
 const FileView = ({ file, width }: FileViewProps) => {
-  const contentRef: React.RefObject<HTMLDivElement> = useRef(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const [contentWidth, setContentWidth] = useState(100);
   const [contentHight, setContentHight] = useState(100);
 
   const onResize = () => {
+    if (!contentRef.current) return;
     setContentWidth(contentRef.current.getBoundingClientRect().width);
     setContentHight((contentRef.current.getBoundingClientRect().width * 10) / 16);
   };
 
   useEffect(() => {
+    if (!contentRef.current) return;
     setContentWidth(contentRef.current.getBoundingClientRect().width);
     setContentHight((contentRef.current.getBoundingClientRect().width * 10) / 16);
   }, []);

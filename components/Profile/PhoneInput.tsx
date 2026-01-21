@@ -14,7 +14,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
   const [num, setNum] = useState(initialPhoneNumber ? initialPhoneNumber : "");
   const [error, setError] = useState(false);
   useEffect(() => {
-    setNum(initialPhoneNumber);
+    setNum(initialPhoneNumber ?? "");
   }, [initialPhoneNumber]);
 
   return (
