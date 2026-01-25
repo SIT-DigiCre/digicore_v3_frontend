@@ -10,7 +10,6 @@ type Props = {
 };
 
 const TagMultiSelect = ({ selectedTags, onChange, workTags }: Props) => {
-
   if (!workTags || workTags.length === 0) return null;
 
   return (

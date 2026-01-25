@@ -33,9 +33,7 @@ export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => 
   }
 };
 
-const WorkCreatePage = ({
-  tags,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const WorkCreatePage = ({ tags }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();

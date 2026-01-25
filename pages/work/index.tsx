@@ -130,7 +130,7 @@ const WorkIndexPage = ({
               ))}
             </>
           ) : (
-            <Typography my={2}>作品がありません</Typography>
+            <Typography my={2}>Workがねぇ...</Typography>
           )}
         </Grid>
         {works && works.length > 0 && (

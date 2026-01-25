@@ -19,22 +19,18 @@ export const WorkCardPreview = ({ id }: Props) => {
     if (!authState.isLogined || !authState.token) return;
 
     (async () => {
-      try {
-        const res = await apiClient.GET("/work/work/{workId}", {
-          params: {
-            path: {
-              workId: id,
-            },
+      const res = await apiClient.GET("/work/work/{workId}", {
+        params: {
+          path: {
+            workId: id,
           },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-        });
-        if (res.data) {
-          setWorkDetail(res.data);
-        }
-      } catch {
-        // エラーは無視（プレビューなので）
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      if (res.data) {
+        setWorkDetail(res.data);
       }
     })();
   }, [id, authState.isLogined, authState.token]);

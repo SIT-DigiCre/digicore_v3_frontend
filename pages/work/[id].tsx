@@ -39,11 +39,7 @@ type WorkPublic = {
   tags: WorkPublicTag[];
 };
 
-export const getServerSideProps = async ({
-  params,
-  query,
-  req,
-}: GetServerSidePropsContext) => {
+export const getServerSideProps = async ({ params, query, req }: GetServerSidePropsContext) => {
   try {
     const id = params?.id;
     if (!id || typeof id !== "string") {
@@ -73,22 +69,18 @@ export const getServerSideProps = async ({
       return { notFound: true };
     }
 
-    try {
-      const publicRes = await client.GET("/work/work/{workId}/public", {
-        params: {
-          path: {
-            workId: id,
-          },
+    const publicRes = await client.GET("/work/work/{workId}/public", {
+      params: {
+        path: {
+          workId: id,
         },
-      });
-      if (publicRes.data) {
-        workPublic = publicRes.data as WorkPublic;
-        if (workPublic.description) {
-          workPublic.description = workPublic.description.substring(0, 100);
-        }
+      },
+    });
+    if (publicRes.data) {
+      workPublic = publicRes.data as WorkPublic;
+      if (workPublic.description) {
+        workPublic.description = workPublic.description.substring(0, 100);
       }
-    } catch {
-      // 公開情報の取得失敗は無視（ログイン済みの場合は詳細情報で表示可能）
     }
 
     if (!workDetail && !workPublic) {
