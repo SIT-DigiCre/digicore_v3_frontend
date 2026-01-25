@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -43,11 +43,7 @@ export const getServerSideProps = async ({
   params,
   query,
   req,
-}: {
-  params: { id?: string };
-  query: { mode?: string };
-  req: NextApiRequest;
-}) => {
+}: GetServerSidePropsContext) => {
   try {
     const id = params?.id;
     if (!id || typeof id !== "string") {
@@ -91,8 +87,8 @@ export const getServerSideProps = async ({
           workPublic.description = workPublic.description.substring(0, 100);
         }
       }
-    } catch (error) {
-      console.error("Failed to fetch work:", error);
+    } catch {
+      // 公開情報の取得失敗は無視（ログイン済みの場合は詳細情報で表示可能）
     }
 
     if (!workDetail && !workPublic) {
@@ -111,8 +107,7 @@ export const getServerSideProps = async ({
         tags,
       },
     };
-  } catch (error) {
-    console.error("Failed to fetch work:", error);
+  } catch {
     return { notFound: true };
   }
 };

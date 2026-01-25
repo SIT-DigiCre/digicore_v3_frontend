@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -11,7 +11,7 @@ import { useErrorState } from "../../../hook/useErrorState";
 import { WorkTagUpdate } from "../../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
 
   try {
@@ -42,8 +42,7 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
         tagDetails: validTagDetails,
       },
     };
-  } catch (error) {
-    console.error("Failed to fetch work tags:", error);
+  } catch {
     return {
       props: {
         tagDetails: [],

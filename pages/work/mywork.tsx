@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -23,13 +23,7 @@ import { createServerApiClient } from "../../utils/fetch/client";
 
 const ITEMS_PER_PAGE = 10;
 
-export const getServerSideProps = async ({
-  req,
-  query,
-}: {
-  req: NextApiRequest;
-  query: { page?: string };
-}) => {
+export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
   const page = query.page ? parseInt(query.page as string, 10) : 1;
   const offset = (page - 1) * ITEMS_PER_PAGE;
@@ -81,8 +75,7 @@ export const getServerSideProps = async ({
         hasPreviousPage,
       },
     };
-  } catch (error) {
-    console.error("Failed to fetch my works:", error);
+  } catch {
     return {
       redirect: {
         destination: "/login",
