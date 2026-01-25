@@ -1,16 +1,117 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Box, Button, Modal, TextField } from "@mui/material";
 
 import PageHead from "../../../components/Common/PageHead";
 import TagRow from "../../../components/Work/TagRow";
-import { useWorkTags } from "../../../hook/work/useWorkTag";
+import { useAuthState } from "../../../hook/useAuthState";
+import { useErrorState } from "../../../hook/useErrorState";
 import { WorkTagUpdate } from "../../../interfaces/work";
+import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-const WorkTagIndexPage = () => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const tagsRes = await client.GET("/work/tag");
+    const tags = tagsRes.data?.tags || [];
+
+    const tagDetails = await Promise.all(
+      tags.map(async (tag) => {
+        try {
+          const detailRes = await client.GET("/work/tag/{tagId}", {
+            params: {
+              path: {
+                tagId: tag.tagId,
+              },
+            },
+          });
+          return detailRes.data;
+        } catch {
+          return null;
+        }
+      }),
+    );
+
+    const validTagDetails = tagDetails.filter((detail) => detail !== null && detail !== undefined);
+
+    return {
+      props: {
+        tagDetails: validTagDetails,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch work tags:", error);
+    return {
+      props: {
+        tagDetails: [],
+      },
+    };
+  }
+};
+
+const WorkTagIndexPage = ({
+  tagDetails,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
   const [createModal, setCreateModal] = useState(false);
   const [newTag, setNewTag] = useState<WorkTagUpdate>({ name: "", description: "" });
-  const { workTags, createWorkTag, deleteWorkTag } = useWorkTags();
+
+  const createWorkTag = async (name: string, description: string) => {
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "work-tag-create-fail", message: "ログインしてください" });
+      return;
+    }
+
+    if (name.length === 0) {
+      setNewError({ name: "work-tag-create-fail", message: "タグ名を入力してください" });
+      return;
+    }
+
+    try {
+      await apiClient.POST("/work/tag", {
+        body: {
+          name,
+          description,
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      removeError("work-tag-create-fail");
+      router.reload();
+    } catch {
+      setNewError({ name: "work-tag-create-fail", message: "タグの新規作成に失敗しました" });
+    }
+  };
+
+  const deleteWorkTag = async (tagId: string) => {
+    if (!authState.isLogined || !authState.token) {
+      setNewError({ name: "work-tag-delete-fail", message: "ログインしてください" });
+      return;
+    }
+
+    try {
+      await apiClient.DELETE("/work/tag/{tagId}", {
+        params: {
+          path: {
+            tagId,
+          },
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      removeError("work-tag-delete-fail");
+      router.reload();
+    } catch {
+      setNewError({ name: "work-tag-delete-fail", message: "タグの削除に失敗しました" });
+    }
+  };
 
   return (
     <>
@@ -22,8 +123,8 @@ const WorkTagIndexPage = () => {
           </Button>
         </div>
         <div>
-          {workTags.map((WorkTag) => (
-            <TagRow key={WorkTag.tagId} tagId={WorkTag.tagId} deleteWorkTag={deleteWorkTag} />
+          {tagDetails.map((tagDetail) => (
+            <TagRow key={tagDetail.tagId} tagDetail={tagDetail} deleteWorkTag={deleteWorkTag} />
           ))}
         </div>
       </div>
@@ -60,6 +161,7 @@ const WorkTagIndexPage = () => {
               onClick={() => {
                 createWorkTag(newTag.name, newTag.description);
                 setCreateModal(false);
+                setNewTag({ name: "", description: "" });
               }}
             >
               作成
@@ -68,6 +170,7 @@ const WorkTagIndexPage = () => {
               variant="outlined"
               onClick={() => {
                 setCreateModal(false);
+                setNewTag({ name: "", description: "" });
               }}
               style={{ margin: "1rem" }}
             >

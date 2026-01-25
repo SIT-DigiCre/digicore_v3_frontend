@@ -1,25 +1,104 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { Add, FilterList } from "@mui/icons-material";
 import {
   Avatar,
   AvatarGroup,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Grid,
   Stack,
+  Typography,
 } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import PageHead from "../../components/Common/PageHead";
+import Pagination from "../../components/Common/Pagination";
 import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
-import { useWorks } from "../../hook/work/useWork";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const MyWorkPage = () => {
-  const { works, loadMore, isOver } = useWorks("my");
+const ITEMS_PER_PAGE = 10;
+
+export const getServerSideProps = async ({
+  req,
+  query,
+}: {
+  req: NextApiRequest;
+  query: { page?: string };
+}) => {
+  const client = createServerApiClient(req);
+  const page = query.page ? parseInt(query.page as string, 10) : 1;
+  const offset = (page - 1) * ITEMS_PER_PAGE;
+
+  try {
+    // 現在のユーザー情報を取得
+    const meRes = await client.GET("/user/me");
+    if (!meRes.data || !meRes.data.userId) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const userId = meRes.data.userId;
+
+    // 自分の作品一覧を取得
+    const worksRes = await client.GET("/work/work", {
+      params: {
+        query: {
+          offset,
+          authorId: userId,
+        },
+      },
+    });
+
+    if (!worksRes.data || !worksRes.data.works) {
+      return {
+        props: {
+          works: [],
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      };
+    }
+
+    const works = worksRes.data.works;
+    const hasNextPage = works.length === ITEMS_PER_PAGE;
+    const hasPreviousPage = page > 1;
+
+    return {
+      props: {
+        works,
+        currentPage: page,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch my works:", error);
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+};
+
+const MyWorkPage = ({
+  works,
+  currentPage,
+  hasNextPage,
+  hasPreviousPage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
 
   return (
     <>
@@ -34,7 +113,7 @@ const MyWorkPage = () => {
       </Stack>
       <Stack spacing={2}>
         <Grid container>
-          {works ? (
+          {works && works.length > 0 ? (
             <>
               {works.map((w) => (
                 <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
@@ -70,15 +149,25 @@ const MyWorkPage = () => {
               ))}
             </>
           ) : (
-            <p>Workがねぇ...</p>
+            <Typography my={2}>作品がありません</Typography>
           )}
         </Grid>
+        {works && works.length > 0 && (
+          <Stack alignItems="center">
+            <Pagination
+              page={currentPage}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              onChange={(page) =>
+                router.push({
+                  pathname: router.pathname,
+                  query: { page },
+                })
+              }
+            />
+          </Stack>
+        )}
       </Stack>
-      {!isOver && (
-        <Stack alignItems="center" my={2}>
-          <Button onClick={() => loadMore()}>もっと見る</Button>
-        </Stack>
-      )}
     </>
   );
 };

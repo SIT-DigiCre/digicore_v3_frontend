@@ -1,15 +1,15 @@
 import { Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Stack } from "@mui/material";
 import Select from "@mui/material/Select";
 
-import { useWorkTags } from "../../hook/work/useWorkTag";
+import { WorkTag } from "../../interfaces/work";
 
 type Props = {
   selectedTags: string[];
   onChange: (tagIds: string[]) => void;
+  workTags: WorkTag[];
 };
 
-const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
-  const { workTags } = useWorkTags();
+const TagMultiSelect = ({ selectedTags, onChange, workTags }: Props) => {
 
   if (!workTags || workTags.length === 0) return null;
 

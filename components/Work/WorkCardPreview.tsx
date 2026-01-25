@@ -1,13 +1,43 @@
-import { useWork } from "../../hook/work/useWork";
+import { useEffect, useState } from "react";
+
 import MarkdownView from "../Markdown/MarkdownView";
+import { useAuthState } from "../../hook/useAuthState";
+import { WorkDetail } from "../../interfaces/work";
+import { apiClient } from "../../utils/fetch/client";
 
 import { WorkFileView } from "./WorkFileView";
 
 type Props = {
   id: string;
 };
+
 export const WorkCardPreview = ({ id }: Props) => {
-  const { workDetail } = useWork(id);
+  const { authState } = useAuthState();
+  const [workDetail, setWorkDetail] = useState<WorkDetail | null>(null);
+
+  useEffect(() => {
+    if (!authState.isLogined || !authState.token) return;
+
+    (async () => {
+      try {
+        const res = await apiClient.GET("/work/work/{workId}", {
+          params: {
+            path: {
+              workId: id,
+            },
+          },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        });
+        if (res.data) {
+          setWorkDetail(res.data);
+        }
+      } catch {
+        // エラーは無視（プレビューなので）
+      }
+    })();
+  }, [id, authState.isLogined, authState.token]);
 
   if (!workDetail) {
     return <p>読み込み中...</p>;

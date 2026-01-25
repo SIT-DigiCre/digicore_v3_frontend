@@ -14,14 +14,15 @@ import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
 
-import type { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
+import type { WorkAuthor, WorkDetail, WorkRequest, WorkTag } from "../../interfaces/work";
 
 type WorkEditorProps = {
   onSubmit: (work: WorkRequest) => void;
   initWork?: WorkDetail;
+  initialTags?: WorkTag[];
 };
 
-const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
+const WorkEditor = ({ onSubmit, initWork, initialTags }: WorkEditorProps) => {
   const { authState } = useAuthState();
   const [authorIds, setAuthorIds] = useState<string[]>([]);
   const [name, setName] = useState("");
@@ -135,7 +136,11 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
       <Box>
         <Heading level={3}>タグ</Heading>
         {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
-        <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
+        <TagMultiSelect
+          selectedTags={tags}
+          onChange={(tags) => setTags(tags)}
+          workTags={initialTags || []}
+        />
       </Box>
       <Box>
         <Heading level={3}>作品説明</Heading>

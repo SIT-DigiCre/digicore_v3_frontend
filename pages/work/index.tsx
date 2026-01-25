@@ -1,26 +1,92 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { FilterList } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import {
   Avatar,
   AvatarGroup,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Grid,
   Stack,
+  Typography,
 } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import PageHead from "../../components/Common/PageHead";
+import Pagination from "../../components/Common/Pagination";
 import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
-import { useWorks } from "../../hook/work/useWork";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const WorkIndexPage = () => {
-  const { works, loadMore, isOver } = useWorks();
+const ITEMS_PER_PAGE = 10;
+
+export const getServerSideProps = async ({
+  req,
+  query,
+}: {
+  req: NextApiRequest;
+  query: { page?: string };
+}) => {
+  const client = createServerApiClient(req);
+  const page = query.page ? parseInt(query.page as string, 10) : 1;
+  const offset = (page - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const worksRes = await client.GET("/work/work", {
+      params: {
+        query: {
+          offset,
+        },
+      },
+    });
+
+    if (!worksRes.data || !worksRes.data.works) {
+      return {
+        props: {
+          works: [],
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      };
+    }
+
+    const works = worksRes.data.works;
+    const hasNextPage = works.length === ITEMS_PER_PAGE;
+    const hasPreviousPage = page > 1;
+
+    return {
+      props: {
+        works,
+        currentPage: page,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch works:", error);
+    return {
+      props: {
+        works: [],
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+  }
+};
+
+const WorkIndexPage = ({
+  works,
+  currentPage,
+  hasNextPage,
+  hasPreviousPage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
 
   return (
     <>
@@ -35,7 +101,7 @@ const WorkIndexPage = () => {
           </ButtonLink>
         </Stack>
         <Grid container>
-          {works ? (
+          {works && works.length > 0 ? (
             <>
               {works.map((w) => (
                 <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
@@ -71,16 +137,27 @@ const WorkIndexPage = () => {
               ))}
             </>
           ) : (
-            <p>Workがねぇ...</p>
+            <Typography my={2}>作品がありません</Typography>
           )}
         </Grid>
+        {works && works.length > 0 && (
+          <Stack alignItems="center">
+            <Pagination
+              page={currentPage}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              onChange={(page) =>
+                router.push({
+                  pathname: router.pathname,
+                  query: { page },
+                })
+              }
+            />
+          </Stack>
+        )}
       </Stack>
-      {!isOver && (
-        <Stack alignItems="center" my={2}>
-          <Button onClick={() => loadMore()}>もっと見る</Button>
-        </Stack>
-      )}
     </>
   );
 };
+
 export default WorkIndexPage;
