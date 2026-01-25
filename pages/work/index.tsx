@@ -26,7 +26,8 @@ const ITEMS_PER_PAGE = 10;
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
-  const page = query.page ? parseInt(query.page as string, 10) : 1;
+  const rawPage = query.page ? parseInt(query.page as string, 10) : 1;
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
   const offset = (page - 1) * ITEMS_PER_PAGE;
 
   try {

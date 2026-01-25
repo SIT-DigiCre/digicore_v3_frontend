@@ -54,19 +54,15 @@ export const getServerSideProps = async ({ params, query, req }: GetServerSidePr
     let workDetail = null;
     let workPublic: WorkPublic | undefined = undefined;
 
-    try {
-      const detailRes = await client.GET("/work/work/{workId}", {
-        params: {
-          path: {
-            workId: id,
-          },
+    const detailRes = await client.GET("/work/work/{workId}", {
+      params: {
+        path: {
+          workId: id,
         },
-      });
-      if (detailRes.data) {
-        workDetail = detailRes.data;
-      }
-    } catch {
-      return { notFound: true };
+      },
+    });
+    if (detailRes.data) {
+      workDetail = detailRes.data;
     }
 
     const publicRes = await client.GET("/work/work/{workId}/public", {
