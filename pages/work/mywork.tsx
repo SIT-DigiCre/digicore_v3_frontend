@@ -1,25 +1,117 @@
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { Add, FilterList } from "@mui/icons-material";
 import {
   Avatar,
   AvatarGroup,
-  Button,
   Card,
   CardContent,
   CardHeader,
   Grid,
   Stack,
+  Typography,
 } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import PageHead from "../../components/Common/PageHead";
+import Pagination from "../../components/Common/Pagination";
 import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
-import { useWorks } from "../../hook/work/useWork";
+import { WorkDetail } from "../../interfaces/work";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const MyWorkPage = () => {
-  const { works, loadMore, isOver } = useWorks("my");
+const ITEMS_PER_PAGE = 10;
+
+export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
+  const client = createServerApiClient(req);
+  const rawPage = query.page ? parseInt(query.page as string, 10) : 1;
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+  const offset = (page - 1) * ITEMS_PER_PAGE;
+
+  try {
+    const meRes = await client.GET("/user/me");
+    if (!meRes.data || !meRes.data.userId) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const userId = meRes.data.userId;
+
+    const worksRes = await client.GET("/work/work", {
+      params: {
+        query: {
+          offset,
+          authorId: userId,
+        },
+      },
+    });
+
+    if (!worksRes.data || !worksRes.data.works) {
+      return {
+        props: {
+          works: [],
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      };
+    }
+
+    const works = worksRes.data.works;
+    const hasNextPage = works.length === ITEMS_PER_PAGE;
+    const hasPreviousPage = page > 1;
+
+    const workDetails = await Promise.all(
+      works.map(async (work) => {
+        const detailRes = await client.GET("/work/work/{workId}", {
+          params: {
+            path: {
+              workId: work.workId,
+            },
+          },
+        });
+        if (detailRes.data) {
+          return detailRes.data;
+        }
+        return {
+          ...work,
+          description: "",
+          files: [],
+        } as WorkDetail;
+      }),
+    );
+
+    return {
+      props: {
+        works: workDetails,
+        currentPage: page,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
+  } catch {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+};
+
+const MyWorkPage = ({
+  works,
+  currentPage,
+  hasNextPage,
+  hasPreviousPage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  const router = useRouter();
 
   return (
     <>
@@ -34,7 +126,7 @@ const MyWorkPage = () => {
       </Stack>
       <Stack spacing={2}>
         <Grid container>
-          {works ? (
+          {works && works.length > 0 ? (
             <>
               {works.map((w) => (
                 <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
@@ -62,7 +154,7 @@ const MyWorkPage = () => {
                       }
                     ></CardHeader>
                     <CardContent>
-                      <WorkCardPreview id={w.workId} />
+                      <WorkCardPreview description={w.description} files={w.files} />
                       {w.tags && <ChipList chipList={w.tags.map((t) => t.name)} />}
                     </CardContent>
                   </Card>
@@ -70,15 +162,25 @@ const MyWorkPage = () => {
               ))}
             </>
           ) : (
-            <p>Workがねぇ...</p>
+            <Typography my={2}>Workがねぇ...</Typography>
           )}
         </Grid>
+        {works && works.length > 0 && (
+          <Stack alignItems="center">
+            <Pagination
+              page={currentPage}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              onChange={(page) =>
+                router.push({
+                  pathname: router.pathname,
+                  query: { page },
+                })
+              }
+            />
+          </Stack>
+        )}
       </Stack>
-      {!isOver && (
-        <Stack alignItems="center" my={2}>
-          <Button onClick={() => loadMore()}>もっと見る</Button>
-        </Stack>
-      )}
     </>
   );
 };

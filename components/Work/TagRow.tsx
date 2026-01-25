@@ -2,18 +2,18 @@ import { useState } from "react";
 
 import { useTheme, Modal, Box, Stack, Button } from "@mui/material";
 
-import { useWorkTagDetail } from "../../hook/work/useWorkTag";
+import { WorkTagDetail } from "../../interfaces/work";
 
 type Props = {
-  tagId: string;
+  tagDetail: WorkTagDetail;
   deleteWorkTag: (tagId: string) => void;
 };
 
-const TagRow = ({ tagId, deleteWorkTag }: Props) => {
-  const tagDetail = useWorkTagDetail(tagId);
+const TagRow = ({ tagDetail, deleteWorkTag }: Props) => {
   const [deleteModal, setDeleteModal] = useState<boolean>(false);
   const theme = useTheme();
-  return tagDetail ? (
+
+  return (
     <div style={{ display: "flex", margin: 6, justifyContent: "space-between" }}>
       <div>{tagDetail.name}</div>
       <div>
@@ -39,7 +39,7 @@ const TagRow = ({ tagId, deleteWorkTag }: Props) => {
               color="error"
               style={{ margin: "1rem" }}
               onClick={() => {
-                deleteWorkTag(tagId);
+                deleteWorkTag(tagDetail.tagId);
                 setDeleteModal(false);
               }}
             >
@@ -58,7 +58,7 @@ const TagRow = ({ tagId, deleteWorkTag }: Props) => {
         </Box>
       </Modal>
     </div>
-  ) : null;
+  );
 };
 
 export default TagRow;
