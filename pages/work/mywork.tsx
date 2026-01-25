@@ -19,6 +19,7 @@ import ChipList from "../../components/Common/ChipList";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
+import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 const ITEMS_PER_PAGE = 10;
@@ -30,7 +31,6 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
   const offset = (page - 1) * ITEMS_PER_PAGE;
 
   try {
-    // 現在のユーザー情報を取得
     const meRes = await client.GET("/user/me");
     if (!meRes.data || !meRes.data.userId) {
       return {
@@ -43,7 +43,6 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
 
     const userId = meRes.data.userId;
 
-    // 自分の作品一覧を取得
     const worksRes = await client.GET("/work/work", {
       params: {
         query: {
@@ -68,9 +67,29 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
     const hasNextPage = works.length === ITEMS_PER_PAGE;
     const hasPreviousPage = page > 1;
 
+    const workDetails = await Promise.all(
+      works.map(async (work) => {
+        const detailRes = await client.GET("/work/work/{workId}", {
+          params: {
+            path: {
+              workId: work.workId,
+            },
+          },
+        });
+        if (detailRes.data) {
+          return detailRes.data;
+        }
+        return {
+          ...work,
+          description: "",
+          files: [],
+        } as WorkDetail;
+      }),
+    );
+
     return {
       props: {
-        works,
+        works: workDetails,
         currentPage: page,
         hasNextPage,
         hasPreviousPage,
@@ -135,7 +154,7 @@ const MyWorkPage = ({
                       }
                     ></CardHeader>
                     <CardContent>
-                      <WorkCardPreview id={w.workId} />
+                      <WorkCardPreview description={w.description} files={w.files} />
                       {w.tags && <ChipList chipList={w.tags.map((t) => t.name)} />}
                     </CardContent>
                   </Card>
