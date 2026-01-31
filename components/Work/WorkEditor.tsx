@@ -14,19 +14,20 @@ import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
 
-import type { WorkAuthor, WorkDetail, WorkRequest } from "../../interfaces/work";
+import type { WorkAuthor, WorkDetail, WorkRequest, WorkTag } from "../../interfaces/work";
 
 type WorkEditorProps = {
   onSubmit: (work: WorkRequest) => void;
   initWork?: WorkDetail;
+  workTags?: WorkTag[];
 };
 
-const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
+const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
   const { authState } = useAuthState();
   const [authorIds, setAuthorIds] = useState<string[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [tags, setTags] = useState<string[]>([]);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
   const [files, setFiles] = useState<string[]>([]);
   const [isOpenFileBrowser, setIsOpenFileBrowser] = useState(false);
 
@@ -39,7 +40,7 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
     setAuthorIds(initWork.authors.map((a) => a.userId));
     setName(initWork.name);
     setDescription(initWork.description);
-    setTags(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
+    setSelectedTagIds(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
     setFiles(initWork.files ? initWork.files.map((f) => f.fileId) : []);
   }, [initWork]);
 
@@ -59,7 +60,7 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
       name: name,
       description: description,
       authors: authorIds,
-      tags: tags,
+      tags: selectedTagIds,
       files: files,
     };
     onSubmit(workRequest);
@@ -135,7 +136,11 @@ const WorkEditor = ({ onSubmit, initWork }: WorkEditorProps) => {
       <Box>
         <Heading level={3}>タグ</Heading>
         {/* 後で岡本さんがどうにかしてくれる → そうか？ →　そうだった！ */}
-        <TagMultiSelect selectedTags={tags} onChange={(tags) => setTags(tags)} />
+        <TagMultiSelect
+          selectedTagIds={selectedTagIds}
+          onChange={(newSelectedTagIds) => setSelectedTagIds(newSelectedTagIds)}
+          workTags={workTags || []}
+        />
       </Box>
       <Box>
         <Heading level={3}>作品説明</Heading>

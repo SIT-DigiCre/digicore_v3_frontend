@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -14,15 +14,9 @@ import MarkdownView from "../../components/Markdown/MarkdownView";
 import WorkEditor from "../../components/Work/WorkEditor";
 import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useAuthState } from "../../hook/useAuthState";
-import { useWork } from "../../hook/work/useWork";
+import { useErrorState } from "../../hook/useErrorState";
 import { WorkRequest } from "../../interfaces/work";
-import { isAxiosError, serverSideAxios } from "../../utils/axios";
-
-type WorkDetailPageProps = {
-  id: string;
-  modeStr?: string;
-  workPublic?: WorkPublic;
-};
+import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
 type WorkPublicAuthor = {
   userId: string;
@@ -45,30 +39,75 @@ type WorkPublic = {
   tags: WorkPublicTag[];
 };
 
-const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
-  const { workDetail, updateWork, deleteWork } = useWork(id);
+export const getServerSideProps = async ({ params, query, req }: GetServerSidePropsContext) => {
+  try {
+    const id = params?.id;
+    if (!id || typeof id !== "string") {
+      return { notFound: true };
+    }
+
+    const { mode } = query;
+    const modeStr = typeof mode === "string" ? mode : null;
+
+    const client = createServerApiClient(req);
+
+    let workDetail = null;
+    let workPublic: WorkPublic | undefined = undefined;
+
+    const detailRes = await client.GET("/work/work/{workId}", {
+      params: {
+        path: {
+          workId: id,
+        },
+      },
+    });
+    if (detailRes.data) {
+      workDetail = detailRes.data;
+    }
+
+    const publicRes = await client.GET("/work/work/{workId}/public", {
+      params: {
+        path: {
+          workId: id,
+        },
+      },
+    });
+    if (publicRes.data) {
+      workPublic = publicRes.data as WorkPublic;
+      if (workPublic.description) {
+        workPublic.description = workPublic.description.substring(0, 100);
+      }
+    }
+
+    if (!workDetail && !workPublic) {
+      return { notFound: true };
+    }
+
+    const tagsRes = await client.GET("/work/tag");
+    const tags = tagsRes.data?.tags || [];
+
+    return {
+      props: {
+        id,
+        modeStr,
+        workDetail,
+        workPublic,
+        tags,
+      },
+    };
+  } catch {
+    return { notFound: true };
+  }
+};
+
+type WorkDetailPageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetailPageProps) => {
   const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
   const router = useRouter();
 
-  if (!workDetail || !authState.user) return <p>読み込み中...</p>;
-
-  const onSubmit = (workRequest: WorkRequest) => {
-    updateWork(workRequest).then((result) => {
-      if (!result) return;
-      router.push(`/work/${id}`);
-    });
-  };
-
-  const onClickDelete = async () => {
-    const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
-    if (res) {
-      await deleteWork();
-      router.push(`/work`);
-    }
-  };
-
-  // TODO: サーバーサイドでOGPが生成されるようにする
-  if (!authState.isLogined && !!workPublic) {
+  if (!authState.isLogined && workPublic) {
     return (
       <Head>
         <meta property="og:title" content={workPublic.name} />
@@ -91,7 +130,61 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
     );
   }
 
-  if (!authState.isLogined || !authState.user) return <p>読み込み中...</p>;
+  if (!authState.isLogined || !authState.user || !workDetail) {
+    return <p>読み込み中...</p>;
+  }
+
+  const onSubmit = async (workRequest: WorkRequest) => {
+    if (!authState.token) {
+      setNewError({ name: "work-put-fail", message: "ログインしてください" });
+      return;
+    }
+
+    try {
+      await apiClient.PUT("/work/work/{workId}", {
+        params: {
+          path: {
+            workId: id,
+          },
+        },
+        body: workRequest,
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      removeError("work-put-fail");
+      router.reload();
+    } catch {
+      setNewError({ name: "work-put-fail", message: "Workの更新に失敗しました" });
+    }
+  };
+
+  const onClickDelete = async () => {
+    if (!authState.token) {
+      setNewError({ name: "work-delete-fail", message: "ログインしてください" });
+      return;
+    }
+
+    const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
+    if (!res) return;
+
+    try {
+      await apiClient.DELETE("/work/work/{workId}", {
+        params: {
+          path: {
+            workId: id,
+          },
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
+      removeError("work-delete-fail");
+      router.push(`/work`);
+    } catch {
+      setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
+    }
+  };
 
   return (
     <>
@@ -100,7 +193,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
         <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
           作品一覧に戻る
         </ButtonLink>
-        {workDetail.authors.map((a) => a.userId).includes(authState.user.userId!) && (
+        {workDetail.authors.some((a) => a.userId === authState.user?.userId) && (
           <Stack direction="row" spacing={1}>
             {modeStr !== "edit" && (
               <IconButtonLink href={`/work/${id}?mode=edit`} ariaLabel="編集する">
@@ -114,7 +207,7 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
         )}
       </Stack>
       {modeStr === "edit" ? (
-        <WorkEditor onSubmit={onSubmit} initWork={workDetail} />
+        <WorkEditor onSubmit={onSubmit} initWork={workDetail} workTags={tags} />
       ) : (
         <Stack direction="column" spacing={2} my={2}>
           <Box>
@@ -160,28 +253,3 @@ const WorkDetailPage = ({ id, modeStr, workPublic }: WorkDetailPageProps) => {
 };
 
 export default WorkDetailPage;
-
-export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
-  try {
-    const id = params?.id;
-    const { mode } = query;
-    const modeStr = typeof mode === "string" ? mode : null;
-    let work: WorkPublic | undefined;
-    try {
-      const res = await serverSideAxios.get(`/work/work/${id}/public`);
-      work = res.data;
-    } catch (e) {
-      if (isAxiosError(e)) {
-        console.error(e.response?.data);
-      }
-    }
-
-    if (work?.description) {
-      work.description = work.description.substring(0, 100);
-    }
-
-    return { props: { id, modeStr, workPublic: work } };
-  } catch (error) {
-    return { props: { errors: (error as Error).message } };
-  }
-};

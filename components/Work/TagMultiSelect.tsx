@@ -1,16 +1,15 @@
 import { Chip, FormControl, InputLabel, MenuItem, OutlinedInput, Stack } from "@mui/material";
 import Select from "@mui/material/Select";
 
-import { useWorkTags } from "../../hook/work/useWorkTag";
+import { WorkTag } from "../../interfaces/work";
 
 type Props = {
-  selectedTags: string[];
+  selectedTagIds: string[];
   onChange: (tagIds: string[]) => void;
+  workTags: WorkTag[];
 };
 
-const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
-  const { workTags } = useWorkTags();
-
+const TagMultiSelect = ({ selectedTagIds, onChange, workTags }: Props) => {
   if (!workTags || workTags.length === 0) return null;
 
   return (
@@ -19,7 +18,7 @@ const TagMultiSelect = ({ selectedTags, onChange }: Props) => {
       <Select
         labelId="multiple-tag-label"
         multiple={true}
-        value={selectedTags}
+        value={selectedTagIds}
         onChange={(event) => {
           const value = event.target.value;
           if (typeof value === "string") {

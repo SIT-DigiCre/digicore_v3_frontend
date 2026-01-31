@@ -1,21 +1,17 @@
-import { useWork } from "../../hook/work/useWork";
+import { WorkFile } from "../../interfaces/work";
 import MarkdownView from "../Markdown/MarkdownView";
 
 import { WorkFileView } from "./WorkFileView";
 
 type Props = {
-  id: string;
+  description: string;
+  files: WorkFile[];
 };
-export const WorkCardPreview = ({ id }: Props) => {
-  const { workDetail } = useWork(id);
 
-  if (!workDetail) {
-    return <p>読み込み中...</p>;
+export const WorkCardPreview = ({ description, files }: Props) => {
+  if (!files || files.length === 0) {
+    return <MarkdownView md={description.substring(0, 120)} />;
   }
 
-  if (!workDetail.files || workDetail.files.length === 0) {
-    return <MarkdownView md={workDetail.description.substring(0, 120)} />;
-  }
-
-  return <WorkFileView fileId={workDetail.files[0].fileId} />;
+  return <WorkFileView fileId={files[0].fileId} />;
 };
