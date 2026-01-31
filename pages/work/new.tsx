@@ -72,7 +72,7 @@ const WorkCreatePage = ({ tags }: InferGetServerSidePropsType<typeof getServerSi
           作品一覧に戻る
         </ButtonLink>
       </Stack>
-      <WorkEditor onSubmit={onSubmit} initialTags={tags} />
+      <WorkEditor onSubmit={onSubmit} workTags={tags} />
     </>
   );
 };

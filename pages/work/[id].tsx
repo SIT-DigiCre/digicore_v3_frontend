@@ -207,7 +207,7 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
         )}
       </Stack>
       {modeStr === "edit" ? (
-        <WorkEditor onSubmit={onSubmit} initWork={workDetail} initialTags={tags} />
+        <WorkEditor onSubmit={onSubmit} initWork={workDetail} workTags={tags} />
       ) : (
         <Stack direction="column" spacing={2} my={2}>
           <Box>
