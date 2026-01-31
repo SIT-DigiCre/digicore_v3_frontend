@@ -5,11 +5,11 @@ import { useMemo, type ReactElement, type ReactNode } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import { DarkModeProvider } from "../components/DarkModeContext";
+import { DarkModeProvider, useDarkMode } from "../components/DarkModeContext";
 import { ErrorStateProvider } from "../components/ErrorStateContext";
 import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
-import { useDarkMode } from "../hook/useDarkMode";
+import { PageTitleProvider } from "../components/PageTitleContext";
 import "../style/common.css";
 
 import "highlightjs/styles/vs2015.css";
@@ -27,7 +27,9 @@ const App = ({ Component, pageProps, router }: AppPropsWithLayout) => {
   return (
     <ErrorStateProvider>
       <DarkModeProvider>
-        <AppRoot Component={Component} pageProps={pageProps} router={router} />
+        <PageTitleProvider>
+          <AppRoot Component={Component} pageProps={pageProps} router={router} />
+        </PageTitleProvider>
       </DarkModeProvider>
     </ErrorStateProvider>
   );

@@ -20,7 +20,7 @@ export const useFile: UseFile = (fileId) => {
         const res = await apiClient.GET("/storage/{fileId}", {
           params: { path: { fileId } },
           headers: {
-            Authorization: "Bearer " + authState.token,
+            Authorization: `Bearer  ${authState.token}`,
           },
         });
         if (res.data) {
@@ -52,11 +52,11 @@ export const useMyFiles: UseMyFiles = () => {
     try {
       const res = await apiClient.GET("/storage/myfile", {
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer  ${authState.token}`,
         },
       });
       if (res.data?.files) {
-        setFileInfos(res.data.files as unknown as FileInfo[]);
+        setFileInfos(res.data.files);
         removeError("myfileobjects-get-fail");
       }
     } catch {
@@ -77,12 +77,12 @@ export const useMyFiles: UseMyFiles = () => {
       const res = await apiClient.POST("/storage/myfile", {
         body: file,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer  ${authState.token}`,
         },
       });
       if (res.data) {
         removeError("myfileobject-post-fail");
-        return res.data as unknown as FileObject;
+        return res.data;
       }
       return "アップロードに失敗しました";
     } catch (e: unknown) {

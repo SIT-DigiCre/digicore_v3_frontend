@@ -1,7 +1,9 @@
 import type { GetServerSideProps } from "next";
 import Link from "next/link";
+import { useState } from "react";
 
-import { Box, Stack, TextField, Typography } from "@mui/material";
+import { CheckCircle, CopyAll } from "@mui/icons-material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
@@ -38,6 +40,8 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
 };
 
 const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCallbackPageProps) => {
+  const [isCopied, setIsCopied] = useState(false);
+
   if (codeMissing) {
     return (
       <Box>
@@ -62,6 +66,18 @@ const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCall
             をご利用ください。お問い合わせの際は以下のエラーメッセージを添えていただけると幸いです。
           </Typography>
           <Stack spacing={2} alignItems="center" mt={2}>
+            {errorMessage && (
+              <Button
+                startIcon={isCopied ? <CheckCircle /> : <CopyAll />}
+                variant="contained"
+                onClick={() => {
+                  navigator.clipboard.writeText(errorMessage);
+                  setIsCopied(true);
+                }}
+              >
+                {isCopied ? "コピーしました" : "エラーメッセージをコピー"}
+              </Button>
+            )}
             <TextField value={errorMessage ?? ""} disabled fullWidth multiline rows={10} />
           </Stack>
         </Box>

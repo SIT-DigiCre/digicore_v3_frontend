@@ -56,3 +56,5 @@ export const useDarkModeContext = (): DarkModeContextValue => {
   if (!ctx) throw new Error("useDarkModeContext must be used within DarkModeProvider");
   return ctx;
 };
+
+export const useDarkMode = useDarkModeContext;

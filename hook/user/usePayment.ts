@@ -20,7 +20,7 @@ export const usePayment: UsePayment = () => {
     try {
       const res = await apiClient.GET("/user/me/payment", {
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer  ${authState.token}`,
         },
       });
       if (res.data?.histories) {
@@ -47,7 +47,7 @@ export const usePayment: UsePayment = () => {
       await apiClient.PUT("/user/me/payment", {
         body: { transferName: name },
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer  ${authState.token}`,
         },
       });
       await getHistories();

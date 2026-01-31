@@ -2,8 +2,8 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack } from "@
 
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
+import { useDarkMode } from "../../components/DarkModeContext";
 import { useAuthState } from "../../hook/useAuthState";
-import { useDarkMode } from "../../hook/useDarkMode";
 import { DarkMode } from "../../interfaces";
 
 const SettingPage = () => {

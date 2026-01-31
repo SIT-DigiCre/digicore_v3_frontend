@@ -13,6 +13,7 @@ import {
 
 import Heading from "../Common/Heading";
 import ErrorView from "../Error/ErrorView";
+import { usePageTitle } from "../PageTitleContext";
 
 import Drawer from "./Drawer";
 
@@ -24,6 +25,7 @@ interface AppBarProps {
 }
 
 export default function AppBar({ children, window }: AppBarProps) {
+  const { title } = usePageTitle();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
@@ -66,7 +68,7 @@ export default function AppBar({ children, window }: AppBarProps) {
           >
             <MenuIcon />
           </IconButton>
-          <Heading level={1}>デジクリ</Heading>
+          <Heading level={1}>{title}</Heading>
         </Toolbar>
       </MuiAppBar>
       <Box

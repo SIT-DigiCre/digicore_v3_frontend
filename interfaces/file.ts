@@ -5,8 +5,6 @@ export type FileInfo = {
   kSize: string;
   extension: string;
   isPublic: boolean;
-  createdAt: Date;
-  updateAt: Date;
 };
 
 export type FileObject = FileInfo & {

@@ -47,12 +47,12 @@ export const useAuthState: UseAuthState = () => {
         return {
           isLogined: true,
           isLoading: false,
-          user: res.data as User,
+          user: res.data,
           token,
         };
       });
       removeError("autologin-fail");
-      return res.data as User;
+      return res.data;
     } catch {
       if (!isPublicPage) {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
@@ -64,9 +64,7 @@ export const useAuthState: UseAuthState = () => {
 
   const getToken = (): string | null => {
     if (typeof document === "undefined") return null;
-    const jwtCookie = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("jwt="));
+    const jwtCookie = document.cookie.split("; ").find((row) => row.startsWith("jwt="));
     return jwtCookie ? jwtCookie.replace(/^jwt=/, "") : null;
   };
 
@@ -88,7 +86,7 @@ export const useAuthState: UseAuthState = () => {
   };
 
   const onLogin = (token: string) => {
-    const maxAge = 60 * 60 * 24 * 7;
+    const maxAge = 60 * 60 * 24 * 7; // 7日間
     const isProduction = process.env.NODE_ENV === "production";
     const secureFlag = isProduction ? "; Secure" : "";
     document.cookie = `jwt=${token}; path=/; max-age=${maxAge}; SameSite=Lax${secureFlag}`;

@@ -184,6 +184,7 @@ export const useBudgets: UseBudgets = (proposerId) => {
         },
       });
       if (data) {
+        // 1ページあたり10件のBudgetが返ってくるため、これより少なければ最後のページに達したと判断する
         if (data.budgets.length < 10) {
           setIsOver(true);
         }
