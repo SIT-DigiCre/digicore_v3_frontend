@@ -4,12 +4,12 @@ import Select from "@mui/material/Select";
 import { WorkTag } from "../../interfaces/work";
 
 type Props = {
-  selectedTags: string[];
+  selectedTagIds: string[];
   onChange: (tagIds: string[]) => void;
   workTags: WorkTag[];
 };
 
-const TagMultiSelect = ({ selectedTags, onChange, workTags }: Props) => {
+const TagMultiSelect = ({ selectedTagIds, onChange, workTags }: Props) => {
   if (!workTags || workTags.length === 0) return null;
 
   return (
@@ -18,7 +18,7 @@ const TagMultiSelect = ({ selectedTags, onChange, workTags }: Props) => {
       <Select
         labelId="multiple-tag-label"
         multiple={true}
-        value={selectedTags}
+        value={selectedTagIds}
         onChange={(event) => {
           const value = event.target.value;
           if (typeof value === "string") {
