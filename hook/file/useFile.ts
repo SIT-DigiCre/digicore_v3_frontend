@@ -20,7 +20,7 @@ export const useFile: UseFile = (fileId) => {
         const res = await apiClient.GET("/storage/{fileId}", {
           params: { path: { fileId } },
           headers: {
-            Authorization: `Bearer  ${authState.token}`,
+            Authorization: `Bearer ${authState.token}`,
           },
         });
         if (res.data) {
@@ -52,7 +52,7 @@ export const useMyFiles: UseMyFiles = () => {
     try {
       const res = await apiClient.GET("/storage/myfile", {
         headers: {
-          Authorization: `Bearer  ${authState.token}`,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       if (res.data?.files) {
@@ -77,7 +77,7 @@ export const useMyFiles: UseMyFiles = () => {
       const res = await apiClient.POST("/storage/myfile", {
         body: file,
         headers: {
-          Authorization: `Bearer  ${authState.token}`,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       if (res.data) {

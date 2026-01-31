@@ -15,7 +15,7 @@ export const useMattermostRegister = (): {
       const res = await apiClient.POST("/mattermost/create_user", {
         body: f,
         headers: {
-          Authorization: `Bearer  ${authState.token}`,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
       if (res.data) {

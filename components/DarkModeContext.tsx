@@ -24,6 +24,7 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
   const [darkModeValue, setDarkModeValue] = useState<DarkMode>("os");
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const local = localStorage.getItem("darkmode");
     if (local === "dark" || local === "light" || local === "os") setDarkModeValue(local);
   }, []);
@@ -56,5 +57,3 @@ export const useDarkModeContext = (): DarkModeContextValue => {
   if (!ctx) throw new Error("useDarkModeContext must be used within DarkModeProvider");
   return ctx;
 };
-
-export const useDarkMode = useDarkModeContext;

@@ -54,7 +54,7 @@ pnpm generate     # OpenAPIスキーマから型定義を生成
 ### UIフレームワーク
 
 - **Material-UI (MUI)**でコンポーネントとテーマ
-- `useDarkMode`フックでダーク・ライトモード対応
+- `useDarkModeContext`フックでダーク・ライトモード対応
 - `_app.tsx`でグローバルテーマプロバイダー設定
 
 ### ルーティング・ページ

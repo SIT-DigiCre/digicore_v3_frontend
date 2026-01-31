@@ -70,9 +70,13 @@ const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCall
               <Button
                 startIcon={isCopied ? <CheckCircle /> : <CopyAll />}
                 variant="contained"
-                onClick={() => {
-                  navigator.clipboard.writeText(errorMessage);
-                  setIsCopied(true);
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(errorMessage);
+                    setIsCopied(true);
+                  } catch {
+                    window.alert("クリップボードへのコピーに失敗しました。手動でコピーしてください。");
+                  }
                 }}
               >
                 {isCopied ? "コピーしました" : "エラーメッセージをコピー"}
@@ -85,12 +89,7 @@ const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCall
     );
   }
 
-  return (
-    <Box>
-      <Heading level={2}>ログイン処理中</Heading>
-      <Typography>この画面が長時間出る場合はログインからやり直してください。</Typography>
-    </Box>
-  );
+  return null;
 };
 
 export default LoginCallbackPage;

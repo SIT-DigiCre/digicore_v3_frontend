@@ -32,7 +32,7 @@ export const ErrorStateProvider = ({ children }: { children: ReactNode }) => {
         .concat({
           name: existing.name,
           count: (existing.count ?? 0) + 1,
-          message: existing.message,
+          message: error.message,
         });
     });
   }, []);

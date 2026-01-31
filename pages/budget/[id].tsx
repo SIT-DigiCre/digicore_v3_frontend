@@ -32,15 +32,10 @@ import { BudgetDetail, PutBudgetRequest } from "../../interfaces/budget";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-import type { paths } from "../../utils/fetch/api.d";
-
-type BudgetDetailResponse =
-  paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
-
 type BudgetDetailPageProps = {
   id: string;
   modeStr?: string;
-  budget: BudgetDetail;
+  budget: Required<BudgetDetail>;
 };
 
 const BudgetDetailPage = ({ id, modeStr, budget: budgetDetail }: BudgetDetailPageProps) => {
@@ -199,7 +194,7 @@ const BudgetDetailPage = ({ id, modeStr, budget: budgetDetail }: BudgetDetailPag
       />
 
       {modeStr === "edit" ? (
-        <BudgetEditor onSubmit={onSubmit} initBudget={budgetDetail as BudgetDetailResponse} />
+        <BudgetEditor onSubmit={onSubmit} initBudget={budgetDetail} />
       ) : (
         <Stack direction="column" spacing={2} my={2}>
           <div>
@@ -453,5 +448,6 @@ export const getServerSideProps: GetServerSideProps<BudgetDetailPageProps> = asy
     params: { path: { budgetId: id } },
   });
   if (!res.data) return { notFound: true };
-  return { props: { id, modeStr, budget: res.data as BudgetDetail } };
+  // TODO: Zodを導入する
+  return { props: { id, modeStr, budget: res.data as Required<BudgetDetail> } };
 };
