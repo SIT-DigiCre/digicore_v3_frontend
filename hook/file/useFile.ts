@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 import { UploadFile } from "../../interfaces/api";
 import { FileInfo, FileObject } from "../../interfaces/file";
-import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
@@ -12,23 +12,27 @@ export const useFile: UseFile = (fileId) => {
   const [file, setFile] = useState<FileObject>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   useEffect(() => {
+    if (!authState.isLogined || !authState.token) return;
     (async () => {
-      if (!authState.isLogined) return;
       try {
-        const res = await axios.get(`/storage/${fileId}`, {
+        const res = await apiClient.GET("/storage/{fileId}", {
+          params: { path: { fileId } },
           headers: {
             Authorization: "Bearer " + authState.token,
           },
         });
-        const fileObject: FileObject = res.data;
-        setFile(fileObject);
-        removeError("fileobject-get-fail");
+        if (res.data) {
+          setFile(res.data as unknown as FileObject);
+          removeError("fileobject-get-fail");
+        }
       } catch {
         setNewError({ name: "fileobject-get-fail", message: "ファイルの取得に失敗しました" });
       }
     })();
-  }, [authState]);
+  }, [authState.isLogined, authState.token, fileId]);
+
   return file;
 };
 
@@ -42,17 +46,19 @@ export const useMyFiles: UseMyFiles = () => {
   const [fileInfos, setFileInfos] = useState<FileInfo[]>();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   const loadFiles = async () => {
-    if (!authState.isLogined) return;
+    if (!authState.isLogined || !authState.token) return;
     try {
-      const res = await axios.get(`/storage/myfile`, {
+      const res = await apiClient.GET("/storage/myfile", {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
-      const filesRes: FileInfo[] = res.data.files;
-      setFileInfos(filesRes);
-      removeError("myfileobjects-get-fail");
+      if (res.data?.files) {
+        setFileInfos(res.data.files as unknown as FileInfo[]);
+        removeError("myfileobjects-get-fail");
+      }
     } catch {
       setNewError({
         name: "myfileobjects-get-fail",
@@ -60,19 +66,25 @@ export const useMyFiles: UseMyFiles = () => {
       });
     }
   };
+
   useEffect(() => {
     loadFiles();
-  }, [authState]);
+  }, [authState.isLogined, authState.token]);
+
   const upload = async (file: UploadFile): Promise<FileObject | string> => {
+    if (!authState.token) return "未ログイン";
     try {
-      const res = await axios.post(`/storage/myfile`, file, {
+      const res = await apiClient.POST("/storage/myfile", {
+        body: file,
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
-      const fileObject: FileObject = res.data;
-      removeError("myfileobject-post-fail");
-      return fileObject;
+      if (res.data) {
+        removeError("myfileobject-post-fail");
+        return res.data as unknown as FileObject;
+      }
+      return "アップロードに失敗しました";
     } catch (e: unknown) {
       setNewError({
         name: "myfileobject-post-fail",

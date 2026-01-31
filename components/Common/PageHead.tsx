@@ -1,8 +1,6 @@
 import Head from "next/head";
 import { useEffect } from "react";
 
-import { usePageTitle } from "../../hook/usePageTitle";
-
 interface PageHeadProps {
   title: string;
   description?: string;
@@ -10,12 +8,12 @@ interface PageHeadProps {
 }
 
 export default function PageHead({ title, description, imgUrl }: PageHeadProps) {
-  const { setTitle } = usePageTitle();
-
   useEffect(() => {
-    setTitle(title);
-    return () => setTitle("デジクリ");
-  }, [title, setTitle]);
+    document.title = title;
+    return () => {
+      document.title = "デジクリ";
+    };
+  }, [title]);
 
   return (
     <Head>

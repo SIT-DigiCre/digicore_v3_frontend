@@ -4,8 +4,8 @@ import { useMemo, type ReactElement, type ReactNode } from "react";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import { RecoilRoot } from "recoil";
 
+import { ErrorStateProvider } from "../components/ErrorStateContext";
 import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
 import { useDarkMode } from "../hook/useDarkMode";
@@ -24,9 +24,9 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps, router }: AppPropsWithLayout) => {
   return (
-    <RecoilRoot>
+    <ErrorStateProvider>
       <AppRoot Component={Component} pageProps={pageProps} router={router} />
-    </RecoilRoot>
+    </ErrorStateProvider>
   );
 };
 

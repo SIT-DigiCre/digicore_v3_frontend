@@ -12,59 +12,21 @@ import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
-import type { paths } from "../../utils/fetch/api.d";
-
-type BudgetDetailResponse =
-  paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];
-
-export const useBudget = (budgetId: string) => {
-  const [budget, setBudget] = useState<BudgetDetailResponse>();
+export const useBudgetActions = (budgetId: string) => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-
-  const fetchBudget = async () => {
-    if (!authState.isLogined) return;
-    try {
-      const { data } = await apiClient.GET("/budget/{budgetId}", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
-      });
-      if (data) {
-        setBudget(data);
-        removeError("budgetdetail-get-fail");
-      }
-    } catch {
-      setNewError({ name: "budgetdetail-get-fail", message: "稟議の取得に失敗しました" });
-    }
-  };
-
-  useEffect(() => {
-    fetchBudget();
-  }, [authState.isLogined, authState.token]);
 
   const updateBudgetStatusPending = async (
     budgetRequest: PutBudgetStatusPendingRequest,
   ): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_pending", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
+        params: { path: { budgetId } },
         body: budgetRequest,
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-put-fail");
-      await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
     } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
@@ -75,20 +37,14 @@ export const useBudget = (budgetId: string) => {
   const updateBudgetStatusApprove = async (
     budgetRequest: PutBudgetStatusApproveRequest,
   ): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_approve", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
+        params: { path: { budgetId } },
         body: budgetRequest,
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-put-fail");
-      await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
     } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
@@ -99,20 +55,14 @@ export const useBudget = (budgetId: string) => {
   const updateBudgetStatusBought = async (
     budgetRequest: PutBudgetStatusBoughtRequest,
   ): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_bought", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
+        params: { path: { budgetId } },
         body: budgetRequest,
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-put-fail");
-      await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
     } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
@@ -123,20 +73,14 @@ export const useBudget = (budgetId: string) => {
   const updateBudgetStatusPaid = async (
     budgetRequest: PutBudgetStatusPaidRequest,
   ): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_paid", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
+        params: { path: { budgetId } },
         body: budgetRequest,
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-put-fail");
-      await fetchBudget(); // update 後に詳細ページ側の値が更新されないので再度 fetch する
       return true;
     } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
@@ -145,20 +89,14 @@ export const useBudget = (budgetId: string) => {
   };
 
   const updateAdminBudget = async (budgetRequest: PutBudgetAdminRequest): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/admin", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
+        params: { path: { budgetId } },
         body: budgetRequest,
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-put-fail");
-      await fetchBudget();
       return true;
     } catch {
       setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
@@ -166,17 +104,12 @@ export const useBudget = (budgetId: string) => {
     }
   };
 
-  const deleteBudgetStatusPending = async () => {
+  const deleteBudgetStatusPending = async (): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.DELETE("/budget/{budgetId}/status_pending", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        params: { path: { budgetId } },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-delete-fail");
       return true;
@@ -186,17 +119,12 @@ export const useBudget = (budgetId: string) => {
     }
   };
 
-  const deleteBudgetStatusApprove = async () => {
+  const deleteBudgetStatusApprove = async (): Promise<boolean> => {
+    if (!authState.token) return false;
     try {
       await apiClient.DELETE("/budget/{budgetId}/status_approve", {
-        params: {
-          path: {
-            budgetId,
-          },
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
+        params: { path: { budgetId } },
+        headers: { Authorization: `Bearer ${authState.token}` },
       });
       removeError("budget-delete-fail");
       return true;
@@ -207,7 +135,6 @@ export const useBudget = (budgetId: string) => {
   };
 
   return {
-    budgetDetail: budget,
     updateBudgetStatusPending,
     updateBudgetStatusApprove,
     updateBudgetStatusBought,
@@ -217,6 +144,8 @@ export const useBudget = (budgetId: string) => {
     deleteBudgetStatusApprove,
   };
 };
+
+import type { paths } from "../../utils/fetch/api.d";
 
 type BudgetListResponse =
   paths["/budget"]["get"]["responses"]["200"]["content"]["application/json"];
@@ -255,7 +184,6 @@ export const useBudgets: UseBudgets = (proposerId) => {
         },
       });
       if (data) {
-        // 1ページあたり10件のBudgetが返ってくるため、これより少なければ最後のページに達したと判断する
         if (data.budgets.length < 10) {
           setIsOver(true);
         }

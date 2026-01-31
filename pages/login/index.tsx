@@ -1,3 +1,4 @@
+import type { GetServerSideProps } from "next";
 import Image from "next/image";
 
 import { Google } from "@mui/icons-material";
@@ -5,10 +6,20 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
-import { useLoginData } from "../../hook/useLoginData";
-const LoginPage = () => {
-  const { loginUrl } = useLoginData();
+import { createServerApiClient } from "../../utils/fetch/client";
 
+type LoginPageProps = {
+  loginUrl: string;
+};
+
+export const getServerSideProps: GetServerSideProps<LoginPageProps> = async ({ req }) => {
+  const client = createServerApiClient(req);
+  const res = await client.GET("/login");
+  const loginUrl = res.data?.url ?? "";
+  return { props: { loginUrl } };
+};
+
+const LoginPage = ({ loginUrl }: LoginPageProps) => {
   return (
     <>
       <PageHead title="ログイン" />

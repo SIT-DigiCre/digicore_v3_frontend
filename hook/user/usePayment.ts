@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { PaymentHistory } from "../../interfaces/form";
-import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
@@ -14,42 +14,49 @@ export const usePayment: UsePayment = () => {
   const [paymentHistories, setPaymentHistories] = useState<PaymentHistory[]>([]);
   const { setNewError, removeError } = useErrorState();
   const { authState } = useAuthState();
+
   const getHistories = async () => {
+    if (!authState.token) return;
     try {
-      const res = await axios.get("user/me/payment", {
+      const res = await apiClient.GET("/user/me/payment", {
         headers: {
           Authorization: "Bearer " + authState.token,
         },
       });
-      const histories: PaymentHistory[] = res.data.histories;
-      setPaymentHistories(histories);
-
-      removeError("payment-get");
+      if (res.data?.histories) {
+        const histories: PaymentHistory[] = res.data.histories.map((h) => ({
+          ...h,
+          updatedAt: new Date(h.updatedAt),
+        }));
+        setPaymentHistories(histories);
+        removeError("payment-get");
+      }
     } catch {
       setNewError({ name: "payment-get", message: "部費支払い情報の取得に失敗しました" });
     }
   };
+
   useEffect(() => {
     if (!authState.isLogined) return;
     getHistories();
-  }, [authState]);
+  }, [authState.isLogined, authState.token]);
+
   const updatePayment = async (name: string) => {
+    if (!authState.token) return false;
     try {
-      await axios.put(
-        "user/me/payment",
-        { transferName: name },
-        {
-          headers: {
-            Authorization: "Bearer " + authState.token,
-          },
+      await apiClient.PUT("/user/me/payment", {
+        body: { transferName: name },
+        headers: {
+          Authorization: "Bearer " + authState.token,
         },
-      );
-      getHistories();
+      });
+      await getHistories();
+      return true;
     } catch {
       return false;
     }
-    return true;
   };
+
   return {
     paymentHistories,
     updatePayment,

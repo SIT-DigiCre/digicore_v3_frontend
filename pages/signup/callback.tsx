@@ -1,29 +1,44 @@
-import { GetServerSideProps } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import type { GetServerSideProps } from "next";
 
 import { Stack, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
-import { useAuthState } from "../../hook/useAuthState";
-import { useRegisterData } from "../../hook/useRegisterData";
+import { createServerApiClient } from "../../utils/fetch/client";
 
 type Props = {
-  code: string;
+  codeMissing?: boolean;
+  signupFailed?: boolean;
 };
-const LoginCallbackPage = ({ code }: Props) => {
-  const { setCallbackCode } = useRegisterData();
-  const router = useRouter();
-  const { onLogin } = useAuthState();
 
-  useEffect(() => {
-    setCallbackCode(code).then((jwt) => {
-      if (jwt) {
-        onLogin(jwt);
-      }
-      router.push("/register/public");
-    });
-  }, []);
+export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req, res }) => {
+  const code = typeof query.code === "string" ? query.code : null;
+  if (!code) {
+    return { props: { codeMissing: true } };
+  }
+
+  const client = createServerApiClient(req);
+  const result = await client.POST("/signup/callback", { body: { code } });
+
+  if (result.data?.jwt) {
+    const jwt = result.data.jwt;
+    const maxAge = 60 * 60 * 24 * 7;
+    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    res.setHeader("Set-Cookie", `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`);
+    return { redirect: { destination: "/register/public", permanent: false } };
+  }
+
+  return { props: { signupFailed: true } };
+};
+
+const SignupCallbackPage = ({ codeMissing, signupFailed }: Props) => {
+  if (codeMissing || signupFailed) {
+    return (
+      <Stack alignItems="center" mt={20}>
+        <Heading level={4}>登録に失敗しました</Heading>
+        <Typography variant="body1">登録からやり直して下さい。</Typography>
+      </Stack>
+    );
+  }
 
   return (
     <Stack alignItems="center" mt={20}>
@@ -35,15 +50,4 @@ const LoginCallbackPage = ({ code }: Props) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  try {
-    const { code } = query;
-    const codeStr = typeof code === "string" ? code : null;
-    return { props: { code: codeStr } };
-  } catch (error: unknown) {
-    return {
-      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
-    };
-  }
-};
-export default LoginCallbackPage;
+export default SignupCallbackPage;

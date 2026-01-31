@@ -16,7 +16,6 @@
     "@mui/icons-material": "7.3.7",
     "@mui/material": "7.3.7",
     "@types/highlightjs": "9.12.6",
-    "axios": "1.13.2",
     "dayjs": "1.11.19",
     "highlightjs": "9.16.2",
     "isomorphic-dompurify": "2.35.0",
@@ -24,8 +23,7 @@
     "next": "16.1.2",
     "openapi-fetch": "^0.15.0",
     "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "recoil": "0.7.7"
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@eslint/eslintrc": "3.3.3",

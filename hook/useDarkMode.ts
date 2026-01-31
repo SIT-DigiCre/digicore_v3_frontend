@@ -1,9 +1,6 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { useMediaQuery } from "@mui/material";
-import { useRecoilState } from "recoil";
-
-import { darkModeState } from "../atom/userAtom";
 
 import type { DarkMode } from "../interfaces";
 
@@ -12,8 +9,10 @@ type UseDarkMode = () => {
   setDarkMode: (mode: DarkMode) => void;
   currentMode: DarkMode;
 };
+
 export const useDarkMode: UseDarkMode = () => {
-  const [darkModeValue, setDarkModeValue] = useRecoilState(darkModeState);
+  const [darkModeValue, setDarkModeValue] = useState<DarkMode>("os");
+
   useEffect(() => {
     try {
       const localMode = localStorage.getItem("darkmode");
@@ -23,15 +22,17 @@ export const useDarkMode: UseDarkMode = () => {
       console.error(err);
     }
   }, []);
+
   const setDarkMode = (mode: DarkMode) => {
     if (mode === darkModeValue) return;
     setDarkModeValue(mode);
     localStorage.setItem("darkmode", mode);
   };
+
   const osSetting = useMediaQuery("(prefers-color-scheme: dark)");
   return {
     isDarkMode: darkModeValue === "os" ? osSetting : darkModeValue === "dark",
-    setDarkMode: setDarkMode,
+    setDarkMode,
     currentMode: darkModeValue,
   };
 };

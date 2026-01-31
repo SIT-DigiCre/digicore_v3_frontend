@@ -1,11 +1,8 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-import { useRecoilState } from "recoil";
-
-import { authState } from "../atom/userAtom";
 import { User } from "../interfaces/user";
-import { axios } from "../utils/axios";
+import { apiClient } from "../utils/fetch/client";
 
 import { useErrorState } from "./useErrorState";
 
@@ -16,6 +13,13 @@ export type AuthState = {
   token: string | undefined;
 };
 
+const DEFAULT_AUTH_STATE: AuthState = {
+  isLogined: false,
+  isLoading: true,
+  user: undefined,
+  token: undefined,
+};
+
 type UseAuthState = () => {
   authState: AuthState;
   onLogin: (token: string) => void;
@@ -24,29 +28,31 @@ type UseAuthState = () => {
 };
 
 export const useAuthState: UseAuthState = () => {
-  const [auth, setAuth] = useRecoilState(authState);
+  const [auth, setAuth] = useState<AuthState>(DEFAULT_AUTH_STATE);
   const { removeError } = useErrorState();
   const router = useRouter();
   const isPublicPage =
     router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
-  const getUserInfo = async (token: string, refresh: boolean): Promise<User | null> => {
+  const getUserInfo = async (token: string, forceRefresh: boolean): Promise<User | null> => {
     try {
-      const res = await axios.get("/user/me", {
+      const res = await apiClient.GET("/user/me", {
         headers: {
           Authorization: "Bearer " + token,
         },
       });
-      if (auth.isLogined && !refresh) return null;
-      const user: User = res.data;
-      setAuth({
-        isLogined: true,
-        isLoading: false,
-        user: user,
-        token: token,
+      if (!res.data) throw new Error("No data");
+      setAuth((prev) => {
+        if (prev.isLogined && !forceRefresh) return prev;
+        return {
+          isLogined: true,
+          isLoading: false,
+          user: res.data as User,
+          token,
+        };
       });
       removeError("autologin-fail");
-      return user;
+      return res.data as User;
     } catch {
       if (!isPublicPage) {
         setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
@@ -56,8 +62,16 @@ export const useAuthState: UseAuthState = () => {
     return null;
   };
 
+  const getToken = (): string | null => {
+    if (typeof document === "undefined") return null;
+    const jwtCookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("jwt="));
+    return jwtCookie ? jwtCookie.replace(/^jwt=/, "") : null;
+  };
+
   const refresh = async () => {
-    const token = localStorage.getItem("jwt");
+    const token = getToken();
     if (!token) return null;
     return await getUserInfo(token, true);
   };
@@ -69,14 +83,12 @@ export const useAuthState: UseAuthState = () => {
       user: undefined,
       token: undefined,
     });
-    localStorage.removeItem("jwt");
     document.cookie = "jwt=; path=/; max-age=0";
     router.push("/login");
   };
 
   const onLogin = (token: string) => {
-    localStorage.setItem("jwt", token);
-    const maxAge = 60 * 60 * 24 * 7; // 7日間
+    const maxAge = 60 * 60 * 24 * 7;
     const isProduction = process.env.NODE_ENV === "production";
     const secureFlag = isProduction ? "; Secure" : "";
     document.cookie = `jwt=${token}; path=/; max-age=${maxAge}; SameSite=Lax${secureFlag}`;
@@ -84,15 +96,18 @@ export const useAuthState: UseAuthState = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("jwt");
-    if (!token) return;
+    const token = getToken();
+    if (!token) {
+      setAuth((prev) => ({ ...prev, isLoading: false }));
+      return;
+    }
     getUserInfo(token, false);
   }, []);
 
   return {
     authState: auth,
-    onLogin: onLogin,
-    logout: logout,
+    onLogin,
+    logout,
     refresh,
   };
 };
