@@ -11,14 +11,21 @@ import { createServerApiClient } from "../../utils/fetch/client";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
+function normalizeQueryParam(
+  value: string | string[] | undefined
+): string | undefined {
+  if (value === undefined) return undefined;
+  return Array.isArray(value) ? value[0] : value;
+}
+
 export const getServerSideProps = async ({
   params,
   req,
   query,
 }: {
-  params: { id: string };
+  params: { id?: string };
   req: NextApiRequest;
-  query: { seed?: string; page?: string };
+  query: Record<string, string | string[] | undefined>;
 }) => {
   const idParam = params?.id;
   const userId = typeof idParam === "string" ? idParam : "";
@@ -48,12 +55,15 @@ export const getServerSideProps = async ({
       return { notFound: true };
     }
 
+    const seed = normalizeQueryParam(query.seed);
+    const page = normalizeQueryParam(query.page);
+
     return {
       props: {
         profile: profileRes.data,
         introduction: introductionRes.data?.introduction || null,
-        seed: query.seed,
-        page: query.page,
+        seed: seed ?? null,
+        page: page ?? null,
       },
     };
   } catch (error) {
@@ -63,7 +73,10 @@ export const getServerSideProps = async ({
 };
 
 const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
-  const backUrl = seed ? `/member/?seed=${seed}&page=${page || "1"}` : "/member/";
+  const backUrl =
+    seed != null && seed !== ""
+      ? `/member/?seed=${seed}&page=${page ?? "1"}`
+      : "/member/";
 
   return (
     <>
