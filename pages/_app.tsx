@@ -5,6 +5,7 @@ import { useMemo, type ReactElement, type ReactNode } from "react";
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
+import { DarkModeProvider } from "../components/DarkModeContext";
 import { ErrorStateProvider } from "../components/ErrorStateContext";
 import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
@@ -25,7 +26,9 @@ type AppPropsWithLayout = AppProps & {
 const App = ({ Component, pageProps, router }: AppPropsWithLayout) => {
   return (
     <ErrorStateProvider>
-      <AppRoot Component={Component} pageProps={pageProps} router={router} />
+      <DarkModeProvider>
+        <AppRoot Component={Component} pageProps={pageProps} router={router} />
+      </DarkModeProvider>
     </ErrorStateProvider>
   );
 };
