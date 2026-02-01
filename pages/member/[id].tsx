@@ -11,9 +11,7 @@ import { createServerApiClient } from "../../utils/fetch/client";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-function normalizeQueryParam(
-  value: string | string[] | undefined
-): string | undefined {
+function normalizeQueryParam(value: string | string[] | undefined): string | undefined {
   if (value === undefined) return undefined;
   return Array.isArray(value) ? value[0] : value;
 }
@@ -74,9 +72,7 @@ export const getServerSideProps = async ({
 
 const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
   const backUrl =
-    seed != null && seed !== ""
-      ? `/member/?seed=${seed}&page=${page ?? "1"}`
-      : "/member/";
+    seed != null && seed !== "" ? `/member/?seed=${seed}&page=${page ?? "1"}` : "/member/";
 
   return (
     <>

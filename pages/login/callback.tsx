@@ -75,7 +75,9 @@ const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCall
                     await navigator.clipboard.writeText(errorMessage);
                     setIsCopied(true);
                   } catch {
-                    window.alert("クリップボードへのコピーに失敗しました。手動でコピーしてください。");
+                    window.alert(
+                      "クリップボードへのコピーに失敗しました。手動でコピーしてください。",
+                    );
                   }
                 }}
               >

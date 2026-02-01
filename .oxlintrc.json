@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": ["node_modules/", ".next/", "out/", "build/"],
+  "env": {
+    "es2022": true,
+    "node": true
+  },
+  "settings": {
+    "react": {
+      "version": "18.3.1"
+    }
+  },
+  "plugins": ["eslint", "oxc", "nextjs", "react", "import", "jsx-a11y", "unicorn"],
+  "rules": {
+    "sort-imports": "warn"
+  }
+}

@@ -1,11 +1,11 @@
-name: Lint Code Base
+name: Codecheck
 on:
   pull_request:
 jobs:
-  lint:
+  codecheck:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout target branch
+      - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Setup Node
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
@@ -14,10 +14,10 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2 # v4.0.0
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: TypeScript Compile Check
         run: pnpm tsc --noEmit
-      - name: Run ESLint
-        run: pnpm lint
-      - name: Run Prettier
-        run: pnpm format --check
+      - name: Oxlint
+        run: pnpm run lint
+      - name: Oxfmt
+        run: pnpm run format

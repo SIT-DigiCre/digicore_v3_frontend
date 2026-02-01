@@ -1,10 +1,9 @@
 {
   "editor.tabSize": 2,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.addMissingImports": "explicit",
-    "source.fixAll": "explicit",
-    "source.organizeImports": "explicit"
-  }
+    "source.fixAll.oxc": "explicit",
+    "source.organizeImports": "never"
+  },
+  "files.insertFinalNewline": true
 }

@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 
 import type { ErrorState } from "../interfaces";
 
@@ -48,11 +41,7 @@ export const ErrorStateProvider = ({ children }: { children: ReactNode }) => {
     [errors, setNewError, resetError, removeError],
   );
 
-  return (
-    <ErrorStateContext.Provider value={value}>
-      {children}
-    </ErrorStateContext.Provider>
-  );
+  return <ErrorStateContext.Provider value={value}>{children}</ErrorStateContext.Provider>;
 };
 
 export const useErrorStateContext = (): ErrorStateContextValue => {
