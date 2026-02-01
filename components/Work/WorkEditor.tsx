@@ -44,8 +44,7 @@ const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
     setFiles(initWork.files ? initWork.files.map((f) => f.fileId) : []);
   }, [
 	initWork,
-	authState.user,
-	authState.user.userId
+	authState.user
 ]);
 
   if (!authState.user) return <p>読み込み中...</p>;
