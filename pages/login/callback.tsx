@@ -9,7 +9,6 @@ import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-
 type LoginCallbackPageProps = {
   loginFailed?: boolean;
   errorMessage?: string;

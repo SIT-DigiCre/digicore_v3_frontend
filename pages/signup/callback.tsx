@@ -1,11 +1,9 @@
-
 import type { GetServerSideProps } from "next";
 
 import { Stack, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
 import { createServerApiClient } from "../../utils/fetch/client";
-
 
 type Props = {
   codeMissing?: boolean;

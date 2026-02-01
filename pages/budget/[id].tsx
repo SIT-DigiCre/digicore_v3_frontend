@@ -32,7 +32,6 @@ import { BudgetDetail, PutBudgetRequest } from "../../interfaces/budget";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-
 type BudgetDetailPageProps = {
   id: string;
   modeStr?: string;

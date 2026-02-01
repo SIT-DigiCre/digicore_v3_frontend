@@ -18,7 +18,6 @@ import { useErrorState } from "../../hook/useErrorState";
 import { WorkRequest } from "../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
-
 type WorkPublicAuthor = {
   userId: string;
   username: string;

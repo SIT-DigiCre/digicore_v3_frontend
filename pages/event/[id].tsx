@@ -1,4 +1,3 @@
-
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 
 import { ArrowBack } from "@mui/icons-material";
@@ -10,7 +9,6 @@ import PageHead from "../../components/Common/PageHead";
 import EventReservationFrame from "../../components/Event/EventReservationFrame";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import { createServerApiClient } from "../../utils/fetch/client";
-
 
 export const getServerSideProps = async ({
   params,

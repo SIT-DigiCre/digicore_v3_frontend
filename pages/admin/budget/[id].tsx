@@ -27,7 +27,6 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export const getServerSideProps = async ({

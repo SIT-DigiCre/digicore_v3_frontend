@@ -1,4 +1,3 @@
-
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 
 import { Stack } from "@mui/material";
@@ -6,7 +5,6 @@ import { Stack } from "@mui/material";
 import PageHead from "../../components/Common/PageHead";
 import EventListItem from "../../components/Event/EventListItem";
 import { createServerApiClient } from "../../utils/fetch/client";
-
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

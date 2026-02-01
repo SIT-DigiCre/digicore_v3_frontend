@@ -1,4 +1,3 @@
-
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 
@@ -12,7 +11,6 @@ import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
 import { WorkRequest } from "../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
-
 
 export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);

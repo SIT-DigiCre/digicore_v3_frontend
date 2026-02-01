@@ -16,7 +16,6 @@ import { useErrorState } from "../../hook/useErrorState";
 import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
-
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 

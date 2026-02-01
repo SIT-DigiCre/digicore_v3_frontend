@@ -1,4 +1,3 @@
-
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -23,7 +22,6 @@ import Pagination from "../../components/Common/Pagination";
 import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
-
 
 const ITEMS_PER_PAGE = 10;
 

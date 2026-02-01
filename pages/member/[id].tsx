@@ -9,7 +9,6 @@ import PageHead from "../../components/Common/PageHead";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 function normalizeQueryParam(value: string | string[] | undefined): string | undefined {

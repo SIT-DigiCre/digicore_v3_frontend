@@ -16,7 +16,6 @@ import PaymentDetailDialog from "../../components/Payment/PaymentDetailDialog";
 import { Payment } from "../../interfaces/payment";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-
 type Props = {
   payments: Payment[];
 };

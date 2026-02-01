@@ -31,13 +31,7 @@ export const useFile: UseFile = (fileId) => {
         setNewError({ message: "ファイルの取得に失敗しました", name: "fileobject-get-fail" });
       }
     })();
-  }, [
-	authState.isLogined,
-	authState.token,
-	fileId,
-	setNewError,
-	removeError
-]);
+  }, [authState.isLogined, authState.token, fileId, setNewError, removeError]);
 
   return file;
 };
@@ -75,11 +69,7 @@ export const useMyFiles: UseMyFiles = () => {
 
   useEffect(() => {
     loadFiles();
-  }, [
-	authState.isLogined,
-	authState.token,
-	loadFiles
-]);
+  }, [authState.isLogined, authState.token, loadFiles]);
 
   const upload = async (file: UploadFile): Promise<FileObject | string> => {
     if (!authState.token) return "未ログイン";

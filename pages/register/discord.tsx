@@ -10,7 +10,6 @@ import { ButtonLink } from "../../components/Common/ButtonLink";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { createServerApiClient } from "../../utils/fetch/client";
 
-
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 

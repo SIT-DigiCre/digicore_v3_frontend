@@ -1,16 +1,16 @@
 {
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "dev": "next",
     "build": "next typegen && next build",
-    "start": "next start",
-    "typecheck": "tsc --noEmit",
-    "lint": "oxlint",
-    "lint:fix": "oxlint --fix",
+    "dev": "next",
     "format": "oxfmt --check",
     "format:fix": "oxfmt",
-    "generate": "npx openapi-typescript ./utils/fetch/bundle.gen.yml -o ./utils/fetch/api.d.ts"
+    "generate": "npx openapi-typescript ./utils/fetch/bundle.gen.yml -o ./utils/fetch/api.d.ts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "preinstall": "npx only-allow pnpm",
+    "start": "next start",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
@@ -29,7 +29,6 @@
     "@types/node": "25.1.0",
     "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
-    "eslint-plugin-import": "2.32.0",
     "openapi-typescript": "7.10.1",
     "oxfmt": "0.27.0",
     "oxlint": "1.42.0",

@@ -16,11 +16,11 @@ import {
   TextField,
 } from "@mui/material";
 
+import type { BudgetClass } from "../../interfaces/budget";
+
 import { useBudgets } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
-
-import type { BudgetClass } from "../../interfaces/budget";
 
 type NewBudgetDialogProps = {
   open: boolean;

@@ -2,7 +2,6 @@ import Link from "next/link";
 
 import { Button } from "@mui/material";
 
-
 type Props = {
   href: string;
   target?: "_blank" | "_self";

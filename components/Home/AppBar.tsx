@@ -14,7 +14,6 @@ import {
 import Heading from "../Common/Heading";
 import ErrorView from "../Error/ErrorView";
 import { usePageTitle } from "../PageTitleContext";
-
 import Drawer from "./Drawer";
 
 const drawerWidth = 240;

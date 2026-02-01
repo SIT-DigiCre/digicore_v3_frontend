@@ -14,11 +14,9 @@ import {
   Typography,
 } from "@mui/material";
 
-
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { createServerApiClient } from "../../utils/fetch/client";
-
 
 const ITEMS_PER_PAGE = 10;
 

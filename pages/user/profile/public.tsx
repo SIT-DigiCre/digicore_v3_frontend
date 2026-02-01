@@ -17,7 +17,6 @@ import { DEFAULT_USER, User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 

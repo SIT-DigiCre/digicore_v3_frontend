@@ -21,7 +21,6 @@ import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog
 import { Payment } from "../../../interfaces/payment";
 import { createServerApiClient } from "../../../utils/fetch/client";
 
-
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 

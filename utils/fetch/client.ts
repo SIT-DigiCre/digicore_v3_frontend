@@ -1,11 +1,10 @@
-
 import type { GetServerSidePropsContext, NextApiRequest } from "next";
 
 import createClient from "openapi-fetch";
 
-import { baseURL, baseURLForServerSide } from "../common";
-
 import type { paths } from "./api.d.ts";
+
+import { baseURL, baseURLForServerSide } from "../common";
 
 type ServerSideRequest = GetServerSidePropsContext["req"] | NextApiRequest;
 

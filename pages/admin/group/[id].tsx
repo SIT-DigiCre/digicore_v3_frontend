@@ -1,4 +1,3 @@
-
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
 
@@ -22,7 +21,6 @@ import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
 import AddUserDialog from "../../../components/Group/AddUserDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
-
 
 export const getServerSideProps = async ({
   req,

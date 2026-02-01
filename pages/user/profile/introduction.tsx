@@ -12,7 +12,6 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
-
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 

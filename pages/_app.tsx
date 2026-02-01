@@ -10,7 +10,6 @@ import { ErrorStateProvider } from "../components/ErrorStateContext";
 import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
 import { PageTitleProvider } from "../components/PageTitleContext";
-
 import "../style/common.css";
 
 // ref: https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#with-typescript

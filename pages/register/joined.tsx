@@ -20,7 +20,6 @@ import {
   Typography,
 } from "@mui/material";
 
-
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
@@ -28,7 +27,6 @@ import { MattermostRegister } from "../../components/Mattermost/Register";
 import TransferClubFeeView from "../../components/Register/TransferClubFeeView";
 import { EnvJoinAPIData } from "../../interfaces/api";
 import { createServerApiClient } from "../../utils/fetch/client";
-
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

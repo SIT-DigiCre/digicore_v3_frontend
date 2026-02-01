@@ -70,11 +70,7 @@ const FileView = ({ file, width }: FileViewProps) => {
       case "exe":
         return (
           <>
-            <Link
-              href={file.url}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
+            <Link href={file.url} rel="noopener noreferrer" target="_blank">
               {file.name}
             </Link>
             <p>注意！実行形式ファイル</p>
@@ -82,11 +78,7 @@ const FileView = ({ file, width }: FileViewProps) => {
         );
       default:
         return (
-          <Link
-            href={file.url}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
+          <Link href={file.url} rel="noopener noreferrer" target="_blank">
             {file.name}
           </Link>
         );

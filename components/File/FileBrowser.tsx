@@ -17,7 +17,6 @@ import {
 
 import { useFile, useMyFiles } from "../../hook/file/useFile";
 import { FileKind, FileObject, getFileKind } from "../../interfaces/file";
-
 import FileKindIcon from "./FileKindIcon";
 import { FileUploader } from "./FileUploader";
 

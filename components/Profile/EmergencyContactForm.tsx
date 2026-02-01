@@ -3,7 +3,6 @@ import { Button, Stack, TextField, Typography } from "@mui/material";
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 import Heading from "../Common/Heading";
-
 import PhoneInput from "./PhoneInput";
 
 type EmergencyContactFormProps = {
