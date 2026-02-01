@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 import { Close as CloseIcon, CloudUpload as CloudUploadIcon } from "@mui/icons-material";
@@ -51,7 +52,7 @@ export const FileBrowserModal = ({
   useEffect(() => {
     setIsOpen(open);
     reloadMyFileIds();
-  }, [open, reloadMyFileIds]);
+  }, [open]);
   const { myFileInfos, reloadMyFileIds } = useMyFiles();
   const onClickCancel = () => {
     setIsOpen(false);
@@ -209,9 +210,12 @@ const FileListItem = ({ fileId, onClick, onlyFileKind }: FileListItemProps) => {
                   width: 60,
                 }}
               >
-                <img
+                <Image
+                  alt="画像ファイル"
+                  height={60}
                   src={file.url}
-                  alt=""
+                  unoptimized
+                  width={60}
                   style={{
                     height: "100%",
                     objectFit: "cover",

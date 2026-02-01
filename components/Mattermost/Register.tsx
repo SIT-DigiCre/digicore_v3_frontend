@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -12,7 +12,6 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-
 
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
 import { useAuthState } from "../../hook/useAuthState";
@@ -64,7 +63,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     validatePassword(registrationForm.password) === true &&
     registrationForm.password === passwordConfirm;
 
-  const onRegister = (e: FormEvent<HTMLFormElement>) => {
+  const onRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     (async () => {
       setSending(true);
@@ -79,8 +78,8 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     if (userProfile) {
       setRegistrationForm({
         ...registrationForm,
-        username: userProfile.studentNumber,
         nickname: userProfile.username,
+        username: userProfile.studentNumber,
       });
     }
   }, [userProfile, registrationForm]);

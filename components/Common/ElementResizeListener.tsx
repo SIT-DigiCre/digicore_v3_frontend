@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef } from "react";
 const ElementResizeListener = (props: { onResize: (event: Event) => void }) => {
   const rafRef = useRef(0);
   const objectRef = useRef<HTMLObjectElement>(null);
+  const windowRef = useRef<Window | null>(null);
   const onResizeRef = useRef(props.onResize);
 
   onResizeRef.current = props.onResize;
@@ -18,31 +19,32 @@ const ElementResizeListener = (props: { onResize: (event: Event) => void }) => {
 
   const onLoad = useCallback(() => {
     const obj = objectRef.current;
-    if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-      // defaultViewはDocumentに関連付けられているWindowオブジェクトを返す
-      // object要素のWindowオブジェクトに対し、リサイズイベントを登録する
-      obj.contentDocument.defaultView.addEventListener("resize", _onResize);
+    if (obj?.contentDocument?.defaultView) {
+      const win = obj.contentDocument.defaultView;
+      windowRef.current = win;
+      win.addEventListener("resize", _onResize);
     }
   }, [_onResize]);
 
   useEffect(() => {
-    // クリーンアップ処理
     return () => {
-      const obj = objectRef.current;
-      if (obj && obj.contentDocument && obj.contentDocument.defaultView) {
-        obj.contentDocument.defaultView.removeEventListener("resize", _onResize);
+      const win = windowRef.current;
+      if (win) {
+        win.removeEventListener("resize", _onResize);
+        windowRef.current = null;
       }
     };
   }, [_onResize]);
 
   return (
     <object
+      aria-label="リサイズ検知用（非表示）"
+      data={"about:blank"}
       onLoad={onLoad}
       ref={objectRef}
       tabIndex={-1}
-      type={"text/html"}
-      data={"about:blank"}
       title={""}
+      type={"text/html"}
       style={{
         height: "100%",
         left: 0,

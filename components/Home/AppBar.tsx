@@ -49,12 +49,12 @@ export default function AppBar({ children, window }: AppBarProps) {
   return (
     <Stack>
       <MuiAppBar
+        component="header"
         position="fixed"
         sx={{
           ml: { sm: `${drawerWidth}px` },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
-        role="banner"
       >
         <Toolbar>
           <IconButton

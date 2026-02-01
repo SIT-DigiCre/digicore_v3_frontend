@@ -11,6 +11,7 @@
   "rules": {
     "sort-keys": "warn",
     "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "react/exhaustive-deps": "off",
     "eslint-import/order": [
       "error",
       {

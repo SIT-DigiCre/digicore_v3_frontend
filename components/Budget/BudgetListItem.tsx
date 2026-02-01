@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import { ListItemIcon, ListItemText } from "@mui/material";
 
 import { useFile } from "../../hook/file/useFile";
@@ -15,7 +17,14 @@ const BudgetListItem = ({ fileId }: BudgetListItemProps) => {
   return (
     <>
       {getFileKind(file.extension) === "image" ? (
-        <img src={file.url} alt={file.name} style={{ height: "100px" }} />
+        <Image
+          alt={file.name}
+          height={100}
+          src={file.url}
+          unoptimized
+          width={100}
+          style={{ height: "100px", objectFit: "contain" }}
+        />
       ) : (
         <ListItemIcon>
           <FileKindIcon kind={getFileKind(file.extension)} />
