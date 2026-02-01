@@ -25,7 +25,7 @@ export const useMattermostRegister = (): {
       return false;
     } catch (err: unknown) {
       const errMsg = err instanceof Error ? err.message : "An unknown error occurred";
-      setNewError({ name: "mattermost-registration-error", message: errMsg });
+      setNewError({ message: errMsg, name: "mattermost-registration-error" });
       return false;
     }
   };

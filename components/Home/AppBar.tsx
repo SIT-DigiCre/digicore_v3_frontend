@@ -51,8 +51,8 @@ export default function AppBar({ children, window }: AppBarProps) {
       <MuiAppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
         role="banner"
       >
@@ -64,7 +64,7 @@ export default function AppBar({ children, window }: AppBarProps) {
             aria-controls="navigation-menu"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: "none" } }}
+            sx={{ display: { sm: "none" }, mr: 2 }}
           >
             <MenuIcon />
           </IconButton>
@@ -74,7 +74,7 @@ export default function AppBar({ children, window }: AppBarProps) {
       <Box
         component="nav"
         id="navigation-menu"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ flexShrink: { sm: 0 }, width: { sm: drawerWidth } }}
         aria-label="メインナビゲーション"
       >
         <MuiDrawer
@@ -84,8 +84,8 @@ export default function AppBar({ children, window }: AppBarProps) {
           onTransitionEnd={handleDrawerTransitionEnd}
           onClose={handleDrawerClose}
           sx={{
-            display: { xs: "block", sm: "none" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+            display: { sm: "none", xs: "block" },
           }}
           slotProps={{
             root: {
@@ -98,8 +98,8 @@ export default function AppBar({ children, window }: AppBarProps) {
         <MuiDrawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth },
+            display: { sm: "block", xs: "none" },
           }}
           open
         >
@@ -109,9 +109,9 @@ export default function AppBar({ children, window }: AppBarProps) {
       <Box
         sx={{
           flexGrow: 1,
+          ml: { sm: `${drawerWidth}px` },
           py: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
         }}
       >
         <Toolbar />

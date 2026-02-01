@@ -1,3 +1,4 @@
+
 import type { GetServerSideProps } from "next";
 import Image from "next/image";
 
@@ -7,6 +8,7 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { createServerApiClient } from "../../utils/fetch/client";
+
 
 type Props = {
   registerUrl: string;

@@ -32,14 +32,18 @@ export const usePayment: UsePayment = () => {
         removeError("payment-get");
       }
     } catch {
-      setNewError({ name: "payment-get", message: "部費支払い情報の取得に失敗しました" });
+      setNewError({ message: "部費支払い情報の取得に失敗しました", name: "payment-get" });
     }
   };
 
   useEffect(() => {
     if (!authState.isLogined) return;
     getHistories();
-  }, [authState.isLogined, authState.token]);
+  }, [
+	authState.isLogined,
+	authState.token,
+	getHistories
+]);
 
   const updatePayment = async (name: string) => {
     if (!authState.token) return false;

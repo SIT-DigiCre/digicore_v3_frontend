@@ -1,17 +1,41 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "ignorePatterns": ["node_modules/", ".next/", "out/", "build/"],
-  "env": {
-    "es2022": true,
-    "node": true
-  },
-  "settings": {
-    "react": {
-      "version": "19.2.4"
+  "jsPlugins": [
+    {
+      "name": "eslint-import",
+      "specifier": "eslint-plugin-import"
     }
-  },
-  "plugins": ["eslint", "oxc", "nextjs", "react", "import", "jsx-a11y", "unicorn"],
+  ],
+  "plugins": ["eslint", "typescript", "unicorn", "react", "react-perf", "nextjs", "oxc", "import", "jsx-a11y"],
   "rules": {
-    "sort-imports": "warn"
+    "sort-keys": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "eslint-import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "parent",
+          "sibling",
+          "index",
+          "object",
+          "type",
+        ],
+        "pathGroups": [
+          {
+            "pattern": "{react,react-dom/**,next,next/**}",
+            "group": "builtin",
+            "position": "before",
+          },
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": {
+          "order": "asc",
+        },
+        "newlines-between": "always",
+      },
+    ],
   }
 }

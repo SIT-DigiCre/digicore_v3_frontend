@@ -4,12 +4,14 @@ import { useState } from "react";
 
 import { Box, Button, Modal, TextField } from "@mui/material";
 
+
 import PageHead from "../../../components/Common/PageHead";
 import TagRow from "../../../components/Work/TagRow";
 import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
 import { WorkTagUpdate } from "../../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
+
 
 export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
@@ -58,24 +60,24 @@ const WorkTagIndexPage = ({
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [createModal, setCreateModal] = useState(false);
-  const [newTag, setNewTag] = useState<WorkTagUpdate>({ name: "", description: "" });
+  const [newTag, setNewTag] = useState<WorkTagUpdate>({ description: "", name: "" });
 
   const createWorkTag = async (name: string, description: string) => {
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "work-tag-create-fail", message: "ログインしてください" });
+      setNewError({ message: "ログインしてください", name: "work-tag-create-fail" });
       return;
     }
 
     if (name.length === 0) {
-      setNewError({ name: "work-tag-create-fail", message: "タグ名を入力してください" });
+      setNewError({ message: "タグ名を入力してください", name: "work-tag-create-fail" });
       return;
     }
 
     try {
       await apiClient.POST("/work/tag", {
         body: {
-          name,
           description,
+          name,
         },
         headers: {
           Authorization: `Bearer ${authState.token}`,
@@ -84,31 +86,31 @@ const WorkTagIndexPage = ({
       removeError("work-tag-create-fail");
       router.reload();
     } catch {
-      setNewError({ name: "work-tag-create-fail", message: "タグの新規作成に失敗しました" });
+      setNewError({ message: "タグの新規作成に失敗しました", name: "work-tag-create-fail" });
     }
   };
 
   const deleteWorkTag = async (tagId: string) => {
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "work-tag-delete-fail", message: "ログインしてください" });
+      setNewError({ message: "ログインしてください", name: "work-tag-delete-fail" });
       return;
     }
 
     try {
       await apiClient.DELETE("/work/tag/{tagId}", {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
         params: {
           path: {
             tagId,
           },
         },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
       });
       removeError("work-tag-delete-fail");
       router.reload();
     } catch {
-      setNewError({ name: "work-tag-delete-fail", message: "タグの削除に失敗しました" });
+      setNewError({ message: "タグの削除に失敗しました", name: "work-tag-delete-fail" });
     }
   };
 
@@ -129,7 +131,7 @@ const WorkTagIndexPage = ({
       </div>
 
       <Modal open={createModal}>
-        <Box style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
+        <Box style={{ alignContent: "center", display: "flex", justifyContent: "center" }}>
           <Box sx={{ bgcolor: "background.paper", p: 4 }}>
             <TextField
               label="タグ名"
@@ -160,7 +162,7 @@ const WorkTagIndexPage = ({
               onClick={() => {
                 createWorkTag(newTag.name, newTag.description);
                 setCreateModal(false);
-                setNewTag({ name: "", description: "" });
+                setNewTag({ description: "", name: "" });
               }}
             >
               作成
@@ -169,7 +171,7 @@ const WorkTagIndexPage = ({
               variant="outlined"
               onClick={() => {
                 setCreateModal(false);
-                setNewTag({ name: "", description: "" });
+                setNewTag({ description: "", name: "" });
               }}
               style={{ margin: "1rem" }}
             >

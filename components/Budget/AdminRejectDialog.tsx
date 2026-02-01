@@ -16,10 +16,10 @@ export const AdminRejectDialog = ({ open, onClose, onConfirm, name }: AdminRejec
         aria-label="却下操作をキャンセルする"
         onClick={onClose}
         sx={{
+          color: (theme) => theme.palette.grey[500],
           position: "absolute",
           right: 12,
           top: 12,
-          color: (theme) => theme.palette.grey[500],
         }}
       >
         <Close />

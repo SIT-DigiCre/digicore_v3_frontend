@@ -1,3 +1,4 @@
+
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import Link from "next/link";
 
@@ -21,6 +22,7 @@ import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
 import AddUserDialog from "../../../components/Group/AddUserDialog";
 import { createServerApiClient } from "../../../utils/fetch/client";
+
 
 export const getServerSideProps = async ({
   req,
@@ -103,7 +105,7 @@ const AdminGroupDetailPage = ({
                   {group.users.map((user) => (
                     <TableRow key={user.userId}>
                       <TableCell>
-                        <Avatar src={user.userIcon} sx={{ width: 40, height: 40 }}>
+                        <Avatar src={user.userIcon} sx={{ height: 40, width: 40 }}>
                           {user.name.charAt(0)}
                         </Avatar>
                       </TableCell>

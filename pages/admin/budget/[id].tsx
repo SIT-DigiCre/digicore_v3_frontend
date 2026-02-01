@@ -27,6 +27,7 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
+
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 export const getServerSideProps = async ({
@@ -54,8 +55,8 @@ export const getServerSideProps = async ({
     }
     return {
       props: {
-        budgetId,
         budget: budgetRes.data,
+        budgetId,
       },
     };
   } catch (error) {
@@ -75,9 +76,9 @@ const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
   const updateAdminBudget = (status: "approve" | "reject" | "paid") => {
     apiClient
       .PUT("/budget/{budgetId}/admin", {
-        params: { path: { budgetId } },
         body: { status },
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       })
       .then(() => router.reload());
   };

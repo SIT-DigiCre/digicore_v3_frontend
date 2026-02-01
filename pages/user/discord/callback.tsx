@@ -1,3 +1,4 @@
+
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -36,7 +37,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
   useEffect(() => {
     if (!authState.isLogined) return;
     onCallback();
-  }, [authState, onCallback]);
+  }, [authState]);
 
   if (isLoginFailed) return <p>Discord連携に失敗</p>;
   return <p>Discord連携作業中...（そのままお待ちください）</p>;
@@ -47,7 +48,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const { code } = context.query;
   let userId = "";
   if (typeof code === "string") userId = code;
-  const props: Props = { isLoginFailed: !(typeof userId === "string"), code: userId };
+  const props: Props = { code: userId, isLoginFailed: !(typeof userId === "string") };
   return {
     props: props,
   };

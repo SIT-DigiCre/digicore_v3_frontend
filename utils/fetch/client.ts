@@ -1,3 +1,4 @@
+
 import type { GetServerSidePropsContext, NextApiRequest } from "next";
 
 import createClient from "openapi-fetch";

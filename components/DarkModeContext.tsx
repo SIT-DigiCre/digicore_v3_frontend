@@ -1,11 +1,11 @@
 import {
+  type ReactNode,
   createContext,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
 
 import { useMediaQuery } from "@mui/material";
@@ -42,9 +42,9 @@ export const DarkModeProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo(
     () => ({
+      currentMode: darkModeValue,
       isDarkMode,
       setDarkMode,
-      currentMode: darkModeValue,
     }),
     [isDarkMode, setDarkMode, darkModeValue],
   );

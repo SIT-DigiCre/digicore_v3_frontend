@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+
 import { User } from "../interfaces/user";
 import { apiClient } from "../utils/fetch/client";
 
@@ -14,10 +15,10 @@ export type AuthState = {
 };
 
 const DEFAULT_AUTH_STATE: AuthState = {
-  isLogined: false,
   isLoading: true,
-  user: undefined,
+  isLogined: false,
   token: undefined,
+  user: undefined,
 };
 
 type UseAuthState = () => {
@@ -45,17 +46,17 @@ export const useAuthState: UseAuthState = () => {
       setAuth((prev) => {
         if (prev.isLogined && !forceRefresh) return prev;
         return {
-          isLogined: true,
           isLoading: false,
-          user: res.data,
+          isLogined: true,
           token,
+          user: res.data,
         };
       });
       removeError("autologin-fail");
       return res.data;
     } catch {
       if (!isPublicPage) {
-        setAuth({ isLogined: false, isLoading: false, user: undefined, token: undefined });
+        setAuth({ isLoading: false, isLogined: false, token: undefined, user: undefined });
         router.push("/login");
       }
     }
@@ -76,10 +77,10 @@ export const useAuthState: UseAuthState = () => {
 
   const logout = () => {
     setAuth({
-      isLogined: false,
       isLoading: false,
-      user: undefined,
+      isLogined: false,
       token: undefined,
+      user: undefined,
     });
     document.cookie = "jwt=; path=/; max-age=0";
     router.push("/login");
@@ -100,12 +101,12 @@ export const useAuthState: UseAuthState = () => {
       return;
     }
     getUserInfo(token, false);
-  }, []);
+  }, [getUserInfo]);
 
   return {
     authState: auth,
-    onLogin,
     logout,
+    onLogin,
     refresh,
   };
 };

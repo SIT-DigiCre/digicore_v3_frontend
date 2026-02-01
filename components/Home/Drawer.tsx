@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -110,11 +111,11 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
         <Link
           href="/"
           style={{
-            textDecoration: "none",
-            color: "inherit",
-            fontWeight: 800,
-            display: "flex",
             alignItems: "center",
+            color: "inherit",
+            display: "flex",
+            fontWeight: 800,
+            textDecoration: "none",
           }}
         >
           <Image
@@ -132,21 +133,21 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
             <ListItem key={item.href} disablePadding>
               <Link
                 href={item.href}
-                style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+                style={{ color: "inherit", textDecoration: "none", width: "100%" }}
               >
                 <ListItemButton
                   role="menuitem"
                   tabIndex={0}
                   onClick={handleDrawerClose}
                   sx={{
-                    backgroundColor: isMenuItemActive(item.href)
-                      ? "action.selected"
-                      : "transparent",
                     "&:hover": {
                       backgroundColor: isMenuItemActive(item.href)
                         ? "action.selected"
                         : "action.hover",
                     },
+                    backgroundColor: isMenuItemActive(item.href)
+                      ? "action.selected"
+                      : "transparent",
                   }}
                 >
                   <ListItemIcon aria-hidden="true">{item.icon}</ListItemIcon>
@@ -159,21 +160,21 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
           <ListItem disablePadding>
             <Link
               href={loginItem.href}
-              style={{ textDecoration: "none", color: "inherit", width: "100%" }}
+              style={{ color: "inherit", textDecoration: "none", width: "100%" }}
             >
               <ListItemButton
                 role="menuitem"
                 tabIndex={0}
                 onClick={handleDrawerClose}
                 sx={{
-                  backgroundColor: isMenuItemActive(loginItem.href)
-                    ? "action.selected"
-                    : "transparent",
                   "&:hover": {
                     backgroundColor: isMenuItemActive(loginItem.href)
                       ? "action.selected"
                       : "action.hover",
                   },
+                  backgroundColor: isMenuItemActive(loginItem.href)
+                    ? "action.selected"
+                    : "transparent",
                 }}
               >
                 <ListItemIcon aria-hidden="true">{loginItem.icon}</ListItemIcon>

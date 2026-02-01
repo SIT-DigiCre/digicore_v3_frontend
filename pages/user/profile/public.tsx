@@ -17,6 +17,7 @@ import { DEFAULT_USER, User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
+
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
@@ -53,7 +54,7 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
   const handleSave = async () => {
     if (!editUserProfile) return;
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "profile-update-fail", message: "ログインが必要です" });
+      setNewError({ message: "ログインが必要です", name: "profile-update-fail" });
       return;
     }
     const response = await apiClient.PUT("/user/me", {
@@ -64,8 +65,8 @@ const PublicProfilePage = ({ initialUserProfile }: PublicProfilePageProps) => {
     });
     if (response.error) {
       setNewError({
-        name: "profile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
+        name: "profile-update-fail",
       });
       return;
     }

@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { Card, CardContent } from "@mui/material";
 
+
 import { DigicreEvent } from "../../interfaces/event";
 import Heading from "../Common/Heading";
 import MarkdownView from "../Markdown/MarkdownView";

@@ -44,6 +44,10 @@ pnpm run dev
 
 バックエンドの実装が変更されたら、[`/document/bundle.gen.yml`](https://github.com/SIT-DigiCre/digicore_v3_backend/blob/master/document/bundle.gen.yml)をコピーしてきて、`/utils/fetch/bundle.gen.yml`に貼り付けてください。その後`pnpm generate`を実行すると、新しい型定義が生成されます。
 
+### oxlint のエラーについて
+
+インポートの順序がアルファベット順ではない場合などに警告が出ます。手動で修正しても良いですが、`pnpm run lint:fix`を実行すると自動で修正されます。
+
 ## 機能の開発の仕方
 
 ### ブランチの命名

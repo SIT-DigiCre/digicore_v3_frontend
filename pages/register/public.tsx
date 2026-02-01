@@ -17,6 +17,7 @@ import { FileObject } from "../../interfaces/file";
 import { DEFAULT_USER, User } from "../../interfaces/user";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
+
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
@@ -61,8 +62,8 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
     });
     if (response.error) {
       setNewError({
-        name: "profile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
+        name: "profile-update-fail",
       });
       setIsPending(false);
     } else {

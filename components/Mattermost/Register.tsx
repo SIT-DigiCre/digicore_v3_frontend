@@ -13,6 +13,7 @@ import {
   Typography,
 } from "@mui/material";
 
+
 import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
 import { useAuthState } from "../../hook/useAuthState";
 import { MattermostRegistrationRequest } from "../../interfaces/api";
@@ -27,9 +28,9 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
   const userProfile = authState.user;
   const { register } = useMattermostRegister();
   const [registrationForm, setRegistrationForm] = useState<MattermostRegistrationRequest>({
-    username: "",
     nickname: "",
     password: "",
+    username: "",
   });
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [sending, setSending] = useState(false);
@@ -82,7 +83,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
         nickname: userProfile.username,
       });
     }
-  }, [userProfile]);
+  }, [userProfile, registrationForm]);
   return (
     <Stack spacing={4}>
       <Heading level={2}>Mattermost</Heading>

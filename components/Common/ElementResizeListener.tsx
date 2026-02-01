@@ -23,7 +23,7 @@ const ElementResizeListener = (props: { onResize: (event: Event) => void }) => {
       // object要素のWindowオブジェクトに対し、リサイズイベントを登録する
       obj.contentDocument.defaultView.addEventListener("resize", _onResize);
     }
-  }, []);
+  }, [_onResize]);
 
   useEffect(() => {
     // クリーンアップ処理
@@ -33,7 +33,7 @@ const ElementResizeListener = (props: { onResize: (event: Event) => void }) => {
         obj.contentDocument.defaultView.removeEventListener("resize", _onResize);
       }
     };
-  }, []);
+  }, [_onResize]);
 
   return (
     <object
@@ -44,14 +44,14 @@ const ElementResizeListener = (props: { onResize: (event: Event) => void }) => {
       data={"about:blank"}
       title={""}
       style={{
+        height: "100%",
+        left: 0,
+        opacity: 0,
+        pointerEvents: "none",
         position: "absolute",
         top: 0,
-        left: 0,
-        height: "100%",
         width: "100%",
-        pointerEvents: "none",
         zIndex: -1,
-        opacity: 0,
       }}
     />
   );

@@ -11,15 +11,15 @@ export type User = {
 };
 
 export const DEFAULT_USER: User = {
+  activeLimit: "",
+  discordUserId: "",
+  iconUrl: "",
+  isAdmin: false,
+  schoolGrade: 0,
+  shortIntroduction: "",
+  studentNumber: "",
   userId: "",
   username: "",
-  studentNumber: "",
-  iconUrl: "",
-  schoolGrade: 0,
-  discordUserId: "",
-  shortIntroduction: "",
-  activeLimit: "",
-  isAdmin: false,
 };
 
 export type UserProfile = {

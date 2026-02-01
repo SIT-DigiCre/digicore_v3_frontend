@@ -14,9 +14,11 @@ import {
   Typography,
 } from "@mui/material";
 
+
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { createServerApiClient } from "../../utils/fetch/client";
+
 
 const ITEMS_PER_PAGE = 10;
 
@@ -56,11 +58,11 @@ export const getServerSideProps = async ({
     if (!usersRes.data || !usersRes.data.users) {
       return {
         props: {
-          users: [],
           currentPage: 1,
           hasNextPage: false,
           hasPreviousPage: false,
           seed,
+          users: [],
         },
       };
     }
@@ -71,22 +73,22 @@ export const getServerSideProps = async ({
 
     return {
       props: {
-        users,
         currentPage: page,
         hasNextPage,
         hasPreviousPage,
         seed,
+        users,
       },
     };
   } catch (error) {
     console.error("Failed to fetch users:", error);
     return {
       props: {
-        users: [],
         currentPage: 1,
         hasNextPage: false,
         hasPreviousPage: false,
         seed,
+        users: [],
       },
     };
   }
@@ -120,7 +122,7 @@ const UserIndexPage = ({
                   {users.map((userProfile) => (
                     <TableRow key={userProfile.userId}>
                       <TableCell>
-                        <Avatar src={userProfile.iconUrl} sx={{ width: 40, height: 40 }} />
+                        <Avatar src={userProfile.iconUrl} sx={{ height: 40, width: 40 }} />
                       </TableCell>
                       <TableCell>
                         <Link
@@ -143,7 +145,7 @@ const UserIndexPage = ({
                 onChange={(page) =>
                   router.push({
                     pathname: router.pathname,
-                    query: { seed, page },
+                    query: { page, seed },
                   })
                 }
               />

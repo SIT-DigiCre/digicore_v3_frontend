@@ -18,6 +18,7 @@ import { useErrorState } from "../../hook/useErrorState";
 import { WorkRequest } from "../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
+
 type WorkPublicAuthor = {
   userId: string;
   username: string;
@@ -90,9 +91,9 @@ export const getServerSideProps = async ({ params, query, req }: GetServerSidePr
       props: {
         id,
         modeStr,
+        tags,
         workDetail,
         workPublic,
-        tags,
       },
     };
   } catch {
@@ -136,32 +137,32 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
 
   const onSubmit = async (workRequest: WorkRequest) => {
     if (!authState.token) {
-      setNewError({ name: "work-put-fail", message: "ログインしてください" });
+      setNewError({ message: "ログインしてください", name: "work-put-fail" });
       return;
     }
 
     try {
       await apiClient.PUT("/work/work/{workId}", {
+        body: workRequest,
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
         params: {
           path: {
             workId: id,
           },
         },
-        body: workRequest,
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
       });
       removeError("work-put-fail");
       router.reload();
     } catch {
-      setNewError({ name: "work-put-fail", message: "Workの更新に失敗しました" });
+      setNewError({ message: "Workの更新に失敗しました", name: "work-put-fail" });
     }
   };
 
   const onClickDelete = async () => {
     if (!authState.token) {
-      setNewError({ name: "work-delete-fail", message: "ログインしてください" });
+      setNewError({ message: "ログインしてください", name: "work-delete-fail" });
       return;
     }
 
@@ -170,19 +171,19 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
 
     try {
       await apiClient.DELETE("/work/work/{workId}", {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
         params: {
           path: {
             workId: id,
           },
         },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
       });
       removeError("work-delete-fail");
       router.push(`/work`);
     } catch {
-      setNewError({ name: "work-delete-fail", message: "Workの削除に失敗しました" });
+      setNewError({ message: "Workの削除に失敗しました", name: "work-delete-fail" });
     }
   };
 

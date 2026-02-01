@@ -67,28 +67,28 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
     setIsLoading(true);
     try {
       const res = await apiClient.DELETE("/event/{eventId}/{reservationId}/me", {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
         params: {
           path: {
             eventId,
             reservationId: eventReservation.reservationId,
           },
         },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
       });
       if (res.error) {
         setNewError({
-          name: "event-reservation-cancel-fail",
           message: res.error.message,
+          name: "event-reservation-cancel-fail",
         });
       } else {
         router.reload();
       }
     } catch {
       setNewError({
-        name: "event-reservation-cancel-fail",
         message: "イベント予約のキャンセルに失敗しました",
+        name: "event-reservation-cancel-fail",
       });
     } finally {
       setIsLoading(false);
@@ -99,12 +99,6 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
     setIsLoading(true);
     try {
       const res = await apiClient.PUT("/event/{eventId}/{reservationId}/me", {
-        params: {
-          path: {
-            eventId,
-            reservationId: eventReservation.reservationId,
-          },
-        },
         body: {
           comment: commentText,
           url: urlText,
@@ -112,19 +106,25 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
         headers: {
           Authorization: `Bearer ${authState.token}`,
         },
+        params: {
+          path: {
+            eventId,
+            reservationId: eventReservation.reservationId,
+          },
+        },
       });
       if (res.error) {
         setNewError({
-          name: "event-reservation-fail",
           message: res.error.message,
+          name: "event-reservation-fail",
         });
       } else {
         router.reload();
       }
     } catch {
       setNewError({
-        name: "event-reservation-fail",
         message: "イベント予約に失敗しました",
+        name: "event-reservation-fail",
       });
     } finally {
       setShowModal(false);
@@ -175,7 +175,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
             <Typography>予約者がいません</Typography>
           )}
         </CardContent>
-        <CardActions sx={{ p: 2, pt: 0, gap: 2, alignItems: "center" }}>
+        <CardActions sx={{ alignItems: "center", gap: 2, p: 2, pt: 0 }}>
           {eventReservation.reservated ? (
             <Button
               size="small"
@@ -211,17 +211,17 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
       >
         <Paper
           sx={{
-            position: "absolute" as const,
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: { xs: "90%", sm: 600 },
-            maxWidth: 700,
             bgcolor: "background.paper",
             borderRadius: 2,
             boxShadow: 24,
-            p: 0,
+            left: "50%",
+            maxWidth: 700,
             outline: "none",
+            p: 0,
+            position: "absolute" as const,
+            top: "50%",
+            transform: "translate(-50%, -50%)",
+            width: { sm: 600, xs: "90%" },
           }}
           elevation={8}
         >

@@ -1,3 +1,4 @@
+
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 
@@ -11,6 +12,7 @@ import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
 import { WorkRequest } from "../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
+
 
 export const getServerSideProps = async ({ req }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
@@ -40,7 +42,7 @@ const WorkCreatePage = ({ tags }: InferGetServerSidePropsType<typeof getServerSi
 
   const onSubmit = async (workRequest: WorkRequest) => {
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "work-post-fail", message: "ログインしてください" });
+      setNewError({ message: "ログインしてください", name: "work-post-fail" });
       return;
     }
 
@@ -53,14 +55,14 @@ const WorkCreatePage = ({ tags }: InferGetServerSidePropsType<typeof getServerSi
       });
 
       if (!res.data || !res.data.workId) {
-        setNewError({ name: "work-post-fail", message: "Workの投稿に失敗しました" });
+        setNewError({ message: "Workの投稿に失敗しました", name: "work-post-fail" });
         return;
       }
 
       removeError("work-post-fail");
       router.push(`/work/${res.data.workId}`);
     } catch {
-      setNewError({ name: "work-post-fail", message: "Workの投稿に失敗しました" });
+      setNewError({ message: "Workの投稿に失敗しました", name: "work-post-fail" });
     }
   };
 

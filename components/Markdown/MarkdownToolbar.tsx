@@ -22,12 +22,12 @@ const ActionButton = ({ icon: Icon, label, onClick }: ActionButtonProps) => {
         size="small"
         onClick={onClick}
         sx={{
-          borderRadius: 2,
-          border: `1px solid ${borderColor}`,
           backgroundColor,
+          border: `1px solid ${borderColor}`,
+          borderRadius: 2,
           color: theme.palette.text.primary,
-          minWidth: "2rem",
           minHeight: "2rem",
+          minWidth: "2rem",
           transition: "background-color 0.2s ease, color 0.2s ease",
         }}
       >

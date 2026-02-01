@@ -28,17 +28,17 @@ type FileBrowserModalProps = {
 };
 
 const modalStyle = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: "90%", sm: 600 },
-  maxWidth: 700,
   bgcolor: "background.paper",
   borderRadius: 2,
   boxShadow: 24,
-  p: 0,
+  left: "50%",
+  maxWidth: 700,
   outline: "none",
+  p: 0,
+  position: "absolute" as const,
+  top: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { sm: 600, xs: "90%" },
 };
 
 export const FileBrowserModal = ({
@@ -51,7 +51,7 @@ export const FileBrowserModal = ({
   useEffect(() => {
     setIsOpen(open);
     reloadMyFileIds();
-  }, [open]);
+  }, [open, reloadMyFileIds]);
   const { myFileInfos, reloadMyFileIds } = useMyFiles();
   const onClickCancel = () => {
     setIsOpen(false);
@@ -76,12 +76,12 @@ export const FileBrowserModal = ({
           <Paper sx={modalStyle} elevation={8}>
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "space-between",
                 alignItems: "center",
-                p: 3,
                 borderBottom: "1px solid",
                 borderColor: "divider",
+                display: "flex",
+                justifyContent: "space-between",
+                p: 3,
               }}
             >
               <Typography variant="h6" component="h2" fontWeight="bold">
@@ -96,11 +96,11 @@ export const FileBrowserModal = ({
               <Stack spacing={2}>
                 <Box
                   sx={{
-                    overflowY: "auto",
-                    maxHeight: "400px",
                     border: "1px solid",
                     borderColor: "divider",
                     borderRadius: 1,
+                    maxHeight: "400px",
+                    overflowY: "auto",
                   }}
                 >
                   {myFileInfos ? (
@@ -127,11 +127,11 @@ export const FileBrowserModal = ({
 
             <Box
               sx={{
-                p: 3,
-                borderTop: "1px solid",
                 borderColor: "divider",
+                borderTop: "1px solid",
                 display: "flex",
                 justifyContent: "space-between",
+                p: 3,
               }}
             >
               <Button variant="outlined" onClick={onClickCancel}>
@@ -179,59 +179,59 @@ const FileListItem = ({ fileId, onClick, onlyFileKind }: FileListItemProps) => {
       }}
       disabled={isDisabled}
       sx={{
-        borderBottom: "1px solid",
-        borderColor: "divider",
-        "&:last-child": {
-          borderBottom: "none",
-        },
         "&:hover": {
           backgroundColor: isDisabled ? "transparent" : "action.hover",
         },
+        "&:last-child": {
+          borderBottom: "none",
+        },
+        borderBottom: "1px solid",
+        borderColor: "divider",
         opacity: isDisabled ? 0.5 : 1,
         py: 2,
       }}
     >
-      <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+      <Box sx={{ alignItems: "center", display: "flex", width: "100%" }}>
         {file ? (
           <>
             {getFileKind(file.extension) === "image" ? (
               <Box
                 sx={{
-                  width: 60,
-                  height: 60,
-                  mr: 2,
-                  borderRadius: 1,
-                  overflow: "hidden",
+                  alignItems: "center",
                   border: "1px solid",
                   borderColor: "divider",
+                  borderRadius: 1,
                   display: "flex",
-                  alignItems: "center",
+                  height: 60,
                   justifyContent: "center",
+                  mr: 2,
+                  overflow: "hidden",
+                  width: 60,
                 }}
               >
                 <img
                   src={file.url}
                   alt=""
                   style={{
-                    width: "100%",
                     height: "100%",
                     objectFit: "cover",
+                    width: "100%",
                   }}
                 />
               </Box>
             ) : (
               <Box
                 sx={{
-                  width: 60,
-                  height: 60,
-                  mr: 2,
-                  display: "flex",
                   alignItems: "center",
-                  justifyContent: "center",
                   backgroundColor: "grey.100",
-                  borderRadius: 1,
                   border: "1px solid",
                   borderColor: "divider",
+                  borderRadius: 1,
+                  display: "flex",
+                  height: 60,
+                  justifyContent: "center",
+                  mr: 2,
+                  width: 60,
                 }}
               >
                 <FileKindIcon kind={getFileKind(file.extension)} />
@@ -255,17 +255,17 @@ const FileListItem = ({ fileId, onClick, onlyFileKind }: FileListItemProps) => {
             </Box>
           </>
         ) : (
-          <Box sx={{ display: "flex", alignItems: "center", width: "100%" }}>
+          <Box sx={{ alignItems: "center", display: "flex", width: "100%" }}>
             <Box
               sx={{
-                width: 60,
-                height: 60,
-                mr: 2,
+                alignItems: "center",
                 backgroundColor: "grey.200",
                 borderRadius: 1,
                 display: "flex",
-                alignItems: "center",
+                height: 60,
                 justifyContent: "center",
+                mr: 2,
+                width: 60,
               }}
             >
               <Typography variant="caption" color="text.secondary">

@@ -16,8 +16,8 @@ export const BudgetFileView = ({ fileId }: WorkFileViewProps) => {
       <div
         ref={contentRef}
         style={{
-          width: "100%",
           textAlign: "center",
+          width: "100%",
         }}
       >
         <p>読み込み中...</p>

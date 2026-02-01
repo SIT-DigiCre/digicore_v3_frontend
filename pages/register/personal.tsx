@@ -16,6 +16,7 @@ import { useErrorState } from "../../hook/useErrorState";
 import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
+
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
@@ -53,8 +54,8 @@ const RegisterPersonalProfilePage = ({
     });
     if (response.error) {
       setNewError({
-        name: "privateprofile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
+        name: "privateprofile-update-fail",
       });
       setIsPending(false);
     } else {

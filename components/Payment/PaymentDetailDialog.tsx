@@ -38,14 +38,14 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
     startTransition(async () => {
       try {
         await apiClient.PUT(`/payment/{paymentId}`, {
+          body: { checked: checked, note: note },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
           params: {
             path: {
               paymentId: payment.paymentId,
             },
-          },
-          body: { checked: checked, note: note },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
           },
         });
         removeError("payments-update-fail");
@@ -53,8 +53,8 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
         onClose();
       } catch {
         setNewError({
-          name: "payments-update-fail",
           message: "支払情報の更新に失敗しました",
+          name: "payments-update-fail",
         });
       }
     });
@@ -68,10 +68,10 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
         onClick={onClose}
         disabled={isPending}
         sx={{
+          color: (theme) => theme.palette.grey[500],
           position: "absolute",
           right: 12,
           top: 12,
-          color: (theme) => theme.palette.grey[500],
         }}
       >
         <Close />

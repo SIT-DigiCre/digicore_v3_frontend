@@ -9,6 +9,7 @@ import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import { createServerApiClient } from "../../utils/fetch/client";
 
+
 type LoginCallbackPageProps = {
   loginFailed?: boolean;
   errorMessage?: string;
@@ -36,7 +37,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     return { redirect: { destination: "/", permanent: false } };
   }
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
-  return { props: { loginFailed: true, errorMessage } };
+  return { props: { errorMessage, loginFailed: true } };
 };
 
 const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCallbackPageProps) => {

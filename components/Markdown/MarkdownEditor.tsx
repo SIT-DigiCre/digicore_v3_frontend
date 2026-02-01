@@ -88,66 +88,66 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
   const toolbarActions = useMemo<ActionButtonProps[]>(() => {
     const actions: ActionButtonProps[] = [
       {
+        icon: HMobiledataIcon,
         key: "heading",
         label: "見出し (H3)",
-        icon: HMobiledataIcon,
         onClick: () => insertBlock("\n### "),
       },
       {
+        icon: FormatBoldIcon,
         key: "bold",
         label: "太字",
-        icon: FormatBoldIcon,
         onClick: () => insertBlock("**強調**"),
       },
       {
+        icon: FormatItalicIcon,
         key: "italic",
         label: "斜体",
-        icon: FormatItalicIcon,
         onClick: () => insertBlock("*斜体*"),
       },
       {
+        icon: FormatQuoteIcon,
         key: "quote",
         label: "引用",
-        icon: FormatQuoteIcon,
         onClick: () => insertBlock("\n> "),
       },
       {
+        icon: FormatListBulletedIcon,
         key: "bullet",
         label: "箇条書き",
-        icon: FormatListBulletedIcon,
         onClick: () => insertBlock("\n- "),
       },
       {
+        icon: FormatListNumberedIcon,
         key: "ordered",
         label: "番号付きリスト",
-        icon: FormatListNumberedIcon,
         onClick: () => insertBlock("\n1. "),
       },
       {
+        icon: CodeIcon,
         key: "inlineCode",
         label: "インラインコード",
-        icon: CodeIcon,
         onClick: () => insertBlock("`code`"),
       },
       {
+        icon: LinkIcon,
         key: "link",
         label: "リンク",
-        icon: LinkIcon,
         onClick: () => insertBlock("[タイトル](https://example.com)"),
       },
       {
+        icon: ImageIcon,
         key: "image",
         label: "画像を挿入",
-        icon: ImageIcon,
         onClick: () => setIsOpenFileBrowser(true),
       },
     ];
 
     if (isMobile) {
       actions.push({
+        icon: mobileViewMode === "editor" ? VisibilityIcon : EditIcon,
         key: "toggleView",
         label: mobileViewMode === "editor" ? "プレビュー表示" : "編集に戻る",
-        icon: mobileViewMode === "editor" ? VisibilityIcon : EditIcon,
         onClick: () => setMobileViewMode((prev) => (prev === "editor" ? "preview" : "editor")),
       });
     }
@@ -166,7 +166,7 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
       <Stack spacing={2}>
         <MarkdownToolbar actions={toolbarActions} />
         <Stack direction="row" gap={2}>
-          <Box sx={{ flex: 1, display: showEditor ? "block" : "none" }}>
+          <Box sx={{ display: showEditor ? "block" : "none", flex: 1 }}>
             <textarea
               ref={textareaRef}
               placeholder="ここにテキストを入力してください"
@@ -174,35 +174,35 @@ const MarkdownEditor = ({ value, onChange }: MarkdownEditorProps) => {
               value={md}
               onChange={onChangeMd}
               style={{
-                height: isMobile ? 260 : 500,
-                width: "100%",
-                fontSize: "1rem",
-                padding: "1rem",
-                borderRadius: "0.5rem",
+                backgroundColor:
+                  theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[50],
                 border: `1px solid ${
                   theme.palette.mode === "dark" ? theme.palette.grey[800] : theme.palette.grey[300]
                 }`,
-                backgroundColor:
-                  theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[50],
+                borderRadius: "0.5rem",
                 color:
                   theme.palette.mode === "dark" ? theme.palette.grey[100] : theme.palette.grey[900],
                 fontFamily: "inherit",
+                fontSize: "1rem",
+                height: isMobile ? 260 : 500,
+                padding: "1rem",
                 resize: "none",
+                width: "100%",
               }}
             />
           </Box>
-          <Box sx={{ flex: 1, display: showPreview ? "block" : "none" }}>
+          <Box sx={{ display: showPreview ? "block" : "none", flex: 1 }}>
             <Box
               sx={{
-                height: isMobile ? 260 : 500,
-                overflowY: "auto",
-                overflowWrap: "anywhere",
-                borderRadius: "0.5rem",
+                backgroundColor:
+                  theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[100],
                 border: `1px solid ${
                   theme.palette.mode === "dark" ? theme.palette.grey[800] : theme.palette.grey[200]
                 }`,
-                backgroundColor:
-                  theme.palette.mode === "dark" ? theme.palette.grey[900] : theme.palette.grey[100],
+                borderRadius: "0.5rem",
+                height: isMobile ? 260 : 500,
+                overflowWrap: "anywhere",
+                overflowY: "auto",
                 padding: "1rem",
               }}
             >

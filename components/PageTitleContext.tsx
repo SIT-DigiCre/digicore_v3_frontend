@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
+import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from "react";
 
 type PageTitleContextValue = {
   title: string;
@@ -14,7 +14,7 @@ export const PageTitleProvider = ({ children }: { children: ReactNode }) => {
     setTitleState(t);
   }, []);
 
-  const value = useMemo(() => ({ title, setTitle }), [title, setTitle]);
+  const value = useMemo(() => ({ setTitle, title }), [title, setTitle]);
 
   return <PageTitleContext.Provider value={value}>{children}</PageTitleContext.Provider>;
 };

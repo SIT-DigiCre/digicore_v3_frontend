@@ -9,6 +9,7 @@ import PageHead from "../../components/Common/PageHead";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import { createServerApiClient } from "../../utils/fetch/client";
 
+
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
 function normalizeQueryParam(value: string | string[] | undefined): string | undefined {
@@ -58,10 +59,10 @@ export const getServerSideProps = async ({
 
     return {
       props: {
-        profile: profileRes.data,
         introduction: introductionRes.data?.introduction || null,
-        seed: seed ?? null,
         page: page ?? null,
+        profile: profileRes.data,
+        seed: seed ?? null,
       },
     };
   } catch (error) {
@@ -85,23 +86,23 @@ const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
 
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={4} alignItems="center">
-              <Grid size={{ xs: 12, sm: 4 }}>
+              <Grid size={{ sm: 4, xs: 12 }}>
                 <Box display="flex" justifyContent="center">
                   <Avatar
                     src={profile.iconUrl}
                     alt={`${profile.username}のアイコン`}
                     sx={{
-                      width: { xs: 120, sm: 150 },
-                      height: { xs: 120, sm: 150 },
                       border: 3,
                       borderColor: "primary.main",
+                      height: { sm: 150, xs: 120 },
+                      width: { sm: 150, xs: 120 },
                     }}
                   />
                 </Box>
               </Grid>
 
-              <Grid size={{ xs: 12, sm: 8 }}>
-                <Box textAlign={{ xs: "center", sm: "left" }}>
+              <Grid size={{ sm: 8, xs: 12 }}>
+                <Box textAlign={{ sm: "left", xs: "center" }}>
                   <Heading level={2}>{profile.username}</Heading>
 
                   {profile.shortIntroduction && (
@@ -110,7 +111,7 @@ const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
                     </Typography>
                   )}
 
-                  <Box display="flex" justifyContent={{ xs: "center", sm: "flex-start" }}>
+                  <Box display="flex" justifyContent={{ sm: "flex-start", xs: "center" }}>
                     <Chip
                       icon={<SchoolIcon />}
                       label={`${profile.schoolGrade}年生`}
@@ -135,12 +136,21 @@ const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
                 variant="h5"
                 component="h2"
                 gutterBottom
-                sx={{ mb: 3, fontWeight: "bold" }}
+                sx={{ fontWeight: "bold", mb: 3 }}
               >
                 詳細な自己紹介
               </Typography>
               <Box
                 sx={{
+                  "& blockquote": {
+                    backgroundColor: "grey.50",
+                    borderColor: "primary.main",
+                    borderLeft: 4,
+                    fontStyle: "italic",
+                    ml: 0,
+                    pl: 2,
+                    py: 1,
+                  },
                   "& h1, & h2, & h3, & h4, & h5, & h6": {
                     color: "primary.main",
                     fontWeight: "bold",
@@ -151,15 +161,6 @@ const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
                   },
                   "& ul, & ol": {
                     pl: 3,
-                  },
-                  "& blockquote": {
-                    borderLeft: 4,
-                    borderColor: "primary.main",
-                    pl: 2,
-                    ml: 0,
-                    fontStyle: "italic",
-                    backgroundColor: "grey.50",
-                    py: 1,
                   },
                 }}
               >

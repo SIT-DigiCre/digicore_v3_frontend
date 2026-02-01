@@ -42,7 +42,11 @@ const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
     setDescription(initWork.description);
     setSelectedTagIds(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
     setFiles(initWork.files ? initWork.files.map((f) => f.fileId) : []);
-  }, [initWork]);
+  }, [
+	initWork,
+	authState.user,
+	authState.user.userId
+]);
 
   if (!authState.user) return <p>読み込み中...</p>;
 
@@ -57,19 +61,19 @@ const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
 
   const onClickSave = () => {
     const workRequest: WorkRequest = {
-      name: name,
-      description: description,
       authors: authorIds,
-      tags: selectedTagIds,
+      description: description,
       files: files,
+      name: name,
+      tags: selectedTagIds,
     };
     onSubmit(workRequest);
   };
 
   const currentUser: WorkAuthor = {
+    iconUrl: authState.user.iconUrl,
     userId: authState.user.userId!,
     username: authState.user.username,
-    iconUrl: authState.user.iconUrl,
   };
 
   return (

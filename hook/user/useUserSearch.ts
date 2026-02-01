@@ -15,21 +15,21 @@ export const useUserSearch = () => {
     if (query.length < 1 || query.length > 10) return;
     try {
       const { data } = await apiClient.GET("/user/search", {
-        params: {
-          query: { query },
-        },
         headers: {
           Authorization: `Bearer ${authState.token}`,
         },
+        params: {
+          query: { query },
+        },
       });
       if (!data) {
-        setNewError({ name: "user-search-fail", message: "ユーザー検索に失敗しました" });
+        setNewError({ message: "ユーザー検索に失敗しました", name: "user-search-fail" });
         return;
       }
       setSearchResults(data.users);
       removeError("user-search-fail");
     } catch {
-      setNewError({ name: "user-search-fail", message: "ユーザー検索に失敗しました" });
+      setNewError({ message: "ユーザー検索に失敗しました", name: "user-search-fail" });
     }
   };
 

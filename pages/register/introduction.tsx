@@ -13,6 +13,7 @@ import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
+
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
@@ -54,8 +55,8 @@ const RegisterIntroductionProfilePage = ({
     });
     if (response.error) {
       setNewError({
-        name: "introduction-update-fail",
         message: response.error.message || "自己紹介情報の更新に失敗しました",
+        name: "introduction-update-fail",
       });
       setIsPending(false);
     } else {

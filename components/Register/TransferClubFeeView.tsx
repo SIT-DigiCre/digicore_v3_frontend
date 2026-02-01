@@ -39,7 +39,7 @@ const TransferClubFeeView = () => {
           口座情報をコピーする
         </Button>
       </Stack>
-      <TableContainer component={Paper} sx={{ maxWidth: 300, my: 2, mx: "auto" }}>
+      <TableContainer component={Paper} sx={{ maxWidth: 300, mx: "auto", my: 2 }}>
         <Table>
           <TableBody>
             <TableRow>

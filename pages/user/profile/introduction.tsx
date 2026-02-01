@@ -12,6 +12,7 @@ import { useAuthState } from "../../../hook/useAuthState";
 import { useErrorState } from "../../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
+
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);
 
@@ -39,7 +40,7 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
 
   const handleSave = async () => {
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "introduction-update-fail", message: "ログインが必要です" });
+      setNewError({ message: "ログインが必要です", name: "introduction-update-fail" });
       return;
     }
     const response = await apiClient.PUT("/user/me/introduction", {
@@ -50,8 +51,8 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
     });
     if (response.error) {
       setNewError({
-        name: "introduction-update-fail",
         message: response.error.message || "自己紹介情報の更新に失敗しました",
+        name: "introduction-update-fail",
       });
       return;
     }

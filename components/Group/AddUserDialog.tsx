@@ -48,13 +48,13 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
     setIsLoadingUsers(true);
     try {
       const response = await apiClient.GET("/user/search", {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
         params: {
           query: {
             query,
           },
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
         },
       });
 
@@ -64,14 +64,14 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
 
       setUserOptions(
         response.data.users.map((user) => ({
+          iconUrl: user.iconUrl || "",
           userId: user.userId,
           username: user.username,
-          iconUrl: user.iconUrl || "",
         })),
       );
     } catch (error) {
       console.error("Error loading users:", error);
-      setNewError({ name: "load-users-error", message: "ユーザー一覧の取得に失敗しました" });
+      setNewError({ message: "ユーザー一覧の取得に失敗しました", name: "load-users-error" });
     } finally {
       setIsLoadingUsers(false);
     }
@@ -90,36 +90,36 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
 
   const handleSubmit = async () => {
     if (!selectedUser) {
-      setNewError({ name: "add-user-validation", message: "ユーザーを選択してください" });
+      setNewError({ message: "ユーザーを選択してください", name: "add-user-validation" });
       return;
     }
 
     try {
       startTransition(async () => {
         const response = await apiClient.POST("/group/{groupId}/user", {
-          params: {
-            path: {
-              groupId,
-            },
-          },
           body: {
             userId: selectedUser.userId,
           },
           headers: {
             Authorization: `Bearer ${authState.token}`,
           },
+          params: {
+            path: {
+              groupId,
+            },
+          },
         });
 
         if (response.error) {
           const errorMessage = response.error.message || "ユーザーの追加に失敗しました";
-          setNewError({ name: "add-user-error", message: errorMessage });
+          setNewError({ message: errorMessage, name: "add-user-error" });
           return;
         }
         await router.replace(router.asPath);
       });
     } catch (error) {
       console.error("Error adding user to group:", error);
-      setNewError({ name: "add-user-error", message: "ユーザーの追加に失敗しました" });
+      setNewError({ message: "ユーザーの追加に失敗しました", name: "add-user-error" });
     }
   };
 
@@ -135,10 +135,10 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
           onClick={handleClose}
           disabled={isPending}
           sx={{
+            color: (theme) => theme.palette.grey[500],
             position: "absolute",
             right: 12,
             top: 12,
-            color: (theme) => theme.palette.grey[500],
           }}
         >
           <Close />
@@ -179,7 +179,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
                 renderOption={(props, option) => (
                   <li {...props} key={option.userId}>
                     <Stack direction="row" spacing={1} alignItems="center">
-                      <Avatar src={option.iconUrl} sx={{ width: 32, height: 32 }}>
+                      <Avatar src={option.iconUrl} sx={{ height: 32, width: 32 }}>
                         {option.username.charAt(0)}
                       </Avatar>
                       <Typography>{option.username}</Typography>

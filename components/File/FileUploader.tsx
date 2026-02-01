@@ -23,17 +23,17 @@ import { useMyFiles } from "../../hook/file/useFile";
 import { FileKind, FileObject, getFileExtWithKind } from "../../interfaces/file";
 
 const modalStyle = {
-  position: "absolute" as const,
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: { xs: "90%", sm: 500 },
-  maxWidth: 600,
   bgcolor: "background.paper",
   borderRadius: 2,
   boxShadow: 24,
-  p: 0,
+  left: "50%",
+  maxWidth: 600,
   outline: "none",
+  p: 0,
+  position: "absolute" as const,
+  top: "50%",
+  transform: "translate(-50%, -50%)",
+  width: { sm: 500, xs: "90%" },
 };
 
 type FileUploaderProps = {
@@ -96,7 +96,7 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
     try {
       const fileName = file.name;
       const base64 = (await getBase64(file)).split(",")[1];
-      const fileObject = await uploadFile({ name: fileName, file: base64, isPublic: true });
+      const fileObject = await uploadFile({ file: base64, isPublic: true, name: fileName });
       if (typeof fileObject === "string") {
         setErrorMsg(fileObject);
         setUploading(false);
@@ -149,12 +149,12 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
         <Paper sx={modalStyle} elevation={8}>
           <Box
             sx={{
-              display: "flex",
-              justifyContent: "space-between",
               alignItems: "center",
-              p: 3,
               borderBottom: "1px solid",
               borderColor: "divider",
+              display: "flex",
+              justifyContent: "space-between",
+              p: 3,
             }}
           >
             <Typography variant="h6" component="h2" fontWeight="bold">
@@ -169,18 +169,18 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
             <Stack spacing={3}>
               <Paper
                 sx={{
+                  "&:hover": {
+                    backgroundColor: "action.hover",
+                    borderColor: "primary.main",
+                  },
+                  backgroundColor: isDragOver ? "action.hover" : "background.default",
                   border: "2px dashed",
                   borderColor: isDragOver ? "primary.main" : "grey.300",
                   borderRadius: 2,
+                  cursor: "pointer",
                   p: 4,
                   textAlign: "center",
-                  cursor: "pointer",
                   transition: "all 0.3s ease",
-                  backgroundColor: isDragOver ? "action.hover" : "background.default",
-                  "&:hover": {
-                    borderColor: "primary.main",
-                    backgroundColor: "action.hover",
-                  },
                 }}
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
@@ -190,8 +190,8 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
                 <Stack spacing={2} alignItems="center">
                   <CloudUploadIcon
                     sx={{
-                      fontSize: 48,
                       color: isDragOver ? "primary.main" : "text.secondary",
+                      fontSize: 48,
                     }}
                   />
                   <Typography variant="h6" color="text.primary">
@@ -206,7 +206,7 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
                       <Typography
                         variant="caption"
                         color="text.secondary"
-                        sx={{ mb: 1, display: "block" }}
+                        sx={{ display: "block", mb: 1 }}
                       >
                         対応ファイル形式:
                       </Typography>
@@ -227,7 +227,7 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
               </Paper>
 
               {selectedFile && !uploading && (
-                <Paper sx={{ p: 2, backgroundColor: "grey.50" }}>
+                <Paper sx={{ backgroundColor: "grey.50", p: 2 }}>
                   <Stack direction="row" spacing={2} alignItems="center">
                     <FileIcon color="primary" />
                     <Box sx={{ flexGrow: 1 }}>
@@ -260,11 +260,11 @@ export const FileUploader = ({ open, onCancel, onUploaded, onlyFileKind }: FileU
           </Box>
           <Box
             sx={{
-              p: 3,
-              borderTop: "1px solid",
               borderColor: "divider",
+              borderTop: "1px solid",
               display: "flex",
               justifyContent: "flex-start",
+              p: 3,
             }}
           >
             <Button variant="outlined" onClick={onClickCancel} disabled={uploading}>

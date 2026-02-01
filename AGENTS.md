@@ -25,9 +25,11 @@ pnpm install
 pnpm dev          # 開発サーバー起動
 pnpm build        # 本番用ビルド
 pnpm start        # 本番サーバー起動
-pnpm typecheck   # TypeScript型チェック実行
-pnpm lint         # ESLintチェック（自動修正付き）
-pnpm format       # Prettierでコード整形
+pnpm typecheck    # TypeScript型チェック実行
+pnpm lint         # oxlintチェック
+pnpm lint:fix     # oxlintチェック（自動修正付き）
+pnpm format       # oxfmtでフォーマットチェック
+pnpm format:fix   # oxfmtでコード整形
 pnpm generate     # OpenAPIスキーマから型定義を生成
 ```
 
@@ -96,7 +98,7 @@ pnpm generate     # OpenAPIスキーマから型定義を生成
 
 ### コードスタイル
 
-- ESLintで強制されるインポート順序: builtin → external → parent → sibling → index → object → type
+- **oxlint**（`.oxlintrc.json`）でリント、**oxfmt**（`.oxfmtrc.json`）でフォーマット
 - インポートグループ間は必ず改行
 - console.logは禁止（console.warn/errorは可）
 
