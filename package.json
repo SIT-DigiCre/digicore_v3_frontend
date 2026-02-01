@@ -17,23 +17,21 @@
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.7",
     "@mui/material": "7.3.7",
-    "@types/highlightjs": "9.12.6",
     "dayjs": "1.11.19",
-    "highlightjs": "9.16.2",
     "isomorphic-dompurify": "2.35.0",
     "marked": "17.0.1",
-    "next": "16.1.2",
-    "openapi-fetch": "^0.15.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "next": "16.1.6",
+    "openapi-fetch": "0.15.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@types/node": "25.0.9",
-    "@types/react": "18.3.27",
-    "@types/react-dom": "18.3.7",
-    "openapi-typescript": "^7.10.1",
+    "@types/node": "25.1.0",
+    "@types/react": "19.2.10",
+    "@types/react-dom": "19.2.3",
+    "openapi-typescript": "7.10.1",
     "oxfmt": "0.27.0",
-    "oxlint": "1.39.0",
+    "oxlint": "1.42.0",
     "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.28.0"

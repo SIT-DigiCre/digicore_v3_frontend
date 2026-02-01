@@ -12,8 +12,6 @@ import AppBar from "../components/Home/AppBar";
 import { PageTitleProvider } from "../components/PageTitleContext";
 import "../style/common.css";
 
-import "highlightjs/styles/vs2015.css";
-
 // ref: https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#with-typescript
 export type NextPageWithLayout<P = unknown> = NextPage<P> & {
   getLayout?: (page: ReactElement) => ReactNode;
