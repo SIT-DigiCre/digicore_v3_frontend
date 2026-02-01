@@ -208,7 +208,7 @@ export const useBudgets: UseBudgets = (proposerId) => {
     if (authState.isLogined) {
       loadBudgets(0);
     }
-  }, [authState.isLogined, loadBudgets]);
+  }, [authState.isLogined]);
 
   const loadMore = () => {
     loadBudgets(offsetNum + 10);

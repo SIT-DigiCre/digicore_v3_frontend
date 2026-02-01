@@ -31,7 +31,7 @@ export const useFile: UseFile = (fileId) => {
         setNewError({ message: "ファイルの取得に失敗しました", name: "fileobject-get-fail" });
       }
     })();
-  }, [authState.isLogined, authState.token, fileId, setNewError, removeError]);
+  }, [authState.isLogined, authState.token, fileId]);
 
   return file;
 };

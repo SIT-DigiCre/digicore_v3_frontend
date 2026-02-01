@@ -99,7 +99,7 @@ export const useAuthState: UseAuthState = () => {
       return;
     }
     getUserInfo(token, false);
-  }, [getUserInfo]);
+  }, []);
 
   return {
     authState: auth,
