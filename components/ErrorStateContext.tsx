@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from "react";
 
 import type { ErrorState } from "../interfaces";
 
@@ -30,9 +23,9 @@ export const ErrorStateProvider = ({ children }: { children: ReactNode }) => {
       return prev
         .filter((e) => e.name !== error.name)
         .concat({
-          name: existing.name,
           count: (existing.count ?? 0) + 1,
           message: error.message,
+          name: existing.name,
         });
     });
   }, []);
@@ -44,15 +37,11 @@ export const ErrorStateProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const value = useMemo(
-    () => ({ errors, setNewError, resetError, removeError }),
+    () => ({ errors, removeError, resetError, setNewError }),
     [errors, setNewError, resetError, removeError],
   );
 
-  return (
-    <ErrorStateContext.Provider value={value}>
-      {children}
-    </ErrorStateContext.Provider>
-  );
+  return <ErrorStateContext.Provider value={value}>{children}</ErrorStateContext.Provider>;
 };
 
 export const useErrorStateContext = (): ErrorStateContextValue => {

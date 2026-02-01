@@ -14,10 +14,10 @@ const RegisterStepLayout = ({ children }: RegisterStepLayoutProps) => {
   const currentPath = router.asPath;
 
   const steps = [
-    { label: "公開情報", value: "public", path: `/register/public` },
-    { label: "個人情報", value: "personal", path: `/register/personal` },
-    { label: "Discord連携", value: "discord", path: `/register/discord` },
-    { label: "自己紹介", value: "introduction", path: `/register/introduction` },
+    { label: "公開情報", path: `/register/public`, value: "public" },
+    { label: "個人情報", path: `/register/personal`, value: "personal" },
+    { label: "Discord連携", path: `/register/discord`, value: "discord" },
+    { label: "自己紹介", path: `/register/introduction`, value: "introduction" },
   ];
 
   const getCurrentStep = () => {

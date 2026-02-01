@@ -61,8 +61,8 @@ const RegisterPublicProfilePage = ({ initialUserProfile }: RegisterPublicProfile
     });
     if (response.error) {
       setNewError({
-        name: "profile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
+        name: "profile-update-fail",
       });
       setIsPending(false);
     } else {

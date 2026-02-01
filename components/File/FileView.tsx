@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { FileObject, getFileKind } from "../../interfaces/file";
@@ -28,36 +30,58 @@ const FileView = ({ file, width }: FileViewProps) => {
   const getFileTag = () => {
     switch (getFileKind(file.extension)) {
       case "image":
-        return <img src={file.url} alt={file.name} style={{ maxWidth: "100%" }} />;
+        return (
+          <Image
+            alt={file.name}
+            height={contentHight}
+            src={file.url}
+            unoptimized
+            width={contentWidth}
+            style={{ maxWidth: "100%" }}
+          />
+        );
       case "docx":
       case "xlsx":
       case "pptx":
         return (
           <iframe
             src={"https://view.officeapps.live.com/op/embed.aspx?src=" + file.url}
+            title="Office ドキュメントプレビュー"
             width={width ? width : contentWidth}
             height={width ? (width * 10) / 16 : contentHight}
             frameBorder="0"
           />
         );
       case "video":
-        return <video src={file.url} style={{ maxWidth: "100%" }} controls />;
+        return (
+          <video src={file.url} style={{ maxWidth: "100%" }} controls>
+            <track kind="captions" />
+          </video>
+        );
       case "audio":
         return (
           <>
             <p>{file.name}</p>
-            <audio src={file.url} controls></audio>
+            <audio src={file.url} controls>
+              <track kind="captions" />
+            </audio>
           </>
         );
       case "exe":
         return (
           <>
-            <a href={file.url}>{file.name}</a>
+            <Link href={file.url} rel="noopener noreferrer" target="_blank">
+              {file.name}
+            </Link>
             <p>注意！実行形式ファイル</p>
           </>
         );
       default:
-        return <a href={file.url}>{file.name}</a>;
+        return (
+          <Link href={file.url} rel="noopener noreferrer" target="_blank">
+            {file.name}
+          </Link>
+        );
     }
   };
 

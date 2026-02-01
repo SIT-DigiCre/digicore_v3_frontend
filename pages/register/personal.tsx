@@ -53,8 +53,8 @@ const RegisterPersonalProfilePage = ({
     });
     if (response.error) {
       setNewError({
-        name: "privateprofile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
+        name: "privateprofile-update-fail",
       });
       setIsPending(false);
     } else {

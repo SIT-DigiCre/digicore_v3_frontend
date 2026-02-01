@@ -11,8 +11,8 @@ const FloatingWindow = ({ to, text }: Props) => {
   return (
     <Box
       style={{
-        position: "fixed",
         left: 10,
+        position: "fixed",
         top: 10,
       }}
     >

@@ -41,7 +41,7 @@ const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps
   const handleSave = async () => {
     if (!editProfile) return;
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "privateprofile-update-fail", message: "ログインが必要です" });
+      setNewError({ message: "ログインが必要です", name: "privateprofile-update-fail" });
       return;
     }
     const response = await apiClient.PUT("/user/me/private", {
@@ -50,8 +50,8 @@ const PersonalProfilePage = ({ initialPrivateProfile }: PersonalProfilePageProps
     });
     if (response.error) {
       setNewError({
-        name: "privateprofile-update-fail",
         message: response.error.message || "ユーザー情報の更新に失敗しました",
+        name: "privateprofile-update-fail",
       });
       return;
     }

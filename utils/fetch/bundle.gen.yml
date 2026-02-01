@@ -25,6 +25,10 @@ tags:
     description: Status system
   - name: mattermost
     description: Mattermost system
+  - name: mail
+    description: Mail system
+  - name: activity
+    description: Activity system
 paths:
   /status:
     get:
@@ -1579,6 +1583,253 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /mail:
+    post:
+      tags:
+        - mail
+      description: Send bulk email
+      security:
+        - BearerAuth:
+            - admin
+      requestBody:
+        description: Email request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostMail'
+      responses:
+        '200':
+          description: Success send email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostMail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/checkin:
+    post:
+      tags:
+        - activity
+      description: Activity checkin
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Activity checkin request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckin'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/checkout:
+    post:
+      tags:
+        - activity
+      description: Activity checkout
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Activity checkout request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckout'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/checkout/{userId}':
+    post:
+      tags:
+        - activity
+      description: Admin force activity checkout
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Activity checkout request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckout'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/record/{recordId}':
+    put:
+      tags:
+        - activity
+      description: Update activity record times
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Activity record update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutActivityRecordRecordId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/place/{place}/current':
+    get:
+      tags:
+        - activity
+      description: Get current users in place
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: place
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get current users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityPlacePlaceCurrent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/place/{place}/history':
+    get:
+      tags:
+        - activity
+      description: Get place visit history
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: place
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - day
+              - week
+              - month
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success get place history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityPlacePlaceHistory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/user/{userId}/records':
+    get:
+      tags:
+        - activity
+      description: Get user activity records
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: place
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Success get user records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityUserUserIdRecords'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -2951,6 +3202,194 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             ja: 備考
+    ReqPostMail:
+      required:
+        - addresses
+        - subject
+        - body
+      properties:
+        addresses:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: email
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 送信先アドレス
+        subject:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タイトル
+        body:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 本文
+        sendToAdmin:
+          type: boolean
+          default: false
+          x-oapi-codegen-extra-tags:
+            ja: 管理者用アドレスにも送信
+    ResPostMail:
+      required:
+        - successCount
+        - failures
+      properties:
+        successCount:
+          type: integer
+        failures:
+          type: array
+          items:
+            required:
+              - address
+              - error
+            properties:
+              address:
+                type: string
+              error:
+                type: string
+    ReqPostActivityCheckin:
+      required:
+        - place
+      properties:
+        place:
+          type: string
+          minLength: 3
+          maxLength: 30
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=30'
+            ja: 場所名
+    ReqPostActivityCheckout:
+      required:
+        - place
+      properties:
+        place:
+          type: string
+          minLength: 3
+          maxLength: 30
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=30'
+            ja: 場所名
+        checkout_at:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            validate: omitempty
+            ja: チェックアウト時刻
+    ReqPutActivityRecordRecordId:
+      required:
+        - activity_type
+        - time
+      properties:
+        activity_type:
+          type: string
+          enum:
+            - checkin
+            - checkout
+          x-oapi-codegen-extra-tags:
+            ja: アクティビティタイプ
+        time:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            ja: 更新時刻
+    ResGetActivityPlacePlaceCurrent:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityPlacePlaceCurrentObjectUser'
+    ResGetActivityPlacePlaceCurrentObjectUser:
+      required:
+        - userId
+        - username
+        - shortIntroduction
+        - iconUrl
+        - checkedInAt
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        shortIntroduction:
+          type: string
+        iconUrl:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+    ResGetActivityPlacePlaceHistory:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityPlacePlaceHistoryObjectUser'
+    ResGetActivityPlacePlaceHistoryObjectUser:
+      required:
+        - userId
+        - username
+        - shortIntroduction
+        - iconUrl
+        - checkInCount
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        shortIntroduction:
+          type: string
+        iconUrl:
+          type: string
+        checkInCount:
+          type: integer
+    ResGetActivityUserUserIdRecords:
+      required:
+        - records
+        - total
+        - offset
+        - limit
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityUserUserIdRecordsObjectRecord'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    ResGetActivityUserUserIdRecordsObjectRecord:
+      required:
+        - recordId
+        - place
+        - checkedInAt
+        - initialCheckedInAt
+      properties:
+        recordId:
+          type: string
+        place:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+        checkedOutAt:
+          type: string
+          format: date-time
+          nullable: true
+        initialCheckedInAt:
+          type: string
+          format: date-time
+        initialCheckedOutAt:
+          type: string
+          format: date-time
+          nullable: true
     Error:
       required:
         - level

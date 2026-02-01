@@ -15,7 +15,7 @@ export default function PageHead({ title, description, imgUrl }: PageHeadProps) 
   useEffect(() => {
     setTitle(title);
     return () => setTitle("デジクリ");
-  }, [title, setTitle]);
+  }, [title]);
 
   return (
     <Head>

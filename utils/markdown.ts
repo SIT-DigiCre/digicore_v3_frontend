@@ -2,11 +2,6 @@ import DOMPurify from "isomorphic-dompurify";
 import { marked } from "marked";
 
 marked.setOptions({
-  // highlightは主に使用しているわけではないので、エラーを回避するため一旦コメントアウト
-  // highlight: (code, lang) => {
-  //   return highlight.highlightAuto(code, [lang]).value;
-  // },
-  // langPrefix: "hljs language-",
   breaks: true,
 });
 

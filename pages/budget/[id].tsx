@@ -272,7 +272,7 @@ const BudgetDetailPage = ({ id, modeStr, budget: budgetDetail }: BudgetDetailPag
             )}
             {budgetDetail.status === "approve" &&
               authState.user.userId === budgetDetail.proposer.userId && (
-                <Stack direction="row" sx={{ marginTop: 3, gap: 2 }} flexWrap="wrap">
+                <Stack direction="row" sx={{ gap: 2, marginTop: 3 }} flexWrap="wrap">
                   <Button
                     variant="contained"
                     startIcon={<Check />}
@@ -449,5 +449,5 @@ export const getServerSideProps: GetServerSideProps<BudgetDetailPageProps> = asy
   });
   if (!res.data) return { notFound: true };
   // TODO: Zodを導入する
-  return { props: { id, modeStr, budget: res.data as Required<BudgetDetail> } };
+  return { props: { budget: res.data as Required<BudgetDetail>, id, modeStr } };
 };

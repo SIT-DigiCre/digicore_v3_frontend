@@ -62,7 +62,7 @@ const AuthorMultiSelect = ({ initAuthors, currentUser, onChange }: Props) => {
         getOptionLabel={(option) => option.username}
         renderOption={(props, option) => (
           <li {...props} key={option.userId}>
-            <Avatar src={option.iconUrl} alt="" sx={{ width: 24, height: 24, marginRight: 1 }} />
+            <Avatar src={option.iconUrl} alt="" sx={{ height: 24, marginRight: 1, width: 24 }} />
             {option.username}
           </li>
         )}
@@ -77,7 +77,7 @@ const AuthorMultiSelect = ({ initAuthors, currentUser, onChange }: Props) => {
             disabled={authors.length >= MAX_SELECTED_AUTHORS}
           />
         )}
-        sx={{ minWidth: 300, flexWrap: "wrap" }}
+        sx={{ flexWrap: "wrap", minWidth: 300 }}
       />
     </FormControl>
   );

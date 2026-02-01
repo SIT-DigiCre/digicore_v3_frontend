@@ -22,14 +22,14 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_pending", {
-        params: { path: { budgetId } },
         body: budgetRequest,
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-put-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
+      setNewError({ message: "稟議の更新に失敗しました", name: "budget-put-fail" });
       return false;
     }
   };
@@ -40,14 +40,14 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_approve", {
-        params: { path: { budgetId } },
         body: budgetRequest,
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-put-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
+      setNewError({ message: "稟議の更新に失敗しました", name: "budget-put-fail" });
       return false;
     }
   };
@@ -58,14 +58,14 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_bought", {
-        params: { path: { budgetId } },
         body: budgetRequest,
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-put-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
+      setNewError({ message: "稟議の更新に失敗しました", name: "budget-put-fail" });
       return false;
     }
   };
@@ -76,14 +76,14 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/status_paid", {
-        params: { path: { budgetId } },
         body: budgetRequest,
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-put-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
+      setNewError({ message: "稟議の更新に失敗しました", name: "budget-put-fail" });
       return false;
     }
   };
@@ -92,14 +92,14 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.PUT("/budget/{budgetId}/admin", {
-        params: { path: { budgetId } },
         body: budgetRequest,
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-put-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-put-fail", message: "稟議の更新に失敗しました" });
+      setNewError({ message: "稟議の更新に失敗しました", name: "budget-put-fail" });
       return false;
     }
   };
@@ -108,13 +108,13 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.DELETE("/budget/{budgetId}/status_pending", {
-        params: { path: { budgetId } },
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-delete-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-delete-fail", message: "稟議の削除に失敗しました" });
+      setNewError({ message: "稟議の削除に失敗しました", name: "budget-delete-fail" });
       return false;
     }
   };
@@ -123,25 +123,25 @@ export const useBudgetActions = (budgetId: string) => {
     if (!authState.token) return false;
     try {
       await apiClient.DELETE("/budget/{budgetId}/status_approve", {
-        params: { path: { budgetId } },
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       });
       removeError("budget-delete-fail");
       return true;
     } catch {
-      setNewError({ name: "budget-delete-fail", message: "稟議の削除に失敗しました" });
+      setNewError({ message: "稟議の削除に失敗しました", name: "budget-delete-fail" });
       return false;
     }
   };
 
   return {
-    updateBudgetStatusPending,
+    deleteBudgetStatusApprove,
+    deleteBudgetStatusPending,
+    updateAdminBudget,
     updateBudgetStatusApprove,
     updateBudgetStatusBought,
     updateBudgetStatusPaid,
-    updateAdminBudget,
-    deleteBudgetStatusPending,
-    deleteBudgetStatusApprove,
+    updateBudgetStatusPending,
   };
 };
 
@@ -169,6 +169,9 @@ export const useBudgets: UseBudgets = (proposerId) => {
     if (!authState.isLogined || !authState.user) return;
     try {
       const { data } = await apiClient.GET("/budget", {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
         params: {
           query: {
             offset: n,
@@ -178,9 +181,6 @@ export const useBudgets: UseBudgets = (proposerId) => {
                 : proposerId
               : undefined,
           },
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
         },
       });
       if (data) {
@@ -198,8 +198,8 @@ export const useBudgets: UseBudgets = (proposerId) => {
         return;
       }
       setNewError({
-        name: "budgets-get-fail",
         message: "稟議情報の一覧の取得に失敗しました",
+        name: "budgets-get-fail",
       });
     }
   };
@@ -227,19 +227,19 @@ export const useBudgets: UseBudgets = (proposerId) => {
         removeError("budget-post-fail");
         return data.budgetId;
       } else {
-        setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
+        setNewError({ message: "稟議の申請に失敗しました", name: "budget-post-fail" });
         return "error";
       }
     } catch {
-      setNewError({ name: "budget-post-fail", message: "稟議の申請に失敗しました" });
+      setNewError({ message: "稟議の申請に失敗しました", name: "budget-post-fail" });
       return "error";
     }
   };
 
   return {
     budgets: budgets,
-    isOver: isOver,
     createBudget: createBudget,
+    isOver: isOver,
     loadMore: loadMore,
   };
 };

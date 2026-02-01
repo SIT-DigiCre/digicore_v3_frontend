@@ -1,0 +1,27 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "out/",
+    "build/",
+    "utils/fetch/api.d.ts",
+    "utils/fetch/bundle.gen.yml"
+  ],
+  "plugins": [
+    "eslint",
+    "typescript",
+    "unicorn",
+    "react",
+    "react-perf",
+    "nextjs",
+    "oxc",
+    "import",
+    "jsx-a11y"
+  ],
+  "rules": {
+    "sort-keys": "warn",
+    "no-console": ["warn", { "allow": ["warn", "error"] }],
+    "react/exhaustive-deps": "off"
+  }
+}

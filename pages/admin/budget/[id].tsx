@@ -54,8 +54,8 @@ export const getServerSideProps = async ({
     }
     return {
       props: {
-        budgetId,
         budget: budgetRes.data,
+        budgetId,
       },
     };
   } catch (error) {
@@ -75,9 +75,9 @@ const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
   const updateAdminBudget = (status: "approve" | "reject" | "paid") => {
     apiClient
       .PUT("/budget/{budgetId}/admin", {
-        params: { path: { budgetId } },
         body: { status },
         headers: { Authorization: `Bearer ${authState.token}` },
+        params: { path: { budgetId } },
       })
       .then(() => router.reload());
   };

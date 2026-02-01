@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 import AudioFileIcon from "@mui/icons-material/AudioFile";
 import FolderZipIcon from "@mui/icons-material/FolderZip";
 import ImageIcon from "@mui/icons-material/Image";
@@ -32,9 +34,11 @@ const FileKindIcon = ({ kind }: Props) => {
     case "pptx":
       return (
         <Icon>
-          <img
-            src="/image/fileicon/microsoft-powerpoint.svg"
+          <Image
             alt="PowerPoint"
+            height={24}
+            src="/image/fileicon/microsoft-powerpoint.svg"
+            width={24}
             style={{ maxWidth: "100%" }}
           />
         </Icon>
@@ -42,25 +46,49 @@ const FileKindIcon = ({ kind }: Props) => {
     case "docx":
       return (
         <Icon>
-          <img src="/image/fileicon/microsoft-word.svg" alt="Word" style={{ maxWidth: "100%" }} />
+          <Image
+            alt="Word"
+            height={24}
+            src="/image/fileicon/microsoft-word.svg"
+            width={24}
+            style={{ maxWidth: "100%" }}
+          />
         </Icon>
       );
     case "xlsx":
       return (
         <Icon>
-          <img src="/image/fileicon/microsoft-excel.svg" alt="Excel" style={{ maxWidth: "100%" }} />
+          <Image
+            alt="Excel"
+            height={24}
+            src="/image/fileicon/microsoft-excel.svg"
+            width={24}
+            style={{ maxWidth: "100%" }}
+          />
         </Icon>
       );
     case "exe":
       return (
         <Icon>
-          <img src="/image/fileicon/windows-11.svg" alt="Windows" style={{ maxWidth: "100%" }} />
+          <Image
+            alt="Windows"
+            height={24}
+            src="/image/fileicon/windows-11.svg"
+            width={24}
+            style={{ maxWidth: "100%" }}
+          />
         </Icon>
       );
     case "apk":
       return (
         <Icon>
-          <img src="/image/fileicon/android.svg" alt="Android" style={{ maxWidth: "100%" }} />
+          <Image
+            alt="Android"
+            height={24}
+            src="/image/fileicon/android.svg"
+            width={24}
+            style={{ maxWidth: "100%" }}
+          />
         </Icon>
       );
     default:

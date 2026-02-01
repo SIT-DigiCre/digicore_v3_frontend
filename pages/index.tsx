@@ -25,6 +25,7 @@ const IndexPage = () => {
         </Box>
         <div className="index_calender">
           <iframe
+            title="カレンダー"
             src="https://calendar.google.com/calendar/embed?src=sitdigicrecircle%40gmail.com&ctz=Asia%2FTokyo"
             style={{ border: 0 }}
             width="800"

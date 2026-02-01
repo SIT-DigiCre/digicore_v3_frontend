@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Alert,
@@ -27,9 +27,9 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
   const userProfile = authState.user;
   const { register } = useMattermostRegister();
   const [registrationForm, setRegistrationForm] = useState<MattermostRegistrationRequest>({
-    username: "",
     nickname: "",
     password: "",
+    username: "",
   });
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [sending, setSending] = useState(false);
@@ -63,7 +63,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     validatePassword(registrationForm.password) === true &&
     registrationForm.password === passwordConfirm;
 
-  const onRegister = (e: FormEvent<HTMLFormElement>) => {
+  const onRegister = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     (async () => {
       setSending(true);
@@ -78,11 +78,11 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     if (userProfile) {
       setRegistrationForm({
         ...registrationForm,
-        username: userProfile.studentNumber,
         nickname: userProfile.username,
+        username: userProfile.studentNumber,
       });
     }
-  }, [userProfile]);
+  }, [userProfile, registrationForm]);
   return (
     <Stack spacing={4}>
       <Heading level={2}>Mattermost</Heading>

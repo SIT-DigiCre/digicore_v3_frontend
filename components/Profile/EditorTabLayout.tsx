@@ -22,25 +22,25 @@ const EditorTabLayout = ({ children }: EditorTabLayoutProps) => {
   const basePath = "/user/profile";
 
   const steps = [
-    { label: "公開情報", icon: <PublicIcon />, value: "public", path: `${basePath}/public` },
+    { icon: <PublicIcon />, label: "公開情報", path: `${basePath}/public`, value: "public" },
     {
-      label: "本人情報",
       icon: <HealthAndSafetyIcon />,
-      value: "personal",
+      label: "本人情報",
       path: `${basePath}/personal`,
+      value: "personal",
     },
     {
-      label: "緊急連絡先",
       icon: <EmergencyIcon />,
-      value: "emergency",
+      label: "緊急連絡先",
       path: `${basePath}/emergency`,
+      value: "emergency",
     },
-    { label: "Discord連携", icon: <ChatIcon />, value: "discord", path: `${basePath}/discord` },
+    { icon: <ChatIcon />, label: "Discord連携", path: `${basePath}/discord`, value: "discord" },
     {
-      label: "自己紹介",
       icon: <RecordVoiceOverIcon />,
-      value: "introduction",
+      label: "自己紹介",
       path: `${basePath}/introduction`,
+      value: "introduction",
     },
   ] as const;
 

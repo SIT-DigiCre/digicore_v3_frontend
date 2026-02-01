@@ -103,7 +103,7 @@ const AdminGroupDetailPage = ({
                   {group.users.map((user) => (
                     <TableRow key={user.userId}>
                       <TableCell>
-                        <Avatar src={user.userIcon} sx={{ width: 40, height: 40 }}>
+                        <Avatar src={user.userIcon} sx={{ height: 40, width: 40 }}>
                           {user.name.charAt(0)}
                         </Avatar>
                       </TableCell>

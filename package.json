@@ -1,46 +1,38 @@
 {
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "dev": "next",
     "build": "next typegen && next build",
+    "dev": "next",
+    "format": "oxfmt --check",
+    "format:fix": "oxfmt",
+    "generate": "npx openapi-typescript ./utils/fetch/bundle.gen.yml -o ./utils/fetch/api.d.ts",
+    "lint": "oxlint",
+    "lint:fix": "oxlint --fix",
+    "preinstall": "npx only-allow pnpm",
     "start": "next start",
-    "type-check": "tsc",
-    "lint": "eslint . --fix",
-    "format": "prettier --write \"./**/*.{ts,tsx}\"",
-    "generate": "npx openapi-typescript ./utils/fetch/bundle.gen.yml -o ./utils/fetch/api.d.ts"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
     "@emotion/styled": "11.14.1",
     "@mui/icons-material": "7.3.7",
     "@mui/material": "7.3.7",
-    "@types/highlightjs": "9.12.6",
     "dayjs": "1.11.19",
-    "highlightjs": "9.16.2",
     "isomorphic-dompurify": "2.35.0",
     "marked": "17.0.1",
-    "next": "16.1.2",
-    "openapi-fetch": "^0.15.0",
-    "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "next": "16.1.6",
+    "openapi-fetch": "0.15.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "3.3.3",
-    "@eslint/js": "9.39.2",
-    "@next/eslint-plugin-next": "16.1.2",
-    "@types/node": "25.0.9",
-    "@types/react": "18.3.27",
-    "@types/react-dom": "18.3.7",
-    "eslint": "9.39.2",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-hooks": "7.0.1",
-    "openapi-typescript": "^7.10.1",
-    "prettier": "3.8.0",
-    "typescript": "5.9.3",
-    "typescript-eslint": "8.53.0"
+    "@types/node": "25.1.0",
+    "@types/react": "19.2.10",
+    "@types/react-dom": "19.2.3",
+    "openapi-typescript": "7.10.1",
+    "oxfmt": "0.27.0",
+    "oxlint": "1.42.0",
+    "typescript": "5.9.3"
   },
   "packageManager": "pnpm@10.28.0"
 }

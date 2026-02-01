@@ -54,8 +54,8 @@ const RegisterIntroductionProfilePage = ({
     });
     if (response.error) {
       setNewError({
-        name: "introduction-update-fail",
         message: response.error.message || "自己紹介情報の更新に失敗しました",
+        name: "introduction-update-fail",
       });
       setIsPending(false);
     } else {

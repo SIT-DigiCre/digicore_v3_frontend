@@ -32,7 +32,7 @@ export const usePayment: UsePayment = () => {
         removeError("payment-get");
       }
     } catch {
-      setNewError({ name: "payment-get", message: "部費支払い情報の取得に失敗しました" });
+      setNewError({ message: "部費支払い情報の取得に失敗しました", name: "payment-get" });
     }
   };
 

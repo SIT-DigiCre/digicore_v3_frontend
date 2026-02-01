@@ -36,7 +36,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     return { redirect: { destination: "/", permanent: false } };
   }
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
-  return { props: { loginFailed: true, errorMessage } };
+  return { props: { errorMessage, loginFailed: true } };
 };
 
 const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCallbackPageProps) => {
@@ -75,7 +75,9 @@ const LoginCallbackPage = ({ loginFailed, errorMessage, codeMissing }: LoginCall
                     await navigator.clipboard.writeText(errorMessage);
                     setIsCopied(true);
                   } catch {
-                    window.alert("クリップボードへのコピーに失敗しました。手動でコピーしてください。");
+                    window.alert(
+                      "クリップボードへのコピーに失敗しました。手動でコピーしてください。",
+                    );
                   }
                 }}
               >

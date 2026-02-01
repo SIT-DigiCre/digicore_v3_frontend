@@ -31,12 +31,12 @@ const AdminGroupNewPage = () => {
 
   const handleSubmit = async () => {
     if (!name.trim() || !description.trim()) {
-      setNewError({ name: "new-group-validation", message: "グループ名と説明を入力してください" });
+      setNewError({ message: "グループ名と説明を入力してください", name: "new-group-validation" });
       return;
     }
 
     if (!authState.isLogined || !authState.token) {
-      setNewError({ name: "new-group-auth", message: "ログインが必要です" });
+      setNewError({ message: "ログインが必要です", name: "new-group-auth" });
       return;
     }
 
@@ -44,10 +44,10 @@ const AdminGroupNewPage = () => {
       startTransition(async () => {
         const response = await apiClient.POST("/group", {
           body: {
-            name: name.trim(),
             description: description.trim(),
             isAdminGroup,
             joinable: !isAdminGroup && joinable,
+            name: name.trim(),
           },
           headers: {
             Authorization: `Bearer ${authState.token}`,
@@ -55,14 +55,14 @@ const AdminGroupNewPage = () => {
         });
         if (response.error) {
           const errorMessage = response.error.message || "グループの作成に失敗しました";
-          setNewError({ name: "new-group-error", message: errorMessage });
+          setNewError({ message: errorMessage, name: "new-group-error" });
           return;
         }
         router.push("/admin/group");
       });
     } catch (error) {
       console.error("Error creating group:", error);
-      setNewError({ name: "new-group-error", message: "グループの作成に失敗しました" });
+      setNewError({ message: "グループの作成に失敗しました", name: "new-group-error" });
     }
   };
 

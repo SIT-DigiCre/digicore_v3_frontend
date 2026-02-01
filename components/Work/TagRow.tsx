@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { useTheme, Modal, Box, Stack, Button } from "@mui/material";
+import { Box, Button, Modal, Stack, useTheme } from "@mui/material";
 
 import { WorkTagDetail } from "../../interfaces/work";
 
@@ -14,10 +14,10 @@ const TagRow = ({ tagDetail, deleteWorkTag }: Props) => {
   const theme = useTheme();
 
   return (
-    <div style={{ display: "flex", margin: 6, justifyContent: "space-between" }}>
+    <div style={{ display: "flex", justifyContent: "space-between", margin: 6 }}>
       <div>{tagDetail.name}</div>
       <div>
-        <small style={{ marginLeft: "1em", color: theme.palette.text.secondary }}>
+        <small style={{ color: theme.palette.text.secondary, marginLeft: "1em" }}>
           {tagDetail.description}
         </small>
       </div>
@@ -30,7 +30,7 @@ const TagRow = ({ tagDetail, deleteWorkTag }: Props) => {
         </Stack>
       </div>
       <Modal open={deleteModal}>
-        <Box style={{ display: "flex", justifyContent: "center", alignContent: "center" }}>
+        <Box style={{ alignContent: "center", display: "flex", justifyContent: "center" }}>
           <Box sx={{ bgcolor: "background.paper", p: 4 }}>
             本当にタグ {tagDetail.name} を削除してよろしいですか？
             <Button

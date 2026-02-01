@@ -24,10 +24,10 @@ export const MarkAsBoughtDialog = ({ open, onClose, onConfirm, name }: MarkAsBou
         aria-label="切り替え操作をキャンセルする"
         onClick={onClose}
         sx={{
+          color: (theme) => theme.palette.grey[500],
           position: "absolute",
           right: 12,
           top: 12,
-          color: (theme) => theme.palette.grey[500],
         }}
       >
         <Close />

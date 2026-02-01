@@ -1,6 +1,5 @@
 import { WorkFile } from "../../interfaces/work";
 import MarkdownView from "../Markdown/MarkdownView";
-
 import { WorkFileView } from "./WorkFileView";
 
 type Props = {

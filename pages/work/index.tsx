@@ -43,10 +43,10 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
     if (!worksRes.data || !worksRes.data.works) {
       return {
         props: {
-          works: [],
           currentPage: 1,
           hasNextPage: false,
           hasPreviousPage: false,
+          works: [],
         },
       };
     }
@@ -77,19 +77,19 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
 
     return {
       props: {
-        works: workDetails,
         currentPage: page,
         hasNextPage,
         hasPreviousPage,
+        works: workDetails,
       },
     };
   } catch {
     return {
       props: {
-        works: [],
         currentPage: 1,
         hasNextPage: false,
         hasPreviousPage: false,
+        works: [],
       },
     };
   }
@@ -122,12 +122,12 @@ const WorkIndexPage = ({
                 <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
                   <Card
                     sx={{
-                      width: "100%",
-                      display: "inline-block",
-                      m: 0.5,
-                      height: "100%",
-                      textDecoration: "none",
                       color: "inherit",
+                      display: "inline-block",
+                      height: "100%",
+                      m: 0.5,
+                      textDecoration: "none",
+                      width: "100%",
                     }}
                     component={Link}
                     href={`/work/${w.workId}`}

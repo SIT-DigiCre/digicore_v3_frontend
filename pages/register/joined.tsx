@@ -140,7 +140,7 @@ const JoinedSteps = ({ step, setStep, joinData }: StepsProps) => {
           <Typography mt={2}>
             アプリ起動後、以下のように設定し、先ほど作成したアカウントでログインください
           </Typography>
-          <TableContainer component={Paper} sx={{ maxWidth: 250, my: 2, mx: "auto" }}>
+          <TableContainer component={Paper} sx={{ maxWidth: 250, mx: "auto", my: 2 }}>
             <Table>
               <TableBody>
                 <TableRow>
@@ -195,7 +195,7 @@ const JoinedSteps = ({ step, setStep, joinData }: StepsProps) => {
             <Typography>Discordの招待URLが取得できませんでした</Typography>
           )}
           <Heading level={3}>主なボイスチャンネルやテキストチャット</Heading>
-          <TableContainer component={Paper} sx={{ maxWidth: 500, my: 2, mx: "auto" }}>
+          <TableContainer component={Paper} sx={{ maxWidth: 500, mx: "auto", my: 2 }}>
             <Table>
               <TableBody>
                 <TableRow>

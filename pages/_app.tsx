@@ -1,8 +1,8 @@
 import type { NextPage } from "next";
 import type { AppProps } from "next/app";
-import { useMemo, type ReactElement, type ReactNode } from "react";
+import { type ReactElement, type ReactNode, useMemo } from "react";
 
-import { createTheme, ThemeProvider } from "@mui/material";
+import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import { DarkModeProvider, useDarkModeContext } from "../components/DarkModeContext";
@@ -11,8 +11,6 @@ import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
 import { PageTitleProvider } from "../components/PageTitleContext";
 import "../style/common.css";
-
-import "highlightjs/styles/vs2015.css";
 
 // ref: https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#with-typescript
 export type NextPageWithLayout<P = unknown> = NextPage<P> & {

@@ -1,6 +1,6 @@
 # デジコア v3 フロントエンド
 
-芝浦工業大学デジクリが部員管理やイベント、作品の管理に利用しているグループウェア「デジコア」の ver3 のフロントエンド
+芝浦工業大学デジクリが部員管理やイベント、作品の管理に利用しているグループウェア「デジコア」のフロントエンド
 
 [core3.digicre.net](https://core3.digicre.net)にて公開
 
@@ -8,12 +8,19 @@
 
 Windows にて開発している方は WSL などの環境で開発することをおすすめします。
 
+### VSCode の拡張機能のインストール
+
+VSCodeで開発を行う場合は、`oxc.oxc-vscode`をインストールしてください。
+
+https://marketplace.visualstudio.com/items?itemName=oxc.oxc-vscode
+
 ### pnpm のインストール
 
 node のパッケージマネージャー`pnpm`をインストールします。
+
 `pnpm-lock.yaml`などが壊れるので`npm`は使用しないで下さい。
 
-```
+```bash
 npm i -g pnpm
 ```
 
@@ -21,21 +28,25 @@ npm i -g pnpm
 
 ### パッケージのインストール
 
-```
+```bash
 pnpm install
 ```
 
 ### 開発用サーバーの起動
 
-コードを変更し保存すると、反映されるようになっているので開発サーバーを起動しながらコーディングが可能です。
+コードを変更し保存すると反映されるようになっている(ホットリロードが有効化されている)ので開発サーバーを起動しながらコーディングが可能です。
 
-```
-pnpm dev
+```bash
+pnpm run dev
 ```
 
 ### バックエンドAPIの型定義の生成
 
 バックエンドの実装が変更されたら、[`/document/bundle.gen.yml`](https://github.com/SIT-DigiCre/digicore_v3_backend/blob/master/document/bundle.gen.yml)をコピーしてきて、`/utils/fetch/bundle.gen.yml`に貼り付けてください。その後`pnpm generate`を実行すると、新しい型定義が生成されます。
+
+### oxlint のエラーについて
+
+インポートの順序がアルファベット順ではない場合などに警告が出ます。手動で修正しても良いですが、`pnpm run lint:fix`を実行すると自動で修正されます。
 
 ## 機能の開発の仕方
 
@@ -53,12 +64,14 @@ pnpm dev
 ブログの投稿機能を作る場合  
 `feature/blog-post`
 
-### DraftPR の作成
+### Draft PR の作成
 
 少しでも作業が進み、コミットができたら、リモートにプッシュしてドラフトプルリクエストを作成します。
 
 概要の部分には作業した項目やこれから作業することを ToDo 形式で記入します。
-![pr概要](./doc/pic/pr-gaiyo.png)
+
+![pr概要](./docs/images/pr-gaiyo.png)
+
 ブログ投稿機能作成の例
 
 ```markdown
@@ -68,7 +81,8 @@ pnpm dev
 ```
 
 書けたら**Draft pull request**で作成します。
-![draft-pr](./doc/pic/pr-draft.png)
+
+![draft-pr](./docs/images/pr-draft.png)
 
 ### がんばって作る
 
@@ -84,7 +98,8 @@ PR で行っている ToDo が完了して master に Merge する準備がで�
 
 ここまでできたらレビュワーを指定します。
 GitHub の`Reviewers`の歯車ボタンをクリックしてレビュ依頼をする人を選択します。
-![レビュワー指定](./doc/pic/pr-reviewer.png)
+
+![レビュワー指定](./docs/images/pr-reviewer.png)
 
 ### Mattermost で報告
 

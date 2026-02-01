@@ -13,7 +13,6 @@ import {
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 import Heading from "../Common/Heading";
-
 import NameInput from "./NameInput";
 import PhoneInput from "./PhoneInput";
 

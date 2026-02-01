@@ -16,7 +16,6 @@ import {
 
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
-
 import BudgetListItem from "./BudgetListItem";
 
 import type { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
@@ -45,24 +44,24 @@ type BudgetEditorProps = {
 const editableFields: {
   [K in BudgetStatus]: FieldFlags;
 } = {
-  pending: {
-    name: true,
-    purpose: true,
-    budget: true,
-    mattermostUrl: true,
-    remark: true,
-  },
   approve: {
-    settlement: true,
-    remark: true,
     files: true,
+    remark: true,
+    settlement: true,
   },
   bought: {
-    settlement: true,
-    remark: true,
     files: true,
+    remark: true,
+    settlement: true,
   },
   paid: {
+    remark: true,
+  },
+  pending: {
+    budget: true,
+    mattermostUrl: true,
+    name: true,
+    purpose: true,
     remark: true,
   },
   reject: {},
@@ -164,14 +163,14 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
     if (!isAllValid) return;
 
     const budgetRequest: PutBudgetRequest = {
+      bought: false,
+      budget: parseInt(budgetStr),
+      files,
+      mattermostUrl,
       name,
       purpose,
-      mattermostUrl,
-      budget: parseInt(budgetStr),
-      settlement: parseInt(settlementStr),
       remark,
-      files,
-      bought: false,
+      settlement: parseInt(settlementStr),
     };
     onSubmit(budgetRequest);
   };
@@ -334,7 +333,7 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
           />
         </Box>
       )}
-      <Box sx={{ marginTop: 6, marginBottom: 3, textAlign: "center" }}>
+      <Box sx={{ marginBottom: 3, marginTop: 6, textAlign: "center" }}>
         {initBudget.status === "reject" ? (
           <Typography>この稟議は却下されているため、これ以上編集することができません。</Typography>
         ) : (

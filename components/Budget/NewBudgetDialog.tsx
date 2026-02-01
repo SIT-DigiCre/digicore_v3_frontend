@@ -31,11 +31,11 @@ const classList: BudgetClass[] = ["room", "project", "outside", "fixed", "festiv
 const classDisplay: {
   [K in BudgetClass]: string;
 } = {
-  room: "部室",
-  project: "企画",
-  outside: "学外活動",
-  fixed: "固定費用",
   festival: "学園祭",
+  fixed: "固定費用",
+  outside: "学外活動",
+  project: "企画",
+  room: "部室",
 };
 
 export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
@@ -54,8 +54,8 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
     } else {
       if (!authState.user) return;
       createBudget({
-        name: name,
         class: className,
+        name: name,
         proposerUserId: authState.user.userId!,
       })
         .then((budgetId) => {
@@ -65,8 +65,8 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
         .catch((error) => {
           console.error("Error creating budget:", error);
           setNewError({
-            name: "post-budget",
             message: "稟議申請に失敗しました",
+            name: "post-budget",
           });
         });
     }
@@ -79,10 +79,10 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
         aria-label="稟議申請をやめる"
         onClick={onClose}
         sx={{
+          color: (theme) => theme.palette.grey[500],
           position: "absolute",
           right: 12,
           top: 12,
-          color: (theme) => theme.palette.grey[500],
         }}
       >
         <Close />

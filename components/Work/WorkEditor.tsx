@@ -9,7 +9,6 @@ import { FileObject } from "../../interfaces/file";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownEditor from "../Markdown/MarkdownEditor";
-
 import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
@@ -33,7 +32,7 @@ const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
 
   useEffect(() => {
     if (!initWork) {
-      if (!authState.user) return;
+      if (!authState.user || !authState.user.userId) return;
       setAuthorIds([authState.user.userId!]);
       return;
     }
@@ -42,7 +41,7 @@ const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
     setDescription(initWork.description);
     setSelectedTagIds(initWork.tags ? initWork.tags.map((t) => t.tagId) : []);
     setFiles(initWork.files ? initWork.files.map((f) => f.fileId) : []);
-  }, [initWork]);
+  }, [initWork, authState.user]);
 
   if (!authState.user) return <p>読み込み中...</p>;
 
@@ -57,19 +56,19 @@ const WorkEditor = ({ onSubmit, initWork, workTags }: WorkEditorProps) => {
 
   const onClickSave = () => {
     const workRequest: WorkRequest = {
-      name: name,
-      description: description,
       authors: authorIds,
-      tags: selectedTagIds,
+      description: description,
       files: files,
+      name: name,
+      tags: selectedTagIds,
     };
     onSubmit(workRequest);
   };
 
   const currentUser: WorkAuthor = {
+    iconUrl: authState.user.iconUrl,
     userId: authState.user.userId!,
     username: authState.user.username,
-    iconUrl: authState.user.iconUrl,
   };
 
   return (
