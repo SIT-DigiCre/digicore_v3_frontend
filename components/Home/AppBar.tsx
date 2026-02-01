@@ -11,9 +11,9 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import { usePageTitle } from "../../hook/usePageTitle";
 import Heading from "../Common/Heading";
 import ErrorView from "../Error/ErrorView";
+import { usePageTitle } from "../PageTitleContext";
 
 import Drawer from "./Drawer";
 
@@ -25,9 +25,9 @@ interface AppBarProps {
 }
 
 export default function AppBar({ children, window }: AppBarProps) {
+  const { title } = usePageTitle();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
-  const { title } = usePageTitle();
 
   const handleDrawerClose = () => {
     setIsClosing(true);

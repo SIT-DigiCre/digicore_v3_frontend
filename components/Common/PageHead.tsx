@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { useEffect } from "react";
 
-import { usePageTitle } from "../../hook/usePageTitle";
+import { usePageTitle } from "../PageTitleContext";
 
 interface PageHeadProps {
   title: string;

@@ -1,5 +1,5 @@
 import { MattermostRegistrationRequest } from "../../interfaces/api";
-import { axios } from "../../utils/axios";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
 import { useErrorState } from "../useErrorState";
 
@@ -8,25 +8,27 @@ export const useMattermostRegister = (): {
 } => {
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
+
   const register = async (f: MattermostRegistrationRequest) => {
+    if (!authState.token) return false;
     try {
-      const res = await axios.post("/mattermost/create_user", f, {
+      const res = await apiClient.POST("/mattermost/create_user", {
+        body: f,
         headers: {
-          Authorization: "Bearer " + authState.token,
+          Authorization: `Bearer ${authState.token}`,
         },
       });
-      removeError("mattermost-registration-error");
-      return res.data;
-    } catch (err: unknown) {
-      let errMsg = "";
-      if (err instanceof Error) {
-        errMsg = err.message;
-      } else {
-        errMsg = err instanceof Error ? err.message : "An unknown error occurred";
+      if (res.data) {
+        removeError("mattermost-registration-error");
+        return res.data;
       }
+      return false;
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : "An unknown error occurred";
       setNewError({ name: "mattermost-registration-error", message: errMsg });
       return false;
     }
   };
+
   return { register };
 };

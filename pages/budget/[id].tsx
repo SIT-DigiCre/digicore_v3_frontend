@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -26,21 +26,21 @@ import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
 import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
-import { useBudget } from "../../hook/budget/useBudget";
+import { useBudgetActions } from "../../hook/budget/useBudget";
 import { useAuthState } from "../../hook/useAuthState";
-import { Budget, PutBudgetRequest } from "../../interfaces/budget";
+import { BudgetDetail, PutBudgetRequest } from "../../interfaces/budget";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
+import { createServerApiClient } from "../../utils/fetch/client";
 
 type BudgetDetailPageProps = {
   id: string;
   modeStr?: string;
-  budgetPublic?: Budget;
+  budget: Required<BudgetDetail>;
 };
 
-const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
+const BudgetDetailPage = ({ id, modeStr, budget: budgetDetail }: BudgetDetailPageProps) => {
   const router = useRouter();
   const {
-    budgetDetail,
     updateBudgetStatusApprove,
     updateBudgetStatusBought,
     updateBudgetStatusPaid,
@@ -48,7 +48,7 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
     updateAdminBudget,
     deleteBudgetStatusPending,
     deleteBudgetStatusApprove,
-  } = useBudget(id);
+  } = useBudgetActions(id);
   const { authState } = useAuthState();
   const [openAdminApproveDialog, setOpenAdminApproveDialog] = useState(false);
   const [openAdminRejectDialog, setOpenAdminRejectDialog] = useState(false);
@@ -56,61 +56,58 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
   const [openMarkAsBoughtDialog, setOpenMarkAsBoughtDialog] = useState(false);
   const [openDeleteBudgetDialog, setOpenDeleteBudgetDialog] = useState(false);
 
-  if (!budgetDetail || !authState.user) return <p>読み込み中...</p>;
+  if (!authState.user) return <p>読み込み中...</p>;
 
   const onSubmit = (budgetRequest: PutBudgetRequest) => {
     switch (budgetDetail.status) {
       case "pending":
         updateBudgetStatusPending(budgetRequest).then((result) => {
           if (!result) return;
-          router.push(`/budget/${id}`);
+          router.replace(router.asPath);
         });
         break;
       case "approve":
         updateBudgetStatusApprove(budgetRequest).then((result) => {
           if (!result) return;
-          router.push(`/budget/${id}`);
+          router.replace(router.asPath);
         });
         break;
       case "bought":
         updateBudgetStatusBought(budgetRequest).then((result) => {
           if (!result) return;
-          router.push(`/budget/${id}`);
+          router.replace(router.asPath);
         });
         break;
       case "paid":
         updateBudgetStatusPaid(budgetRequest).then((result) => {
           if (!result) return;
-          router.push(`/budget/${id}`);
+          router.replace(router.asPath);
         });
         break;
     }
   };
 
   const submitAdminApprove = () => {
-    updateAdminBudget({
-      status: "approve",
-    }).then((result) => {
+    updateAdminBudget({ status: "approve" }).then((result) => {
       if (!result) return;
       setOpenAdminApproveDialog(false);
+      router.replace(router.asPath);
     });
   };
 
   const submitAdminReject = () => {
-    updateAdminBudget({
-      status: "reject",
-    }).then((result) => {
+    updateAdminBudget({ status: "reject" }).then((result) => {
       if (!result) return;
       setOpenAdminRejectDialog(false);
+      router.replace(router.asPath);
     });
   };
 
   const submitAdminPaid = () => {
-    updateAdminBudget({
-      status: "paid",
-    }).then((result) => {
+    updateAdminBudget({ status: "paid" }).then((result) => {
       if (!result) return;
       setOpenAdminPaidDialog(false);
+      router.replace(router.asPath);
     });
   };
 
@@ -123,6 +120,7 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
     }).then((result) => {
       if (!result) return;
       setOpenMarkAsBoughtDialog(false);
+      router.replace(router.asPath);
     });
   };
 
@@ -396,7 +394,7 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
                         承認者
                       </TableCell>
                       <TableCell>
-                        {budgetDetail.approver.username ||
+                        {budgetDetail.approver?.username ||
                           `(${classDisplay[budgetDetail.class as keyof typeof classDisplay]}のため自動承認)`}
                       </TableCell>
                     </TableRow>
@@ -436,15 +434,20 @@ const BudgetDetailPage = ({ id, modeStr }: BudgetDetailPageProps) => {
 
 export default BudgetDetailPage;
 
-export const getServerSideProps: GetServerSideProps = async ({ params, query }) => {
-  try {
-    const id = params?.id;
-    const { mode } = query;
-    const modeStr = typeof mode === "string" ? mode : null;
-    return { props: { id, modeStr } };
-  } catch (error: unknown) {
-    return {
-      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
-    };
-  }
+export const getServerSideProps: GetServerSideProps<BudgetDetailPageProps> = async ({
+  params,
+  query,
+  req,
+}) => {
+  const id = params?.id;
+  if (!id || typeof id !== "string") return { notFound: true };
+  const { mode } = query;
+  const modeStr = typeof mode === "string" ? mode : undefined;
+  const client = createServerApiClient(req);
+  const res = await client.GET("/budget/{budgetId}", {
+    params: { path: { budgetId: id } },
+  });
+  if (!res.data) return { notFound: true };
+  // TODO: Zodを導入する
+  return { props: { id, modeStr, budget: res.data as Required<BudgetDetail> } };
 };

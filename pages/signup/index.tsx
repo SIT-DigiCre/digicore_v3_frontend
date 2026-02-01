@@ -1,3 +1,4 @@
+import type { GetServerSideProps } from "next";
 import Image from "next/image";
 
 import { Google } from "@mui/icons-material";
@@ -5,10 +6,20 @@ import { Box, Button, Stack, Typography } from "@mui/material";
 
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
-import { useRegisterData } from "../../hook/useRegisterData";
+import { createServerApiClient } from "../../utils/fetch/client";
 
-const RegisterPage = () => {
-  const { registerUrl } = useRegisterData();
+type Props = {
+  registerUrl: string;
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({ req }) => {
+  const client = createServerApiClient(req);
+  const res = await client.GET("/signup");
+  const registerUrl = res.data?.url ?? "";
+  return { props: { registerUrl } };
+};
+
+const RegisterPage = ({ registerUrl }: Props) => {
   return (
     <>
       <PageHead title="登録" />

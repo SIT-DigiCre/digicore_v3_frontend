@@ -4,11 +4,12 @@ import { useMemo, type ReactElement, type ReactNode } from "react";
 
 import { createTheme, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import { RecoilRoot } from "recoil";
 
+import { DarkModeProvider, useDarkModeContext } from "../components/DarkModeContext";
+import { ErrorStateProvider } from "../components/ErrorStateContext";
 import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
-import { useDarkMode } from "../hook/useDarkMode";
+import { PageTitleProvider } from "../components/PageTitleContext";
 import "../style/common.css";
 
 import "highlightjs/styles/vs2015.css";
@@ -24,14 +25,18 @@ type AppPropsWithLayout = AppProps & {
 
 const App = ({ Component, pageProps, router }: AppPropsWithLayout) => {
   return (
-    <RecoilRoot>
-      <AppRoot Component={Component} pageProps={pageProps} router={router} />
-    </RecoilRoot>
+    <ErrorStateProvider>
+      <DarkModeProvider>
+        <PageTitleProvider>
+          <AppRoot Component={Component} pageProps={pageProps} router={router} />
+        </PageTitleProvider>
+      </DarkModeProvider>
+    </ErrorStateProvider>
   );
 };
 
 const AppRoot = ({ Component, pageProps }: AppPropsWithLayout) => {
-  const { isDarkMode } = useDarkMode();
+  const { isDarkMode } = useDarkModeContext();
   const theme = useMemo(
     () =>
       createTheme({
