@@ -25,7 +25,7 @@ pnpm install
 pnpm dev          # 開発サーバー起動
 pnpm build        # 本番用ビルド
 pnpm start        # 本番サーバー起動
-pnpm type-check   # TypeScript型チェック実行
+pnpm typecheck   # TypeScript型チェック実行
 pnpm lint         # ESLintチェック（自動修正付き）
 pnpm format       # Prettierでコード整形
 pnpm generate     # OpenAPIスキーマから型定義を生成
