@@ -13,11 +13,11 @@ import LinkIcon from "@mui/icons-material/Link";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { Box, Stack, useMediaQuery, useTheme } from "@mui/material";
 
-import type { FileObject } from "../../interfaces/file";
-
 import { FileBrowserModal } from "../File/FileBrowser";
 import MarkdownToolbar, { type ActionButtonProps } from "./MarkdownToolbar";
 import MarkdownView from "./MarkdownView";
+
+import type { FileObject } from "../../interfaces/file";
 
 type MarkdownEditorProps = {
   value: string;

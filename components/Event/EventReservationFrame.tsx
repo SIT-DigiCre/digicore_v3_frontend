@@ -22,12 +22,12 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import type { DigicreEventReservation } from "../../interfaces/event";
-
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
 import { getTimeSpanText } from "../../utils/date-util";
 import { apiClient } from "../../utils/fetch/client";
+
+import type { DigicreEventReservation } from "../../interfaces/event";
 
 type EventReservationFrameProps = {
   eventId: string;

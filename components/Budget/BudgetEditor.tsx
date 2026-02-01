@@ -14,13 +14,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import type { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
-import type { FileObject } from "../../interfaces/file";
-import type { paths } from "../../utils/fetch/api.d";
-
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import BudgetListItem from "./BudgetListItem";
+
+import type { BudgetStatus, PutBudgetRequest } from "../../interfaces/budget";
+import type { FileObject } from "../../interfaces/file";
+import type { paths } from "../../utils/fetch/api.d";
 
 type BudgetDetailResponse =
   paths["/budget/{budgetId}"]["get"]["responses"]["200"]["content"]["application/json"];

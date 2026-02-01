@@ -4,8 +4,6 @@ import { Add, Save } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, IconButton, List, ListItem, Stack, TextField } from "@mui/material";
 
-import type { WorkAuthor, WorkDetail, WorkRequest, WorkTag } from "../../interfaces/work";
-
 import { useAuthState } from "../../hook/useAuthState";
 import { FileObject } from "../../interfaces/file";
 import Heading from "../Common/Heading";
@@ -14,6 +12,8 @@ import MarkdownEditor from "../Markdown/MarkdownEditor";
 import AuthorMultiSelect from "./AuthorMultiSelect";
 import TagMultiSelect from "./TagMultiSelect";
 import WorkListItem from "./WorkListItem";
+
+import type { WorkAuthor, WorkDetail, WorkRequest, WorkTag } from "../../interfaces/work";
 
 type WorkEditorProps = {
   onSubmit: (work: WorkRequest) => void;
