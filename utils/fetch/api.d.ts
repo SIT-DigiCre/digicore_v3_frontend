@@ -4,2827 +4,3217 @@
  */
 
 export interface paths {
-  "/status": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Server status check */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description All Systems Operational */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetStatus"];
-          };
+    "/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/status/club_room": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get club room status */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get club room status page */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetStatusClubRoom"];
-          };
+        /** @description Server status check */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description All Systems Operational */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetStatus"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Update club room status */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description club room status */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutStatusClubRoom"];
+    "/status/club_room": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description OK */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content?: never;
+        /** @description Get club room status */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get club room status page */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetStatusClubRoom"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/signup": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get signup URL */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Signup URL */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetSignup"];
-          };
+        /** @description Update club room status */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description club room status */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutStatusClubRoom"];
+                };
+            };
+            responses: {
+                /** @description OK */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-      };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/signup/callback": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /** @description Verify auth */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Auth information */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostSignupCallback"];
+    "/signup": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success signup */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResPostSignupCallback"];
-          };
+        /** @description Get signup URL */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Signup URL */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetSignup"];
+                    };
+                };
+            };
         };
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/login": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get login URL */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Login URL */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetLogin"];
-          };
+    "/signup/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/login/callback": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    /** @description Verify auth */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Auth information */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostLoginCallback"];
+        get?: never;
+        put?: never;
+        /** @description Verify auth */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Auth information */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostSignupCallback"];
+                };
+            };
+            responses: {
+                /** @description Success signup */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostSignupCallback"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
         };
-      };
-      responses: {
-        /** @description Success signup */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResPostLoginCallback"];
-          };
-        };
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get login URL */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Login URL */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetLogin"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get user list */
-    get: {
-      parameters: {
-        query?: {
-          offset?: number;
-          seed?: number;
+    "/login/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get user list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUser"];
-          };
+        get?: never;
+        put?: never;
+        /** @description Verify auth */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Auth information */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostLoginCallback"];
+                };
+            };
+            responses: {
+                /** @description Success signup */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostLoginCallback"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/search": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get user list */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                    seed?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get user list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUser"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Search users by username */
-    get: {
-      parameters: {
-        query: {
-          query: string;
+    "/user/search": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success search users */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUser"];
-          };
+        /** @description Search users by username */
+        get: {
+            parameters: {
+                query: {
+                    query: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success search users */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUser"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/{userId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/user/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get user id's profile */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get user id's profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserUserId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get user id's profile */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          userId: string;
+    "/user/{userId}/introduction": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get user id's profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserUserId"];
-          };
+        /** @description Get my introduction */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my introduction */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserUserIdIntroduction"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/{userId}/introduction": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/user/{userId}/group": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get groups which the specified user joined */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get groups which the specified user joined */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetGroup"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get my introduction */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          userId: string;
+    "/user/{userId}/work": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get my introduction */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserUserIdIntroduction"];
-          };
+        /** @description Get works which the specified user is included as author */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get works which the specified user is included as author */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWork"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/{userId}/group": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/user/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get my profile */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMe"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        /** @description Update my profile */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description My profile */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutUserMe"];
+                };
+            };
+            responses: {
+                /** @description Success update my profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMe"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get groups which the specified user joined */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          userId: string;
+    "/user/me/renewal": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get groups which the specified user joined */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetGroup"];
-          };
+        get?: never;
+        /** @description Renewal active limit */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success update my private profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMe"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/{userId}/work": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/user/me/discord": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get discord login URL */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Discord login URL */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeDiscord"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get works which the specified user is included as author */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          userId: string;
+    "/user/me/discord/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get works which the specified user is included as author */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkWork"];
-          };
+        get?: never;
+        /** @description Verify discord auth */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Auth information */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutUserMeDiscordCallback"];
+                };
+            };
+            responses: {
+                /** @description Success signup */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMe"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/user/me/introduction": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get my introduction */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my introduction */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeIntroduction"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        /** @description Update my introduction */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description My introduction */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutUserMeIntroduction"];
+                };
+            };
+            responses: {
+                /** @description Success update my introduction */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeIntroduction"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get my profile */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get my profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMe"];
-          };
+    "/user/me/private": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Get my private profile */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my private profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMePrivate"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        /** @description Update my profile */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description My profile */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutUserMePrivate"];
+                };
+            };
+            responses: {
+                /** @description Success update my private profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMePrivate"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Update my profile */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description My profile */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutUserMe"];
+    "/user/me/payment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success update my profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMe"];
-          };
+        /** @description Get my payment */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my payment */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMePayment"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Update my payment */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description My payment */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutUserMePayment"];
+                };
+            };
+            responses: {
+                /** @description Success update my payment */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMePayment"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me/renewal": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/payment": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get payment list */
+        get: {
+            parameters: {
+                query?: {
+                    year?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get payment list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetPayment"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /** @description Renewal active limit */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success update my private profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMe"];
-          };
+    "/payment/{paymentId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Get user payment */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    paymentId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success check user payment */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetPaymentPaymentId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        /** @description Check user payment */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    paymentId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Check user payment */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutPaymentPaymentId"];
+                };
+            };
+            responses: {
+                /** @description Success check user payment */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetPaymentPaymentId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me/discord": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/tool": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get tool URL */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Tool URL */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetTool"];
+                    };
+                };
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get discord login URL */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Discord login URL */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMeDiscord"];
-          };
+    "/event": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
+        /** @description Get event list */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get event list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetEvent"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me/discord/callback": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/event/{eventId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get event */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get event */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetEventEventId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /** @description Verify discord auth */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Auth information */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutUserMeDiscordCallback"];
+    "/event/{eventId}/{reservationId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success signup */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMe"];
-          };
+        /** @description Get event reservation */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                    reservationId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get event reservation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me/introduction": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/event/{eventId}/{reservationId}/me": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Create my event reservation */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                    reservationId: string;
+                };
+                cookie?: never;
+            };
+            /** @description My event reservation */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutEventEventIdReservationIdMe"];
+                };
+            };
+            responses: {
+                /** @description Success create my event reservation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        /** @description Delete my event reservation */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                    reservationId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success delete my event reservation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get my introduction */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get my introduction */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMeIntroduction"];
-          };
+    "/storage/myfile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Get file list */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description file list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetStorageMyfile"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        /** @description Post file */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Upload file */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostStorageMyfile"];
+                };
+            };
+            responses: {
+                /** @description Create file */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetStorageFileId"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Update my introduction */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description My introduction */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutUserMeIntroduction"];
+    "/storage/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success update my introduction */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMeIntroduction"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me/private": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get my private profile */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get my private profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMePrivate"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    /** @description Update my profile */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description My profile */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutUserMePrivate"];
-        };
-      };
-      responses: {
-        /** @description Success update my private profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMePrivate"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/user/me/payment": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get my payment */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get my payment */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMePayment"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    /** @description Update my payment */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description My payment */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutUserMePayment"];
-        };
-      };
-      responses: {
-        /** @description Success update my payment */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetUserMePayment"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/payment": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get payment list */
-    get: {
-      parameters: {
-        query?: {
-          year?: number;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get payment list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetPayment"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/payment/{paymentId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get user payment */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          paymentId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success check user payment */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetPaymentPaymentId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    /** @description Check user payment */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          paymentId: string;
-        };
-        cookie?: never;
-      };
-      /** @description Check user payment */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutPaymentPaymentId"];
-        };
-      };
-      responses: {
-        /** @description Success check user payment */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetPaymentPaymentId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/tool": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get tool URL */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Tool URL */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetTool"];
-          };
-        };
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/event": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get event list */
-    get: {
-      parameters: {
-        query?: {
-          offset?: number;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get event list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetEvent"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/event/{eventId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get event */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          eventId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get event */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetEventEventId"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/event/{eventId}/{reservationId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get event reservation */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          eventId: string;
-          reservationId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get event reservation */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/event/{eventId}/{reservationId}/me": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    /** @description Create my event reservation */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          eventId: string;
-          reservationId: string;
-        };
-        cookie?: never;
-      };
-      /** @description My event reservation */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutEventEventIdReservationIdMe"];
-        };
-      };
-      responses: {
-        /** @description Success create my event reservation */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    /** @description Delete my event reservation */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          eventId: string;
-          reservationId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success delete my event reservation */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/storage/myfile": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get file list */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description file list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetStorageMyfile"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    /** @description Post file */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Upload file */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostStorageMyfile"];
-        };
-      };
-      responses: {
-        /** @description Create file */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetStorageFileId"];
-          };
-        };
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/storage/{fileId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get file */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          fileId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
         /** @description Get file */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetStorageFileId"];
-          };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    fileId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get file */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetStorageFileId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/mattermost/create_user": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/mattermost/create_user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Create mattermost account */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Mattermost account */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostMattermostCreateuser"];
+                };
+            };
+            responses: {
+                /** @description Success to create mattermost account */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostMattermostCreateuser"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** @description Create mattermost account */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Mattermost account */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostMattermostCreateuser"];
+    "/work/work": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success to create mattermost account */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResPostMattermostCreateuser"];
-          };
+        /** @description Get work list */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                    authorId?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description work list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWork"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        /** @description Post work */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Create work */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostWorkWork"];
+                };
+            };
+            responses: {
+                /** @description Create work */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWorkWorkId"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/work/work": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get work list */
-    get: {
-      parameters: {
-        query?: {
-          offset?: number;
-          authorId?: string;
+    "/work/work/{workId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description work list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkWork"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    /** @description Post work */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Create work */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostWorkWork"];
-        };
-      };
-      responses: {
-        /** @description Create work */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkWorkWorkId"];
-          };
-        };
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/work/work/{workId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get work */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          workId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
         /** @description Get work */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkWorkWorkId"];
-          };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get work */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWorkWorkId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Update work */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Update work */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutWorkWorkWorkId"];
+                };
+            };
+            responses: {
+                /** @description Create work */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWorkWorkId"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        /** @description Delete work */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Update work */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          workId: string;
+    "/work/work/{workId}/public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      /** @description Update work */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutWorkWorkWorkId"];
+        /** @description Get work(public) */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    workId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get work */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkWorkWorkIdPublic"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-      };
-      responses: {
-        /** @description Create work */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkWorkWorkId"];
-          };
-        };
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    post?: never;
-    /** @description Delete work */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          workId: string;
+    "/work/tag": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        200: components["responses"]["BlankSuccess"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Get tag list */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description tag list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkTag"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        /** @description Post tag */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Create tag */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostWorkTag"];
+                };
+            };
+            responses: {
+                /** @description Create tag */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkTagTagId"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/work/work/{workId}/public": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get work(public) */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          workId: string;
+    "/work/tag/{tagId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Get work */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkWorkWorkIdPublic"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/work/tag": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get tag list */
-    get: {
-      parameters: {
-        query?: {
-          offset?: number;
-        };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description tag list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkTag"];
-          };
-        };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    put?: never;
-    /** @description Post tag */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Create tag */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostWorkTag"];
-        };
-      };
-      responses: {
-        /** @description Create tag */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkTagTagId"];
-          };
-        };
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/work/tag/{tagId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    /** @description Get tag */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          tagId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
         /** @description Get tag */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkTagTagId"];
-          };
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tagId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get tag */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkTagTagId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    /** @description Update tag */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          tagId: string;
-        };
-        cookie?: never;
-      };
-      /** @description Update tag */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutWorkTagTagId"];
-        };
-      };
-      responses: {
         /** @description Update tag */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetWorkTagTagId"];
-          };
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tagId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Update tag */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutWorkTagTagId"];
+                };
+            };
+            responses: {
+                /** @description Update tag */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetWorkTagTagId"];
+                    };
+                };
+                500: components["responses"]["InternalServer"];
+            };
         };
-        500: components["responses"]["InternalServer"];
-      };
+        post?: never;
+        /** @description Delete tag */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    tagId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    post?: never;
-    /** @description Delete tag */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          tagId: string;
+    "/group": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        200: components["responses"]["BlankSuccess"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Get group list */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                    seed?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get group list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetGroup"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        /** @description Create new group */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostGroup"];
+                };
+            };
+            responses: {
+                /** @description Success create group */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostGroup"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/group": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/group/{groupId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get group id's profile */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    groupId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get group id's profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetGroupGroupId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get group list */
-    get: {
-      parameters: {
-        query?: {
-          offset?: number;
-          seed?: number;
+    "/group/{groupId}/user": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get group list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetGroup"];
-          };
+        get?: never;
+        put?: never;
+        /** @description Add user to group */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    groupId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostGroupGroupIdUser"];
+                };
+            };
+            responses: {
+                /** @description Success add user to group */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostGroupGroupIdUser"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    /** @description Create new group */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostGroup"];
+    "/group/{groupId}/join": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success create group */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResPostGroup"];
-          };
+        get?: never;
+        put?: never;
+        /** @description Join to group */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    groupId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success join to group */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostGroupGroupIdJoin"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/group/{groupId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/budget": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get budget list */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                    proposerId?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success budget list */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudget"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        /** @description Create budget */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Budget */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostBudget"];
+                };
+            };
+            responses: {
+                /** @description Success update budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get group id's profile */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          groupId: string;
+    "/budget/{budgetId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get group id's profile */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetGroupGroupId"];
-          };
+        /** @description Get budget */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/group/{groupId}/user": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/budget/{budgetId}/status_pending": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Update budget(status pending) */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Budget */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusPending"];
+                };
+            };
+            responses: {
+                /** @description Success update budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        /** @description Delete budget(status pending) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** @description Add user to group */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          groupId: string;
+    "/budget/{budgetId}/status_approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostGroupGroupIdUser"];
+        get?: never;
+        /** @description Update budget(status approve) */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Budget */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusApprove"];
+                };
+            };
+            responses: {
+                /** @description Success update budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-      };
-      responses: {
-        /** @description Success add user to group */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResPostGroupGroupIdUser"];
-          };
+        post?: never;
+        /** @description Delete budget(status approve) */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/group/{groupId}/join": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/budget/{budgetId}/status_bought": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Update budget(status bought) */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Budget */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusBought"];
+                };
+            };
+            responses: {
+                /** @description Success update budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    put?: never;
-    /** @description Join to group */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          groupId: string;
+    "/budget/{budgetId}/status_paid": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success join to group */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResPostGroupGroupIdJoin"];
-          };
+        get?: never;
+        /** @description Update budget(status paid) */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Budget */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusPaid"];
+                };
+            };
+            responses: {
+                /** @description Success update budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/budget/{budgetId}/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Update budget by admin */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    budgetId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Budget */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutBudgetBudgetIdAdmin"];
+                };
+            };
+            responses: {
+                /** @description Success update budget */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetBudgetBudgetId"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get budget list */
-    get: {
-      parameters: {
-        query?: {
-          offset?: number;
-          proposerId?: string;
+    "/mail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success budget list */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudget"];
-          };
+        get?: never;
+        put?: never;
+        /** @description Send bulk email */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Email request */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostMail"];
+                };
+            };
+            responses: {
+                /** @description Success send email */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostMail"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    /** @description Create budget */
-    post: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path?: never;
-        cookie?: never;
-      };
-      /** @description Budget */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPostBudget"];
+    "/activity/checkin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-      };
-      responses: {
-        /** @description Success update budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
+        get?: never;
+        put?: never;
+        /** @description Activity checkin */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Activity checkin request */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostActivityCheckin"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget/{budgetId}": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/activity/checkout": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Activity checkout */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Activity checkout request */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostActivityCheckout"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    /** @description Get budget */
-    get: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
+    "/activity/checkout/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        /** @description Success get budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
+        get?: never;
+        put?: never;
+        /** @description Admin force activity checkout */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Activity checkout request */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostActivityCheckout"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-        403: components["responses"]["Unauthorized"];
-        404: components["responses"]["NotFound"];
-        500: components["responses"]["InternalServer"];
-      };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    put?: never;
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget/{budgetId}/status_pending": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/activity/record/{recordId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Update activity record times */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    recordId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Activity record update request */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutActivityRecordRecordId"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /** @description Update budget(status pending) */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
+    "/activity/place/{place}/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      /** @description Budget */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusPending"];
+        /** @description Get current users in place */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    place: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get current users */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetActivityPlacePlaceCurrent"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
         };
-      };
-      responses: {
-        /** @description Success update budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    post?: never;
-    /** @description Delete budget(status pending) */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
+    "/activity/place/{place}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
         };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        200: components["responses"]["BlankSuccess"];
-        500: components["responses"]["InternalServer"];
-      };
+        /** @description Get place visit history */
+        get: {
+            parameters: {
+                query: {
+                    period: "day" | "week" | "month";
+                    date: string;
+                };
+                header?: never;
+                path: {
+                    place: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get place history */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetActivityPlacePlaceHistory"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget/{budgetId}/status_approve": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
+    "/activity/user/{userId}/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get user activity records */
+        get: {
+            parameters: {
+                query?: {
+                    place?: string;
+                    offset?: number;
+                    limit?: number;
+                };
+                header?: never;
+                path: {
+                    userId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get user records */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetActivityUserUserIdRecords"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
     };
-    get?: never;
-    /** @description Update budget(status approve) */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
-        };
-        cookie?: never;
-      };
-      /** @description Budget */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusApprove"];
-        };
-      };
-      responses: {
-        /** @description Success update budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    /** @description Delete budget(status approve) */
-    delete: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
-        };
-        cookie?: never;
-      };
-      requestBody?: never;
-      responses: {
-        200: components["responses"]["BlankSuccess"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget/{budgetId}/status_bought": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    /** @description Update budget(status bought) */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
-        };
-        cookie?: never;
-      };
-      /** @description Budget */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusBought"];
-        };
-      };
-      responses: {
-        /** @description Success update budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget/{budgetId}/status_paid": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    /** @description Update budget(status paid) */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
-        };
-        cookie?: never;
-      };
-      /** @description Budget */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutBudgetBudgetIdStatusPaid"];
-        };
-      };
-      responses: {
-        /** @description Success update budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  "/budget/{budgetId}/admin": {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    /** @description Update budget by admin */
-    put: {
-      parameters: {
-        query?: never;
-        header?: never;
-        path: {
-          budgetId: string;
-        };
-        cookie?: never;
-      };
-      /** @description Budget */
-      requestBody: {
-        content: {
-          "application/json": components["schemas"]["ReqPutBudgetBudgetIdAdmin"];
-        };
-      };
-      responses: {
-        /** @description Success update budget */
-        200: {
-          headers: {
-            [name: string]: unknown;
-          };
-          content: {
-            "application/json": components["schemas"]["ResGetBudgetBudgetId"];
-          };
-        };
-        400: components["responses"]["BadRequest"];
-        403: components["responses"]["Unauthorized"];
-        500: components["responses"]["InternalServer"];
-      };
-    };
-    post?: never;
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
 }
 export type webhooks = Record<string, never>;
 export interface components {
-  schemas: {
-    ResGetStatus: {
-      status: boolean;
-    };
-    ReqPutStatusClubRoom: {
-      lock: boolean;
-      token: string;
-    };
-    ResGetStatusClubRoom: {
-      lock: boolean;
-    };
-    ResGetSignup: {
-      url: string;
-    };
-    ReqPostSignupCallback: {
-      code: string;
-    };
-    ResPostSignupCallback: {
-      jwt: string;
-    };
-    ResGetLogin: {
-      url: string;
-    };
-    ReqPostLoginCallback: {
-      code: string;
-    };
-    ResPostLoginCallback: {
-      jwt: string;
-    };
-    ResGetTool: {
-      discordUrl: string;
-    };
-    ResGetUser: {
-      users: components["schemas"]["ResGetUserObjectUser"][];
-    };
-    ResGetUserObjectUser: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-      shortIntroduction: string;
-    };
-    ResGetUserUserId: {
-      userId: string;
-      username: string;
-      studentNumber: string;
-      iconUrl: string;
-      schoolGrade: number;
-      discordUserId: string;
-      shortIntroduction: string;
-      activeLimit: string;
-    };
-    ResGetUserUserIdIntroduction: {
-      introduction: string;
-    };
-    ResGetUserMe: {
-      userId: string;
-      username: string;
-      studentNumber: string;
-      iconUrl: string;
-      schoolGrade: number;
-      discordUserId: string;
-      shortIntroduction: string;
-      activeLimit: string;
-      isAdmin: boolean;
-    };
-    ReqPutUserMe: {
-      username: string;
-      iconUrl: string;
-      schoolGrade: number;
-      shortIntroduction: string;
-    };
-    ResGetUserMeIntroduction: {
-      introduction: string;
-    };
-    ReqPutUserMeIntroduction: {
-      introduction: string;
-    };
-    ResGetUserMePrivate: {
-      lastName: string;
-      lastNameKana: string;
-      firstName: string;
-      firstNameKana: string;
-      isMale: boolean;
-      phoneNumber: string;
-      address: string;
-      parentName: string;
-      parentCellphoneNumber: string;
-      parentHomephoneNumber: string;
-      parentAddress: string;
-    };
-    ReqPutUserMePrivate: {
-      lastName: string;
-      lastNameKana: string;
-      firstName: string;
-      firstNameKana: string;
-      isMale: boolean;
-      phoneNumber: string;
-      address: string;
-      parentName: string;
-      parentCellphoneNumber: string;
-      parentHomephoneNumber?: string;
-      parentAddress: string;
-    };
-    ResGetUserMePayment: {
-      histories: components["schemas"]["ResGetUserMePaymentObjectHistory"][];
-    };
-    ResGetUserMePaymentObjectHistory: {
-      year: number;
-      transferName: string;
-      checked: boolean;
-      updatedAt: string;
-    };
-    ReqPutUserMePayment: {
-      transferName: string;
-    };
-    ResGetUserMeDiscord: {
-      url: string;
-    };
-    ReqPutUserMeDiscordCallback: {
-      code: string;
-    };
-    ResGetEvent: {
-      events: components["schemas"]["ResGetEventObjectEvent"][];
-    };
-    ResGetEventObjectEvent: {
-      eventId: string;
-      name: string;
-      description: string;
-      calendarView: boolean;
-      reservable: boolean;
-      reservated: boolean;
-    };
-    ResGetEventEventId: {
-      eventId: string;
-      name: string;
-      description: string;
-      calendarView: boolean;
-      reservable: boolean;
-      reservated: boolean;
-      reservations: components["schemas"]["ResGetEventEventIdObjectReservation"][];
-    };
-    ResGetEventEventIdObjectReservation: {
-      reservationId: string;
-      name: string;
-      description: string;
-      startDate: string;
-      finishDate: string;
-      reservable: boolean;
-      reservated: boolean;
-      reservationFinishDate: string;
-      reservationStartDate: string;
-      capacity: number;
-      freeCapacity: number;
-    };
-    ResGetEventEventIdReservationId: {
-      eventId: string;
-      reservationId: string;
-      name: string;
-      description: string;
-      startDate: string;
-      finishDate: string;
-      reservable: boolean;
-      reservated: boolean;
-      reservationFinishDate: string;
-      reservationStartDate: string;
-      capacity: number;
-      freeCapacity: number;
-      users: components["schemas"]["ResGetEventEventIdReservationIdObjectUser"][];
-    };
-    ResGetEventEventIdReservationIdObjectUser: {
-      userId: string;
-      userIcon: string;
-      name: string;
-      comment: string;
-      url: string;
-      /**
-       * Format: date-time
-       * @description ユーザーの登録日時
-       */
-      createdAt: string;
-    };
-    ReqPutEventEventIdReservationIdMe: {
-      comment: string;
-      url: string;
-    };
-    ResGetStorageMyfile: {
-      files: components["schemas"]["ResGetStorageMyfileObjectFile"][];
-    };
-    ResGetStorageMyfileObjectFile: {
-      fileId: string;
-      userId: string;
-      name: string;
-      kSize: string;
-      extension: string;
-      isPublic: boolean;
-      createdAt: string;
-      updatedAt: string;
-    };
-    ReqPostStorageMyfile: {
-      name: string;
-      file: string;
-      isPublic: boolean;
-    };
-    ResGetStorageFileId: {
-      fileId: string;
-      userId: string;
-      name: string;
-      kSize: string;
-      extension: string;
-      isPublic: boolean;
-      createdAt: string;
-      updatedAt: string;
-      url: string;
-    };
-    ReqPostMattermostCreateuser: {
-      username: string;
-      nickname: string;
-      password: string;
-    };
-    ResPostMattermostCreateuser: {
-      username: string;
-    };
-    ResGetWorkWork: {
-      works: components["schemas"]["ResGetWorkWorkObjectWork"][];
-    };
-    ResGetWorkWorkObjectWork: {
-      workId: string;
-      name: string;
-      authors: components["schemas"]["ResGetWorkWorkObjectWorkObjectAuthor"][];
-      tags: components["schemas"]["ResGetWorkWorkObjectWorkObjectTag"][];
-    };
-    ResGetWorkWorkObjectWorkObjectAuthor: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-    };
-    ResGetWorkWorkObjectWorkObjectTag: {
-      tagId: string;
-      name: string;
-    };
-    ReqPostWorkWork: {
-      name: string;
-      description: string;
-      authors: string[];
-      files: string[];
-      tags: string[];
-    };
-    ResGetWorkWorkWorkIdPublic: {
-      workId: string;
-      name: string;
-      description: string;
-      authors: components["schemas"]["ResGetWorkWorkWorkIdObjectAuthor"][];
-      fileUrl?: string;
-      fileName?: string;
-      tags: components["schemas"]["ResGetWorkWorkWorkIdObjectTag"][];
-    };
-    ResGetWorkWorkWorkIdPublicObjectAuthor: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-    };
-    ResGetWorkWorkWorkIdPublicObjectTag: {
-      tagId: string;
-      name: string;
-    };
-    ResGetWorkWorkWorkId: {
-      workId: string;
-      name: string;
-      description: string;
-      authors: components["schemas"]["ResGetWorkWorkWorkIdObjectAuthor"][];
-      files: components["schemas"]["ResGetWorkWorkWorkIdObjectFile"][];
-      tags: components["schemas"]["ResGetWorkWorkWorkIdObjectTag"][];
-    };
-    ResGetWorkWorkWorkIdObjectAuthor: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-    };
-    ResGetWorkWorkWorkIdObjectTag: {
-      tagId: string;
-      name: string;
-    };
-    ResGetWorkWorkWorkIdObjectFile: {
-      fileId: string;
-      name: string;
-    };
-    ReqPutWorkWorkWorkId: {
-      name: string;
-      description: string;
-      authors: string[];
-      files: string[];
-      tags: string[];
-    };
-    ResGetWorkTag: {
-      tags: components["schemas"]["ResGetWorkTagObjectTag"][];
-    };
-    ResGetWorkTagObjectTag: {
-      tagId: string;
-      name: string;
-    };
-    ReqPostWorkTag: {
-      name: string;
-      description: string;
-    };
-    ResGetWorkTagTagId: {
-      tagId: string;
-      name: string;
-      description: string;
-    };
-    ReqPutWorkTagTagId: {
-      name: string;
-      description: string;
-    };
-    ResGetGroup: {
-      groups: components["schemas"]["ResGetGroupObjectGroup"][];
-    };
-    ResGetGroupObjectGroup: {
-      groupId: string;
-      name: string;
-      userCount: number;
-      joinable: boolean;
-      joined: boolean;
-      isAdminGroup: boolean;
-    };
-    ResGetGroupGroupId: {
-      groupId: string;
-      name: string;
-      description: string;
-      userCount: number;
-      joinable: boolean;
-      joined: boolean;
-      isAdminGroup: boolean;
-      users: components["schemas"]["ResGetGroupGroupIdObjectUser"][];
-    };
-    ResGetGroupGroupIdObjectUser: {
-      userId: string;
-      userIcon: string;
-      name: string;
-    };
-    ReqPostGroup: {
-      name: string;
-      description: string;
-      joinable: boolean;
-      isAdminGroup: boolean;
-    };
-    ResPostGroup: {
-      groupId: string;
-      name: string;
-      description: string;
-      joinable: boolean;
-      userCount: number;
-    };
-    ReqPostGroupGroupIdUser: {
-      userId: string;
-    };
-    ResPostGroupGroupIdUser: {
-      message: string;
-    };
-    ResPostGroupGroupIdJoin: {
-      message: string;
-    };
-    ResGetBudget: {
-      budgets: components["schemas"]["ResGetBudgetObjectBudget"][];
-    };
-    ResGetBudgetObjectBudget: {
-      budgetId: string;
-      proposer?: components["schemas"]["ResGetBudgetObjectBudgetObjectproposer"];
-      name: string;
-      class: string;
-      status: string;
-      settlement: number;
-      budget: number;
-      updatedAt: string;
-    };
-    ResGetBudgetObjectBudgetObjectproposer: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-    };
-    ResGetBudgetBudgetId: {
-      budgetId: string;
-      name: string;
-      class: string;
-      status: string;
-      proposer: components["schemas"]["ResGetBudgetBudgetIdObjectProposer"];
-      approver: components["schemas"]["ResGetBudgetBudgetIdObjectApprover"];
-      budget: number;
-      settlement: number;
-      purpose: string;
-      mattermostUrl: string;
-      remark: string;
-      files: components["schemas"]["ResGetBudgetBudgetIdObjectFile"][];
-      createdAt: string;
-      approvedAt: string;
-      updatedAt: string;
-    };
-    ResGetBudgetBudgetIdObjectFile: {
-      fileId: string;
-      name: string;
-    };
-    ResGetBudgetBudgetIdObjectApprover: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-    };
-    ResGetBudgetBudgetIdObjectProposer: {
-      userId: string;
-      username: string;
-      iconUrl: string;
-    };
-    ReqPostBudget: {
-      name: string;
-      class: string;
-    };
-    ReqPutBudgetBudgetIdStatusApprove: {
-      settlement: number;
-      remark: string;
-      bought: boolean;
-      files: string[];
-    };
-    ReqPutBudgetBudgetIdStatusBought: {
-      settlement: number;
-      remark: string;
-      files: string[];
-    };
-    ReqPutBudgetBudgetIdStatusPaid: {
-      remark: string;
-    };
-    ReqPutBudgetBudgetIdStatusPending: {
-      name: string;
-      budget: number;
-      purpose: string;
-      mattermostUrl: string;
-      remark: string;
-      files: string[];
-    };
-    ReqPutBudgetBudgetIdAdmin: {
-      status: string;
-    };
-    ResGetPayment: {
-      payments: components["schemas"]["ResGetPaymentObjectPayment"][];
-    };
-    ResGetPaymentObjectPayment: {
-      paymentId: string;
-      userId: string;
-      studentNumber: string;
-      transferName: string;
-      checked?: boolean;
-      note: string;
-    };
-    ResGetPaymentPaymentId: {
-      paymentId: string;
-      userId: string;
-      studentNumber: string;
-      transferName: string;
-      note: string;
-    };
-    ReqPutPaymentPaymentId: {
-      checked: boolean;
-      note: string;
-    };
-    Error: {
-      level: string;
-      message: string;
-    };
-    Success: {
-      success: boolean;
-    };
-  };
-  responses: {
-    /** @description Validation error, etc. */
-    BadRequest: {
-      headers: {
-        [name: string]: unknown;
-      };
-      content: {
-        "application/json": components["schemas"]["Error"];
-      };
-    };
-    /** @description Authentication error, etc. */
-    Unauthorized: {
-      headers: {
-        [name: string]: unknown;
-      };
-      content: {
-        "application/json": components["schemas"]["Error"];
-      };
-    };
-    /** @description Resource does not exist, etc. */
-    NotFound: {
-      headers: {
-        [name: string]: unknown;
-      };
-      content: {
-        "application/json": components["schemas"]["Error"];
-      };
-    };
-    /** @description System error, etc. */
-    InternalServer: {
-      headers: {
-        [name: string]: unknown;
-      };
-      content: {
-        "application/json": components["schemas"]["Error"];
-      };
-    };
-    /** @description Success response */
-    BlankSuccess: {
-      headers: {
-        [name: string]: unknown;
-      };
-      content: {
-        "application/json": components["schemas"]["Success"];
-      };
-    };
-  };
-  parameters: never;
-  requestBodies: never;
-  headers: never;
-  pathItems: never;
+    schemas: {
+        ResGetStatus: {
+            status: boolean;
+        };
+        ReqPutStatusClubRoom: {
+            lock: boolean;
+            token: string;
+        };
+        ResGetStatusClubRoom: {
+            lock: boolean;
+        };
+        ResGetSignup: {
+            url: string;
+        };
+        ReqPostSignupCallback: {
+            code: string;
+        };
+        ResPostSignupCallback: {
+            jwt: string;
+        };
+        ResGetLogin: {
+            url: string;
+        };
+        ReqPostLoginCallback: {
+            code: string;
+        };
+        ResPostLoginCallback: {
+            jwt: string;
+        };
+        ResGetTool: {
+            discordUrl: string;
+        };
+        ResGetUser: {
+            users: components["schemas"]["ResGetUserObjectUser"][];
+        };
+        ResGetUserObjectUser: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+            shortIntroduction: string;
+        };
+        ResGetUserUserId: {
+            userId: string;
+            username: string;
+            studentNumber: string;
+            iconUrl: string;
+            schoolGrade: number;
+            discordUserId: string;
+            shortIntroduction: string;
+            activeLimit: string;
+        };
+        ResGetUserUserIdIntroduction: {
+            introduction: string;
+        };
+        ResGetUserMe: {
+            userId: string;
+            username: string;
+            studentNumber: string;
+            iconUrl: string;
+            schoolGrade: number;
+            discordUserId: string;
+            shortIntroduction: string;
+            activeLimit: string;
+            isAdmin: boolean;
+        };
+        ReqPutUserMe: {
+            username: string;
+            iconUrl: string;
+            schoolGrade: number;
+            shortIntroduction: string;
+        };
+        ResGetUserMeIntroduction: {
+            introduction: string;
+        };
+        ReqPutUserMeIntroduction: {
+            introduction: string;
+        };
+        ResGetUserMePrivate: {
+            lastName: string;
+            lastNameKana: string;
+            firstName: string;
+            firstNameKana: string;
+            isMale: boolean;
+            phoneNumber: string;
+            address: string;
+            parentName: string;
+            parentCellphoneNumber: string;
+            parentHomephoneNumber: string;
+            parentAddress: string;
+        };
+        ReqPutUserMePrivate: {
+            lastName: string;
+            lastNameKana: string;
+            firstName: string;
+            firstNameKana: string;
+            isMale: boolean;
+            phoneNumber: string;
+            address: string;
+            parentName: string;
+            parentCellphoneNumber: string;
+            parentHomephoneNumber?: string;
+            parentAddress: string;
+        };
+        ResGetUserMePayment: {
+            histories: components["schemas"]["ResGetUserMePaymentObjectHistory"][];
+        };
+        ResGetUserMePaymentObjectHistory: {
+            year: number;
+            transferName: string;
+            checked: boolean;
+            updatedAt: string;
+        };
+        ReqPutUserMePayment: {
+            transferName: string;
+        };
+        ResGetUserMeDiscord: {
+            url: string;
+        };
+        ReqPutUserMeDiscordCallback: {
+            code: string;
+        };
+        ResGetEvent: {
+            events: components["schemas"]["ResGetEventObjectEvent"][];
+        };
+        ResGetEventObjectEvent: {
+            eventId: string;
+            name: string;
+            description: string;
+            calendarView: boolean;
+            reservable: boolean;
+            reservated: boolean;
+        };
+        ResGetEventEventId: {
+            eventId: string;
+            name: string;
+            description: string;
+            calendarView: boolean;
+            reservable: boolean;
+            reservated: boolean;
+            reservations: components["schemas"]["ResGetEventEventIdObjectReservation"][];
+        };
+        ResGetEventEventIdObjectReservation: {
+            reservationId: string;
+            name: string;
+            description: string;
+            startDate: string;
+            finishDate: string;
+            reservable: boolean;
+            reservated: boolean;
+            reservationFinishDate: string;
+            reservationStartDate: string;
+            capacity: number;
+            freeCapacity: number;
+        };
+        ResGetEventEventIdReservationId: {
+            eventId: string;
+            reservationId: string;
+            name: string;
+            description: string;
+            startDate: string;
+            finishDate: string;
+            reservable: boolean;
+            reservated: boolean;
+            reservationFinishDate: string;
+            reservationStartDate: string;
+            capacity: number;
+            freeCapacity: number;
+            users: components["schemas"]["ResGetEventEventIdReservationIdObjectUser"][];
+        };
+        ResGetEventEventIdReservationIdObjectUser: {
+            userId: string;
+            userIcon: string;
+            name: string;
+            comment: string;
+            url: string;
+            /**
+             * Format: date-time
+             * @description ユーザーの登録日時
+             */
+            createdAt: string;
+        };
+        ReqPutEventEventIdReservationIdMe: {
+            comment: string;
+            url: string;
+        };
+        ResGetStorageMyfile: {
+            files: components["schemas"]["ResGetStorageMyfileObjectFile"][];
+        };
+        ResGetStorageMyfileObjectFile: {
+            fileId: string;
+            userId: string;
+            name: string;
+            kSize: string;
+            extension: string;
+            isPublic: boolean;
+            createdAt: string;
+            updatedAt: string;
+        };
+        ReqPostStorageMyfile: {
+            name: string;
+            file: string;
+            isPublic: boolean;
+        };
+        ResGetStorageFileId: {
+            fileId: string;
+            userId: string;
+            name: string;
+            kSize: string;
+            extension: string;
+            isPublic: boolean;
+            createdAt: string;
+            updatedAt: string;
+            url: string;
+        };
+        ReqPostMattermostCreateuser: {
+            username: string;
+            nickname: string;
+            password: string;
+        };
+        ResPostMattermostCreateuser: {
+            username: string;
+        };
+        ResGetWorkWork: {
+            works: components["schemas"]["ResGetWorkWorkObjectWork"][];
+        };
+        ResGetWorkWorkObjectWork: {
+            workId: string;
+            name: string;
+            authors: components["schemas"]["ResGetWorkWorkObjectWorkObjectAuthor"][];
+            tags: components["schemas"]["ResGetWorkWorkObjectWorkObjectTag"][];
+        };
+        ResGetWorkWorkObjectWorkObjectAuthor: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+        };
+        ResGetWorkWorkObjectWorkObjectTag: {
+            tagId: string;
+            name: string;
+        };
+        ReqPostWorkWork: {
+            name: string;
+            description: string;
+            authors: string[];
+            files: string[];
+            tags: string[];
+        };
+        ResGetWorkWorkWorkIdPublic: {
+            workId: string;
+            name: string;
+            description: string;
+            authors: components["schemas"]["ResGetWorkWorkWorkIdObjectAuthor"][];
+            fileUrl?: string;
+            fileName?: string;
+            tags: components["schemas"]["ResGetWorkWorkWorkIdObjectTag"][];
+        };
+        ResGetWorkWorkWorkIdPublicObjectAuthor: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+        };
+        ResGetWorkWorkWorkIdPublicObjectTag: {
+            tagId: string;
+            name: string;
+        };
+        ResGetWorkWorkWorkId: {
+            workId: string;
+            name: string;
+            description: string;
+            authors: components["schemas"]["ResGetWorkWorkWorkIdObjectAuthor"][];
+            files: components["schemas"]["ResGetWorkWorkWorkIdObjectFile"][];
+            tags: components["schemas"]["ResGetWorkWorkWorkIdObjectTag"][];
+        };
+        ResGetWorkWorkWorkIdObjectAuthor: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+        };
+        ResGetWorkWorkWorkIdObjectTag: {
+            tagId: string;
+            name: string;
+        };
+        ResGetWorkWorkWorkIdObjectFile: {
+            fileId: string;
+            name: string;
+        };
+        ReqPutWorkWorkWorkId: {
+            name: string;
+            description: string;
+            authors: string[];
+            files: string[];
+            tags: string[];
+        };
+        ResGetWorkTag: {
+            tags: components["schemas"]["ResGetWorkTagObjectTag"][];
+        };
+        ResGetWorkTagObjectTag: {
+            tagId: string;
+            name: string;
+        };
+        ReqPostWorkTag: {
+            name: string;
+            description: string;
+        };
+        ResGetWorkTagTagId: {
+            tagId: string;
+            name: string;
+            description: string;
+        };
+        ReqPutWorkTagTagId: {
+            name: string;
+            description: string;
+        };
+        ResGetGroup: {
+            groups: components["schemas"]["ResGetGroupObjectGroup"][];
+        };
+        ResGetGroupObjectGroup: {
+            groupId: string;
+            name: string;
+            userCount: number;
+            joinable: boolean;
+            joined: boolean;
+            isAdminGroup: boolean;
+        };
+        ResGetGroupGroupId: {
+            groupId: string;
+            name: string;
+            description: string;
+            userCount: number;
+            joinable: boolean;
+            joined: boolean;
+            isAdminGroup: boolean;
+            users: components["schemas"]["ResGetGroupGroupIdObjectUser"][];
+        };
+        ResGetGroupGroupIdObjectUser: {
+            userId: string;
+            userIcon: string;
+            name: string;
+        };
+        ReqPostGroup: {
+            name: string;
+            description: string;
+            joinable: boolean;
+            isAdminGroup: boolean;
+        };
+        ResPostGroup: {
+            groupId: string;
+            name: string;
+            description: string;
+            joinable: boolean;
+            userCount: number;
+        };
+        ReqPostGroupGroupIdUser: {
+            userId: string;
+        };
+        ResPostGroupGroupIdUser: {
+            message: string;
+        };
+        ResPostGroupGroupIdJoin: {
+            message: string;
+        };
+        ResGetBudget: {
+            budgets: components["schemas"]["ResGetBudgetObjectBudget"][];
+        };
+        ResGetBudgetObjectBudget: {
+            budgetId: string;
+            proposer?: components["schemas"]["ResGetBudgetObjectBudgetObjectproposer"];
+            name: string;
+            class: string;
+            status: string;
+            settlement: number;
+            budget: number;
+            updatedAt: string;
+        };
+        ResGetBudgetObjectBudgetObjectproposer: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+        };
+        ResGetBudgetBudgetId: {
+            budgetId: string;
+            name: string;
+            class: string;
+            status: string;
+            proposer: components["schemas"]["ResGetBudgetBudgetIdObjectProposer"];
+            approver: components["schemas"]["ResGetBudgetBudgetIdObjectApprover"];
+            budget: number;
+            settlement: number;
+            purpose: string;
+            mattermostUrl: string;
+            remark: string;
+            files: components["schemas"]["ResGetBudgetBudgetIdObjectFile"][];
+            createdAt: string;
+            approvedAt: string;
+            updatedAt: string;
+        };
+        ResGetBudgetBudgetIdObjectFile: {
+            fileId: string;
+            name: string;
+        };
+        ResGetBudgetBudgetIdObjectApprover: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+        };
+        ResGetBudgetBudgetIdObjectProposer: {
+            userId: string;
+            username: string;
+            iconUrl: string;
+        };
+        ReqPostBudget: {
+            name: string;
+            class: string;
+        };
+        ReqPutBudgetBudgetIdStatusApprove: {
+            settlement: number;
+            remark: string;
+            bought: boolean;
+            files: string[];
+        };
+        ReqPutBudgetBudgetIdStatusBought: {
+            settlement: number;
+            remark: string;
+            files: string[];
+        };
+        ReqPutBudgetBudgetIdStatusPaid: {
+            remark: string;
+        };
+        ReqPutBudgetBudgetIdStatusPending: {
+            name: string;
+            budget: number;
+            purpose: string;
+            mattermostUrl: string;
+            remark: string;
+            files: string[];
+        };
+        ReqPutBudgetBudgetIdAdmin: {
+            status: string;
+        };
+        ResGetPayment: {
+            payments: components["schemas"]["ResGetPaymentObjectPayment"][];
+        };
+        ResGetPaymentObjectPayment: {
+            paymentId: string;
+            userId: string;
+            studentNumber: string;
+            transferName: string;
+            checked?: boolean;
+            note: string;
+        };
+        ResGetPaymentPaymentId: {
+            paymentId: string;
+            userId: string;
+            studentNumber: string;
+            transferName: string;
+            note: string;
+        };
+        ReqPutPaymentPaymentId: {
+            checked: boolean;
+            note: string;
+        };
+        ReqPostMail: {
+            addresses: string[];
+            subject: string;
+            body: string;
+            /** @default false */
+            sendToAdmin: boolean;
+        };
+        ResPostMail: {
+            successCount: number;
+            failures: {
+                address: string;
+                error: string;
+            }[];
+        };
+        ReqPostActivityCheckin: {
+            place: string;
+        };
+        ReqPostActivityCheckout: {
+            place: string;
+            /** Format: date-time */
+            checkout_at?: string;
+        };
+        ReqPutActivityRecordRecordId: {
+            /** @enum {string} */
+            activity_type: "checkin" | "checkout";
+            /** Format: date-time */
+            time: string;
+        };
+        ResGetActivityPlacePlaceCurrent: {
+            users: components["schemas"]["ResGetActivityPlacePlaceCurrentObjectUser"][];
+        };
+        ResGetActivityPlacePlaceCurrentObjectUser: {
+            userId: string;
+            username: string;
+            shortIntroduction: string;
+            iconUrl: string;
+            /** Format: date-time */
+            checkedInAt: string;
+        };
+        ResGetActivityPlacePlaceHistory: {
+            users: components["schemas"]["ResGetActivityPlacePlaceHistoryObjectUser"][];
+        };
+        ResGetActivityPlacePlaceHistoryObjectUser: {
+            userId: string;
+            username: string;
+            shortIntroduction: string;
+            iconUrl: string;
+            checkInCount: number;
+        };
+        ResGetActivityUserUserIdRecords: {
+            records: components["schemas"]["ResGetActivityUserUserIdRecordsObjectRecord"][];
+            total: number;
+            offset: number;
+            limit: number;
+        };
+        ResGetActivityUserUserIdRecordsObjectRecord: {
+            recordId: string;
+            place: string;
+            /** Format: date-time */
+            checkedInAt: string;
+            /** Format: date-time */
+            checkedOutAt?: string | null;
+            /** Format: date-time */
+            initialCheckedInAt: string;
+            /** Format: date-time */
+            initialCheckedOutAt?: string | null;
+        };
+        Error: {
+            level: string;
+            message: string;
+        };
+        Success: {
+            success: boolean;
+        };
+    };
+    responses: {
+        /** @description Validation error, etc. */
+        BadRequest: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description Authentication error, etc. */
+        Unauthorized: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description Resource does not exist, etc. */
+        NotFound: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description System error, etc. */
+        InternalServer: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description Success response */
+        BlankSuccess: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Success"];
+            };
+        };
+    };
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
 export type $defs = Record<string, never>;
 export type operations = Record<string, never>;

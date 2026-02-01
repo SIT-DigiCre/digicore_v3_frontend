@@ -25,6 +25,10 @@ tags:
     description: Status system
   - name: mattermost
     description: Mattermost system
+  - name: mail
+    description: Mail system
+  - name: activity
+    description: Activity system
 paths:
   /status:
     get:
@@ -32,32 +36,32 @@ paths:
         - status
       description: Server status check
       responses:
-        "200":
+        '200':
           description: All Systems Operational
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetStatus"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetStatus'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /status/club_room:
     get:
       tags:
         - status
       description: Get club room status
       responses:
-        "200":
+        '200':
           description: Success get club room status page
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetStatusClubRoom"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetStatusClubRoom'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - status
@@ -68,28 +72,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutStatusClubRoom"
+              $ref: '#/components/schemas/ReqPutStatusClubRoom'
       responses:
-        "200":
+        '200':
           description: OK
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /signup:
     get:
       tags:
         - auth
       description: Get signup URL
       responses:
-        "200":
+        '200':
           description: Signup URL
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetSignup"
+                $ref: '#/components/schemas/ResGetSignup'
   /signup/callback:
     post:
       tags:
@@ -101,28 +105,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostSignupCallback"
+              $ref: '#/components/schemas/ReqPostSignupCallback'
       responses:
-        "200":
+        '200':
           description: Success signup
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostSignupCallback"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResPostSignupCallback'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /login:
     get:
       tags:
         - auth
       description: Get login URL
       responses:
-        "200":
+        '200':
           description: Login URL
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetLogin"
+                $ref: '#/components/schemas/ResGetLogin'
   /login/callback:
     post:
       tags:
@@ -134,16 +138,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostLoginCallback"
+              $ref: '#/components/schemas/ReqPostLoginCallback'
       responses:
-        "200":
+        '200':
           description: Success signup
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostLoginCallback"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResPostLoginCallback'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user:
     get:
       tags:
@@ -161,18 +165,18 @@ paths:
           schema:
             type: integer
       responses:
-        "200":
+        '200':
           description: Success get user list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUser"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUser'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/search:
     get:
       tags:
@@ -189,19 +193,19 @@ paths:
             minLength: 1
             maxLength: 10
       responses:
-        "200":
+        '200':
           description: Success search users
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUser"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/user/{userId}":
+                $ref: '#/components/schemas/ResGetUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}':
     get:
       tags:
         - user
@@ -215,19 +219,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get user id's profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserUserId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/user/{userId}/introduction":
+                $ref: '#/components/schemas/ResGetUserUserId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}/introduction':
     get:
       tags:
         - user
@@ -241,19 +245,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get my introduction
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserUserIdIntroduction"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/user/{userId}/group":
+                $ref: '#/components/schemas/ResGetUserUserIdIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}/group':
     get:
       tags:
         - user
@@ -267,19 +271,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get groups which the specified user joined
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetGroup"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/user/{userId}/work":
+                $ref: '#/components/schemas/ResGetGroup'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/user/{userId}/work':
     get:
       tags:
         - user
@@ -293,18 +297,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get works which the specified user is included as author
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkWork"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkWork'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me:
     get:
       tags:
@@ -313,18 +317,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Success get my profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMe"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMe'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - user
@@ -337,20 +341,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutUserMe"
+              $ref: '#/components/schemas/ReqPutUserMe'
       responses:
-        "200":
+        '200':
           description: Success update my profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMe"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/renewal:
     put:
       tags:
@@ -359,18 +363,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Success update my private profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMe"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMe'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/discord:
     get:
       tags:
@@ -379,12 +383,12 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Discord login URL
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMeDiscord"
+                $ref: '#/components/schemas/ResGetUserMeDiscord'
   /user/me/discord/callback:
     put:
       tags:
@@ -398,16 +402,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutUserMeDiscordCallback"
+              $ref: '#/components/schemas/ReqPutUserMeDiscordCallback'
       responses:
-        "200":
+        '200':
           description: Success signup
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMe"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMe'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/introduction:
     get:
       tags:
@@ -416,18 +420,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Success get my introduction
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMeIntroduction"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMeIntroduction'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - user
@@ -440,20 +444,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutUserMeIntroduction"
+              $ref: '#/components/schemas/ReqPutUserMeIntroduction'
       responses:
-        "200":
+        '200':
           description: Success update my introduction
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMeIntroduction"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMeIntroduction'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/private:
     get:
       tags:
@@ -462,18 +466,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Success get my private profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMePrivate"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMePrivate'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - user
@@ -486,20 +490,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutUserMePrivate"
+              $ref: '#/components/schemas/ReqPutUserMePrivate'
       responses:
-        "200":
+        '200':
           description: Success update my private profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMePrivate"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMePrivate'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /user/me/payment:
     get:
       tags:
@@ -508,18 +512,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Success get my payment
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMePayment"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMePayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - user
@@ -532,20 +536,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutUserMePayment"
+              $ref: '#/components/schemas/ReqPutUserMePayment'
       responses:
-        "200":
+        '200':
           description: Success update my payment
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetUserMePayment"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetUserMePayment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /payment:
     get:
       tags:
@@ -560,19 +564,19 @@ paths:
           schema:
             type: integer
       responses:
-        "200":
+        '200':
           description: Success get payment list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetPayment"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/payment/{paymentId}":
+                $ref: '#/components/schemas/ResGetPayment'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/payment/{paymentId}':
     get:
       tags:
         - payment
@@ -587,18 +591,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success check user payment
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetPaymentPaymentId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - payment
@@ -618,20 +622,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutPaymentPaymentId"
+              $ref: '#/components/schemas/ReqPutPaymentPaymentId'
       responses:
-        "200":
+        '200':
           description: Success check user payment
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetPaymentPaymentId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetPaymentPaymentId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /tool:
     get:
       tags:
@@ -640,12 +644,12 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: Tool URL
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetTool"
+                $ref: '#/components/schemas/ResGetTool'
   /event:
     get:
       tags:
@@ -659,19 +663,19 @@ paths:
           schema:
             type: integer
       responses:
-        "200":
+        '200':
           description: Success get event list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetEvent"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/event/{eventId}":
+                $ref: '#/components/schemas/ResGetEvent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}':
     get:
       tags:
         - event
@@ -685,19 +689,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get event
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetEventEventId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/event/{eventId}/{reservationId}":
+                $ref: '#/components/schemas/ResGetEventEventId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/{reservationId}':
     get:
       tags:
         - event
@@ -716,19 +720,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get event reservation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetEventEventIdReservationId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/event/{eventId}/{reservationId}/me":
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/{reservationId}/me':
     put:
       tags:
         - event
@@ -752,20 +756,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutEventEventIdReservationIdMe"
+              $ref: '#/components/schemas/ReqPutEventEventIdReservationIdMe'
       responses:
-        "200":
+        '200':
           description: Success create my event reservation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetEventEventIdReservationId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     delete:
       tags:
         - event
@@ -784,18 +788,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success delete my event reservation
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetEventEventIdReservationId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /storage/myfile:
     get:
       tags:
@@ -804,18 +808,18 @@ paths:
       security:
         - BearerAuth: []
       responses:
-        "200":
+        '200':
           description: file list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetStorageMyfile"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetStorageMyfile'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     post:
       tags:
         - storage
@@ -828,17 +832,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostStorageMyfile"
+              $ref: '#/components/schemas/ReqPostStorageMyfile'
       responses:
-        "200":
+        '200':
           description: Create file
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetStorageFileId"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/storage/{fileId}":
+                $ref: '#/components/schemas/ResGetStorageFileId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/storage/{fileId}':
     get:
       tags:
         - storage
@@ -852,18 +856,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Get file
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetStorageFileId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetStorageFileId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /mattermost/create_user:
     post:
       tags:
@@ -877,20 +881,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostMattermostCreateuser"
+              $ref: '#/components/schemas/ReqPostMattermostCreateuser'
       responses:
-        "200":
+        '200':
           description: Success to create mattermost account
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostMattermostCreateuser"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResPostMattermostCreateuser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /work/work:
     get:
       tags:
@@ -909,18 +913,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: work list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkWork"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkWork'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     post:
       tags:
         - work
@@ -933,17 +937,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostWorkWork"
+              $ref: '#/components/schemas/ReqPostWorkWork'
       responses:
-        "200":
+        '200':
           description: Create work
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkWorkWorkId"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/work/work/{workId}":
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}':
     get:
       tags:
         - work
@@ -957,18 +961,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Get work
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkWorkWorkId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - work
@@ -987,16 +991,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutWorkWorkWorkId"
+              $ref: '#/components/schemas/ReqPutWorkWorkWorkId'
       responses:
-        "200":
+        '200':
           description: Create work
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkWorkWorkId"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkWorkWorkId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     delete:
       tags:
         - work
@@ -1010,11 +1014,11 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          $ref: "#/components/responses/BlankSuccess"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/work/work/{workId}/public":
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/work/{workId}/public':
     get:
       tags:
         - work
@@ -1026,18 +1030,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Get work
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkWorkWorkIdPublic"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkWorkWorkIdPublic'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /work/tag:
     get:
       tags:
@@ -1051,18 +1055,18 @@ paths:
           schema:
             type: integer
       responses:
-        "200":
+        '200':
           description: tag list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkTag"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkTag'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     post:
       tags:
         - work
@@ -1075,17 +1079,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostWorkTag"
+              $ref: '#/components/schemas/ReqPostWorkTag'
       responses:
-        "200":
+        '200':
           description: Create tag
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkTagTagId"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/work/tag/{tagId}":
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/work/tag/{tagId}':
     get:
       tags:
         - work
@@ -1099,18 +1103,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Get tag
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkTagTagId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     put:
       tags:
         - work
@@ -1129,16 +1133,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutWorkTagTagId"
+              $ref: '#/components/schemas/ReqPutWorkTagTagId'
       responses:
-        "200":
+        '200':
           description: Update tag
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetWorkTagTagId"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetWorkTagTagId'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     delete:
       tags:
         - work
@@ -1152,10 +1156,10 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          $ref: "#/components/responses/BlankSuccess"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /group:
     get:
       tags:
@@ -1173,18 +1177,18 @@ paths:
           schema:
             type: integer
       responses:
-        "200":
+        '200':
           description: Success get group list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetGroup"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetGroup'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     post:
       tags:
         - group
@@ -1196,21 +1200,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostGroup"
+              $ref: '#/components/schemas/ReqPostGroup'
       responses:
-        "200":
+        '200':
           description: Success create group
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostGroup"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/group/{groupId}":
+                $ref: '#/components/schemas/ResPostGroup'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}':
     get:
       tags:
         - group
@@ -1224,19 +1228,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get group id's profile
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetGroupGroupId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/group/{groupId}/user":
+                $ref: '#/components/schemas/ResGetGroupGroupId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}/user':
     post:
       tags:
         - group
@@ -1254,23 +1258,23 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostGroupGroupIdUser"
+              $ref: '#/components/schemas/ReqPostGroupGroupIdUser'
       responses:
-        "200":
+        '200':
           description: Success add user to group
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostGroupGroupIdUser"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/group/{groupId}/join":
+                $ref: '#/components/schemas/ResPostGroupGroupIdUser'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/group/{groupId}/join':
     post:
       tags:
         - group
@@ -1284,20 +1288,20 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success join to group
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResPostGroupGroupIdJoin"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResPostGroupGroupIdJoin'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /budget:
     get:
       tags:
@@ -1315,18 +1319,18 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success budget list
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudget"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetBudget'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     post:
       tags:
         - budget
@@ -1339,21 +1343,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPostBudget"
+              $ref: '#/components/schemas/ReqPostBudget'
       responses:
-        "200":
+        '200':
           description: Success update budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/budget/{budgetId}":
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}':
     get:
       tags:
         - budget
@@ -1367,19 +1371,19 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        '200':
           description: Success get budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "404":
-          $ref: "#/components/responses/NotFound"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/budget/{budgetId}/status_pending":
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_pending':
     put:
       tags:
         - budget
@@ -1398,20 +1402,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutBudgetBudgetIdStatusPending"
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPending'
       responses:
-        "200":
+        '200':
           description: Success update budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     delete:
       tags:
         - budget
@@ -1425,11 +1429,11 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          $ref: "#/components/responses/BlankSuccess"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/budget/{budgetId}/status_approve":
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_approve':
     put:
       tags:
         - budget
@@ -1448,20 +1452,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutBudgetBudgetIdStatusApprove"
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusApprove'
       responses:
-        "200":
+        '200':
           description: Success update budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
     delete:
       tags:
         - budget
@@ -1475,11 +1479,11 @@ paths:
           schema:
             type: string
       responses:
-        "200":
-          $ref: "#/components/responses/BlankSuccess"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/budget/{budgetId}/status_bought":
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_bought':
     put:
       tags:
         - budget
@@ -1498,21 +1502,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutBudgetBudgetIdStatusBought"
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusBought'
       responses:
-        "200":
+        '200':
           description: Success update budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/budget/{budgetId}/status_paid":
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/status_paid':
     put:
       tags:
         - budget
@@ -1531,21 +1535,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutBudgetBudgetIdStatusPaid"
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdStatusPaid'
       responses:
-        "200":
+        '200':
           description: Success update budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
-  "/budget/{budgetId}/admin":
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/budget/{budgetId}/admin':
     put:
       tags:
         - budget
@@ -1565,20 +1569,267 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ReqPutBudgetBudgetIdAdmin"
+              $ref: '#/components/schemas/ReqPutBudgetBudgetIdAdmin'
       responses:
-        "200":
+        '200':
           description: Success update budget
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ResGetBudgetBudgetId"
-        "400":
-          $ref: "#/components/responses/BadRequest"
-        "403":
-          $ref: "#/components/responses/Unauthorized"
-        "500":
-          $ref: "#/components/responses/InternalServer"
+                $ref: '#/components/schemas/ResGetBudgetBudgetId'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /mail:
+    post:
+      tags:
+        - mail
+      description: Send bulk email
+      security:
+        - BearerAuth:
+            - admin
+      requestBody:
+        description: Email request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostMail'
+      responses:
+        '200':
+          description: Success send email
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResPostMail'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/checkin:
+    post:
+      tags:
+        - activity
+      description: Activity checkin
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Activity checkin request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckin'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/checkout:
+    post:
+      tags:
+        - activity
+      description: Activity checkout
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Activity checkout request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckout'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/checkout/{userId}':
+    post:
+      tags:
+        - activity
+      description: Admin force activity checkout
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Activity checkout request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPostActivityCheckout'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/record/{recordId}':
+    put:
+      tags:
+        - activity
+      description: Update activity record times
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Activity record update request
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReqPutActivityRecordRecordId'
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/place/{place}/current':
+    get:
+      tags:
+        - activity
+      description: Get current users in place
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: place
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Success get current users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityPlacePlaceCurrent'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/place/{place}/history':
+    get:
+      tags:
+        - activity
+      description: Get place visit history
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: place
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: period
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - day
+              - week
+              - month
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+      responses:
+        '200':
+          description: Success get place history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityPlacePlaceHistory'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  '/activity/user/{userId}/records':
+    get:
+      tags:
+        - activity
+      description: Get user activity records
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: place
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Success get user records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityUserUserIdRecords'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
 components:
   schemas:
     ResGetStatus:
@@ -1662,7 +1913,7 @@ components:
         users:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetUserObjectUser"
+            $ref: '#/components/schemas/ResGetUserObjectUser'
     ResGetUserObjectUser:
       required:
         - userId
@@ -1751,22 +2002,22 @@ components:
         username:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: ユーザー名
         iconUrl:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: アイコンURL
         schoolGrade:
           type: integer
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=9"
+            validate: 'required,min=1,max=9'
             ja: 学年
         shortIntroduction:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 短い自己紹介
     ResGetUserMeIntroduction:
       required:
@@ -1835,22 +2086,22 @@ components:
         lastName:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 名字
         lastNameKana:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 名字(カナ)
         firstName:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 名前
         firstNameKana:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 名前(カナ)
         isMale:
           type: boolean
@@ -1860,22 +2111,22 @@ components:
         phoneNumber:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,phonenumber"
+            validate: 'required,phonenumber'
             ja: 電話番号
         address:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 住所
         parentName:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 緊急連絡先氏名
         parentCellphoneNumber:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,phonenumber"
+            validate: 'required,phonenumber'
             ja: 緊急連絡先携帯電話番号
         parentHomephoneNumber:
           type: string
@@ -1885,7 +2136,7 @@ components:
         parentAddress:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 緊急連絡先住所
     ResGetUserMePayment:
       required:
@@ -1894,7 +2145,7 @@ components:
         histories:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetUserMePaymentObjectHistory"
+            $ref: '#/components/schemas/ResGetUserMePaymentObjectHistory'
     ResGetUserMePaymentObjectHistory:
       required:
         - year
@@ -1917,7 +2168,7 @@ components:
         transferName:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: 振込名義
     ResGetUserMeDiscord:
       required:
@@ -1941,7 +2192,7 @@ components:
         events:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetEventObjectEvent"
+            $ref: '#/components/schemas/ResGetEventObjectEvent'
     ResGetEventObjectEvent:
       required:
         - eventId
@@ -1988,7 +2239,7 @@ components:
         reservations:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetEventEventIdObjectReservation"
+            $ref: '#/components/schemas/ResGetEventEventIdObjectReservation'
     ResGetEventEventIdObjectReservation:
       required:
         - reservationId
@@ -2068,7 +2319,7 @@ components:
         users:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetEventEventIdReservationIdObjectUser"
+            $ref: '#/components/schemas/ResGetEventEventIdReservationIdObjectUser'
     ResGetEventEventIdReservationIdObjectUser:
       required:
         - userId
@@ -2114,7 +2365,7 @@ components:
         files:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetStorageMyfileObjectFile"
+            $ref: '#/components/schemas/ResGetStorageMyfileObjectFile'
     ResGetStorageMyfileObjectFile:
       required:
         - fileId
@@ -2151,12 +2402,12 @@ components:
         name:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,max=255"
+            validate: 'required,max=255'
             ja: ファイル名
         file:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,max=104857600"
+            validate: 'required,max=104857600'
             ja: ファイル
         isPublic:
           type: boolean
@@ -2202,17 +2453,17 @@ components:
         username:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=3,max=22"
+            validate: 'required,min=3,max=22'
             ja: ユーザー名
         nickname:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=3,max=22"
+            validate: 'required,min=3,max=22'
             ja: ニックネーム
         password:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=8,max=64"
+            validate: 'required,min=8,max=64'
             ja: パスワード
     ResPostMattermostCreateuser:
       required:
@@ -2227,7 +2478,7 @@ components:
         works:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkObjectWork"
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWork'
     ResGetWorkWorkObjectWork:
       required:
         - workId
@@ -2242,11 +2493,11 @@ components:
         authors:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkObjectWorkObjectAuthor"
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectAuthor'
         tags:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkObjectWorkObjectTag"
+            $ref: '#/components/schemas/ResGetWorkWorkObjectWorkObjectTag'
     ResGetWorkWorkObjectWorkObjectAuthor:
       required:
         - userId
@@ -2291,21 +2542,21 @@ components:
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: 作者
         files:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: ファイル
         tags:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: タグ
     ResGetWorkWorkWorkIdPublic:
       required:
@@ -2324,7 +2575,7 @@ components:
         authors:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor"
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
         fileUrl:
           type: string
         fileName:
@@ -2332,7 +2583,7 @@ components:
         tags:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkWorkIdObjectTag"
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
     ResGetWorkWorkWorkIdPublicObjectAuthor:
       required:
         - userId
@@ -2372,15 +2623,15 @@ components:
         authors:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor"
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectAuthor'
         files:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkWorkIdObjectFile"
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectFile'
         tags:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkWorkWorkIdObjectTag"
+            $ref: '#/components/schemas/ResGetWorkWorkWorkIdObjectTag'
     ResGetWorkWorkWorkIdObjectAuthor:
       required:
         - userId
@@ -2434,21 +2685,21 @@ components:
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: 作者
         files:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: ファイル
         tags:
           type: array
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: タグ
     ResGetWorkTag:
       required:
@@ -2457,7 +2708,7 @@ components:
         tags:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetWorkTagObjectTag"
+            $ref: '#/components/schemas/ResGetWorkTagObjectTag'
     ResGetWorkTagObjectTag:
       required:
         - tagId
@@ -2516,7 +2767,7 @@ components:
         groups:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetGroupObjectGroup"
+            $ref: '#/components/schemas/ResGetGroupObjectGroup'
     ResGetGroupObjectGroup:
       required:
         - groupId
@@ -2566,7 +2817,7 @@ components:
         users:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetGroupGroupIdObjectUser"
+            $ref: '#/components/schemas/ResGetGroupGroupIdObjectUser'
     ResGetGroupGroupIdObjectUser:
       required:
         - userId
@@ -2589,12 +2840,12 @@ components:
         name:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=255"
+            validate: 'required,min=1,max=255'
             ja: グループ名
         description:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,min=1,max=1000"
+            validate: 'required,min=1,max=1000'
             ja: グループの説明
         joinable:
           type: boolean
@@ -2629,7 +2880,7 @@ components:
         userId:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: "required,uuid"
+            validate: 'required,uuid'
             ja: ユーザーID
     ResPostGroupGroupIdUser:
       required:
@@ -2650,7 +2901,7 @@ components:
         budgets:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetBudgetObjectBudget"
+            $ref: '#/components/schemas/ResGetBudgetObjectBudget'
     ResGetBudgetObjectBudget:
       required:
         - budgetId
@@ -2665,7 +2916,7 @@ components:
         budgetId:
           type: string
         proposer:
-          $ref: "#/components/schemas/ResGetBudgetObjectBudgetObjectproposer"
+          $ref: '#/components/schemas/ResGetBudgetObjectBudgetObjectproposer'
         name:
           type: string
         class:
@@ -2717,9 +2968,9 @@ components:
         status:
           type: string
         proposer:
-          $ref: "#/components/schemas/ResGetBudgetBudgetIdObjectProposer"
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectProposer'
         approver:
-          $ref: "#/components/schemas/ResGetBudgetBudgetIdObjectApprover"
+          $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectApprover'
         budget:
           type: integer
         settlement:
@@ -2733,7 +2984,7 @@ components:
         files:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetBudgetBudgetIdObjectFile"
+            $ref: '#/components/schemas/ResGetBudgetBudgetIdObjectFile'
         createdAt:
           type: string
         approvedAt:
@@ -2812,7 +3063,7 @@ components:
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: ファイル
     ReqPutBudgetBudgetIdStatusBought:
       required:
@@ -2833,7 +3084,7 @@ components:
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: ファイル
     ReqPutBudgetBudgetIdStatusPaid:
       required:
@@ -2880,7 +3131,7 @@ components:
           items:
             type: string
           x-oapi-codegen-extra-tags:
-            validate: "dive,uuid"
+            validate: 'dive,uuid'
             ja: ファイル
     ReqPutBudgetBudgetIdAdmin:
       required:
@@ -2898,7 +3149,7 @@ components:
         payments:
           type: array
           items:
-            $ref: "#/components/schemas/ResGetPaymentObjectPayment"
+            $ref: '#/components/schemas/ResGetPaymentObjectPayment'
     ResGetPaymentObjectPayment:
       required:
         - paymentId
@@ -2951,6 +3202,194 @@ components:
           type: string
           x-oapi-codegen-extra-tags:
             ja: 備考
+    ReqPostMail:
+      required:
+        - addresses
+        - subject
+        - body
+      properties:
+        addresses:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: email
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 送信先アドレス
+        subject:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: タイトル
+        body:
+          type: string
+          x-oapi-codegen-extra-tags:
+            validate: required
+            ja: 本文
+        sendToAdmin:
+          type: boolean
+          default: false
+          x-oapi-codegen-extra-tags:
+            ja: 管理者用アドレスにも送信
+    ResPostMail:
+      required:
+        - successCount
+        - failures
+      properties:
+        successCount:
+          type: integer
+        failures:
+          type: array
+          items:
+            required:
+              - address
+              - error
+            properties:
+              address:
+                type: string
+              error:
+                type: string
+    ReqPostActivityCheckin:
+      required:
+        - place
+      properties:
+        place:
+          type: string
+          minLength: 3
+          maxLength: 30
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=30'
+            ja: 場所名
+    ReqPostActivityCheckout:
+      required:
+        - place
+      properties:
+        place:
+          type: string
+          minLength: 3
+          maxLength: 30
+          x-oapi-codegen-extra-tags:
+            validate: 'required,min=3,max=30'
+            ja: 場所名
+        checkout_at:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            validate: omitempty
+            ja: チェックアウト時刻
+    ReqPutActivityRecordRecordId:
+      required:
+        - activity_type
+        - time
+      properties:
+        activity_type:
+          type: string
+          enum:
+            - checkin
+            - checkout
+          x-oapi-codegen-extra-tags:
+            ja: アクティビティタイプ
+        time:
+          type: string
+          format: date-time
+          x-oapi-codegen-extra-tags:
+            ja: 更新時刻
+    ResGetActivityPlacePlaceCurrent:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityPlacePlaceCurrentObjectUser'
+    ResGetActivityPlacePlaceCurrentObjectUser:
+      required:
+        - userId
+        - username
+        - shortIntroduction
+        - iconUrl
+        - checkedInAt
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        shortIntroduction:
+          type: string
+        iconUrl:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+    ResGetActivityPlacePlaceHistory:
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityPlacePlaceHistoryObjectUser'
+    ResGetActivityPlacePlaceHistoryObjectUser:
+      required:
+        - userId
+        - username
+        - shortIntroduction
+        - iconUrl
+        - checkInCount
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        shortIntroduction:
+          type: string
+        iconUrl:
+          type: string
+        checkInCount:
+          type: integer
+    ResGetActivityUserUserIdRecords:
+      required:
+        - records
+        - total
+        - offset
+        - limit
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityUserUserIdRecordsObjectRecord'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    ResGetActivityUserUserIdRecordsObjectRecord:
+      required:
+        - recordId
+        - place
+        - checkedInAt
+        - initialCheckedInAt
+      properties:
+        recordId:
+          type: string
+        place:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+        checkedOutAt:
+          type: string
+          format: date-time
+          nullable: true
+        initialCheckedInAt:
+          type: string
+          format: date-time
+        initialCheckedOutAt:
+          type: string
+          format: date-time
+          nullable: true
     Error:
       required:
         - level
@@ -2968,35 +3407,35 @@ components:
           type: boolean
   responses:
     BadRequest:
-      description: "Validation error, etc."
+      description: 'Validation error, etc.'
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
     Unauthorized:
-      description: "Authentication error, etc."
+      description: 'Authentication error, etc.'
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
     NotFound:
-      description: "Resource does not exist, etc."
+      description: 'Resource does not exist, etc.'
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
     InternalServer:
-      description: "System error, etc."
+      description: 'System error, etc.'
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Error"
+            $ref: '#/components/schemas/Error'
     BlankSuccess:
       description: Success response
       content:
         application/json:
           schema:
-            $ref: "#/components/schemas/Success"
+            $ref: '#/components/schemas/Success'
   securitySchemes:
     BearerAuth:
       type: http
