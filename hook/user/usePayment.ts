@@ -39,7 +39,7 @@ export const usePayment: UsePayment = () => {
   useEffect(() => {
     if (!authState.isLogined) return;
     getHistories();
-  }, [authState.isLogined, authState.token, getHistories]);
+  }, [authState.isLogined, authState.token]);
 
   const updatePayment = async (name: string) => {
     if (!authState.token) return false;
