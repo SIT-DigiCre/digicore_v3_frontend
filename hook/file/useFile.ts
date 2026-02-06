@@ -69,7 +69,7 @@ export const useMyFiles: UseMyFiles = () => {
 
   useEffect(() => {
     loadFiles();
-  }, [authState.isLogined, authState.token, loadFiles]);
+  }, [authState.isLogined, authState.token]);
 
   const upload = async (file: UploadFile): Promise<FileObject | string> => {
     if (!authState.token) return "未ログイン";

@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 import type { ReactElement } from "react";
 import { useState } from "react";
 
-import { Button, Stack } from "@mui/material";
+import { Save } from "@mui/icons-material";
+import { Button, Stack, Typography } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
 import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
@@ -62,6 +63,9 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
   return (
     <Stack spacing={2}>
       <Heading level={2}>自己紹介</Heading>
+      <Typography>
+        自分が作ってきた作品や活動について書いてみましょう。まだ作品がない方はこれからどんなものを作りたいかでも構いません。学科名は記載しても良いですが、学年は別で表示されるので不要です。
+      </Typography>
       <MarkdownEditor
         value={editUserIntro.md}
         onChange={(e) => {
@@ -72,6 +76,7 @@ const IntroductionProfilePage = ({ initialIntroduction }: IntroductionProfilePag
         <Button
           variant="contained"
           disabled={initialIntroduction === editUserIntro.md}
+          startIcon={<Save />}
           onClick={handleSave}
         >
           保存する
