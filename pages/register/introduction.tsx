@@ -4,7 +4,7 @@ import type { ReactElement } from "react";
 import { useState } from "react";
 
 import { ArrowBack, ArrowForward } from "@mui/icons-material";
-import { Button, CircularProgress, Stack } from "@mui/material";
+import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import MarkdownEditor from "../../components/Markdown/MarkdownEditor";
@@ -66,6 +66,9 @@ const RegisterIntroductionProfilePage = ({
 
   return (
     <>
+      <Typography>
+        自分が作ってきた作品や活動について書いてみましょう。まだ作品がない方はこれからどんなものを作りたいかでも構いません。学科名は記載しても良いですが、学年は別で表示されるので不要です。
+      </Typography>
       <MarkdownEditor
         value={editUserIntro.md}
         onChange={(e) => {
