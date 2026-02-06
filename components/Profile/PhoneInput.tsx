@@ -36,7 +36,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
         onBlur={() => {
           // ハイフンを削除し、電話番号であるかをチェック
           const cleanedNum = num.replace(/-/g, "");
-          if (!/^\d{10,11}$/.test(cleanedNum)) {
+          if (!/^\d{10,11}$/.test(cleanedNum) && cleanedNum !== "") {
             setError(true);
           } else {
             onChange(cleanedNum);

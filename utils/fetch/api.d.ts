@@ -2714,6 +2714,8 @@ export interface components {
             phoneNumber: string;
             address: string;
             parentName: string;
+            parentLastName: string;
+            parentFirstName: string;
             parentCellphoneNumber: string;
             parentHomephoneNumber: string;
             parentAddress: string;
@@ -2726,7 +2728,9 @@ export interface components {
             isMale: boolean;
             phoneNumber: string;
             address: string;
-            parentName: string;
+            parentName?: string;
+            parentLastName?: string;
+            parentFirstName?: string;
             parentCellphoneNumber: string;
             parentHomephoneNumber?: string;
             parentAddress: string;

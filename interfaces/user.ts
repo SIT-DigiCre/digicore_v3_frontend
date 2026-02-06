@@ -38,7 +38,9 @@ export type UserPrivateProfile = {
   lastNameKana: string;
   parentAddress: string;
   parentCellphoneNumber: string;
+  parentFirstName: string;
   parentHomephoneNumber: string;
+  parentLastName: string;
   parentName: string;
   phoneNumber: string;
 };
@@ -52,7 +54,9 @@ export const DEFAULT_USER_PRIVATE_PROFILE: UserPrivateProfile = {
   lastNameKana: "",
   parentAddress: "",
   parentCellphoneNumber: "",
+  parentFirstName: "",
   parentHomephoneNumber: "",
+  parentLastName: "",
   parentName: "",
   phoneNumber: "",
 };

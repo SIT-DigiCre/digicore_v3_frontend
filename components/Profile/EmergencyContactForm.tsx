@@ -1,8 +1,10 @@
-import { Button, Stack, TextField, Typography } from "@mui/material";
+import { Save } from "@mui/icons-material";
+import { Button, Stack, TextField } from "@mui/material";
 
 import { UserPrivateProfile } from "../../interfaces/user";
 import { objectEquals } from "../../utils/common";
 import Heading from "../Common/Heading";
+import NameInput from "./NameInput";
 import PhoneInput from "./PhoneInput";
 
 type EmergencyContactFormProps = {
@@ -36,18 +38,19 @@ const EmergencyContactForm = ({
   return (
     <Stack spacing={4}>
       <Stack spacing={2}>
-        <Typography variant="h4" sx={{ fontSize: "1.25rem", fontWeight: "bold" }}>
-          保護者氏名
-        </Typography>
-
-        <TextField
-          label="保護者氏名"
-          required
-          fullWidth
-          onChange={(e) => {
-            onProfileChange({ ...profile, parentName: e.target.value });
+        <Heading level={4}>保護者氏名</Heading>
+        <NameInput
+          firstNameTitle="保護者名字"
+          lastNameTitle="保護者名前"
+          onChange={(first, last) => {
+            onProfileChange({
+              ...profile,
+              parentLastName: first,
+              parentFirstName: last,
+            });
           }}
-          value={profile.parentName}
+          initFirstName={profile.parentLastName}
+          initLastName={profile.parentFirstName}
         />
       </Stack>
       <PhoneInput
@@ -62,7 +65,7 @@ const EmergencyContactForm = ({
         onChange={(num) => {
           onProfileChange({ ...profile, parentHomephoneNumber: num });
         }}
-        title="固定電話番号（ある場合のみ記入）"
+        title="固定電話番号（ある場合のみ）"
         initialPhoneNumber={profile.parentHomephoneNumber}
       />
       <Stack spacing={2}>
@@ -86,6 +89,7 @@ const EmergencyContactForm = ({
         <Stack direction="row" spacing={2} justifyContent="flex-end">
           <Button
             variant="contained"
+            startIcon={<Save />}
             disabled={objectEquals(profile, initialProfile)}
             onClick={handleSave}
           >
