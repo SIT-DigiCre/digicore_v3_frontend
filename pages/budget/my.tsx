@@ -125,7 +125,7 @@ const MyBudgetPage = ({
         </Stack>
         {budgets && budgets.length > 0 ? (
           <TableContainer>
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
+            <Table sx={{ minWidth: 650 }} aria-label="稟議一覧">
               <TableHead>
                 <TableRow>
                   <TableCell>表題</TableCell>

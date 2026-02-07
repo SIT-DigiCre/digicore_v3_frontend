@@ -17,16 +17,16 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import { BudgetFileView } from "../../components/Budget/BudgetFileView";
-import { DeleteBudgetDialog } from "../../components/Budget/DeleteBudgetDialog";
-import { MarkAsBoughtDialog } from "../../components/Budget/MarkAsBoughtDialog";
-import { ButtonLink } from "../../components/Common/ButtonLink";
-import PageHead from "../../components/Common/PageHead";
-import { useBudgetActions } from "../../hook/budget/useBudget";
-import { useAuthState } from "../../hook/useAuthState";
-import { BudgetDetail } from "../../interfaces/budget";
-import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
-import { createServerApiClient } from "../../utils/fetch/client";
+import { BudgetFileView } from "../../../components/Budget/BudgetFileView";
+import { DeleteBudgetDialog } from "../../../components/Budget/DeleteBudgetDialog";
+import { MarkAsBoughtDialog } from "../../../components/Budget/MarkAsBoughtDialog";
+import { ButtonLink } from "../../../components/Common/ButtonLink";
+import PageHead from "../../../components/Common/PageHead";
+import { useBudgetActions } from "../../../hook/budget/useBudget";
+import { useAuthState } from "../../../hook/useAuthState";
+import { BudgetDetail } from "../../../interfaces/budget";
+import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
+import { createServerApiClient } from "../../../utils/fetch/client";
 
 type BudgetDetailPageProps = {
   id: string;
@@ -40,8 +40,6 @@ const BudgetDetailPage = ({ id, budget: budgetDetail }: BudgetDetailPageProps) =
   const { authState } = useAuthState();
   const [openMarkAsBoughtDialog, setOpenMarkAsBoughtDialog] = useState(false);
   const [openDeleteBudgetDialog, setOpenDeleteBudgetDialog] = useState(false);
-
-  if (!authState.user) return <p>読み込み中...</p>;
 
   const submitMarkAsBought = () => {
     updateBudgetStatusApprove({
@@ -100,7 +98,7 @@ const BudgetDetailPage = ({ id, budget: budgetDetail }: BudgetDetailPageProps) =
 
       <Stack direction="column" spacing={2} my={2}>
         <div>
-          {authState.user.userId === budgetDetail.proposer.userId && (
+          {authState.user?.userId === budgetDetail.proposer.userId && (
             // 編集権限がある場合
             <Stack spacing={3} direction="row" justifyContent="flex-end">
               <ButtonLink
@@ -127,7 +125,7 @@ const BudgetDetailPage = ({ id, budget: budgetDetail }: BudgetDetailPageProps) =
             </Stack>
           )}
           {budgetDetail.status === "approve" &&
-            authState.user.userId === budgetDetail.proposer.userId && (
+            authState.user?.userId === budgetDetail.proposer.userId && (
               <Stack direction="row" sx={{ gap: 2, marginTop: 3 }} flexWrap="wrap">
                 <Button
                   variant="contained"
