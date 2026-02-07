@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useState, useTransition } from "react";
 
 import { Add, ArrowBack } from "@mui/icons-material";
@@ -20,7 +19,6 @@ import { useErrorState } from "../../../hook/useErrorState";
 import { apiClient } from "../../../utils/fetch/client";
 
 const AdminGroupNewPage = () => {
-  const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [joinable, setJoinable] = useState(true);
