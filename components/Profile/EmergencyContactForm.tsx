@@ -45,8 +45,8 @@ const EmergencyContactForm = ({
           onChange={(first, last) => {
             onProfileChange({
               ...profile,
-              parentLastName: first,
               parentFirstName: last,
+              parentLastName: first,
             });
           }}
           initFirstName={profile.parentLastName}

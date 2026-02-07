@@ -16,9 +16,9 @@ import {
   TextField,
 } from "@mui/material";
 
-import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
+import { apiClient } from "../../utils/fetch/client";
 
 import type { BudgetClass } from "../../interfaces/budget";
 
@@ -52,7 +52,7 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
       alert("稟議名が空、もしくは種別が指定されていません");
     } else {
       if (!authState.user || !authState.token) return;
-      
+
       try {
         const { data } = await apiClient.POST("/budget", {
           body: {
@@ -64,7 +64,7 @@ export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
             Authorization: `Bearer ${authState.token}`,
           },
         });
-        
+
         if (data) {
           removeError("budget-post-fail");
           onClose();
