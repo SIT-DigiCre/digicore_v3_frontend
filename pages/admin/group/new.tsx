@@ -58,7 +58,7 @@ const AdminGroupNewPage = () => {
           setNewError({ message: errorMessage, name: "new-group-error" });
           return;
         }
-        router.push("/admin/group");
+        window.location.href = "/admin/group";
       });
     } catch (error) {
       console.error("Error creating group:", error);
