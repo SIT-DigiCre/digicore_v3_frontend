@@ -66,13 +66,12 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
         hasPreviousPage,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch budgets:", error);
     return {
-      props: {
-        budgets: [],
-        currentPage: 1,
-        hasNextPage: false,
-        hasPreviousPage: false,
+      redirect: {
+        destination: "/login",
+        permanent: false,
       },
     };
   }

@@ -67,10 +67,27 @@ export const getServerSideProps: GetServerSideProps<BudgetEditPageProps> = async
   const id = params?.id;
   if (!id || typeof id !== "string") return { notFound: true };
   const client = createServerApiClient(req);
+
+  const userRes = await client.GET("/user/me");
+  if (!userRes.data || !userRes.data.userId) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
   const res = await client.GET("/budget/{budgetId}", {
     params: { path: { budgetId: id } },
   });
   if (!res.data) return { notFound: true };
+
+  // 申請者本人のみ編集可能
+  if (res.data.proposer?.userId !== userRes.data.userId) {
+    return { notFound: true };
+  }
+
   // TODO: Zodを導入する
   return {
     props: {

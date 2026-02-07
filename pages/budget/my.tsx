@@ -23,23 +23,12 @@ import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
-import { createServerApiClient, getAuthHeadersFromCookie } from "../../utils/fetch/client";
+import { createServerApiClient } from "../../utils/fetch/client";
 
 const ITEMS_PER_PAGE = 10;
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
-  const authHeaders = getAuthHeadersFromCookie(req);
-
-  // 認証されていない場合はログインページへリダイレクト
-  if (!authHeaders.Authorization) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
 
   const rawPage = query.page ? parseInt(query.page as string, 10) : 1;
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
@@ -90,13 +79,12 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
         hasPreviousPage,
       },
     };
-  } catch {
+  } catch (error) {
+    console.error("Failed to fetch my budgets:", error);
     return {
-      props: {
-        budgets: [],
-        currentPage: 1,
-        hasNextPage: false,
-        hasPreviousPage: false,
+      redirect: {
+        destination: "/login",
+        permanent: false,
       },
     };
   }
