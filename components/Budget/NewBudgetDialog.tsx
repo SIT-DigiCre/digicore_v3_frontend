@@ -16,7 +16,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { useBudgets } from "../../hook/budget/useBudget";
+import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../../hook/useAuthState";
 import { useErrorState } from "../../hook/useErrorState";
 
@@ -41,34 +41,40 @@ const classDisplay: {
 export const NewBudgetDialog = ({ open, onClose }: NewBudgetDialogProps) => {
   const [inputName, setInputName] = useState("");
   const [inputClass, setInputClass] = useState<BudgetClass | undefined>();
-  const { setNewError } = useErrorState();
+  const { setNewError, removeError } = useErrorState();
   const { authState } = useAuthState();
-  const { createBudget } = useBudgets();
   const router = useRouter();
 
-  const onClickCreate = () => {
+  const onClickCreate = async () => {
     const name = inputName;
     const className = inputClass;
     if (name === "" || className === undefined) {
       alert("稟議名が空、もしくは種別が指定されていません");
     } else {
-      if (!authState.user) return;
-      createBudget({
-        class: className,
-        name: name,
-        proposerUserId: authState.user.userId!,
-      })
-        .then((budgetId) => {
-          onClose();
-          router.push(`/budget/${budgetId}?mode=edit`);
-        })
-        .catch((error) => {
-          console.error("Error creating budget:", error);
-          setNewError({
-            message: "稟議申請に失敗しました",
-            name: "post-budget",
-          });
+      if (!authState.user || !authState.token) return;
+      
+      try {
+        const { data } = await apiClient.POST("/budget", {
+          body: {
+            class: className,
+            name: name,
+            proposerUserId: authState.user.userId!,
+          },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
         });
+        
+        if (data) {
+          removeError("budget-post-fail");
+          onClose();
+          router.push(`/budget/${data.budgetId}/edit`);
+        } else {
+          setNewError({ message: "稟議の申請に失敗しました", name: "budget-post-fail" });
+        }
+      } catch {
+        setNewError({ message: "稟議の申請に失敗しました", name: "budget-post-fail" });
+      }
     }
   };
 

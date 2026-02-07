@@ -1,8 +1,9 @@
-import { GetServerSideProps } from "next";
+import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 
-import { Add, ArrowBack, FilterList } from "@mui/icons-material";
+import { Add, FilterList } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -20,20 +21,99 @@ import dayjs from "dayjs";
 import { NewBudgetDialog } from "../../components/Budget/NewBudgetDialog";
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
-import { useBudgets } from "../../hook/budget/useBudget";
+import Pagination from "../../components/Common/Pagination";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../utils/budget/constants";
+import { createServerApiClient, getAuthHeadersFromCookie } from "../../utils/fetch/client";
 
-type MyBudgetPageProps = {
-  modeStr?: string;
+const ITEMS_PER_PAGE = 10;
+
+export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
+  const client = createServerApiClient(req);
+  const authHeaders = getAuthHeadersFromCookie(req);
+
+  // 認証されていない場合はログインページへリダイレクト
+  if (!authHeaders.Authorization) {
+    return {
+      redirect: {
+        destination: "/login",
+        permanent: false,
+      },
+    };
+  }
+
+  const rawPage = query.page ? parseInt(query.page as string, 10) : 1;
+  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+  const offset = (page - 1) * ITEMS_PER_PAGE;
+
+  try {
+    // まず現在のユーザー情報を取得
+    const userRes = await client.GET("/user/me", {});
+
+    if (!userRes.data || !userRes.data.userId) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const budgetsRes = await client.GET("/budget", {
+      params: {
+        query: {
+          offset,
+          proposerId: userRes.data.userId,
+        },
+      },
+    });
+
+    if (!budgetsRes.data || !budgetsRes.data.budgets) {
+      return {
+        props: {
+          budgets: [],
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      };
+    }
+
+    const budgets = budgetsRes.data.budgets;
+    const hasNextPage = budgets.length === ITEMS_PER_PAGE;
+    const hasPreviousPage = page > 1;
+
+    return {
+      props: {
+        budgets,
+        currentPage: page,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    };
+  } catch {
+    return {
+      props: {
+        budgets: [],
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+  }
 };
 
-const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
-  const { budgets, loadMore, isOver } = useBudgets("my");
+const MyBudgetPage = ({
+  budgets,
+  currentPage,
+  hasNextPage,
+  hasPreviousPage,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
+  const router = useRouter();
 
   return (
     <>
-      <PageHead title={modeStr === "admin" ? "★ 自分の稟議" : "自分の稟議"} />
+      <PageHead title="自分の稟議" />
       <NewBudgetDialog
         open={openNewBudgetDialog}
         onClose={() => {
@@ -42,26 +122,18 @@ const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
       />
       <Stack spacing={2}>
         <Stack direction="row" spacing={2} justifyContent="space-between">
-          {modeStr === "admin" ? (
-            <ButtonLink href="/budget" startIcon={<ArrowBack />}>
-              通常モードに戻る
-            </ButtonLink>
-          ) : (
-            <ButtonLink href="/budget" startIcon={<FilterList />} variant="text">
-              稟議一覧を見る
-            </ButtonLink>
-          )}
-          {modeStr !== "admin" && (
-            <Button
-              variant="contained"
-              startIcon={<Add />}
-              onClick={() => {
-                setOpenNewBudgetDialog(true);
-              }}
-            >
-              新規稟議申請
-            </Button>
-          )}
+          <ButtonLink href="/budget" startIcon={<FilterList />} variant="text">
+            稟議一覧を見る
+          </ButtonLink>
+          <Button
+            variant="contained"
+            startIcon={<Add />}
+            onClick={() => {
+              setOpenNewBudgetDialog(true);
+            }}
+          >
+            新規稟議申請
+          </Button>
         </Stack>
         {budgets && budgets.length > 0 ? (
           <TableContainer>
@@ -81,13 +153,7 @@ const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
                 {budgets.map((budget) => (
                   <TableRow key={budget.budgetId}>
                     <TableCell>
-                      <Link
-                        href={
-                          modeStr === "admin"
-                            ? `/budget/${budget.budgetId}?mode=admin`
-                            : `/budget/${budget.budgetId}`
-                        }
-                      >
+                      <Link href={`/budget/${budget.budgetId}`}>
                         {budget.name.length > 20 ? budget.name.substring(0, 20) + "…" : budget.name}
                       </Link>
                     </TableCell>
@@ -121,28 +187,24 @@ const MyBudgetPage = ({ modeStr }: MyBudgetPageProps) => {
         ) : (
           <Typography>稟議がありません</Typography>
         )}
+        {budgets && budgets.length > 0 && (
+          <Stack alignItems="center">
+            <Pagination
+              page={currentPage}
+              hasPreviousPage={hasPreviousPage}
+              hasNextPage={hasNextPage}
+              onChange={(page) =>
+                router.push({
+                  pathname: router.pathname,
+                  query: { page },
+                })
+              }
+            />
+          </Stack>
+        )}
       </Stack>
-      {!isOver && (
-        <Stack alignItems="center" my={2}>
-          <Button variant="contained" onClick={() => loadMore()}>
-            もっと見る
-          </Button>
-        </Stack>
-      )}
     </>
   );
 };
 
 export default MyBudgetPage;
-
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
-  try {
-    const { mode } = query;
-    const modeStr = typeof mode === "string" ? mode : null;
-    return { props: { modeStr } };
-  } catch (error: unknown) {
-    return {
-      props: { errors: error instanceof Error ? error.message : "An unknown error occurred" },
-    };
-  }
-};
