@@ -17,7 +17,6 @@ type LoginCallbackPageProps = {
 
 export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = async ({
   query,
-  req,
   res,
 }) => {
   const code = typeof query.code === "string" ? query.code : null;
@@ -25,7 +24,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     return { props: { codeMissing: true } };
   }
 
-  const client = createServerApiClient(req);
+  const client = createServerApiClient();
   const result = await client.POST("/login/callback", { body: { code } });
 
   if (result.data?.jwt) {

@@ -73,7 +73,8 @@ const RegisterPersonalProfilePage = ({
     editProfile.lastNameKana === "" ||
     editProfile.phoneNumber === "" ||
     editProfile.address === "" ||
-    editProfile.parentName === "" ||
+    editProfile.parentLastName === "" ||
+    editProfile.parentFirstName === "" ||
     editProfile.parentCellphoneNumber === "" ||
     editProfile.parentAddress === "";
 

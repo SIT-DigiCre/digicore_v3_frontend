@@ -12,8 +12,8 @@ type LoginPageProps = {
   loginUrl: string;
 };
 
-export const getServerSideProps: GetServerSideProps<LoginPageProps> = async ({ req }) => {
-  const client = createServerApiClient(req);
+export const getServerSideProps: GetServerSideProps<LoginPageProps> = async () => {
+  const client = createServerApiClient(); // 有効期限切れのjwtを付与しないようにするため、reqを渡さない
   const res = await client.GET("/login");
   const loginUrl = res.data?.url ?? "";
   return { props: { loginUrl } };
