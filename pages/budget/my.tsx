@@ -34,11 +34,13 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
   const offset = (page - 1) * ITEMS_PER_PAGE;
 
-  try {
-    // まず現在のユーザー情報を取得
-    const userRes = await client.GET("/user/me", {});
+  // まず現在のユーザー情報を取得
+  const userRes = await client.GET("/user/me", {});
 
-    if (!userRes.data || !userRes.data.userId) {
+  // 認証エラー（401, 403）の場合はログインページへリダイレクト
+  if (userRes.error) {
+    const status = userRes.response.status;
+    if (status === 401 || status === 403) {
       return {
         redirect: {
           destination: "/login",
@@ -47,40 +49,23 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       };
     }
 
-    const budgetsRes = await client.GET("/budget", {
-      params: {
-        query: {
-          offset,
-          proposerId: userRes.data.userId,
-        },
-      },
-    });
-
-    if (!budgetsRes.data || !budgetsRes.data.budgets) {
-      return {
-        props: {
-          budgets: [],
-          currentPage: 1,
-          hasNextPage: false,
-          hasPreviousPage: false,
-        },
-      };
-    }
-
-    const budgets = budgetsRes.data.budgets;
-    const hasNextPage = budgets.length === ITEMS_PER_PAGE;
-    const hasPreviousPage = page > 1;
-
+    // それ以外のエラーは空配列とエラー情報を返す
+    console.error("Failed to fetch user info:", userRes.error);
     return {
       props: {
-        budgets,
-        currentPage: page,
-        hasNextPage,
-        hasPreviousPage,
+        budgets: [],
+        currentPage: 1,
+        error: {
+          message: `ユーザー情報の取得に失敗しました (HTTP ${status})`,
+          status,
+        },
+        hasNextPage: false,
+        hasPreviousPage: false,
       },
     };
-  } catch (error) {
-    console.error("Failed to fetch my budgets:", error);
+  }
+
+  if (!userRes.data || !userRes.data.userId) {
     return {
       redirect: {
         destination: "/login",
@@ -88,6 +73,69 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       },
     };
   }
+
+  const budgetsRes = await client.GET("/budget", {
+    params: {
+      query: {
+        offset,
+        proposerId: userRes.data.userId,
+      },
+    },
+  });
+
+  // 認証エラー（401, 403）の場合はログインページへリダイレクト
+  if (budgetsRes.error) {
+    const status = budgetsRes.response.status;
+    if (status === 401 || status === 403) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    // それ以外のエラー（404, 500など）は空配列とエラー情報を返す
+    console.error("Failed to fetch my budgets:", budgetsRes.error);
+    return {
+      props: {
+        budgets: [],
+        currentPage: 1,
+        error: {
+          message: `稟議一覧の取得に失敗しました (HTTP ${status})`,
+          status,
+        },
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+  }
+
+  if (!budgetsRes.data || !budgetsRes.data.budgets) {
+    return {
+      props: {
+        budgets: [],
+        currentPage: 1,
+        error: null,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
+  }
+
+  const budgets = budgetsRes.data.budgets;
+  const hasNextPage = budgets.length === ITEMS_PER_PAGE;
+  const hasPreviousPage = page > 1;
+
+  return {
+    props: {
+      budgets,
+      currentPage: page,
+      error: null,
+      hasNextPage,
+      hasPreviousPage,
+    },
+  };
 };
 
 const MyBudgetPage = ({
@@ -95,6 +143,7 @@ const MyBudgetPage = ({
   currentPage,
   hasNextPage,
   hasPreviousPage,
+  error,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const [openNewBudgetDialog, setOpenNewBudgetDialog] = useState(false);
   const router = useRouter();
@@ -123,6 +172,11 @@ const MyBudgetPage = ({
             新規稟議申請
           </Button>
         </Stack>
+        {error && (
+          <Typography color="error" sx={{ bgcolor: "error.lighter", borderRadius: 1, p: 2 }}>
+            {error.message}
+          </Typography>
+        )}
         {budgets && budgets.length > 0 ? (
           <TableContainer>
             <Table sx={{ minWidth: 650 }} aria-label="稟議一覧">
@@ -173,9 +227,9 @@ const MyBudgetPage = ({
             </Table>
           </TableContainer>
         ) : (
-          <Typography>稟議がありません</Typography>
+          <Typography>{error ? "" : "稟議がありません"}</Typography>
         )}
-        {budgets && budgets.length > 0 && (
+        {budgets && budgets.length > 0 && !error && (
           <Stack alignItems="center">
             <Pagination
               page={currentPage}

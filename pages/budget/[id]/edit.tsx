@@ -88,6 +88,11 @@ export const getServerSideProps: GetServerSideProps<BudgetEditPageProps> = async
     return { notFound: true };
   }
 
+  // 却下済み稟議は編集不可
+  if (res.data.status === "reject") {
+    return { notFound: true };
+  }
+
   // TODO: Zodを導入する
   return {
     props: {
