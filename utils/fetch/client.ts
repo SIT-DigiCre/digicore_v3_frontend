@@ -16,8 +16,8 @@ export const apiClient = createClient<paths>({
   },
 });
 
-export const createServerApiClient = (req: ServerSideRequest) => {
-  const authHeaders = getAuthHeadersFromCookie(req);
+export const createServerApiClient = (req?: ServerSideRequest) => {
+  const authHeaders = req ? getAuthHeadersFromCookie(req) : {};
   return createClient<paths>({
     baseUrl: baseURLForServerSide,
     headers: {
