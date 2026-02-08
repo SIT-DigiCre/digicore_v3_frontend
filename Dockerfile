@@ -4,7 +4,7 @@ WORKDIR /core3
 RUN npm install -g pnpm@latest-10
 COPY package.json .
 COPY pnpm-lock.yaml .
-RUN pnpm install
+RUN pnpm install --ignore-scripts
 COPY . .
 RUN pnpm build
 CMD ["pnpm", "start"]

@@ -1,0 +1,11 @@
+pre-commit:
+  parallel: false
+  commands:
+    format:
+      run: pnpm run format:fix
+      stage_fixed: true
+      fail_text: フォーマットエラーがあります
+    lint:
+      run: pnpm run lint:fix
+      stage_fixed: true
+      fail_text: リントエラーがあります

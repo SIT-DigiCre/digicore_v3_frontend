@@ -33,7 +33,7 @@ export const createServerApiClient = (req?: ServerSideRequest) => {
  * @param req Next.jsのgetServerSidePropsから取得できるreqオブジェクト
  * @returns Authorizationヘッダーを含むオブジェクト（トークンがない場合は空オブジェクト）
  */
-export const getAuthHeadersFromCookie = (req: ServerSideRequest): { Authorization?: string } => {
+const getAuthHeadersFromCookie = (req: ServerSideRequest): { Authorization?: string } => {
   if (!req.cookies?.jwt) {
     return {};
   }
