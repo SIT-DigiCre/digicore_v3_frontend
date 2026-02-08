@@ -1,6 +1,7 @@
+import { useRouter } from "next/router";
 import { type Dispatch, type SetStateAction, useEffect, useState } from "react";
 
-import { Add, Save } from "@mui/icons-material";
+import { Add, ArrowBack, Save } from "@mui/icons-material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {
   Box,
@@ -14,6 +15,7 @@ import {
   Typography,
 } from "@mui/material";
 
+import { ButtonLink } from "../Common/ButtonLink";
 import Heading from "../Common/Heading";
 import { FileBrowserModal } from "../File/FileBrowser";
 import BudgetListItem from "./BudgetListItem";
@@ -79,6 +81,7 @@ const isInt = (s?: string) => {
 };
 
 const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [budgetStr, setBudgetStr] = useState("");
   const [mattermostUrl, setMattermostUrl] = useState("");
@@ -173,10 +176,21 @@ const BudgetEditor = ({ onSubmit, initBudget }: BudgetEditorProps) => {
       settlement: parseInt(settlementStr),
     };
     onSubmit(budgetRequest);
+
+    router.push(`/budget/${initBudget.budgetId}`);
   };
 
   return (
     <Stack spacing={2} my={2}>
+      <Stack direction="row" spacing={2} justifyContent="flex-start">
+        <ButtonLink
+          href={`/budget/${initBudget.budgetId}`}
+          startIcon={<ArrowBack />}
+          variant="text"
+        >
+          編集をやめる
+        </ButtonLink>
+      </Stack>
       <Box>
         <Heading level={3}>稟議名</Heading>
         {currentField.name ? (
