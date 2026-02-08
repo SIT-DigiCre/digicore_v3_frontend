@@ -94,8 +94,8 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
       return;
     }
 
-    try {
-      startTransition(async () => {
+    startTransition(async () => {
+      try {
         const response = await apiClient.POST("/group/{groupId}/user", {
           body: {
             userId: selectedUser.userId,
@@ -115,12 +115,15 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
           setNewError({ message: errorMessage, name: "add-user-error" });
           return;
         }
-        await router.replace(router.asPath);
-      });
-    } catch (error) {
-      console.error("Error adding user to group:", error);
-      setNewError({ message: "ユーザーの追加に失敗しました", name: "add-user-error" });
-    }
+
+        router.replace(router.asPath);
+      } catch (error) {
+        console.error("Error adding user to group:", error);
+        setNewError({ message: "ユーザーの追加に失敗しました", name: "add-user-error" });
+      } finally {
+        handleClose();
+      }
+    });
   };
 
   return (
