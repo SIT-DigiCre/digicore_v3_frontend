@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "prepare": "lefthook install",
     "build": "next typegen && next build",
     "dev": "next",
     "format": "oxfmt --check",
@@ -29,6 +30,7 @@
     "@types/node": "25.1.0",
     "@types/react": "19.2.10",
     "@types/react-dom": "19.2.3",
+    "lefthook": "2.1.0",
     "openapi-typescript": "7.10.1",
     "oxfmt": "0.27.0",
     "oxlint": "1.42.0",
