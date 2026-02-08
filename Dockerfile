@@ -1,6 +1,7 @@
 FROM node:22
 
 WORKDIR /core3
+ENV LEFTHOOK=0
 RUN npm install -g pnpm@latest-10
 COPY package.json .
 COPY pnpm-lock.yaml .
