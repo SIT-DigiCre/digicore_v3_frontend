@@ -1,7 +1,6 @@
 {
   "private": true,
   "scripts": {
-    "prepare": "lefthook install",
     "build": "next typegen && next build",
     "dev": "next",
     "format": "oxfmt --check",
@@ -10,6 +9,7 @@
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "preinstall": "npx only-allow pnpm",
+    "prepare": "lefthook install",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
