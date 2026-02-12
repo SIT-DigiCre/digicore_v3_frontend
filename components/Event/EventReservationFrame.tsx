@@ -23,9 +23,9 @@ import {
 import dayjs from "dayjs";
 
 import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
 import { getTimeSpanText } from "../../utils/date-util";
 import { apiClient } from "../../utils/fetch/client";
+import { useErrorState } from "../contexts/ErrorStateContext";
 
 import type { DigicreEventReservation } from "../../interfaces/event";
 

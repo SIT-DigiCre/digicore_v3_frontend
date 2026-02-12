@@ -5,11 +5,11 @@ import { type ReactElement, type ReactNode, useMemo } from "react";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 
-import { DarkModeProvider, useDarkModeContext } from "../components/DarkModeContext";
-import { ErrorStateProvider } from "../components/ErrorStateContext";
+import { DarkModeProvider, useDarkModeContext } from "../components/contexts/DarkModeContext";
+import { ErrorStateProvider } from "../components/contexts/ErrorStateContext";
+import { PageTitleProvider } from "../components/contexts/PageTitleContext";
 import AccessControl from "../components/Home/AccessControl";
 import AppBar from "../components/Home/AppBar";
-import { PageTitleProvider } from "../components/PageTitleContext";
 import "../style/common.css";
 
 // ref: https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts#with-typescript

@@ -7,10 +7,10 @@ import { ArrowBack, ArrowForward } from "@mui/icons-material";
 import { Button, CircularProgress, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import MarkdownEditor from "../../components/Markdown/MarkdownEditor";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {

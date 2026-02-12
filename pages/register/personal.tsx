@@ -8,11 +8,11 @@ import { Box, Button, CircularProgress, Stack } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import EmergencyContactForm from "../../components/Profile/EmergencyContactForm";
 import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
 import RegisterStepLayout from "../../components/Profile/RegisterStepLayout";
 import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
 import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 

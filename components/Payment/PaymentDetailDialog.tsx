@@ -16,9 +16,9 @@ import {
 } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
 import { Payment } from "../../interfaces/payment";
 import { apiClient } from "../../utils/fetch/client";
+import { useErrorState } from "../contexts/ErrorStateContext";
 
 type PaymentDetailDialogProps = {
   payment: Payment;

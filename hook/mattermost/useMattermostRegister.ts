@@ -1,7 +1,7 @@
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import { MattermostRegistrationRequest } from "../../interfaces/api";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
-import { useErrorState } from "../useErrorState";
 
 export const useMattermostRegister = (): {
   register: (f: MattermostRegistrationRequest) => Promise<{ username: string } | false>;

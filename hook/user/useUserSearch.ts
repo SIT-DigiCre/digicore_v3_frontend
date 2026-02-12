@@ -1,9 +1,9 @@
 import { useState } from "react";
 
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import { UserProfile } from "../../interfaces/user";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
-import { useErrorState } from "../useErrorState";
 
 export const useUserSearch = () => {
   const { authState } = useAuthState();

@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 
 import Heading from "../Common/Heading";
+import { usePageTitle } from "../contexts/PageTitleContext";
 import ErrorView from "../Error/ErrorView";
-import { usePageTitle } from "../PageTitleContext";
 import Drawer from "./Drawer";
 
 const drawerWidth = 240;
