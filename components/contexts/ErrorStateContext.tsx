@@ -1,6 +1,15 @@
-import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from "react";
+import { useRouter } from "next/router";
+import {
+  type ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
-import type { ErrorState } from "../interfaces";
+import type { ErrorState } from "../../interfaces";
 
 type ErrorStateContextValue = {
   errors: ErrorState[];
@@ -13,6 +22,11 @@ const ErrorStateContext = createContext<ErrorStateContextValue | null>(null);
 
 export const ErrorStateProvider = ({ children }: { children: ReactNode }) => {
   const [errors, setErrors] = useState<ErrorState[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    setErrors([]);
+  }, [router.pathname]);
 
   const setNewError = useCallback((error: ErrorState) => {
     setErrors((prev) => {
@@ -44,8 +58,8 @@ export const ErrorStateProvider = ({ children }: { children: ReactNode }) => {
   return <ErrorStateContext.Provider value={value}>{children}</ErrorStateContext.Provider>;
 };
 
-export const useErrorStateContext = (): ErrorStateContextValue => {
+export const useErrorState = (): ErrorStateContextValue => {
   const ctx = useContext(ErrorStateContext);
-  if (!ctx) throw new Error("useErrorStateContext must be used within ErrorStateProvider");
+  if (!ctx) throw new Error("useErrorState must be used within ErrorStateProvider");
   return ctx;
 };

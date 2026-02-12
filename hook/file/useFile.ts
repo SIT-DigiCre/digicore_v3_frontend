@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import { UploadFile } from "../../interfaces/api";
 import { FileInfo, FileObject } from "../../interfaces/file";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
-import { useErrorState } from "../useErrorState";
 
 type UseFile = (fileId: string) => FileObject | undefined;
 

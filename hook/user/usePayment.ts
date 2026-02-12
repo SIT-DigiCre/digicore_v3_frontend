@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import { PaymentHistory } from "../../interfaces/form";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
-import { useErrorState } from "../useErrorState";
 
 type UsePayment = () => {
   paymentHistories: PaymentHistory[];

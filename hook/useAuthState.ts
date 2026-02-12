@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
+import { useErrorState } from "../components/contexts/ErrorStateContext";
 import { User } from "../interfaces/user";
 import { apiClient } from "../utils/fetch/client";
-import { useErrorState } from "./useErrorState";
 
 export type AuthState = {
   isLogined: boolean;

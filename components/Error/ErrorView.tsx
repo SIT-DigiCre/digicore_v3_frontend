@@ -1,6 +1,6 @@
 import { Alert, AlertTitle } from "@mui/material";
 
-import { useErrorState } from "../../hook/useErrorState";
+import { useErrorState } from "../contexts/ErrorStateContext";
 
 const ErrorView = () => {
   const { errors } = useErrorState();

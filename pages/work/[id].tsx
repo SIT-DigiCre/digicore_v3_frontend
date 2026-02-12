@@ -10,11 +10,11 @@ import ChipList from "../../components/Common/ChipList";
 import Heading from "../../components/Common/Heading";
 import { IconButtonLink } from "../../components/Common/IconButtonLink";
 import PageHead from "../../components/Common/PageHead";
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import WorkEditor from "../../components/Work/WorkEditor";
 import { WorkFileView } from "../../components/Work/WorkFileView";
 import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
 import { WorkRequest } from "../../interfaces/work";
 import { apiClient, createServerApiClient } from "../../utils/fetch/client";
 

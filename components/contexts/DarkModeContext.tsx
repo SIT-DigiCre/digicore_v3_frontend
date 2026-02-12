@@ -10,7 +10,7 @@ import {
 
 import { useMediaQuery } from "@mui/material";
 
-import type { DarkMode } from "../interfaces";
+import type { DarkMode } from "../../interfaces";
 
 type DarkModeContextValue = {
   isDarkMode: boolean;

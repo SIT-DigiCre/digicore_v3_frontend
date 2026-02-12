@@ -1,3 +1,4 @@
+import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import {
   PutBudgetAdminRequest,
   PutBudgetStatusApproveRequest,
@@ -7,7 +8,6 @@ import {
 } from "../../interfaces/budget";
 import { apiClient } from "../../utils/fetch/client";
 import { useAuthState } from "../useAuthState";
-import { useErrorState } from "../useErrorState";
 
 export const useBudgetActions = (budgetId: string) => {
   const { authState } = useAuthState();

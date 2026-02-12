@@ -17,8 +17,8 @@ import {
 } from "@mui/material";
 
 import { useAuthState } from "../../hook/useAuthState";
-import { useErrorState } from "../../hook/useErrorState";
 import { apiClient } from "../../utils/fetch/client";
+import { useErrorState } from "../contexts/ErrorStateContext";
 
 import type { BudgetClass } from "../../interfaces/budget";
 

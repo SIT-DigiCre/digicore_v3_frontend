@@ -2,7 +2,7 @@ import { Box, Button, FormControl, InputLabel, MenuItem, Select, Stack } from "@
 
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
-import { useDarkModeContext } from "../../components/DarkModeContext";
+import { useDarkModeContext } from "../../components/contexts/DarkModeContext";
 import { useAuthState } from "../../hook/useAuthState";
 import { DarkMode } from "../../interfaces";
 

@@ -6,12 +6,12 @@ import { useState } from "react";
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
+import { useErrorState } from "../../../components/contexts/ErrorStateContext";
 import { FileBrowserModal } from "../../../components/File/FileBrowser";
 import { FileUploader } from "../../../components/File/FileUploader";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useMyFiles } from "../../../hook/file/useFile";
 import { useAuthState } from "../../../hook/useAuthState";
-import { useErrorState } from "../../../hook/useErrorState";
 import { FileObject } from "../../../interfaces/file";
 import { DEFAULT_USER, User } from "../../../interfaces/user";
 import { objectEquals } from "../../../utils/common";

@@ -6,10 +6,10 @@ import { useState } from "react";
 import { Stack } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
+import { useErrorState } from "../../../components/contexts/ErrorStateContext";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import EmergencyContactForm from "../../../components/Profile/EmergencyContactForm";
 import { useAuthState } from "../../../hook/useAuthState";
-import { useErrorState } from "../../../hook/useErrorState";
 import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../../interfaces/user";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 

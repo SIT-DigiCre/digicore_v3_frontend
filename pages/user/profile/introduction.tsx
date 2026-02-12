@@ -7,10 +7,10 @@ import { Save } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 
 import Heading from "../../../components/Common/Heading";
+import { useErrorState } from "../../../components/contexts/ErrorStateContext";
 import MarkdownEditor from "../../../components/Markdown/MarkdownEditor";
 import EditorTabLayout from "../../../components/Profile/EditorTabLayout";
 import { useAuthState } from "../../../hook/useAuthState";
-import { useErrorState } from "../../../hook/useErrorState";
 import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
