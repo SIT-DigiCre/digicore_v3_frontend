@@ -9,6 +9,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import LoginIcon from "@mui/icons-material/Login";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import SettingsIcon from "@mui/icons-material/Settings";
@@ -66,6 +67,11 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
       href: "/member",
       icon: <PeopleAltIcon />,
       label: "部員一覧",
+    },
+    {
+      href: "/activity",
+      icon: <MeetingRoomIcon />,
+      label: "入退室管理",
     },
     {
       href: "/work",
