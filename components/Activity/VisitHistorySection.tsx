@@ -27,6 +27,7 @@ import {
 import dayjs from "dayjs";
 
 import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
 
 import type { ActivityHistoryUser } from "@/interfaces/activity";
 
@@ -59,25 +60,6 @@ const getPeriodLabel = (dateStr: string, period: string): string => {
   return d.format("YYYY/MM/DD");
 };
 
-const navigate = (dateStr: string, period: string, direction: -1 | 1): string => {
-  const d = dayjs(dateStr);
-  if (period === "week") return d.add(direction * 7, "day").format("YYYY-MM-DD");
-  if (period === "month") return d.add(direction, "month").format("YYYY-MM-DD");
-  return d.add(direction, "day").format("YYYY-MM-DD");
-};
-
-const isCurrentPeriod = (dateStr: string, period: string): boolean => {
-  const today = dayjs();
-  if (period === "day") return dayjs(dateStr).isSame(today, "day");
-  if (period === "week") {
-    const currentMonday = getMondayOfWeek(today.format("YYYY-MM-DD"));
-    const targetMonday = getMondayOfWeek(dateStr);
-    return currentMonday.isSame(targetMonday, "day");
-  }
-  if (period === "month") return dayjs(dateStr).isSame(today, "month");
-  return false;
-};
-
 const getTodayLabel = (period: string): string => {
   if (period === "week") return "今週";
   if (period === "month") return "今月";
@@ -101,9 +83,16 @@ const VisitHistorySection = ({
   };
 
   const handleNavigate = (direction: -1 | 1) => {
+    const d = dayjs(date);
+    const newDate =
+      period === "week"
+        ? d.add(direction * 7, "day").format("YYYY-MM-DD")
+        : period === "month"
+          ? d.add(direction, "month").format("YYYY-MM-DD")
+          : d.add(direction, "day").format("YYYY-MM-DD");
     router.push({
       pathname: `/activity/${place}`,
-      query: { date: navigate(date, period, direction), period },
+      query: { date: newDate, period },
     });
   };
 
@@ -120,14 +109,20 @@ const VisitHistorySection = ({
     });
   };
 
-  const isCurrent = isCurrentPeriod(date, period);
+  const today = dayjs();
+  const isCurrent =
+    period === "day"
+      ? dayjs(date).isSame(today, "day")
+      : period === "week"
+        ? getMondayOfWeek(today.format("YYYY-MM-DD")).isSame(getMondayOfWeek(date), "day")
+        : period === "month"
+          ? dayjs(date).isSame(today, "month")
+          : false;
 
   return (
     <Box>
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1.5 }}>
-        <Typography variant="subtitle1" fontWeight="bold">
-          訪問履歴
-        </Typography>
+        <Heading level={3}>訪問履歴</Heading>
         {currentUserId && (
           <ButtonLink
             href={`/activity/${place}/records/${currentUserId}`}

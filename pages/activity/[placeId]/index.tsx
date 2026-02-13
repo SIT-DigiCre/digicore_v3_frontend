@@ -17,6 +17,7 @@ import dayjs from "dayjs";
 import CheckInOutButton from "@/components/Activity/CheckInOutButton";
 import CurrentUsersList from "@/components/Activity/CurrentUsersList";
 import VisitHistorySection from "@/components/Activity/VisitHistorySection";
+import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
 import { createServerApiClient } from "@/utils/fetch/client";
@@ -192,9 +193,7 @@ const ActivityPage = ({
 
         <Box>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5 }}>
-            <Typography variant="subtitle1" fontWeight="bold">
-              在室中
-            </Typography>
+            <Heading level={3}>在室中</Heading>
             <Chip
               icon={<FiberManualRecordIcon sx={{ fontSize: 10 }} />}
               label={`${users.length}人`}

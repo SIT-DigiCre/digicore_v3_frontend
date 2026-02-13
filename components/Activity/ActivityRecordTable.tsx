@@ -54,11 +54,11 @@ const ActivityRecordTable = ({ records, canEdit }: ActivityRecordTableProps) => 
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>場所</TableCell>
-              <TableCell>チェックイン</TableCell>
-              <TableCell>チェックアウト</TableCell>
-              <TableCell>滞在時間</TableCell>
-              {canEdit && <TableCell />}
+              <TableCell sx={{ minWidth: 80, whiteSpace: "nowrap" }}>場所</TableCell>
+              <TableCell sx={{ minWidth: 140, whiteSpace: "nowrap" }}>チェックイン</TableCell>
+              <TableCell sx={{ minWidth: 140, whiteSpace: "nowrap" }}>チェックアウト</TableCell>
+              <TableCell sx={{ minWidth: 80, whiteSpace: "nowrap" }}>滞在時間</TableCell>
+              {canEdit && <TableCell sx={{ minWidth: 56, whiteSpace: "nowrap" }} />}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -66,27 +66,29 @@ const ActivityRecordTable = ({ records, canEdit }: ActivityRecordTableProps) => 
               const editable = dayjs(record.checkedInAt).isSame(dayjs(), "day");
               return (
                 <TableRow key={record.recordId}>
-                  <TableCell>{ACTIVITY_PLACES[record.place] ?? record.place}</TableCell>
-                  <TableCell>
+                  <TableCell sx={{ minWidth: 80, whiteSpace: "nowrap" }}>
+                    {ACTIVITY_PLACES[record.place] ?? record.place}
+                  </TableCell>
+                  <TableCell sx={{ minWidth: 140, whiteSpace: "nowrap" }}>
                     {dayjs(record.checkedInAt).format("YYYY/MM/DD HH:mm")}
                     {record.checkedInAt !== record.initialCheckedInAt && (
                       <Chip label="編集済み" size="small" variant="outlined" sx={{ ml: 1 }} />
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ minWidth: 140, whiteSpace: "nowrap" }}>
                     {record.checkedOutAt ? (
                       dayjs(record.checkedOutAt).format("YYYY/MM/DD HH:mm")
                     ) : (
                       <Chip label="在室中" size="small" color="success" />
                     )}
                   </TableCell>
-                  <TableCell>
+                  <TableCell sx={{ minWidth: 80, whiteSpace: "nowrap" }}>
                     {record.checkedOutAt
                       ? formatDuration(record.checkedInAt, record.checkedOutAt)
                       : "-"}
                   </TableCell>
                   {canEdit && (
-                    <TableCell>
+                    <TableCell sx={{ minWidth: 56, whiteSpace: "nowrap" }}>
                       {editable ? (
                         <IconButton size="small" onClick={() => setEditTarget(record)}>
                           <EditIcon fontSize="small" />
