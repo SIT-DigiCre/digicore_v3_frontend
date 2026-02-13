@@ -77,7 +77,13 @@ const ActivityRecordTable = ({ records, canEdit }: ActivityRecordTableProps) => 
                   </TableCell>
                   <TableCell sx={{ minWidth: 140, whiteSpace: "nowrap" }}>
                     {record.checkedOutAt ? (
-                      dayjs(record.checkedOutAt).format("YYYY/MM/DD HH:mm")
+                      <>
+                        {dayjs(record.checkedOutAt).format("YYYY/MM/DD HH:mm")}
+                        {record.initialCheckedOutAt != null &&
+                          record.checkedOutAt !== record.initialCheckedOutAt && (
+                            <Chip label="編集済み" size="small" variant="outlined" sx={{ ml: 1 }} />
+                          )}
+                      </>
                     ) : (
                       <Chip label="在室中" size="small" color="success" />
                     )}

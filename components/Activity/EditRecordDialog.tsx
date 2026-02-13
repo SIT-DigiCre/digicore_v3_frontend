@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import {
@@ -52,6 +52,14 @@ const EditRecordDialog = ({
   const checkInChanged = checkIn !== initialCheckIn;
   const checkOutChanged = checkOut !== initialCheckOut;
   const isPending = checkInPending || checkOutPending;
+
+  useEffect(() => {
+    if (open) {
+      setCheckIn(toDatetimeLocalValue(checkedInAt));
+      setCheckOut(checkedOutAt ? toDatetimeLocalValue(checkedOutAt) : "");
+      setValidationError("");
+    }
+  }, [open, checkedInAt, checkedOutAt]);
 
   const updateRecord = async (activityType: "checkin" | "checkout", time: string) => {
     if (!authState.token) return;
