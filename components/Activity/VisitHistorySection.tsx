@@ -44,6 +44,7 @@ const getMondayOfWeek = (dateStr: string) => {
   return d.subtract(day - 1, "day");
 };
 
+// TODO: バックエンドの実装が「指定日の1週間前の週を返す」ようになっていて分かりづらいので修正する
 const getPeriodLabel = (dateStr: string, period: string): string => {
   const d = dayjs(dateStr);
   if (period === "week") {
@@ -94,30 +95,29 @@ const VisitHistorySection = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const pushQuery = (newDate: string, newPeriod: string) => {
-    router.push({
-      pathname: `/activity/${place}`,
-      query: { date: newDate, period: newPeriod },
-    });
-  };
-
   const handlePeriodChange = (_: React.MouseEvent<HTMLElement>, newPeriod: string | null) => {
     if (!newPeriod) return;
-    pushQuery(date, newPeriod);
+    router.push({ pathname: `/activity/${place}`, query: { date, period: newPeriod } });
   };
 
   const handleNavigate = (direction: -1 | 1) => {
-    pushQuery(navigate(date, period, direction), period);
+    router.push({
+      pathname: `/activity/${place}`,
+      query: { date: navigate(date, period, direction), period },
+    });
   };
 
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value) {
-      pushQuery(e.target.value, period);
+      router.push({ pathname: `/activity/${place}`, query: { date: e.target.value, period } });
     }
   };
 
   const handleGoToToday = () => {
-    pushQuery(dayjs().format("YYYY-MM-DD"), period);
+    router.push({
+      pathname: `/activity/${place}`,
+      query: { date: dayjs().format("YYYY-MM-DD"), period },
+    });
   };
 
   const isCurrent = isCurrentPeriod(date, period);

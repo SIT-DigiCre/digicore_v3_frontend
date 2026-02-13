@@ -69,7 +69,7 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
       label: "部員一覧",
     },
     {
-      href: "/activity",
+      href: "/activity/omiya-bushitsu",
       icon: <MeetingRoomIcon />,
       label: "入退室管理",
     },

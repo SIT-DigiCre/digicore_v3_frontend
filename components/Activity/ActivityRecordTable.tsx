@@ -37,17 +37,6 @@ const formatDuration = (checkedInAt: string, checkedOutAt: string) => {
   return `${minutes}分`;
 };
 
-const isEdited = (record: ActivityRecord) => {
-  return (
-    record.checkedInAt !== record.initialCheckedInAt ||
-    record.checkedOutAt !== record.initialCheckedOutAt
-  );
-};
-
-const isToday = (record: ActivityRecord) => {
-  return dayjs(record.checkedInAt).isSame(dayjs(), "day");
-};
-
 const ActivityRecordTable = ({ records, canEdit }: ActivityRecordTableProps) => {
   const [editTarget, setEditTarget] = useState<ActivityRecord | null>(null);
 
@@ -74,13 +63,13 @@ const ActivityRecordTable = ({ records, canEdit }: ActivityRecordTableProps) => 
           </TableHead>
           <TableBody>
             {records.map((record) => {
-              const editable = isToday(record);
+              const editable = dayjs(record.checkedInAt).isSame(dayjs(), "day");
               return (
                 <TableRow key={record.recordId}>
                   <TableCell>{ACTIVITY_PLACES[record.place] ?? record.place}</TableCell>
                   <TableCell>
                     {dayjs(record.checkedInAt).format("YYYY/MM/DD HH:mm")}
-                    {isEdited(record) && (
+                    {record.checkedInAt !== record.initialCheckedInAt && (
                       <Chip label="編集済み" size="small" variant="outlined" sx={{ ml: 1 }} />
                     )}
                   </TableCell>

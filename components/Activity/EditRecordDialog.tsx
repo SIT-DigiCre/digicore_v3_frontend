@@ -86,7 +86,7 @@ const EditRecordDialog = ({
 
       removeError("edit-record-fail");
       onClose();
-      router.reload();
+      router.replace(router.asPath);
     } catch {
       setNewError({ message: "記録の更新に失敗しました", name: "edit-record-fail" });
     } finally {
