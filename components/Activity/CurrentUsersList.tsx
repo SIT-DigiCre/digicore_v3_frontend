@@ -13,12 +13,10 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import type { components } from "../../utils/fetch/api.d.ts";
-
-type User = components["schemas"]["ResGetActivityPlacePlaceCurrentObjectUser"];
+import type { ActivityCurrentUser } from "@/interfaces/activity";
 
 type CurrentUsersListProps = {
-  users: User[];
+  users: ActivityCurrentUser[];
 };
 
 const CurrentUsersList = ({ users }: CurrentUsersListProps) => {

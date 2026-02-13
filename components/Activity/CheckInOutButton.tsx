@@ -5,9 +5,9 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { Button, CircularProgress } from "@mui/material";
 
-import { useAuthState } from "../../hook/useAuthState";
-import { apiClient } from "../../utils/fetch/client";
-import { useErrorState } from "../contexts/ErrorStateContext";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import { useAuthState } from "@/hook/useAuthState";
+import { apiClient } from "@/utils/fetch/client";
 
 type CheckInOutButtonProps = {
   place: string;
