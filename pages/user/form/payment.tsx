@@ -39,12 +39,7 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
       return { props: { initialPaymentHistories: [] as PaymentHistory[] } };
     }
 
-    const histories: PaymentHistory[] = res.data.histories.map((h) => ({
-      ...h,
-      updatedAt: h.updatedAt,
-    }));
-
-    return { props: { initialPaymentHistories: histories } };
+    return { props: { initialPaymentHistories: res.data.histories } };
   } catch (error) {
     console.error("Failed to fetch payment histories:", error);
     return { props: { initialPaymentHistories: [] as PaymentHistory[] } };
@@ -88,7 +83,7 @@ const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
     removeError("payment-update-fail");
     setOpenTransferDialog(false);
     setOpenConfirmDialog(true);
-    router.replace(router.asPath);
+    await router.push(router.asPath);
   };
 
   const getStatusChip = (payment: PaymentHistory) => {
