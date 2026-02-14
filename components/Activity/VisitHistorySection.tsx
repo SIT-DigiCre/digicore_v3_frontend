@@ -251,7 +251,7 @@ const VisitHistorySection = ({
                         </Typography>
                       </Link>
                     }
-                    secondary={isMobile ? undefined : user.shortIntroduction || undefined}
+                    secondary={(!isMobile && user.shortIntroduction) || undefined}
                     sx={{ mr: 2 }}
                   />
                 </ListItem>

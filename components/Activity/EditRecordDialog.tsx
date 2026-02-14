@@ -151,9 +151,9 @@ const EditRecordDialog = ({
               fullWidth
               disabled={!checkedOutAt}
               helperText={
-                !checkedOutAt
-                  ? "チェックアウト前のため編集できません"
-                  : `元の時刻: ${dayjs(checkedOutAt).format("HH:mm")}`
+                checkedOutAt
+                  ? `元の時刻: ${dayjs(checkedOutAt).format("HH:mm")}`
+                  : "チェックアウト前のため編集できません"
               }
               slotProps={{ inputLabel: { shrink: true } }}
             />
