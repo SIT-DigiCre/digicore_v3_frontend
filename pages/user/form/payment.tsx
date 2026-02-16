@@ -21,6 +21,7 @@ import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import ProfileConfirmDialog from "@/components/Payment/ProfileConfirmDialog";
+import StatusChip from "@/components/Payment/StatusChip";
 import TransferNameDialog from "@/components/Payment/TransferNameDialog";
 import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
 import { useAuthState } from "@/hook/useAuthState";
@@ -86,13 +87,6 @@ const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
     await router.push(router.asPath);
   };
 
-  const getStatusChip = (payment: PaymentHistory) => {
-    if (payment.checked) {
-      return <Chip label="確認済み" color="success" size="small" />;
-    }
-    return <Chip label="確認待ち" color="warning" size="small" />;
-  };
-
   return (
     <>
       <PageHead title="部費振込" />
@@ -102,7 +96,7 @@ const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
           <Stack spacing={2} alignItems="center">
             <Typography variant="subtitle1">{currentYear}年度のステータス</Typography>
             {currentYearPayment ? (
-              getStatusChip(currentYearPayment)
+              <StatusChip payment={currentYearPayment} />
             ) : (
               <Chip label="未報告" color="default" size="small" />
             )}
@@ -136,7 +130,9 @@ const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
                       {payment.year}
                     </TableCell>
                     <TableCell>{payment.transferName}</TableCell>
-                    <TableCell align="right">{getStatusChip(payment)}</TableCell>
+                    <TableCell align="right">
+                      <StatusChip payment={payment} />
+                    </TableCell>
                     <TableCell align="right">
                       {new Date(payment.updatedAt).toLocaleDateString("ja")}
                     </TableCell>
