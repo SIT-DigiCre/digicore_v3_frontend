@@ -1,14 +1,11 @@
-import { useEffect, useState } from "react";
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useRouter } from "next/router";
+import { useState } from "react";
 
 import {
-  Alert,
   Box,
   Button,
-  FormControl,
-  FormHelperText,
-  Input,
-  InputLabel,
-  Modal,
+  Chip,
   Paper,
   Stack,
   Table,
@@ -17,47 +14,77 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 
-import Heading from "../../../components/Common/Heading";
-import PageHead from "../../../components/Common/PageHead";
-import TransferClubFeeView from "../../../components/Register/TransferClubFeeView";
-import { usePayment } from "../../../hook/user/usePayment";
-import { PaymentHistory } from "../../../interfaces/form";
-import { getFiscalYear } from "../../../utils/date-util";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import ProfileConfirmDialog from "@/components/Payment/ProfileConfirmDialog";
+import StatusChip from "@/components/Payment/StatusChip";
+import TransferNameDialog from "@/components/Payment/TransferNameDialog";
+import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
+import { useAuthState } from "@/hook/useAuthState";
+import { getFiscalYear } from "@/utils/date-util";
+import { apiClient, createServerApiClient } from "@/utils/fetch/client";
 
-const modalStyle = {
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  left: "50%",
-  p: 4,
-  position: "absolute" as const,
-  top: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
+import type { PaymentHistory } from "@/interfaces/form";
+
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const res = await client.GET("/user/me/payment");
+
+    if (!res.data?.histories) {
+      return { props: { initialPaymentHistories: [] as PaymentHistory[] } };
+    }
+
+    return { props: { initialPaymentHistories: res.data.histories } };
+  } catch (error) {
+    console.error("Failed to fetch payment histories:", error);
+    return { props: { initialPaymentHistories: [] as PaymentHistory[] } };
+  }
 };
 
-const PaymentPage = () => {
-  const [openModal, setOpenModal] = useState(false);
-  const { paymentHistories, updatePayment } = usePayment();
-  const [transferName, setTransferName] = useState("");
+type PaymentPageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-  const getCurrentYearPayment = (histories: PaymentHistory[]) => {
-    return histories.find((h) => h.year === getFiscalYear(new Date()));
-  };
+const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
+  const router = useRouter();
+  const { authState } = useAuthState();
+  const { setNewError, removeError } = useErrorState();
+  const [openTransferDialog, setOpenTransferDialog] = useState(false);
+  const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
 
-  useEffect(() => {
-    if (paymentHistories.length === 0) return;
-    const current = getCurrentYearPayment(paymentHistories);
-    if (current) setTransferName(current.transferName);
-  }, [paymentHistories]);
+  const currentYear = getFiscalYear(new Date());
+  const currentYearPayment = initialPaymentHistories.find((h) => h.year === currentYear);
 
-  const onSubmit = () => {
-    updatePayment(transferName).then(() => {
-      setOpenModal(false);
-      setTransferName("");
+  const handleSubmit = async (transferName: string) => {
+    if (!authState.isLogined || !authState.token) {
+      setNewError({
+        message: "ログインが必要です",
+        name: "payment-update-fail",
+      });
+      return;
+    }
+
+    const response = await apiClient.PUT("/user/me/payment", {
+      body: { transferName },
+      headers: { Authorization: `Bearer ${authState.token}` },
     });
+
+    if (response.error) {
+      setNewError({
+        message: response.error.message || "振込情報の更新に失敗しました",
+        name: "payment-update-fail",
+      });
+      return;
+    }
+
+    removeError("payment-update-fail");
+    setOpenTransferDialog(false);
+    setOpenConfirmDialog(true);
+    await router.push(router.asPath);
   };
 
   return (
@@ -65,20 +92,24 @@ const PaymentPage = () => {
       <PageHead title="部費振込" />
       <Heading level={2}>振込完了報告</Heading>
       <Stack spacing={4}>
-        <Stack spacing={2} alignItems="center" my={4}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setOpenModal(true);
-            }}
-          >
-            今年度分の{getCurrentYearPayment(paymentHistories) ? "報告修正" : "報告"}をする
-          </Button>
-        </Stack>
+        <Paper variant="outlined" sx={{ p: 3 }}>
+          <Stack spacing={2} alignItems="center">
+            <Typography variant="subtitle1">{currentYear}年度のステータス</Typography>
+            {currentYearPayment ? (
+              <StatusChip payment={currentYearPayment} />
+            ) : (
+              <Chip label="未報告" color="default" size="small" />
+            )}
+            <Button variant="contained" onClick={() => setOpenTransferDialog(true)}>
+              {currentYearPayment ? "報告を修正する" : "振込報告をする"}
+            </Button>
+          </Stack>
+        </Paper>
+
         <Box>
           <Heading level={2}>振込記録</Heading>
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 300 }} aria-label="simple table">
+            <Table sx={{ minWidth: 300 }}>
               <TableHead>
                 <TableRow>
                   <TableCell>年度</TableCell>
@@ -88,18 +119,20 @@ const PaymentPage = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {paymentHistories.map((payment) => (
+                {initialPaymentHistories.map((payment) => (
                   <TableRow
                     key={payment.year}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    sx={{
+                      "&:last-child td, &:last-child th": { border: 0 },
+                    }}
                   >
                     <TableCell component="th" scope="row">
                       {payment.year}
                     </TableCell>
-                    <TableCell component="th" scope="row">
-                      {payment.transferName}
+                    <TableCell>{payment.transferName}</TableCell>
+                    <TableCell align="right">
+                      <StatusChip payment={payment} />
                     </TableCell>
-                    <TableCell align="right">{payment.checked ? "確認" : "未確認"}</TableCell>
                     <TableCell align="right">
                       {new Date(payment.updatedAt).toLocaleDateString("ja")}
                     </TableCell>
@@ -109,42 +142,21 @@ const PaymentPage = () => {
             </Table>
           </TableContainer>
         </Box>
+
         <Box>
           <Heading level={2}>口座情報</Heading>
           <TransferClubFeeView />
         </Box>
       </Stack>
-      <Modal
-        open={openModal}
-        onClose={() => {
-          setOpenModal(false);
-        }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalStyle}>
-          <Heading level={3}>{getFiscalYear(new Date())}年度用</Heading>
-          <FormControl margin="normal">
-            <InputLabel htmlFor="name">振込名義</InputLabel>
-            <Input
-              id="name"
-              aria-describedby="name-helper-text"
-              onChange={(e) => {
-                setTransferName(e.target.value);
-              }}
-              value={transferName}
-              required
-            />
-            <FormHelperText id="name-helper-text">
-              ATMにて入力した振込名義（カタカナ）を記入してください
-            </FormHelperText>
-          </FormControl>
-          <Alert severity="warning">振込を終えた状態でこのフォームに回答してください</Alert>
-          <Button variant="contained" onClick={onSubmit}>
-            上記事項を確認し振込情報を更新する
-          </Button>
-        </Box>
-      </Modal>
+
+      <TransferNameDialog
+        open={openTransferDialog}
+        onClose={() => setOpenTransferDialog(false)}
+        onSubmit={handleSubmit}
+        initialTransferName={currentYearPayment?.transferName ?? ""}
+      />
+
+      <ProfileConfirmDialog open={openConfirmDialog} onClose={() => setOpenConfirmDialog(false)} />
     </>
   );
 };
