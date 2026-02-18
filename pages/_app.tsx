@@ -41,6 +41,9 @@ const AppRoot = ({ Component, pageProps }: AppPropsWithLayout) => {
         palette: {
           mode: isDarkMode ? "dark" : "light",
         },
+        typography: {
+          fontFamily: ["-apple-system", '"Noto Sans JP"', "sans-serif"].join(","),
+        },
       }),
     [isDarkMode],
   );
