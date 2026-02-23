@@ -5,11 +5,7 @@ import { useRouter } from "next/router";
 import { ArrowBack, School as SchoolIcon } from "@mui/icons-material";
 import {
   Avatar,
-  AvatarGroup,
   Box,
-  Card,
-  CardContent,
-  CardHeader,
   Chip,
   Container,
   Grid,
@@ -19,12 +15,11 @@ import {
 } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
-import ChipList from "../../components/Common/ChipList";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import MarkdownView from "../../components/Markdown/MarkdownView";
-import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
+import { WorkList } from "../../components/Work/WorkList";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
 
@@ -242,53 +237,7 @@ const UserProfilePage = ({
       </Container>
       <Heading level={2}>作品一覧</Heading>
       <Stack spacing={2} mt={2}>
-        <Grid container>
-          {works && works.length > 0 ? (
-            <>
-              {works.map((work) => (
-                <Grid key={work.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
-                  <Card
-                    sx={{
-                      color: "inherit",
-                      display: "inline-block",
-                      height: "100%",
-                      m: 0.5,
-                      textDecoration: "none",
-                      width: "100%",
-                    }}
-                    component={Link}
-                    href={`/work/${work.workId}`}
-                    className="clickable-gray"
-                  >
-                    <CardHeader
-                      title={work.name}
-                      avatar={
-                        <AvatarGroup>
-                          {work.authors.map((author) => (
-                            <Avatar
-                              key={author.userId}
-                              src={author.iconUrl}
-                              alt={author.username}
-                            />
-                          ))}
-                        </AvatarGroup>
-                      }
-                    ></CardHeader>
-                    <CardContent>
-                      <WorkCardPreview description={work.description} files={work.files} />
-                      {work.tags && <ChipList chipList={work.tags.map((tag) => tag.name)} />}
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </>
-          ) : (
-            <Typography my={2}>
-              作品が登録されていません。
-              <Link href="/work/">作品ページ</Link>から投稿してみましょう！
-            </Typography>
-          )}
-        </Grid>
+        <WorkList works={works} />
         {works && works.length > 0 && (
           <Stack alignItems="center">
             <Pagination

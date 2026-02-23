@@ -3,22 +3,12 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Add, FilterList } from "@mui/icons-material";
-import {
-  Avatar,
-  AvatarGroup,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Stack } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
-import ChipList from "../../components/Common/ChipList";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
-import { WorkCardPreview } from "../../components/Work/WorkCardPreview";
+import { WorkList } from "../../components/Work/WorkList";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
 
@@ -125,46 +115,7 @@ const MyWorkPage = ({
         </ButtonLink>
       </Stack>
       <Stack spacing={2}>
-        <Grid container>
-          {works && works.length > 0 ? (
-            <>
-              {works.map((w) => (
-                <Grid key={w.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
-                  <Card
-                    sx={{
-                      color: "inherit",
-                      display: "inline-block",
-                      height: "100%",
-                      m: 0.5,
-                      textDecoration: "none",
-                      width: "100%",
-                    }}
-                    component={Link}
-                    href={`/work/${w.workId}`}
-                    className="clickable-gray"
-                  >
-                    <CardHeader
-                      title={w.name}
-                      avatar={
-                        <AvatarGroup>
-                          {w.authors.map((a) => (
-                            <Avatar key={a.userId} src={a.iconUrl} alt={a.username} />
-                          ))}
-                        </AvatarGroup>
-                      }
-                    ></CardHeader>
-                    <CardContent>
-                      <WorkCardPreview description={w.description} files={w.files} />
-                      {w.tags && <ChipList chipList={w.tags.map((t) => t.name)} />}
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </>
-          ) : (
-            <Typography my={2}>Workがねぇ...</Typography>
-          )}
-        </Grid>
+        <WorkList works={works} />
         {works && works.length > 0 && (
           <Stack alignItems="center">
             <Pagination
