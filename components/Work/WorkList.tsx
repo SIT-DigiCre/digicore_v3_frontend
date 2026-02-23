@@ -1,6 +1,14 @@
 import Link from "next/link";
 
-import { Avatar, AvatarGroup, Card, CardContent, CardHeader, Grid, Typography } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Typography,
+} from "@mui/material";
 
 import ChipList from "../Common/ChipList";
 import { WorkCardPreview } from "./WorkCardPreview";

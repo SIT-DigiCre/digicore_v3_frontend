@@ -2,16 +2,7 @@ import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
 
 import { ArrowBack, School as SchoolIcon } from "@mui/icons-material";
-import {
-  Avatar,
-  Box,
-  Chip,
-  Container,
-  Grid,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Avatar, Box, Chip, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
