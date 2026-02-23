@@ -5,7 +5,6 @@ import { Avatar, AvatarGroup, Card, CardContent, CardHeader, Grid, Typography } 
 import ChipList from "../Common/ChipList";
 import { WorkCardPreview } from "./WorkCardPreview";
 
-import type { ReactNode } from "react";
 import type { WorkDetail } from "../../interfaces/work";
 
 interface WorkListProps {

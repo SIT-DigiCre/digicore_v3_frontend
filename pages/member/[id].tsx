@@ -1,5 +1,4 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { ArrowBack, School as SchoolIcon } from "@mui/icons-material";
