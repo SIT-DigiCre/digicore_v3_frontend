@@ -6,12 +6,14 @@ import { FilterList } from "@mui/icons-material";
 import AddIcon from "@mui/icons-material/Add";
 import { Stack } from "@mui/material";
 
+import { Grid, Typography } from "@mui/material";
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { WorkList } from "../../components/Work/WorkList";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
+
 
 const ITEMS_PER_PAGE = 10;
 
@@ -105,7 +107,13 @@ const WorkIndexPage = ({
             投稿する
           </ButtonLink>
         </Stack>
-        <WorkList works={works} />
+        <Grid container>
+          {works && works.length > 0 ? (
+            <WorkList works={works} />
+          ) : (
+            <Typography my={2}>Workがねぇ...</Typography>
+          )}
+        </Grid>
         {works && works.length > 0 && (
           <Stack alignItems="center">
             <Pagination

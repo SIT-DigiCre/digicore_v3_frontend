@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { ArrowBack, School as SchoolIcon } from "@mui/icons-material";
 import { Avatar, Box, Chip, Container, Grid, Paper, Stack, Typography } from "@mui/material";
 
+import Link from "next/link";
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
@@ -211,7 +212,13 @@ const UserProfilePage = ({
       </Container>
       <Heading level={2}>新着の作品</Heading>
       <Stack spacing={2} mt={2}>
-        <WorkList works={works} />
+        <Grid container>
+          {works && works.length > 0 ? (
+            <WorkList works={works} />
+          ) : (
+            <Typography my={2}>まだ作品が投稿されていません。</Typography>
+          )}
+        </Grid>
       </Stack>
     </>
   );
