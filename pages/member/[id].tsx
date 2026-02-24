@@ -7,15 +7,12 @@ import { Avatar, Box, Chip, Container, Grid, Paper, Stack, Typography } from "@m
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
-import Pagination from "../../components/Common/Pagination";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import { WorkList } from "../../components/Work/WorkList";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
-
-const ITEMS_PER_PAGE = 10;
 
 function normalizeQueryParam(value: string | string[] | undefined): string | undefined {
   if (value === undefined) return undefined;
@@ -34,10 +31,6 @@ export const getServerSideProps = async ({
   const idParam = params?.id;
   const userId = typeof idParam === "string" ? idParam : "";
   if (!userId) return { notFound: true };
-
-  const rawPage = query.page ? parseInt(normalizeQueryParam(query.page) ?? "1", 10) : 1;
-  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
-  const offset = (page - 1) * ITEMS_PER_PAGE;
 
   const client = createServerApiClient(req);
 
@@ -61,7 +54,6 @@ export const getServerSideProps = async ({
         params: {
           query: {
             authorId: userId,
-            offset,
           },
         },
       }),
@@ -72,11 +64,9 @@ export const getServerSideProps = async ({
     }
 
     const seed = normalizeQueryParam(query.seed);
-    const pageParam = normalizeQueryParam(query.page);
+    const page = normalizeQueryParam(query.page);
 
     const works = worksRes.data?.works ?? [];
-    const hasNextPage = works.length === ITEMS_PER_PAGE;
-    const hasPreviousPage = page > 1;
 
     const workDetails = await Promise.all(
       works.map(async (work) => {
@@ -101,12 +91,9 @@ export const getServerSideProps = async ({
     return {
       props: {
         introduction: introductionRes.data?.introduction || null,
-        page: pageParam ?? null,
+        page: page ?? null,
         profile: profileRes.data,
         seed: seed ?? null,
-        currentPage: page,
-        hasNextPage,
-        hasPreviousPage,
         works: workDetails,
       },
     };
@@ -122,9 +109,6 @@ const UserProfilePage = ({
   seed,
   page,
   works,
-  currentPage,
-  hasNextPage,
-  hasPreviousPage,
 }: PageProps) => {
   const router = useRouter();
   const backUrl =
@@ -225,27 +209,9 @@ const UserProfilePage = ({
           )}
         </Stack>
       </Container>
-      <Heading level={2}>作品一覧</Heading>
+      <Heading level={2}>新着の作品</Heading>
       <Stack spacing={2} mt={2}>
         <WorkList works={works} />
-        {works && works.length > 0 && (
-          <Stack alignItems="center">
-            <Pagination
-              page={currentPage}
-              hasPreviousPage={hasPreviousPage}
-              hasNextPage={hasNextPage}
-              onChange={(nextPage) =>
-                router.push({
-                  pathname: `/member/${profile.userId}`,
-                  query: {
-                    ...(seed != null && seed !== "" ? { seed } : {}),
-                    page: nextPage,
-                  },
-                })
-              }
-            />
-          </Stack>
-        )}
       </Stack>
     </>
   );
