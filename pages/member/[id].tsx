@@ -9,8 +9,8 @@ import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import MarkdownView from "../../components/Markdown/MarkdownView";
-import { WorkList } from "../../components/Work/WorkList";
 import { WorkDetail } from "../../interfaces/work";
+import { WorkCard } from "../../components/Work/WorkCard";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -208,7 +208,9 @@ const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps
       <Stack spacing={2} mt={2}>
         <Grid container>
           {works && works.length > 0 ? (
-            <WorkList works={works} />
+            works.map((work) => (
+              <WorkCard key={work.workId} work={work} />
+            ))
           ) : (
             <Typography my={2}>まだ作品が投稿されていません。</Typography>
           )}

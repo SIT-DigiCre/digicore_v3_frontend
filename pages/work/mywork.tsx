@@ -9,9 +9,9 @@ import { Grid, Typography } from "@mui/material";
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
-import { WorkList } from "../../components/Work/WorkList";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
+import { WorkCard } from "../../components/Work/WorkCard";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -118,7 +118,9 @@ const MyWorkPage = ({
       <Stack spacing={2}>
         <Grid container>
           {works && works.length > 0 ? (
-            <WorkList works={works} />
+            works.map((work) => (
+              <WorkCard key={work.workId} work={work} />
+            ))
           ) : (
             <Typography my={2}>
               作品が登録されていません。
