@@ -106,9 +106,7 @@ const WorkIndexPage = ({
         </Stack>
         <Grid container>
           {works && works.length > 0 ? (
-            works.map((work) => (
-              <WorkCard key={work.workId} work={work} />
-            ))
+            works.map((work) => <WorkCard key={work.workId} work={work} />)
           ) : (
             <Typography my={2}>Workがねぇ...</Typography>
           )}

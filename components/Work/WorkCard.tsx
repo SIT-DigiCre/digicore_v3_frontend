@@ -1,21 +1,13 @@
 import Link from "next/link";
+
+import { Avatar, AvatarGroup, Card, CardContent, CardHeader, Grid } from "@mui/material";
+
 import { WorkDetail } from "../../interfaces/work";
-
-import {
-  Avatar,
-  AvatarGroup,
-  Card,
-  CardContent,
-  CardHeader,
-  Grid
-} from "@mui/material";
-
 import ChipList from "../Common/ChipList";
 import { WorkCardPreview } from "./WorkCardPreview";
 
-
 interface WorkCardProps {
-  work: WorkDetail
+  work: WorkDetail;
 }
 
 export const WorkCard = ({ work }: WorkCardProps) => {

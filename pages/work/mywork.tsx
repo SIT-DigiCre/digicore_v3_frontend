@@ -3,15 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { Add, FilterList } from "@mui/icons-material";
-import { Stack } from "@mui/material";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
+import { WorkCard } from "../../components/Work/WorkCard";
 import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
-import { WorkCard } from "../../components/Work/WorkCard";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -118,9 +117,7 @@ const MyWorkPage = ({
       <Stack spacing={2}>
         <Grid container>
           {works && works.length > 0 ? (
-            works.map((work) => (
-              <WorkCard key={work.workId} work={work} />
-            ))
+            works.map((work) => <WorkCard key={work.workId} work={work} />)
           ) : (
             <Typography my={2}>
               作品が登録されていません。
