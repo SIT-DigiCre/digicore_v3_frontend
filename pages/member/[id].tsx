@@ -7,6 +7,8 @@ import { ButtonLink } from "../../components/Common/ButtonLink";
 import Heading from "../../components/Common/Heading";
 import PageHead from "../../components/Common/PageHead";
 import MarkdownView from "../../components/Markdown/MarkdownView";
+import { WorkCard } from "../../components/Work/WorkCard";
+import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
@@ -32,7 +34,7 @@ export const getServerSideProps = async ({
   const client = createServerApiClient(req);
 
   try {
-    const [profileRes, introductionRes] = await Promise.all([
+    const [profileRes, introductionRes, worksRes] = await Promise.all([
       client.GET("/user/{userId}", {
         params: {
           path: {
@@ -47,6 +49,13 @@ export const getServerSideProps = async ({
           },
         },
       }),
+      client.GET("/work/work", {
+        params: {
+          query: {
+            authorId: userId,
+          },
+        },
+      }),
     ]);
 
     if (!profileRes.data) {
@@ -56,12 +65,35 @@ export const getServerSideProps = async ({
     const seed = normalizeQueryParam(query.seed);
     const page = normalizeQueryParam(query.page);
 
+    const works = worksRes.data?.works ?? [];
+
+    const workDetails = await Promise.all(
+      works.map(async (work) => {
+        const detailRes = await client.GET("/work/work/{workId}", {
+          params: {
+            path: {
+              workId: work.workId,
+            },
+          },
+        });
+        if (detailRes.data) {
+          return detailRes.data;
+        }
+        return {
+          ...work,
+          description: "",
+          files: [],
+        } as WorkDetail;
+      }),
+    );
+
     return {
       props: {
         introduction: introductionRes.data?.introduction || null,
         page: page ?? null,
         profile: profileRes.data,
         seed: seed ?? null,
+        works: workDetails,
       },
     };
   } catch (error) {
@@ -70,7 +102,7 @@ export const getServerSideProps = async ({
   }
 };
 
-const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
+const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps) => {
   const backUrl =
     seed != null && seed !== "" ? `/member/?seed=${seed}&page=${page ?? "1"}` : "/member/";
 
@@ -169,6 +201,16 @@ const UserProfilePage = ({ profile, introduction, seed, page }: PageProps) => {
           )}
         </Stack>
       </Container>
+      <Heading level={2}>新着の作品</Heading>
+      <Stack spacing={2} mt={2}>
+        <Grid container>
+          {works && works.length > 0 ? (
+            works.map((work) => <WorkCard key={work.workId} work={work} />)
+          ) : (
+            <Typography my={2}>まだ作品が投稿されていません。</Typography>
+          )}
+        </Grid>
+      </Stack>
     </>
   );
 };
