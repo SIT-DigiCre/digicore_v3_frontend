@@ -1,4 +1,4 @@
-FROM node:22
+FROM node:24
 
 WORKDIR /core3
 RUN npm install -g pnpm@latest-10
