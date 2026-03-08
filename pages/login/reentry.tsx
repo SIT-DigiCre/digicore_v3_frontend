@@ -53,7 +53,6 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
     isPendingReentryMessage(statusMessage) ? statusMessage : "",
   );
 
-  const showPaymentGuide = pendingMessage !== "" && !showSubmittedDialog;
   const isPending = pendingMessage !== "";
 
   const handleSubmit = async () => {
@@ -122,29 +121,6 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
     });
   };
 
-  if (showPaymentGuide) {
-    return (
-      <>
-        <PageHead title="再入部申請" />
-        <Stack spacing={3}>
-          <Heading level={2}>再入部申請を受け付けました</Heading>
-          <Typography>
-            申請内容を管理者が確認中です。確認が完了するまで、再申請はできません。
-          </Typography>
-          {pendingMessage && <Alert severity="info">{pendingMessage}</Alert>}
-          {reentryId && (
-            <Typography color="text.secondary" variant="body2">
-              申請ID: {reentryId}
-            </Typography>
-          )}
-          <ButtonLink href="/login" variant="outlined">
-            ログインページに戻る
-          </ButtonLink>
-        </Stack>
-      </>
-    );
-  }
-
   return (
     <>
       <PageHead title="再入部申請" />
@@ -157,30 +133,40 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
           このフォームは、部費未納で無効化された方と、休学中から復帰する方の再入部申請に対応しています。
           再入部申請はユーザーごとに最大2回までです。
         </Alert>
+        {pendingMessage && <Alert severity="info">{pendingMessage}</Alert>}
+        {isPending && (
+          <Typography color="text.secondary" variant="body2">
+            申請内容を管理者が確認中です。確認が完了するまで、再申請はできません。
+          </Typography>
+        )}
 
         <Paper variant="outlined" sx={{ p: 3 }}>
           <Stack spacing={2}>
             <Typography variant="subtitle1">再入部申請フォーム</Typography>
-            <TextField
-              label="振込名義"
-              helperText="ATM等で入力した振込名義（カタカナ）を入力してください"
-              value={transferName}
-              onChange={(e) => setTransferName(e.target.value)}
-              required
-              fullWidth
-              disabled={isSubmitting}
-            />
-            <Alert severity="warning">振込を終えたあとに申請してください。</Alert>
-            <Box textAlign="end">
-              <Button
-                variant="contained"
-                disabled={isSubmitting || transferName.trim() === ""}
-                onClick={handleSubmit}
-                startIcon={isSubmitting ? <CircularProgress size={18} /> : <SendIcon />}
-              >
-                再入部申請を送信する
-              </Button>
-            </Box>
+            {!isPending && (
+              <>
+                <TextField
+                  label="振込名義"
+                  helperText="ATM等で入力した振込名義（カタカナ）を入力してください"
+                  value={transferName}
+                  onChange={(e) => setTransferName(e.target.value)}
+                  required
+                  fullWidth
+                  disabled={isSubmitting}
+                />
+                <Alert severity="warning">振込を終えたあとに申請してください。</Alert>
+                <Box textAlign="end">
+                  <Button
+                    variant="contained"
+                    disabled={isSubmitting || transferName.trim() === ""}
+                    onClick={handleSubmit}
+                    startIcon={isSubmitting ? <CircularProgress size={18} /> : <SendIcon />}
+                  >
+                    再入部申請を送信する
+                  </Button>
+                </Box>
+              </>
+            )}
           </Stack>
         </Paper>
 
