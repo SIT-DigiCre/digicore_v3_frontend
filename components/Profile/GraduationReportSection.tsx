@@ -29,8 +29,7 @@ const GraduationReportSection = () => {
   const schoolGrade = authState.user?.schoolGrade ?? 0;
   const isGraduated = authState.user?.isGraduated ?? false;
   const canReport = schoolGrade >= 4;
-  const canSubmit =
-    authState.isLogined && !!authState.token && !isGraduated && canReport;
+  const canSubmit = authState.isLogined && !!authState.token && !isGraduated && canReport;
 
   const handleGraduatedReport = () => {
     if (isGraduated) {
