@@ -1,65 +1,10 @@
-import Link from "next/link";
-
 import { CurrencyYen, Groups, HowToReg, ReceiptLong } from "@mui/icons-material";
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  Grid,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 
+import AdminMenuCard from "@/components/Admin/AdminMenuCard";
 import PageHead from "@/components/Common/PageHead";
 import { useAuthState } from "@/hook/useAuthState";
 import { GRANT_BUDGET_ADMIN, GRANT_GROUP_ADMIN, GRANT_PAYMENT_ADMIN } from "@/utils/auth/grants";
-
-type AdminMenuCardProps = {
-  href: string;
-  icon: typeof SvgIcon;
-  title: string;
-  description: string;
-};
-
-const AdminMenuCard = ({ href, icon: Icon, title, description }: AdminMenuCardProps) => (
-  <Grid size={{ md: 4, sm: 6, xs: 12 }}>
-    <Card
-      sx={{
-        "&:hover": { boxShadow: 6 },
-        height: "100%",
-        transition: "box-shadow 0.2s",
-      }}
-    >
-      <CardActionArea component={Link} href={href} sx={{ height: "100%", p: 1 }}>
-        <CardContent>
-          <Box
-            sx={{
-              alignItems: "center",
-              bgcolor: "primary.main",
-              borderRadius: 2,
-              color: "primary.contrastText",
-              display: "flex",
-              height: 56,
-              justifyContent: "center",
-              mb: 2,
-              width: 56,
-            }}
-          >
-            <Icon fontSize="large" />
-          </Box>
-          <Typography variant="h6" fontWeight="bold" gutterBottom>
-            {title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            {description}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
-  </Grid>
-);
 
 const AdminPage = () => {
   const { authState } = useAuthState();
