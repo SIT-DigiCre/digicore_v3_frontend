@@ -2,7 +2,7 @@ import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useMemo, useState, useTransition } from "react";
 
-import { ArrowBack } from "@mui/icons-material";
+import { ArrowBack, Check, Close } from "@mui/icons-material";
 import {
   Button,
   Chip,
@@ -77,6 +77,7 @@ const AdminReentryPage = ({
 
   const handleReview = async (status: "approved" | "rejected") => {
     if (!targetReentry) return;
+    if (isSubmitting) return;
     if (!authState.token) {
       setNewError({
         message: "ログイン情報が見つかりません。再度ログインしてください。",
@@ -86,32 +87,44 @@ const AdminReentryPage = ({
     }
 
     startSubmittingTransition(async () => {
-      const response = await apiClient.PUT("/admin/reentry/{reentryId}", {
-        body: {
-          note: note.trim() === "" ? undefined : note.trim(),
-          status,
-        },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
-        params: {
-          path: {
-            reentryId: targetReentry.reentryId,
+      try {
+        const response = await apiClient.PUT("/admin/reentry/{reentryId}", {
+          body: {
+            note: note.trim() === "" ? undefined : note.trim(),
+            status,
           },
-        },
-      });
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+          params: {
+            path: {
+              reentryId: targetReentry.reentryId,
+            },
+          },
+        });
 
-      if (response.error) {
+        if (response.error) {
+          setNewError({
+            message: response.error.message || "再入部申請の更新に失敗しました",
+            name: "reentry-review-fail",
+          });
+          return;
+        }
+
+        removeError("reentry-review-fail");
+        startSubmittingTransition(() => {
+          setTargetReentry(null);
+          setNote("");
+        });
+        await router.push(router.asPath);
+      } catch (error) {
+        const message =
+          error instanceof Error ? error.message : "再入部申請の更新中にエラーが発生しました";
         setNewError({
-          message: response.error.message || "再入部申請の更新に失敗しました",
+          message,
           name: "reentry-review-fail",
         });
-        return;
       }
-
-      removeError("reentry-review-fail");
-      handleCloseDialog();
-      await router.push(router.asPath);
     });
   };
 
@@ -201,15 +214,21 @@ const AdminReentryPage = ({
           <Button onClick={handleCloseDialog} disabled={isSubmitting}>
             キャンセル
           </Button>
-          <Button color="error" onClick={() => handleReview("rejected")} disabled={isSubmitting}>
-            {isSubmitting ? <CircularProgress size={18} /> : "却下する"}
+          <Button
+            color="error"
+            onClick={() => handleReview("rejected")}
+            disabled={isSubmitting}
+            startIcon={isSubmitting ? <CircularProgress size={18} /> : <Close />}
+          >
+            却下する
           </Button>
           <Button
             variant="contained"
             onClick={() => handleReview("approved")}
             disabled={isSubmitting}
+            startIcon={isSubmitting ? <CircularProgress size={18} /> : <Check />}
           >
-            {isSubmitting ? <CircularProgress size={18} /> : "承認する"}
+            承認する
           </Button>
         </DialogActions>
       </Dialog>

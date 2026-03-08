@@ -18,6 +18,7 @@ import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
+import { getTokenFromCookie } from "@/utils/auth/token";
 import { apiClient } from "@/utils/fetch/client";
 
 type ReentryPageProps = {
@@ -27,12 +28,6 @@ type ReentryPageProps = {
 export const getServerSideProps: GetServerSideProps<ReentryPageProps> = async ({ query }) => {
   const statusMessage = typeof query.message === "string" ? query.message : "";
   return { props: { statusMessage } };
-};
-
-const getJwtFromCookie = (): string | null => {
-  if (typeof document === "undefined") return null;
-  const jwtCookie = document.cookie.split("; ").find((row) => row.startsWith("jwt="));
-  return jwtCookie ? jwtCookie.replace(/^jwt=/, "") : null;
 };
 
 const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
@@ -47,6 +42,8 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
   const showPaymentGuide = reentryId !== null || pendingMessage !== "";
 
   const handleSubmit = async () => {
+    if (isSubmitting) return;
+
     if (!transferName.trim()) {
       setNewError({
         message: "振込名義を入力してください",
@@ -55,8 +52,8 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
       return;
     }
 
-    const jwt = getJwtFromCookie();
-    if (!jwt) {
+    const token = getTokenFromCookie();
+    if (!token) {
       setNewError({
         message: "ログイン状態を確認できません。再度ログインしてください。",
         name: "reentry-request-fail",
@@ -65,36 +62,47 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
     }
 
     startSubmittingTransition(async () => {
-      const response = await apiClient.PUT("/user/me/reentry", {
-        body: {
-          transferName: transferName.trim(),
-        },
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      });
+      try {
+        const response = await apiClient.PUT("/user/me/reentry", {
+          body: {
+            transferName: transferName.trim(),
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-      if (response.error) {
-        const message = response.error.message || "再入部申請に失敗しました";
-        if (
-          message.includes("未処理の再入部申請があります") ||
-          message.includes("再入部申請の確認中です")
-        ) {
-          removeError("reentry-request-fail");
-          setPendingMessage(message);
+        if (response.error) {
+          const message = response.error.message || "再入部申請に失敗しました";
+          if (
+            message.includes("未処理の再入部申請があります") ||
+            message.includes("再入部申請の確認中です")
+          ) {
+            removeError("reentry-request-fail");
+            startSubmittingTransition(() => {
+              setPendingMessage(message);
+            });
+            return;
+          }
+
+          setNewError({
+            message,
+            name: "reentry-request-fail",
+          });
           return;
         }
 
+        removeError("reentry-request-fail");
+        startSubmittingTransition(() => {
+          setPendingMessage("");
+          setReentryId(response.data?.reentryId ?? "");
+        });
+      } catch {
         setNewError({
-          message,
+          message: "再入部申請に失敗しました",
           name: "reentry-request-fail",
         });
-        return;
       }
-
-      removeError("reentry-request-fail");
-      setPendingMessage("");
-      setReentryId(response.data?.reentryId ?? "");
     });
   };
 
