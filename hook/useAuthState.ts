@@ -1,18 +1,20 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useErrorState } from "../components/contexts/ErrorStateContext";
-import { User } from "../interfaces/user";
-import { apiClient } from "../utils/fetch/client";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import { User } from "@/interfaces/user";
+import { apiClient } from "@/utils/fetch/client";
 
 export type AuthState = {
   isLogined: boolean;
   isLoading: boolean;
+  grants: string[];
   user: User | undefined;
   token: string | undefined;
 };
 
 const DEFAULT_AUTH_STATE: AuthState = {
+  grants: [],
   isLoading: true,
   isLogined: false,
   token: undefined,
@@ -33,28 +35,51 @@ export const useAuthState: UseAuthState = () => {
   const isPublicPage =
     router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
+  const resetAuth = () => {
+    setAuth({
+      grants: [],
+      isLoading: false,
+      isLogined: false,
+      token: undefined,
+      user: undefined,
+    });
+  };
+
   const getUserInfo = async (token: string, forceRefresh: boolean): Promise<User | null> => {
     try {
-      const res = await apiClient.GET("/user/me", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      if (!res.data) throw new Error("No data");
+      const headers = {
+        Authorization: "Bearer " + token,
+      };
+      const [userRes, grantsRes] = await Promise.all([
+        apiClient.GET("/user/me", {
+          headers,
+        }),
+        apiClient.GET("/user/me/grants", {
+          headers,
+        }),
+      ]);
+      if (!userRes.data || userRes.error) throw new Error("Failed to fetch user");
+      if (!grantsRes.data || grantsRes.error) throw new Error("Failed to fetch grants");
+
+      const grants = Array.from(
+        new Set(grantsRes.data.grants.map((grant) => grant.trim()).filter((grant) => grant !== "")),
+      );
+
       setAuth((prev) => {
         if (prev.isLogined && !forceRefresh) return prev;
         return {
+          grants,
           isLoading: false,
           isLogined: true,
           token,
-          user: res.data,
+          user: userRes.data,
         };
       });
       removeError("autologin-fail");
-      return res.data;
+      return userRes.data;
     } catch {
+      resetAuth();
       if (!isPublicPage) {
-        setAuth({ isLoading: false, isLogined: false, token: undefined, user: undefined });
         router.push("/login");
       }
     }
@@ -74,12 +99,7 @@ export const useAuthState: UseAuthState = () => {
   };
 
   const logout = () => {
-    setAuth({
-      isLoading: false,
-      isLogined: false,
-      token: undefined,
-      user: undefined,
-    });
+    resetAuth();
     document.cookie = "jwt=; path=/; max-age=0";
     router.push("/login");
   };
@@ -95,7 +115,7 @@ export const useAuthState: UseAuthState = () => {
   useEffect(() => {
     const token = getToken();
     if (!token) {
-      setAuth((prev) => ({ ...prev, isLoading: false }));
+      setAuth((prev) => ({ ...prev, grants: [], isLoading: false }));
       return;
     }
     getUserInfo(token, false);

@@ -7,14 +7,14 @@ export type User = {
   discordUserId: string;
   shortIntroduction: string;
   activeLimit?: string;
-  isAdmin: boolean;
+  claims?: string[];
 };
 
 export const DEFAULT_USER: User = {
   activeLimit: "",
+  claims: [],
   discordUserId: "",
   iconUrl: "",
-  isAdmin: false,
   schoolGrade: 0,
   shortIntroduction: "",
   studentNumber: "",
@@ -41,7 +41,7 @@ export type UserPrivateProfile = {
   parentFirstName: string;
   parentHomephoneNumber: string;
   parentLastName: string;
-  parentName: string;
+  parentName?: string;
   phoneNumber: string;
 };
 

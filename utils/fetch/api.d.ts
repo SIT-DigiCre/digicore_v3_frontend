@@ -615,6 +615,45 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/me/graduated": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Set my graduated status */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success update my profile */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMe"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/user/me/discord": {
         parameters: {
             query?: never;
@@ -894,6 +933,88 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/me/grants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get my available grants from claims */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my grants */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeGrants"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/user/me/reentry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description 再入部申請（振込報告と同時） */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description 再入部申請 */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutUserMeReentry"];
+                };
+            };
+            responses: {
+                /** @description Success create reentry request */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeReentryObjectReentry"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/payment": {
         parameters: {
             query?: never;
@@ -1076,7 +1197,35 @@ export interface paths {
             };
         };
         put?: never;
-        post?: never;
+        /** @description Post event */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description Create event */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostEventEvent"];
+                };
+            };
+            responses: {
+                /** @description Create event */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostEventEvent"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
         delete?: never;
         options?: never;
         head?: never;
@@ -1116,7 +1265,38 @@ export interface paths {
                 500: components["responses"]["InternalServer"];
             };
         };
-        put?: never;
+        /** @description Update event */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Update event */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostEventEvent"];
+                };
+            };
+            responses: {
+                /** @description Success update event */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostEventEvent"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
         post?: never;
         delete?: never;
         options?: never;
@@ -1802,6 +1982,49 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/group/admin": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Create new group with any claim. infra権限を持つユーザーが任意のclaimのグループを作成可能 */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostGroupAdmin"];
+                };
+            };
+            responses: {
+                /** @description Success create admin group */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResPostGroup"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/group/{groupId}": {
         parameters: {
             query?: never;
@@ -2264,7 +2487,7 @@ export interface paths {
             cookie?: never;
         };
         get?: never;
-        /** @description Update budget by admin */
+        /** @description Update budget by account role */
         put: {
             parameters: {
                 query?: never;
@@ -2340,6 +2563,72 @@ export interface paths {
                 500: components["responses"]["InternalServer"];
             };
         };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/inactive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description Set inactive members is_member=false in bulk */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/change-student-number": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description ユーザーの学籍番号を更新する */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description 更新対象ユーザーと更新後学籍番号 */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutAdminChangeStudentNumber"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2625,6 +2914,225 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/me/grade-update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description 自分の学年補正申請一覧の取得 */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get my grade update requests */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeGradeUpdate"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        /** @description 学年補正申請の作成 */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            /** @description 学年補正申請 */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPostUserMeGradeUpdate"];
+                };
+            };
+            responses: {
+                /** @description Success create grade update request */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetUserMeGradeUpdateObjectGradeUpdate"];
+                    };
+                };
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/grade-update": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description 承認待ち学年補正申請一覧の取得（管理者用） */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get pending grade update requests */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetAdminGradeUpdate"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/grade-update/{gradeUpdateId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description 学年補正申請の承認/却下（管理者用） */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    gradeUpdateId: string;
+                };
+                cookie?: never;
+            };
+            /** @description 承認/却下リクエスト */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutAdminGradeUpdateGradeUpdateId"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reentry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description 承認待ち再入部申請一覧の取得（管理者用） */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get pending reentry requests */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetAdminReentry"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/admin/reentry/{reentryId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description 再入部申請の承認/却下（管理者用） */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    reentryId: string;
+                };
+                cookie?: never;
+            };
+            /** @description 承認/却下リクエスト */
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ReqPutAdminReentryReentryId"];
+                };
+            };
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                400: components["responses"]["BadRequest"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -2666,7 +3174,10 @@ export interface components {
         ResGetUserObjectUser: {
             userId: string;
             username: string;
+            schoolGrade: number;
             iconUrl: string;
+            isGraduated: boolean;
+            isMember: boolean;
             shortIntroduction: string;
         };
         ResGetUserUserId: {
@@ -2678,6 +3189,8 @@ export interface components {
             discordUserId: string;
             shortIntroduction: string;
             activeLimit: string;
+            isGraduated: boolean;
+            isMember: boolean;
         };
         ResGetUserUserIdIntroduction: {
             introduction: string;
@@ -2691,7 +3204,9 @@ export interface components {
             discordUserId: string;
             shortIntroduction: string;
             activeLimit: string;
-            isAdmin: boolean;
+            isGraduated: boolean;
+            isMember: boolean;
+            claims: string[];
         };
         ReqPutUserMe: {
             username: string;
@@ -2713,7 +3228,6 @@ export interface components {
             isMale: boolean;
             phoneNumber: string;
             address: string;
-            parentName: string;
             parentLastName: string;
             parentFirstName: string;
             parentCellphoneNumber: string;
@@ -2728,7 +3242,6 @@ export interface components {
             isMale: boolean;
             phoneNumber: string;
             address: string;
-            parentName?: string;
             parentLastName?: string;
             parentFirstName?: string;
             parentCellphoneNumber: string;
@@ -2744,8 +3257,21 @@ export interface components {
             checked: boolean;
             updatedAt: string;
         };
+        ResGetUserMeGrants: {
+            /** @description claim 由来の利用可能機能。infra: group_admin/force_checkout/mail_broadcast/activity_record_edit_other, account: budget_admin/payment_admin */
+            grants: string[];
+        };
         ReqPutUserMePayment: {
             transferName: string;
+        };
+        ReqPutUserMeReentry: {
+            transferName: string;
+        };
+        ResGetUserMeReentryObjectReentry: {
+            reentryId: string;
+            status: string;
+            createdAt: string;
+            updatedAt: string;
         };
         ResGetUserMeDiscord: {
             url: string;
@@ -2817,6 +3343,18 @@ export interface components {
             comment: string;
             url: string;
         };
+        ReqPostEventEvent: {
+            name: string;
+            description: string;
+            calendar_view: boolean;
+        };
+        ResPostEventEvent: {
+            /** Format: uuid */
+            event_id: string;
+            name: string;
+            description: string;
+            calendar_view: boolean;
+        };
         ResGetStorageMyfile: {
             files: components["schemas"]["ResGetStorageMyfileObjectFile"][];
         };
@@ -2860,6 +3398,11 @@ export interface components {
         ResGetWorkWorkObjectWork: {
             workId: string;
             name: string;
+            description: string;
+            firstFile: {
+                fileId: string;
+                name: string;
+            } | null;
             authors: components["schemas"]["ResGetWorkWorkObjectWorkObjectAuthor"][];
             tags: components["schemas"]["ResGetWorkWorkObjectWorkObjectTag"][];
         };
@@ -2975,7 +3518,12 @@ export interface components {
             name: string;
             description: string;
             joinable: boolean;
-            isAdminGroup: boolean;
+        };
+        ReqPostGroupAdmin: {
+            name: string;
+            description: string;
+            joinable: boolean;
+            claim: string;
         };
         ResPostGroup: {
             groupId: string;
@@ -3094,7 +3642,8 @@ export interface components {
             note: string;
         };
         ReqPostMail: {
-            addresses: string[];
+            addresses?: string[];
+            userIds?: string[];
             subject: string;
             body: string;
             /** @default false */
@@ -3159,6 +3708,58 @@ export interface components {
             initialCheckedInAt: string;
             /** Format: date-time */
             initialCheckedOutAt?: string | null;
+        };
+        ReqPostUserMeGradeUpdate: {
+            reason: string;
+        };
+        ResGetUserMeGradeUpdate: {
+            gradeUpdates: components["schemas"]["ResGetUserMeGradeUpdateObjectGradeUpdate"][];
+        };
+        ResGetUserMeGradeUpdateObjectGradeUpdate: {
+            gradeUpdateId: string;
+            gradeDiff: number;
+            reason: string;
+            status: string;
+            createdAt: string;
+            updatedAt: string;
+        };
+        ReqPutAdminGradeUpdateGradeUpdateId: {
+            status: string;
+        };
+        ReqPutAdminChangeStudentNumber: {
+            userId: string;
+            studentNumber: string;
+        };
+        ResGetAdminGradeUpdate: {
+            gradeUpdates: components["schemas"]["ResGetAdminGradeUpdateObjectGradeUpdate"][];
+        };
+        ResGetAdminGradeUpdateObjectGradeUpdate: {
+            gradeUpdateId: string;
+            userId: string;
+            username: string;
+            gradeDiff: number;
+            reason: string;
+            status: string;
+            createdAt: string;
+            updatedAt: string;
+        };
+        ReqPutAdminReentryReentryId: {
+            status: string;
+            note?: string;
+        };
+        ResGetAdminReentry: {
+            reentries: components["schemas"]["ResGetAdminReentryObjectReentry"][];
+        };
+        ResGetAdminReentryObjectReentry: {
+            reentryId: string;
+            userId: string;
+            username: string;
+            studentNumber: string;
+            status: string;
+            paymentStatus: string;
+            note?: string;
+            createdAt: string;
+            updatedAt: string;
         };
         Error: {
             level: string;
