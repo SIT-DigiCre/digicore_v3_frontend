@@ -37,7 +37,11 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
 
   try {
     const reentriesRes = await client.GET("/admin/reentry");
-    return { props: { reentries: reentriesRes.data?.reentries ?? ([] as AdminReentry[]) } };
+    return {
+      props: {
+        reentries: reentriesRes.data?.reentries ?? ([] as AdminReentry[]),
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch pending reentry requests:", error);
     return { props: { reentries: [] as AdminReentry[] } };
@@ -47,8 +51,8 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
 const getPaymentStatusChip = (
   status: string,
 ): { color: "default" | "error" | "success" | "warning"; label: string } => {
-  if (status === "checked") return { color: "success", label: "会計確認済み" };
-  if (status === "pending") return { color: "warning", label: "会計確認待ち" };
+  if (status === "approved") return { color: "success", label: "会計確認済み" };
+  if (status === "pending_accounting") return { color: "warning", label: "会計確認待ち" };
   if (status === "unchecked") return { color: "error", label: "未確認" };
   return { color: "default", label: status };
 };
@@ -61,7 +65,7 @@ const AdminReentryPage = ({
   const { removeError, setNewError } = useErrorState();
   const [targetReentry, setTargetReentry] = useState<AdminReentry | null>(null);
   const [note, setNote] = useState("");
-  const [isSubmitting, startSubmittingTransition] = useTransition();
+  const [isPending, startTransition] = useTransition();
 
   const dialogOpen = targetReentry !== null;
   const paymentStatus = useMemo(() => {
@@ -70,14 +74,14 @@ const AdminReentryPage = ({
   }, [targetReentry]);
 
   const handleCloseDialog = () => {
-    if (isSubmitting) return;
+    if (isPending) return;
     setTargetReentry(null);
     setNote("");
   };
 
   const handleReview = async (status: "approved" | "rejected") => {
     if (!targetReentry) return;
-    if (isSubmitting) return;
+    if (isPending) return;
     if (!authState.token) {
       setNewError({
         message: "ログイン情報が見つかりません。再度ログインしてください。",
@@ -86,11 +90,12 @@ const AdminReentryPage = ({
       return;
     }
 
-    startSubmittingTransition(async () => {
+    startTransition(async () => {
       try {
         const response = await apiClient.PUT("/admin/reentry/{reentryId}", {
           body: {
-            note: note.trim() === "" ? undefined : note.trim(),
+            // TODO: 本来noteは申請者が書き込むものだが、バックエンドの仕様で審査者が書き込むフィールドとして扱われてしまっているため、修正する
+            note: note.trim() === "" ? "xyz" : note.trim(),
             status,
           },
           headers: {
@@ -112,17 +117,18 @@ const AdminReentryPage = ({
         }
 
         removeError("reentry-review-fail");
-        startSubmittingTransition(() => {
-          setTargetReentry(null);
-          setNote("");
-        });
-        await router.push(router.asPath);
       } catch (error) {
         const message =
           error instanceof Error ? error.message : "再入部申請の更新中にエラーが発生しました";
         setNewError({
           message,
           name: "reentry-review-fail",
+        });
+      } finally {
+        setTargetReentry(null);
+        setNote("");
+        startTransition(() => {
+          router.push(router.asPath);
         });
       }
     });
@@ -135,7 +141,7 @@ const AdminReentryPage = ({
       <Stack spacing={2}>
         <Stack direction="row" justifyContent="flex-start" width="100%">
           <ButtonLink href="/admin" startIcon={<ArrowBack />} variant="text">
-            管理者用ポータルに戻る
+            管理者ポータルに戻る
           </ButtonLink>
         </Stack>
         {reentries.length > 0 ? (
@@ -189,8 +195,8 @@ const AdminReentryPage = ({
         <DialogContent dividers>
           <Stack spacing={2} mt={1}>
             <Typography variant="body2">学籍番号: {targetReentry?.studentNumber ?? "-"}</Typography>
-            <Typography variant="body2">氏名: {targetReentry?.username ?? "-"}</Typography>
-            <Typography variant="body2">
+            <Typography variant="body2">ユーザー名: {targetReentry?.username ?? "-"}</Typography>
+            <Typography variant="body2" component="div">
               振込確認:{" "}
               {paymentStatus ? (
                 <Chip size="small" color={paymentStatus.color} label={paymentStatus.label} />
@@ -205,28 +211,25 @@ const AdminReentryPage = ({
               multiline
               minRows={3}
               inputProps={{ maxLength: 255 }}
-              disabled={isSubmitting}
+              disabled={isPending}
               fullWidth
             />
           </Stack>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} disabled={isSubmitting}>
-            キャンセル
-          </Button>
+        <DialogActions sx={{ justifyContent: "space-between" }}>
           <Button
             color="error"
             onClick={() => handleReview("rejected")}
-            disabled={isSubmitting}
-            startIcon={isSubmitting ? <CircularProgress size={18} /> : <Close />}
+            disabled={isPending}
+            startIcon={isPending ? <CircularProgress size={18} /> : <Close />}
           >
             却下する
           </Button>
           <Button
             variant="contained"
             onClick={() => handleReview("approved")}
-            disabled={isSubmitting}
-            startIcon={isSubmitting ? <CircularProgress size={18} /> : <Check />}
+            disabled={isPending}
+            startIcon={isPending ? <CircularProgress size={18} /> : <Check />}
           >
             承認する
           </Button>
