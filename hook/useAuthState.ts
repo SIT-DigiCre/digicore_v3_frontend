@@ -1,18 +1,20 @@
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-import { useErrorState } from "../components/contexts/ErrorStateContext";
-import { User } from "../interfaces/user";
-import { apiClient } from "../utils/fetch/client";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import { User } from "@/interfaces/user";
+import { apiClient } from "@/utils/fetch/client";
 
 export type AuthState = {
   isLogined: boolean;
   isLoading: boolean;
+  grants: string[];
   user: User | undefined;
   token: string | undefined;
 };
 
 const DEFAULT_AUTH_STATE: AuthState = {
+  grants: [],
   isLoading: true,
   isLogined: false,
   token: undefined,
@@ -35,26 +37,48 @@ export const useAuthState: UseAuthState = () => {
 
   const getUserInfo = async (token: string, forceRefresh: boolean): Promise<User | null> => {
     try {
-      const res = await apiClient.GET("/user/me", {
+      const userRes = await apiClient.GET("/user/me", {
         headers: {
           Authorization: "Bearer " + token,
         },
       });
-      if (!res.data) throw new Error("No data");
+      if (!userRes.data) throw new Error("No data");
+
+      const grantsRes = await apiClient.GET("/user/me/grants", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+
+      const grants = Array.from(
+        new Set(
+          (grantsRes.data?.grants ?? [])
+            .map((grant) => grant.trim())
+            .filter((grant) => grant !== ""),
+        ),
+      );
+
       setAuth((prev) => {
         if (prev.isLogined && !forceRefresh) return prev;
         return {
+          grants,
           isLoading: false,
           isLogined: true,
           token,
-          user: res.data,
+          user: userRes.data,
         };
       });
       removeError("autologin-fail");
-      return res.data;
+      return userRes.data;
     } catch {
       if (!isPublicPage) {
-        setAuth({ isLoading: false, isLogined: false, token: undefined, user: undefined });
+        setAuth({
+          grants: [],
+          isLoading: false,
+          isLogined: false,
+          token: undefined,
+          user: undefined,
+        });
         router.push("/login");
       }
     }
@@ -75,6 +99,7 @@ export const useAuthState: UseAuthState = () => {
 
   const logout = () => {
     setAuth({
+      grants: [],
       isLoading: false,
       isLogined: false,
       token: undefined,
@@ -95,7 +120,7 @@ export const useAuthState: UseAuthState = () => {
   useEffect(() => {
     const token = getToken();
     if (!token) {
-      setAuth((prev) => ({ ...prev, isLoading: false }));
+      setAuth((prev) => ({ ...prev, grants: [], isLoading: false }));
       return;
     }
     getUserInfo(token, false);

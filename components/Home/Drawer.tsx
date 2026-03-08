@@ -24,7 +24,8 @@ import {
   Toolbar,
 } from "@mui/material";
 
-import { useAuthState } from "../../hook/useAuthState";
+import { useAuthState } from "@/hook/useAuthState";
+import { GRANT_BUDGET_ADMIN, GRANT_GROUP_ADMIN, GRANT_PAYMENT_ADMIN } from "@/utils/auth/grants";
 
 type MenuItem = {
   href: string;
@@ -39,6 +40,10 @@ type DrawerProps = {
 const Drawer = ({ handleDrawerClose }: DrawerProps) => {
   const { authState } = useAuthState();
   const router = useRouter();
+  const canAccessAdminPage =
+    authState.grants.includes(GRANT_BUDGET_ADMIN) ||
+    authState.grants.includes(GRANT_GROUP_ADMIN) ||
+    authState.grants.includes(GRANT_PAYMENT_ADMIN);
 
   const isMenuItemActive = (href: string): boolean => {
     if (href === "/") {
@@ -101,7 +106,7 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
     label: "ログイン",
   };
 
-  if (authState.user?.isAdmin) {
+  if (canAccessAdminPage) {
     const adminItem: MenuItem = {
       href: "/admin",
       icon: <AdminPanelSettingsIcon />,
