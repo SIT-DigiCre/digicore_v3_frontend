@@ -6,6 +6,8 @@ export type User = {
   schoolGrade: number;
   discordUserId: string;
   shortIntroduction: string;
+  isGraduated: boolean;
+  isMember: boolean;
   activeLimit?: string;
   claims?: string[];
 };
@@ -15,6 +17,8 @@ export const DEFAULT_USER: User = {
   claims: [],
   discordUserId: "",
   iconUrl: "",
+  isGraduated: false,
+  isMember: false,
   schoolGrade: 0,
   shortIntroduction: "",
   studentNumber: "",
