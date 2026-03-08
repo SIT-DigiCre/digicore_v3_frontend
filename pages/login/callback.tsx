@@ -5,14 +5,19 @@ import { useState } from "react";
 import { CheckCircle, CopyAll } from "@mui/icons-material";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
-import Heading from "../../components/Common/Heading";
-import PageHead from "../../components/Common/PageHead";
-import { createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 type LoginCallbackPageProps = {
   loginFailed?: boolean;
   errorMessage?: string;
   codeMissing?: boolean;
+};
+
+const isInactiveAccountError = (message?: string): boolean => {
+  if (!message) return false;
+  return message.includes("無効なアカウントです");
 };
 
 export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = async ({
@@ -34,6 +39,17 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     res.setHeader("Set-Cookie", `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`);
     return { redirect: { destination: "/", permanent: false } };
   }
+
+  if (isInactiveAccountError(result.error?.message)) {
+    const statusMessage = encodeURIComponent(result.error?.message ?? "");
+    return {
+      redirect: {
+        destination: `/login/reentry?message=${statusMessage}`,
+        permanent: false,
+      },
+    };
+  }
+
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
   return { props: { errorMessage, loginFailed: true } };
 };

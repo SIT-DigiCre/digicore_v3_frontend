@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { CurrencyYen, Groups, ReceiptLong } from "@mui/icons-material";
+import { CurrencyYen, Groups, HowToReg, ReceiptLong } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 
 import PageHead from "@/components/Common/PageHead";
@@ -12,7 +12,9 @@ const AdminPage = () => {
   const canAccessBudgetAdmin = authState.grants.includes(GRANT_BUDGET_ADMIN);
   const canAccessGroupAdmin = authState.grants.includes(GRANT_GROUP_ADMIN);
   const canAccessPaymentAdmin = authState.grants.includes(GRANT_PAYMENT_ADMIN);
-  const hasAnyAdminMenu = canAccessBudgetAdmin || canAccessGroupAdmin || canAccessPaymentAdmin;
+  const canAccessReentryAdmin = canAccessGroupAdmin;
+  const hasAnyAdminMenu =
+    canAccessBudgetAdmin || canAccessGroupAdmin || canAccessPaymentAdmin || canAccessReentryAdmin;
 
   return (
     <>
@@ -43,6 +45,16 @@ const AdminPage = () => {
               startIcon={<CurrencyYen />}
             >
               部費振込管理
+            </Button>
+          )}
+          {canAccessReentryAdmin && (
+            <Button
+              component={Link}
+              href="/admin/reentry"
+              variant="contained"
+              startIcon={<HowToReg />}
+            >
+              再入部申請管理
             </Button>
           )}
         </Stack>

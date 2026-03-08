@@ -17,6 +17,7 @@ const getRequiredAdminGrantsByPath = (pathname: string): string[] | null => {
   if (pathname.startsWith("/admin/budget")) return [GRANT_BUDGET_ADMIN];
   if (pathname.startsWith("/admin/group")) return [GRANT_GROUP_ADMIN];
   if (pathname.startsWith("/admin/payment")) return [GRANT_PAYMENT_ADMIN];
+  if (pathname.startsWith("/admin/reentry")) return [GRANT_GROUP_ADMIN];
   return [GRANT_BUDGET_ADMIN, GRANT_GROUP_ADMIN, GRANT_PAYMENT_ADMIN];
 };
 
