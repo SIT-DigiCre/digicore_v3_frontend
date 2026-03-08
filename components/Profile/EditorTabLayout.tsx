@@ -4,11 +4,12 @@ import { ReactNode } from "react";
 import ChatIcon from "@mui/icons-material/Chat";
 import EmergencyIcon from "@mui/icons-material/Emergency";
 import HealthAndSafetyIcon from "@mui/icons-material/HealthAndSafety";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import PublicIcon from "@mui/icons-material/Public";
 import RecordVoiceOverIcon from "@mui/icons-material/RecordVoiceOver";
 import { Box, Tab, Tabs } from "@mui/material";
 
-import PageHead from "../Common/PageHead";
+import PageHead from "@/components/Common/PageHead";
 
 interface EditorTabLayoutProps {
   children: ReactNode;
@@ -42,7 +43,8 @@ const EditorTabLayout = ({ children }: EditorTabLayoutProps) => {
       path: `${basePath}/introduction`,
       value: "introduction",
     },
-  ] as const;
+    { icon: <MoreHorizIcon />, label: "その他", path: `${basePath}/other`, value: "other" },
+  ];
 
   const getCurrentStep = () => {
     const currentStep = steps.findIndex((step) => currentPath.startsWith(step.path));
