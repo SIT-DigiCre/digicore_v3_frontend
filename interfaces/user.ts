@@ -43,7 +43,7 @@ export type UserPrivateProfile = {
   parentFirstName: string;
   parentHomephoneNumber: string;
   parentLastName: string;
-  parentName: string;
+  parentName?: string;
   phoneNumber: string;
 };
 
