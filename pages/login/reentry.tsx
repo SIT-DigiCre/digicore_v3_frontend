@@ -7,6 +7,10 @@ import {
   Box,
   Button,
   CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Paper,
   Stack,
   TextField,
@@ -44,11 +48,12 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
   const [transferName, setTransferName] = useState("");
   const [isSubmitting, startSubmittingTransition] = useTransition();
   const [reentryId, setReentryId] = useState<string | null>(null);
+  const [showSubmittedDialog, setShowSubmittedDialog] = useState(false);
   const [pendingMessage, setPendingMessage] = useState(
     isPendingReentryMessage(statusMessage) ? statusMessage : "",
   );
 
-  const showPaymentGuide = reentryId !== null || pendingMessage !== "";
+  const showPaymentGuide = pendingMessage !== "" && !showSubmittedDialog;
   const isPending = pendingMessage !== "";
 
   const handleSubmit = async () => {
@@ -106,6 +111,7 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
         startSubmittingTransition(() => {
           setPendingMessage("再入部申請を送信しました。現在、管理者の確認待ちです。");
           setReentryId(response.data?.reentryId ?? "");
+          setShowSubmittedDialog(true);
         });
       } catch {
         setNewError({
@@ -149,11 +155,8 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
         </Typography>
         <Alert severity="info">
           このフォームは、部費未納で無効化された方と、休学中から復帰する方の再入部申請に対応しています。
-        </Alert>
-        <Typography color="text.secondary" variant="body2">
           再入部申請はユーザーごとに最大2回までです。
-        </Typography>
-        {statusMessage && <Alert severity="warning">{statusMessage}</Alert>}
+        </Alert>
 
         <Paper variant="outlined" sx={{ p: 3 }}>
           <Stack spacing={2}>
@@ -186,6 +189,34 @@ const ReentryPage = ({ statusMessage }: ReentryPageProps) => {
           <TransferClubFeeView />
         </Paper>
       </Stack>
+
+      <Dialog
+        open={showSubmittedDialog}
+        onClose={() => setShowSubmittedDialog(false)}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>再入部申請を受け付けました</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} mt={1}>
+            <Typography>
+              申請内容を管理者が確認中です。確認が完了するまで、再申請はできません。
+            </Typography>
+            <Alert severity="info">再入部申請を送信しました。現在、管理者の確認待ちです。</Alert>
+            {reentryId && (
+              <Typography color="text.secondary" variant="body2">
+                申請ID: {reentryId}
+              </Typography>
+            )}
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setShowSubmittedDialog(false)}>閉じる</Button>
+          <ButtonLink href="/login" variant="contained">
+            ログインページへ
+          </ButtonLink>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
