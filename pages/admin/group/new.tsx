@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 import { Add, ArrowBack } from "@mui/icons-material";
 import {
@@ -26,7 +26,7 @@ const AdminGroupNewPage = () => {
   const [description, setDescription] = useState("");
   const [joinable, setJoinable] = useState(true);
   const [claim, setClaim] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
   const canAccessGroupAdmin = authState.grants.includes(GRANT_GROUP_ADMIN);
@@ -42,44 +42,47 @@ const AdminGroupNewPage = () => {
       return;
     }
 
+    setIsSubmitting(true);
     try {
-      startTransition(async () => {
-        const trimmedName = name.trim();
-        const trimmedDescription = description.trim();
-        const trimmedClaim = claim.trim();
+      const trimmedName = name.trim();
+      const trimmedDescription = description.trim();
+      const trimmedClaim = claim.trim();
 
-        const response = trimmedClaim
-          ? await apiClient.POST("/group/admin", {
-              body: {
-                claim: trimmedClaim,
-                description: trimmedDescription,
-                joinable,
-                name: trimmedName,
-              },
-              headers: {
-                Authorization: `Bearer ${authState.token}`,
-              },
-            })
-          : await apiClient.POST("/group", {
-              body: {
-                description: trimmedDescription,
-                joinable,
-                name: trimmedName,
-              },
-              headers: {
-                Authorization: `Bearer ${authState.token}`,
-              },
-            });
-        if (response.error) {
-          const errorMessage = response.error.message || "グループの作成に失敗しました";
-          setNewError({ message: errorMessage, name: "new-group-error" });
-          return;
-        }
-        router.push("/admin/group");
-      });
+      const response = trimmedClaim
+        ? await apiClient.POST("/group/admin", {
+            body: {
+              claim: trimmedClaim,
+              description: trimmedDescription,
+              joinable,
+              name: trimmedName,
+            },
+            headers: {
+              Authorization: `Bearer ${authState.token}`,
+            },
+          })
+        : await apiClient.POST("/group", {
+            body: {
+              description: trimmedDescription,
+              joinable,
+              name: trimmedName,
+            },
+            headers: {
+              Authorization: `Bearer ${authState.token}`,
+            },
+          });
+
+      if (response.error) {
+        const errorMessage = response.error.message || "グループの作成に失敗しました";
+        setNewError({ message: errorMessage, name: "new-group-error" });
+        return;
+      }
+
+      await router.push("/admin/group");
     } catch (error) {
       console.error("Error creating group:", error);
       setNewError({ message: "グループの作成に失敗しました", name: "new-group-error" });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -101,7 +104,7 @@ const AdminGroupNewPage = () => {
               variant="outlined"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              disabled={isPending}
+              disabled={isSubmitting}
             />
           </FormControl>
 
@@ -114,7 +117,7 @@ const AdminGroupNewPage = () => {
               rows={4}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              disabled={isPending}
+              disabled={isSubmitting}
             />
           </FormControl>
 
@@ -124,7 +127,7 @@ const AdminGroupNewPage = () => {
               variant="outlined"
               value={claim}
               onChange={(e) => setClaim(e.target.value)}
-              disabled={isPending}
+              disabled={isSubmitting}
               placeholder="例: account / infra"
             />
             <FormHelperText>
@@ -139,7 +142,7 @@ const AdminGroupNewPage = () => {
                 <Checkbox
                   checked={joinable}
                   onChange={(e) => setJoinable(e.target.checked)}
-                  disabled={isPending}
+                  disabled={isSubmitting}
                 />
               }
               label="参加可能にする"
@@ -156,7 +159,7 @@ const AdminGroupNewPage = () => {
             <Button
               variant="contained"
               onClick={handleSubmit}
-              disabled={isPending || !name.trim() || !description.trim() || !canAccessGroupAdmin}
+              disabled={isSubmitting || !name.trim() || !description.trim() || !canAccessGroupAdmin}
               startIcon={<Add />}
             >
               作成する

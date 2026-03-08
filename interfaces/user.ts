@@ -7,7 +7,6 @@ export type User = {
   discordUserId: string;
   shortIntroduction: string;
   activeLimit?: string;
-  isAdmin?: boolean;
   claims?: string[];
 };
 
@@ -16,7 +15,6 @@ export const DEFAULT_USER: User = {
   claims: [],
   discordUserId: "",
   iconUrl: "",
-  isAdmin: false,
   schoolGrade: 0,
   shortIntroduction: "",
   studentNumber: "",

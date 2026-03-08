@@ -18,7 +18,7 @@ const AdminPage = () => {
     <>
       <PageHead title="[管理者用] ポータル" />
       <Stack spacing={2}>
-        <Typography>このページは幹部およびインフラ担当のみが閲覧できます。</Typography>
+        <Typography>このページは管理者権限（grant）を持つユーザーのみが閲覧できます。</Typography>
         <Stack direction="row" spacing={2} flexWrap="wrap">
           {canAccessBudgetAdmin && (
             <Button

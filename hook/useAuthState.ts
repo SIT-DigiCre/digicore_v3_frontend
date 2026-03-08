@@ -35,27 +35,34 @@ export const useAuthState: UseAuthState = () => {
   const isPublicPage =
     router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
+  const resetAuth = () => {
+    setAuth({
+      grants: [],
+      isLoading: false,
+      isLogined: false,
+      token: undefined,
+      user: undefined,
+    });
+  };
+
   const getUserInfo = async (token: string, forceRefresh: boolean): Promise<User | null> => {
     try {
-      const userRes = await apiClient.GET("/user/me", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      if (!userRes.data) throw new Error("No data");
-
-      const grantsRes = await apiClient.GET("/user/me/grants", {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
+      const headers = {
+        Authorization: "Bearer " + token,
+      };
+      const [userRes, grantsRes] = await Promise.all([
+        apiClient.GET("/user/me", {
+          headers,
+        }),
+        apiClient.GET("/user/me/grants", {
+          headers,
+        }),
+      ]);
+      if (!userRes.data || userRes.error) throw new Error("Failed to fetch user");
+      if (!grantsRes.data || grantsRes.error) throw new Error("Failed to fetch grants");
 
       const grants = Array.from(
-        new Set(
-          (grantsRes.data?.grants ?? [])
-            .map((grant) => grant.trim())
-            .filter((grant) => grant !== ""),
-        ),
+        new Set(grantsRes.data.grants.map((grant) => grant.trim()).filter((grant) => grant !== "")),
       );
 
       setAuth((prev) => {
@@ -71,14 +78,8 @@ export const useAuthState: UseAuthState = () => {
       removeError("autologin-fail");
       return userRes.data;
     } catch {
+      resetAuth();
       if (!isPublicPage) {
-        setAuth({
-          grants: [],
-          isLoading: false,
-          isLogined: false,
-          token: undefined,
-          user: undefined,
-        });
         router.push("/login");
       }
     }
@@ -98,13 +99,7 @@ export const useAuthState: UseAuthState = () => {
   };
 
   const logout = () => {
-    setAuth({
-      grants: [],
-      isLoading: false,
-      isLogined: false,
-      token: undefined,
-      user: undefined,
-    });
+    resetAuth();
     document.cookie = "jwt=; path=/; max-age=0";
     router.push("/login");
   };
