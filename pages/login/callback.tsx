@@ -26,6 +26,19 @@ const isInactiveAccountError = (message?: string): boolean => {
   return message.includes("無効なアカウントです");
 };
 
+const isPendingReentryError = (message?: string): boolean => {
+  if (!message) return false;
+  return (
+    message.includes("未処理の再入部申請があります") ||
+    message.includes("再入部申請の確認中です") ||
+    message.includes("確認中")
+  );
+};
+
+const shouldRedirectToReentry = (message?: string): boolean => {
+  return isInactiveAccountError(message) || isPendingReentryError(message);
+};
+
 export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = async ({
   query,
   res,
@@ -40,13 +53,12 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
 
   const redirectToReentry = (statusMessageRaw: string, jwt?: string) => {
     const statusMessage = encodeURIComponent(statusMessageRaw);
-    const reentryCode = encodeURIComponent(code);
     if (jwt) {
       setJwtCookie(res, jwt);
     }
     return {
       redirect: {
-        destination: `/login/reentry?message=${statusMessage}&reentryCode=${reentryCode}`,
+        destination: `/login/reentry?message=${statusMessage}`,
         permanent: false,
       },
     };
@@ -65,7 +77,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
       return { redirect: { destination: "/", permanent: false } };
     }
 
-    if (isInactiveAccountError(meResult.error?.message)) {
+    if (shouldRedirectToReentry(meResult.error?.message)) {
       return redirectToReentry(meResult.error?.message ?? "", jwt);
     }
 
@@ -73,7 +85,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     return { props: { errorMessage, loginFailed: true } };
   }
 
-  if (isInactiveAccountError(result.error?.message)) {
+  if (shouldRedirectToReentry(result.error?.message)) {
     return redirectToReentry(result.error?.message ?? "");
   }
 
