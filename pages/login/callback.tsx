@@ -38,16 +38,11 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
   const client = createServerApiClient();
   const result = await client.POST("/login/callback", { body: { code } });
 
-  if (result.data?.jwt) {
-    setJwtCookie(res, result.data.jwt);
-    return { redirect: { destination: "/", permanent: false } };
-  }
-
-  if (isInactiveAccountError(result.error?.message)) {
-    const statusMessage = encodeURIComponent(result.error?.message ?? "");
+  const redirectToReentry = (statusMessageRaw: string, jwt?: string) => {
+    const statusMessage = encodeURIComponent(statusMessageRaw);
     const reentryCode = encodeURIComponent(code);
-    if (result.data?.jwt) {
-      setJwtCookie(res, result.data.jwt);
+    if (jwt) {
+      setJwtCookie(res, jwt);
     }
     return {
       redirect: {
@@ -55,6 +50,31 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
         permanent: false,
       },
     };
+  };
+
+  if (result.data?.jwt) {
+    const jwt = result.data.jwt;
+    const meResult = await client.GET("/user/me", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (meResult.data) {
+      setJwtCookie(res, jwt);
+      return { redirect: { destination: "/", permanent: false } };
+    }
+
+    if (isInactiveAccountError(meResult.error?.message)) {
+      return redirectToReentry(meResult.error?.message ?? "", jwt);
+    }
+
+    const errorMessage = meResult.error ? JSON.stringify(meResult.error) : "";
+    return { props: { errorMessage, loginFailed: true } };
+  }
+
+  if (isInactiveAccountError(result.error?.message)) {
+    return redirectToReentry(result.error?.message ?? "");
   }
 
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
