@@ -28,6 +28,6 @@ export const getTimeSpanText = (start: string, end: string) => {
   return `${startDate.format("YYYY/MM/DD")}(${getDayText(startDate)}) ${getTimeText(startDate)} 〜 ${endDate.format("MM/DD")}(${getDayText(endDate)}) ${getTimeText(endDate)}`;
 };
 
-//年度を計算する
+// 年度を計算する（3月中の部費振込に対応するため、3月を翌年度とする）
 export const getFiscalYear = (date: Date): number =>
-  date.getMonth() < 3 ? date.getFullYear() - 1 : date.getFullYear();
+  date.getMonth() < 2 ? date.getFullYear() - 1 : date.getFullYear();
