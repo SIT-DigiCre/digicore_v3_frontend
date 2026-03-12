@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { CurrencyYen, Groups, ReceiptLong } from "@mui/icons-material";
+import { CurrencyYen, Groups, ReceiptLong, School } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 
 import PageHead from "@/components/Common/PageHead";
@@ -43,6 +43,16 @@ const AdminPage = () => {
               startIcon={<CurrencyYen />}
             >
               部費振込管理
+            </Button>
+          )}
+          {canAccessGroupAdmin && (
+            <Button
+              component={Link}
+              href="/admin/grade-update"
+              variant="contained"
+              startIcon={<School />}
+            >
+              学年補正申請管理
             </Button>
           )}
         </Stack>
