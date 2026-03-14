@@ -5,11 +5,14 @@ const isPublicPath = (pathname: string): boolean => {
 };
 
 export const proxy = (request: NextRequest) => {
-  const { pathname } = request.nextUrl;
+  const { pathname, search } = request.nextUrl;
   const jwt = request.cookies.get("jwt")?.value;
 
   if (!jwt && !isPublicPath(pathname)) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+    loginUrl.searchParams.set("flash", "login-required");
+    loginUrl.searchParams.set("next", `${pathname}${search}`);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();

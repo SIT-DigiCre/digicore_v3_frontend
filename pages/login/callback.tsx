@@ -15,8 +15,21 @@ type LoginCallbackPageProps = {
   codeMissing?: boolean;
 };
 
+const normalizeNextUrl = (value: string | undefined): string => {
+  if (!value) return "/";
+  let decoded = value;
+  try {
+    decoded = decodeURIComponent(value);
+  } catch {
+    return "/";
+  }
+  if (!decoded.startsWith("/") || decoded.startsWith("//")) return "/";
+  return decoded;
+};
+
 export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = async ({
   query,
+  req,
   res,
 }) => {
   const code = typeof query.code === "string" ? query.code : null;
@@ -31,8 +44,13 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     const jwt = result.data.jwt;
     const maxAge = 60 * 60 * 24 * 7;
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-    res.setHeader("Set-Cookie", `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`);
-    return { redirect: { destination: "/", permanent: false } };
+    const nextCookie = req.cookies?.next;
+    const nextUrl = normalizeNextUrl(nextCookie);
+    res.setHeader("Set-Cookie", [
+      `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`,
+      `next=; Path=/; Max-Age=0; SameSite=Lax${secure}`,
+    ]);
+    return { redirect: { destination: nextUrl, permanent: false } };
   }
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
   return { props: { errorMessage, loginFailed: true } };
