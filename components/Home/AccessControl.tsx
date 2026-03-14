@@ -26,6 +26,10 @@ const AccessControl = ({ children }: AccessControlProps) => {
   const isPublicPage =
     router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
+  if (authState.isLoading) {
+    return null;
+  }
+
   if (!authState.isLogined && !isPublicPage) {
     return (
       <Stack>
