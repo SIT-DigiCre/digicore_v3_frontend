@@ -30,6 +30,15 @@ const LoginPage = ({ loginUrl, flashMessage, nextUrl }: LoginPageProps) => {
       ? encodeURIComponent(nextUrl)
       : null;
 
+  const handleLoginClick = () => {
+    const maxAge = 60 * 10; // 10分間
+    const isProduction = process.env.NODE_ENV === "production";
+    const secureFlag = isProduction ? "; Secure" : "";
+    if (nextCookieValue) {
+      document.cookie = `next=${nextCookieValue}; path=/; max-age=${maxAge}; SameSite=Lax${secureFlag}`;
+    }
+  };
+
   return (
     <>
       <PageHead title="ログイン" />
@@ -51,10 +60,7 @@ const LoginPage = ({ loginUrl, flashMessage, nextUrl }: LoginPageProps) => {
             variant="contained"
             startIcon={<Google aria-label="Google" />}
             href={loginUrl}
-            onClick={() => {
-              if (!nextCookieValue) return;
-              document.cookie = `next=${nextCookieValue}; path=/; max-age=600; SameSite=Lax`;
-            }}
+            onClick={handleLoginClick}
           >
             ログインする
           </Button>
@@ -65,7 +71,7 @@ const LoginPage = ({ loginUrl, flashMessage, nextUrl }: LoginPageProps) => {
           </Typography>
           <Typography>
             デジクリに入部希望の方は contact@digicre.net までメールするか、
-            <a href="https://twitter.com/sitdigicre" target="_blank">
+            <a href="https://twitter.com/sitdigicre" target="_blank" rel="noopener noreferrer">
               公式Twitter
             </a>
             にご相談下さい。
