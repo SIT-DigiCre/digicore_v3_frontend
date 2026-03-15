@@ -15,6 +15,8 @@ type LoginCallbackPageProps = {
   codeMissing?: boolean;
 };
 
+const MAX_NEXT_URL_LENGTH = 2048;
+
 const normalizeNextUrl = (value: string | undefined): string => {
   if (!value) return "/";
   let decoded: string;
@@ -23,6 +25,10 @@ const normalizeNextUrl = (value: string | undefined): string => {
   } catch {
     return "/";
   }
+  // 制御文字（CRLF やタブ等）を含む値は拒否する
+  if (/[\u0000-\u001F\u007F]/.test(decoded)) return "/";
+  // 過度に長い値も拒否することでヘッダー汚染やリソース消費を防ぐ
+  if (decoded.length > MAX_NEXT_URL_LENGTH) return "/";
   if (!decoded.startsWith("/") || decoded.startsWith("//")) return "/";
   return decoded;
 };
