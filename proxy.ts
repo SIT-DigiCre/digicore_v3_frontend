@@ -10,8 +10,18 @@ export const proxy = (request: NextRequest) => {
 
   if (!jwt && !isPublicPath(pathname)) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("next", `${pathname}${search}`);
-    return NextResponse.redirect(loginUrl);
+    const response = NextResponse.redirect(loginUrl);
+    const maxAge = 60 * 10; // 10分間
+    const isProduction = process.env.NODE_ENV === "production";
+
+    response.cookies.set("next", encodeURIComponent(`${pathname}${search}`), {
+      maxAge,
+      path: "/",
+      sameSite: "lax",
+      secure: isProduction,
+    });
+
+    return response;
   }
 
   return NextResponse.next();

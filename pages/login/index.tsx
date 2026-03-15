@@ -2,7 +2,7 @@ import type { GetServerSideProps } from "next";
 import Image from "next/image";
 
 import { Google } from "@mui/icons-material";
-import { Alert, Box, Button, Stack, Typography } from "@mui/material";
+import { Box, Button, Stack, Typography } from "@mui/material";
 
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
@@ -10,32 +10,16 @@ import { createServerApiClient } from "@/utils/fetch/client";
 
 type LoginPageProps = {
   loginUrl: string;
-  nextUrl: string | null;
 };
 
-export const getServerSideProps: GetServerSideProps<LoginPageProps> = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps<LoginPageProps> = async () => {
   const client = createServerApiClient(); // 有効期限切れのjwtを付与しないようにするため、reqを渡さない
   const res = await client.GET("/login");
   const loginUrl = res.data?.url ?? "";
-  const nextUrl = typeof query.next === "string" ? query.next : null;
-  return { props: { loginUrl, nextUrl } };
+  return { props: { loginUrl } };
 };
 
-const LoginPage = ({ loginUrl, nextUrl }: LoginPageProps) => {
-  const nextCookieValue =
-    nextUrl && nextUrl.startsWith("/") && !nextUrl.startsWith("//")
-      ? encodeURIComponent(nextUrl)
-      : null;
-
-  const handleLoginClick = () => {
-    const maxAge = 60 * 10; // 10分間
-    const isProduction = process.env.NODE_ENV === "production";
-    const secureFlag = isProduction ? "; Secure" : "";
-    if (nextCookieValue) {
-      document.cookie = `next=${nextCookieValue}; path=/; max-age=${maxAge}; SameSite=Lax${secureFlag}`;
-    }
-  };
-
+const LoginPage = ({ loginUrl }: LoginPageProps) => {
   return (
     <>
       <PageHead title="ログイン" />
@@ -48,12 +32,7 @@ const LoginPage = ({ loginUrl, nextUrl }: LoginPageProps) => {
         />
         <Heading level={2}>DigiCore v3</Heading>
         <Box my={10}>
-          <Button
-            variant="contained"
-            startIcon={<Google aria-label="Google" />}
-            href={loginUrl}
-            onClick={handleLoginClick}
-          >
+          <Button variant="contained" startIcon={<Google aria-label="Google" />} href={loginUrl}>
             ログインする
           </Button>
         </Box>

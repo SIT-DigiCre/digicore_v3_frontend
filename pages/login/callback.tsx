@@ -17,7 +17,7 @@ type LoginCallbackPageProps = {
 
 const normalizeNextUrl = (value: string | undefined): string => {
   if (!value) return "/";
-  let decoded = value;
+  let decoded: string;
   try {
     decoded = decodeURIComponent(value);
   } catch {
