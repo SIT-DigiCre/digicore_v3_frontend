@@ -28,6 +28,17 @@ export const createServerApiClient = (req?: ServerSideRequest) => {
   });
 };
 
+export const createServerApiClientWithToken = (token: string) => {
+  return createClient<paths>({
+    baseUrl: baseURLForServerSide,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+  });
+};
+
 /**
  * サーバーサイドでクッキーからトークンを取得してヘッダーに設定するヘルパー関数
  * @param req Next.jsのgetServerSidePropsから取得できるreqオブジェクト
