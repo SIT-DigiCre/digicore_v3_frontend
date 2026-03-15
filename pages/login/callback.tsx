@@ -70,10 +70,19 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
   const client = createServerApiClient();
   const result = await client.POST("/login/callback", { body: { code } });
 
+  const setAuthCookies = (jwt: string) => {
+    const maxAge = 60 * 60 * 24 * 7;
+    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+    res.setHeader("Set-Cookie", [
+      `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`,
+      `next=; Path=/; Max-Age=0; SameSite=Lax${secure}`,
+    ]);
+  };
+
   const redirectToReentry = (statusMessageRaw: string, jwt?: string) => {
     const statusMessage = encodeURIComponent(statusMessageRaw);
     if (jwt) {
-      setJwtCookie(res, jwt);
+      setAuthCookies(jwt);
     }
     return {
       redirect: {
@@ -85,8 +94,6 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
 
   if (result.data?.jwt) {
     const jwt = result.data.jwt;
-    const maxAge = 60 * 60 * 24 * 7;
-    const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
     const nextCookie = req.cookies?.next;
     const nextUrl = normalizeNextUrl(nextCookie);
     const meResult = await client.GET("/user/me", {
@@ -96,10 +103,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     });
 
     if (meResult.data) {
-      res.setHeader("Set-Cookie", [
-        `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`,
-        `next=; Path=/; Max-Age=0; SameSite=Lax${secure}`,
-      ]);
+      setAuthCookies(jwt);
       return { redirect: { destination: nextUrl, permanent: false } };
     }
 
