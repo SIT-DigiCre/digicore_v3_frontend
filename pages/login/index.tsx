@@ -71,7 +71,7 @@ const LoginPage = ({ loginUrl, flashMessage, nextUrl }: LoginPageProps) => {
           </Typography>
           <Typography>
             デジクリに入部希望の方は contact@digicre.net までメールするか、
-            <a href="https://twitter.com/sitdigicre" target="_blank" rel="noopener noreferrer">
+            <a href="https://x.com/sitdigicre" target="_blank" rel="noopener noreferrer">
               公式Twitter
             </a>
             にご相談下さい。
