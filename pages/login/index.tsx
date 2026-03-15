@@ -4,9 +4,9 @@ import Image from "next/image";
 import { Google } from "@mui/icons-material";
 import { Alert, Box, Button, Stack, Typography } from "@mui/material";
 
-import Heading from "../../components/Common/Heading";
-import PageHead from "../../components/Common/PageHead";
-import { createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 type LoginPageProps = {
   loginUrl: string;
