@@ -27,12 +27,6 @@ const normalizeNextUrl = (value: string | undefined): string => {
   return decoded;
 };
 
-const setJwtCookie = (res: { setHeader: (name: string, value: string) => void }, jwt: string) => {
-  const maxAge = 60 * 60 * 24 * 7;
-  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
-  res.setHeader("Set-Cookie", `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`);
-};
-
 const isInactiveAccountError = (message?: string): boolean => {
   if (!message) return false;
   return message.includes("無効なアカウントです");
@@ -65,7 +59,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
   const result = await client.POST("/login/callback", { body: { code } });
 
   const setAuthCookies = (jwt: string) => {
-    const maxAge = 60 * 60 * 24 * 7;
+    const maxAge = 60 * 60 * 24 * 7; // 7日間
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
     res.setHeader("Set-Cookie", [
       `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`,
