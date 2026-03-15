@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import { User } from "@/interfaces/user";
+import { getTokenFromCookie } from "@/utils/auth/token";
 import { apiClient } from "@/utils/fetch/client";
 
 export type AuthState = {
@@ -86,14 +87,8 @@ export const useAuthState: UseAuthState = () => {
     return null;
   };
 
-  const getToken = (): string | null => {
-    if (typeof document === "undefined") return null;
-    const jwtCookie = document.cookie.split("; ").find((row) => row.startsWith("jwt="));
-    return jwtCookie ? jwtCookie.replace(/^jwt=/, "") : null;
-  };
-
   const refresh = async () => {
-    const token = getToken();
+    const token = getTokenFromCookie();
     if (!token) return null;
     return await getUserInfo(token, true);
   };
@@ -113,7 +108,7 @@ export const useAuthState: UseAuthState = () => {
   };
 
   useEffect(() => {
-    const token = getToken();
+    const token = getTokenFromCookie();
     if (!token) {
       setAuth((prev) => ({ ...prev, grants: [], isLoading: false }));
       return;
