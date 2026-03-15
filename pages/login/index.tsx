@@ -10,7 +10,6 @@ import { createServerApiClient } from "@/utils/fetch/client";
 
 type LoginPageProps = {
   loginUrl: string;
-  flashMessage: string | null;
   nextUrl: string | null;
 };
 
@@ -18,13 +17,11 @@ export const getServerSideProps: GetServerSideProps<LoginPageProps> = async ({ q
   const client = createServerApiClient(); // 有効期限切れのjwtを付与しないようにするため、reqを渡さない
   const res = await client.GET("/login");
   const loginUrl = res.data?.url ?? "";
-  const flashMessage =
-    query.flash === "login-required" ? "このページを表示するにはログインが必要です。" : null;
   const nextUrl = typeof query.next === "string" ? query.next : null;
-  return { props: { flashMessage, loginUrl, nextUrl } };
+  return { props: { loginUrl, nextUrl } };
 };
 
-const LoginPage = ({ loginUrl, flashMessage, nextUrl }: LoginPageProps) => {
+const LoginPage = ({ loginUrl, nextUrl }: LoginPageProps) => {
   const nextCookieValue =
     nextUrl && nextUrl.startsWith("/") && !nextUrl.startsWith("//")
       ? encodeURIComponent(nextUrl)
@@ -43,11 +40,6 @@ const LoginPage = ({ loginUrl, flashMessage, nextUrl }: LoginPageProps) => {
     <>
       <PageHead title="ログイン" />
       <Stack alignItems="center" mt={20}>
-        {flashMessage && (
-          <Alert severity="info" sx={{ maxWidth: 480, mb: 3, width: "100%" }}>
-            {flashMessage}
-          </Alert>
-        )}
         <Image
           src="/image/digicre-logo.webp"
           alt="デジクリ Digital Creation Circle"

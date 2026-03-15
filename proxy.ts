@@ -10,7 +10,6 @@ export const proxy = (request: NextRequest) => {
 
   if (!jwt && !isPublicPath(pathname)) {
     const loginUrl = new URL("/login", request.url);
-    loginUrl.searchParams.set("flash", "login-required");
     loginUrl.searchParams.set("next", `${pathname}${search}`);
     return NextResponse.redirect(loginUrl);
   }
