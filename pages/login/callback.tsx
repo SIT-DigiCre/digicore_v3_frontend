@@ -5,9 +5,9 @@ import { useState } from "react";
 import { CheckCircle, CopyAll } from "@mui/icons-material";
 import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 
-import Heading from "../../components/Common/Heading";
-import PageHead from "../../components/Common/PageHead";
-import { createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 type LoginCallbackPageProps = {
   loginFailed?: boolean;
@@ -27,6 +27,30 @@ const normalizeNextUrl = (value: string | undefined): string => {
   return decoded;
 };
 
+const setJwtCookie = (res: { setHeader: (name: string, value: string) => void }, jwt: string) => {
+  const maxAge = 60 * 60 * 24 * 7;
+  const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
+  res.setHeader("Set-Cookie", `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`);
+};
+
+const isInactiveAccountError = (message?: string): boolean => {
+  if (!message) return false;
+  return message.includes("無効なアカウントです");
+};
+
+const isPendingReentryError = (message?: string): boolean => {
+  if (!message) return false;
+  return (
+    message.includes("未処理の再入部申請があります") ||
+    message.includes("再入部申請の確認中です") ||
+    message.includes("確認中")
+  );
+};
+
+const shouldRedirectToReentry = (message?: string): boolean => {
+  return isInactiveAccountError(message) || isPendingReentryError(message);
+};
+
 export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = async ({
   query,
   req,
@@ -40,18 +64,51 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
   const client = createServerApiClient();
   const result = await client.POST("/login/callback", { body: { code } });
 
+  const redirectToReentry = (statusMessageRaw: string, jwt?: string) => {
+    const statusMessage = encodeURIComponent(statusMessageRaw);
+    if (jwt) {
+      setJwtCookie(res, jwt);
+    }
+    return {
+      redirect: {
+        destination: `/login/reentry?message=${statusMessage}`,
+        permanent: false,
+      },
+    };
+  };
+
   if (result.data?.jwt) {
     const jwt = result.data.jwt;
     const maxAge = 60 * 60 * 24 * 7;
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
     const nextCookie = req.cookies?.next;
     const nextUrl = normalizeNextUrl(nextCookie);
-    res.setHeader("Set-Cookie", [
-      `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`,
-      `next=; Path=/; Max-Age=0; SameSite=Lax${secure}`,
-    ]);
-    return { redirect: { destination: nextUrl, permanent: false } };
+    const meResult = await client.GET("/user/me", {
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+      },
+    });
+
+    if (meResult.data) {
+      res.setHeader("Set-Cookie", [
+        `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`,
+        `next=; Path=/; Max-Age=0; SameSite=Lax${secure}`,
+      ]);
+      return { redirect: { destination: nextUrl, permanent: false } };
+    }
+
+    if (shouldRedirectToReentry(meResult.error?.message)) {
+      return redirectToReentry(meResult.error?.message ?? "", jwt);
+    }
+
+    const errorMessage = meResult.error ? JSON.stringify(meResult.error) : "";
+    return { props: { errorMessage, loginFailed: true } };
   }
+
+  if (shouldRedirectToReentry(result.error?.message)) {
+    return redirectToReentry(result.error?.message ?? "");
+  }
+
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
   return { props: { errorMessage, loginFailed: true } };
 };
