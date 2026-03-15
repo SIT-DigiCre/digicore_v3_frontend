@@ -4,9 +4,9 @@ import Image from "next/image";
 import { Google } from "@mui/icons-material";
 import { Box, Button, Stack, Typography } from "@mui/material";
 
-import Heading from "../../components/Common/Heading";
-import PageHead from "../../components/Common/PageHead";
-import { createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 type LoginPageProps = {
   loginUrl: string;
@@ -42,7 +42,7 @@ const LoginPage = ({ loginUrl }: LoginPageProps) => {
           </Typography>
           <Typography>
             デジクリに入部希望の方は contact@digicre.net までメールするか、
-            <a href="https://twitter.com/sitdigicre" target="_blank">
+            <a href="https://x.com/sitdigicre" target="_blank" rel="noopener noreferrer">
               公式Twitter
             </a>
             にご相談下さい。

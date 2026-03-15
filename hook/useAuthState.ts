@@ -33,8 +33,6 @@ export const useAuthState: UseAuthState = () => {
   const [auth, setAuth] = useState<AuthState>(DEFAULT_AUTH_STATE);
   const { removeError } = useErrorState();
   const router = useRouter();
-  const isPublicPage =
-    router.pathname.startsWith("/login") || router.pathname.startsWith("/signup");
 
   const resetAuth = () => {
     setAuth({
@@ -80,9 +78,6 @@ export const useAuthState: UseAuthState = () => {
       return userRes.data;
     } catch {
       resetAuth();
-      if (!isPublicPage) {
-        router.push("/login");
-      }
     }
     return null;
   };
