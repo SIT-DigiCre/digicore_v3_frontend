@@ -1,4 +1,4 @@
-import { CurrencyYen, Groups, HowToReg, ReceiptLong } from "@mui/icons-material";
+import { CurrencyYen, Groups, HowToReg, ReceiptLong, School } from "@mui/icons-material";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 
 import AdminMenuCard from "@/components/Admin/AdminMenuCard";
@@ -11,10 +11,15 @@ const AdminPage = () => {
   const canAccessBudgetAdmin = authState.grants.includes(GRANT_BUDGET_ADMIN);
   const canAccessGroupAdmin = authState.grants.includes(GRANT_GROUP_ADMIN);
   const canAccessPaymentAdmin = authState.grants.includes(GRANT_PAYMENT_ADMIN);
+  const canAccessGradeUpdateAdmin = canAccessGroupAdmin;
   // TODO: まだバックエンドで再入部申請を許可するgrantを用意していないので、とりあえず同じようにインフラ権限が持つグループ管理者権限で管理する
   const canAccessReentryAdmin = canAccessGroupAdmin;
   const hasAnyAdminMenu =
-    canAccessBudgetAdmin || canAccessGroupAdmin || canAccessPaymentAdmin || canAccessReentryAdmin;
+    canAccessBudgetAdmin ||
+    canAccessGroupAdmin ||
+    canAccessPaymentAdmin ||
+    canAccessGradeUpdateAdmin ||
+    canAccessReentryAdmin;
 
   return (
     <>
@@ -52,6 +57,14 @@ const AdminPage = () => {
                 icon={CurrencyYen}
                 title="部費振込管理"
                 description="部員の部費振込状況を確認・管理します。"
+              />
+            )}
+            {canAccessGradeUpdateAdmin && (
+              <AdminMenuCard
+                href="/admin/grade-update"
+                icon={School}
+                title="学年補正申請管理"
+                description="部員からの学年補正申請を確認・承認・却下します。"
               />
             )}
             {canAccessReentryAdmin && (
