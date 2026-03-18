@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import { useState } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
@@ -17,29 +17,50 @@ import {
 
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
+import AdminPageError from "../../../components/Error/AdminPageError";
 import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog";
 import { Payment } from "../../../interfaces/payment";
-import { createServerApiClient } from "../../../utils/fetch/client";
+import { requireAdminPageAccess } from "../../../utils/auth/admin";
+
+import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+
+type AdminPaymentPageProps = AdminPageGuardProps & {
+  payments: Payment[];
+};
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
-  const client = createServerApiClient(req);
+  const accessResult = await requireAdminPageAccess(req, "/admin/payment");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
 
   try {
     const paymentsRes = await client.GET("/payment");
 
     if (!paymentsRes.data || !paymentsRes.data.payments) {
-      return { props: { payments: [] } };
+      return { props: { adminPageError: null, payments: [] } };
     }
 
-    return { props: { payments: paymentsRes.data.payments } };
+    return { props: { adminPageError: null, payments: paymentsRes.data.payments } };
   } catch (error) {
     console.error("Failed to fetch payments:", error);
-    return { props: { payments: [] } };
+    return { props: { adminPageError: null, payments: [] } };
   }
 };
 
-const AdminPaymentPage = ({ payments }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const AdminPaymentPage = ({ payments, adminPageError }: AdminPaymentPageProps) => {
   const [targetPayment, updateTargetPayment] = useState<Payment | null>(null);
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -64,7 +85,7 @@ const AdminPaymentPage = ({ payments }: InferGetServerSidePropsType<typeof getSe
                 </TableRow>
               </TableHead>
               <TableBody>
-                {payments.map((payment) => (
+                {payments.map((payment: Payment) => (
                   <TableRow key={payment.paymentId}>
                     <TableCell>{payment.studentNumber}</TableCell>
                     <TableCell>{payment.transferName}</TableCell>

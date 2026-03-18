@@ -1,3 +1,4 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
 import { ArrowBack, Autorenew, PersonOff, School } from "@mui/icons-material";
@@ -21,7 +22,9 @@ import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import AdminPageError from "@/components/Error/AdminPageError";
 import { useAuthState } from "@/hook/useAuthState";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
 import { apiClient } from "@/utils/fetch/client";
 
 type InfraAction = "inactive" | "school-grade";
@@ -57,12 +60,36 @@ const ACTION_CONTENT: Record<
   },
 };
 
-const AdminInfraPage = () => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const accessResult = await requireAdminPageAccess(req, "/admin/infra");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  return {
+    props: {
+      adminPageError: null,
+    },
+  };
+};
+
+const AdminInfraPage = ({
+  adminPageError,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { authState } = useAuthState();
   const { removeError, setNewError } = useErrorState();
   const [pendingAction, setPendingAction] = useState<InfraAction | null>(null);
   const [runningAction, setRunningAction] = useState<InfraAction | null>(null);
   const [result, setResult] = useState<ActionResult>(null);
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   const handleCloseDialog = () => {
     if (runningAction !== null) return;

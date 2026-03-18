@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -21,38 +21,56 @@ import dayjs from "dayjs";
 import { ButtonLink } from "@/components/Common/ButtonLink";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import AdminPageError from "@/components/Error/AdminPageError";
 import { useAuthState } from "@/hook/useAuthState";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
 import { getRequestStatusChipProps } from "@/utils/chip/requestStatus";
-import { apiClient, createServerApiClient } from "@/utils/fetch/client";
+import { apiClient } from "@/utils/fetch/client";
 
-import type { components } from "@/utils/fetch/api";
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
 
 type GradeUpdateRequest = components["schemas"]["ResGetAdminGradeUpdateObjectGradeUpdate"];
+type AdminGradeUpdatePageProps = AdminPageGuardProps & {
+  gradeUpdates: GradeUpdateRequest[];
+};
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
-  const client = createServerApiClient(req);
+  const accessResult = await requireAdminPageAccess(req, "/admin/grade-update");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
 
   try {
     const response = await client.GET("/admin/grade-update");
 
     if (!response.data || !response.data.gradeUpdates) {
-      return { props: { gradeUpdates: [] } };
+      return { props: { adminPageError: null, gradeUpdates: [] } };
     }
 
-    return { props: { gradeUpdates: response.data.gradeUpdates } };
+    return { props: { adminPageError: null, gradeUpdates: response.data.gradeUpdates } };
   } catch (error) {
     console.error("Failed to fetch grade update requests:", error);
-    return { props: { gradeUpdates: [] } };
+    return { props: { adminPageError: null, gradeUpdates: [] } };
   }
 };
 
-const AdminGradeUpdatePage = ({
-  gradeUpdates,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const AdminGradeUpdatePage = ({ gradeUpdates, adminPageError }: AdminGradeUpdatePageProps) => {
   const router = useRouter();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [isLoading, setIsLoading] = useState(false);
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   const updateStatus = async (gradeUpdateId: string, status: "approved" | "rejected") => {
     if (!authState.token || isLoading) {

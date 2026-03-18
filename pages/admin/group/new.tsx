@@ -1,3 +1,4 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -16,11 +17,28 @@ import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import AdminPageError from "@/components/Error/AdminPageError";
 import { useAuthState } from "@/hook/useAuthState";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
 import { GRANT_INFRA } from "@/utils/auth/grants";
 import { apiClient } from "@/utils/fetch/client";
 
-const AdminGroupNewPage = () => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const accessResult = await requireAdminPageAccess(req, "/admin/group/new");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  return {
+    props: {
+      adminPageError: null,
+    },
+  };
+};
+
+const AdminGroupNewPage = ({
+  adminPageError,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -30,6 +48,15 @@ const AdminGroupNewPage = () => {
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
   const canAccessGroupAdmin = authState.grants.includes(GRANT_INFRA);
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   const handleSubmit = async () => {
     if (!name.trim() || !description.trim()) {

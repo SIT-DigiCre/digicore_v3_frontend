@@ -1,4 +1,4 @@
-import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
+import type { GetServerSidePropsContext } from "next";
 import { useRouter } from "next/router";
 import { Fragment } from "react";
 
@@ -24,50 +24,30 @@ import ForceCheckoutButton from "@/components/Activity/ForceCheckoutButton";
 import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
-import { GRANT_INFRA } from "@/utils/auth/grants";
-import { createServerApiClient } from "@/utils/fetch/client";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+
+type AdminActivityPageProps = AdminPageGuardProps & {
+  error: string | null;
+  place: string;
+  users: any[];
+};
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
-  const client = createServerApiClient(req);
   const rawPlace = typeof query.place === "string" ? query.place : DEFAULT_PLACE;
   const place = Object.hasOwn(ACTIVITY_PLACES, rawPlace) ? rawPlace : DEFAULT_PLACE;
 
+  const accessResult = await requireAdminPageAccess(req, "/admin/activity");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
+
   try {
-    const grantsRes = await client.GET("/user/me/grants", {});
-
-    if (grantsRes.error) {
-      const status = grantsRes.response.status;
-
-      if (status === 401 || status === 403) {
-        return {
-          redirect: {
-            destination: "/login",
-            permanent: false,
-          },
-        };
-      }
-
-      console.error("Failed to fetch grants:", grantsRes.error);
-      return {
-        props: {
-          error: `権限情報の取得に失敗しました (HTTP ${status})`,
-          place,
-          users: [],
-        },
-      };
-    }
-
-    const grants = Array.from(
-      new Set(
-        (grantsRes.data?.grants ?? []).map((grant) => grant.trim()).filter((grant) => grant !== ""),
-      ),
-    );
-
-    if (!grants.includes(GRANT_INFRA)) {
-      return { notFound: true };
-    }
-
     const activityRes = await client.GET("/activity/place/{place}/current", {
       params: {
         path: { place },
@@ -89,6 +69,7 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       console.error("Failed to fetch current users:", activityRes.error);
       return {
         props: {
+          adminPageError: null,
           error: `在室情報の取得に失敗しました (HTTP ${status})`,
           place,
           users: [],
@@ -99,6 +80,7 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
     if (!activityRes.data) {
       return {
         props: {
+          adminPageError: null,
           error: "在室情報の取得に失敗しました",
           place,
           users: [],
@@ -108,6 +90,7 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
 
     return {
       props: {
+        adminPageError: null,
         error: null,
         place,
         users: activityRes.data.users ?? [],
@@ -117,6 +100,7 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
     console.error("Failed to fetch current activity users:", error);
     return {
       props: {
+        adminPageError: null,
         error: "在室情報の取得に失敗しました",
         place,
         users: [],
@@ -125,12 +109,17 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
   }
 };
 
-const AdminActivityPage = ({
-  users,
-  place,
-  error,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const AdminActivityPage = ({ users, place, error, adminPageError }: AdminActivityPageProps) => {
   const router = useRouter();
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   const handlePlaceChange = (newPlace: string) => {
     void router.push({
@@ -187,7 +176,7 @@ const AdminActivityPage = ({
           {users.length > 0 ? (
             <Paper variant="outlined">
               <List disablePadding>
-                {users.map((user, index) => (
+                {users.map((user: any, index: number) => (
                   <Fragment key={user.userId}>
                     {index > 0 && <Divider component="li" />}
                     <ListItem

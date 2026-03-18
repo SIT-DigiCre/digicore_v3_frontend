@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 
@@ -25,26 +25,38 @@ import {
 import { ButtonLink } from "@/components/Common/ButtonLink";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import AdminPageError from "@/components/Error/AdminPageError";
 import { useAuthState } from "@/hook/useAuthState";
-import { apiClient, createServerApiClient } from "@/utils/fetch/client";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+import { apiClient } from "@/utils/fetch/client";
 
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
 import type { components } from "@/utils/fetch/api.d.ts";
 
 type AdminReentry = components["schemas"]["ResGetAdminReentryObjectReentry"];
+type AdminReentryPageProps = AdminPageGuardProps & {
+  reentries: AdminReentry[];
+};
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
-  const client = createServerApiClient(req);
+  const accessResult = await requireAdminPageAccess(req, "/admin/reentry");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
 
   try {
     const reentriesRes = await client.GET("/admin/reentry");
     return {
       props: {
+        adminPageError: null,
         reentries: reentriesRes.data?.reentries ?? ([] as AdminReentry[]),
       },
     };
   } catch (error) {
     console.error("Failed to fetch pending reentry requests:", error);
-    return { props: { reentries: [] as AdminReentry[] } };
+    return { props: { adminPageError: null, reentries: [] as AdminReentry[] } };
   }
 };
 
@@ -57,15 +69,22 @@ const getPaymentStatusChip = (
   return { color: "default", label: status };
 };
 
-const AdminReentryPage = ({
-  reentries,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const AdminReentryPage = ({ reentries, adminPageError }: AdminReentryPageProps) => {
   const router = useRouter();
   const { authState } = useAuthState();
   const { removeError, setNewError } = useErrorState();
   const [targetReentry, setTargetReentry] = useState<AdminReentry | null>(null);
   const [note, setNote] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   const dialogOpen = targetReentry !== null;
   const paymentStatus = useMemo(() => {
@@ -156,7 +175,7 @@ const AdminReentryPage = ({
                 </TableRow>
               </TableHead>
               <TableBody>
-                {reentries.map((reentry) => {
+                {reentries.map((reentry: AdminReentry) => {
                   const chip = getPaymentStatusChip(reentry.paymentStatus);
                   return (
                     <TableRow key={reentry.reentryId}>

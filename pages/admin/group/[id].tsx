@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import Link from "next/link";
 
 import { ArrowBack } from "@mui/icons-material";
@@ -19,8 +19,17 @@ import {
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import Heading from "../../../components/Common/Heading";
 import PageHead from "../../../components/Common/PageHead";
+import AdminPageError from "../../../components/Error/AdminPageError";
 import AddUserDialog from "../../../components/Group/AddUserDialog";
-import { createServerApiClient } from "../../../utils/fetch/client";
+import { requireAdminPageAccess } from "../../../utils/auth/admin";
+import { GRANT_INFRA } from "../../../utils/auth/grants";
+
+import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+
+type AdminGroupDetailPageProps = AdminPageGuardProps & {
+  canManageMembers: boolean;
+  group: any;
+};
 
 export const getServerSideProps = async ({
   req,
@@ -29,12 +38,18 @@ export const getServerSideProps = async ({
   req: NextApiRequest;
   params: { id: string };
 }) => {
-  const client = createServerApiClient(req);
   const groupId = params?.id as string;
 
   if (!groupId) {
     return { notFound: true };
   }
+
+  const accessResult = await requireAdminPageAccess(req, "/admin/group");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client, grants } = accessResult;
 
   try {
     const groupRes = await client.GET("/group/{groupId}", {
@@ -49,7 +64,13 @@ export const getServerSideProps = async ({
       return { notFound: true };
     }
 
-    return { props: { group: groupRes.data } };
+    return {
+      props: {
+        adminPageError: null,
+        canManageMembers: groupRes.data.joined || grants.includes(GRANT_INFRA),
+        group: groupRes.data,
+      },
+    };
   } catch (error) {
     console.error("Failed to fetch group:", error);
     return { notFound: true };
@@ -58,7 +79,18 @@ export const getServerSideProps = async ({
 
 const AdminGroupDetailPage = ({
   group,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  adminPageError,
+  canManageMembers,
+}: AdminGroupDetailPageProps) => {
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
+
   return (
     <>
       <PageHead title="[管理者用] グループ詳細" />
@@ -67,7 +99,7 @@ const AdminGroupDetailPage = ({
           <ButtonLink href="/admin/group" startIcon={<ArrowBack />} variant="text">
             グループ一覧に戻る
           </ButtonLink>
-          {group.joined && <AddUserDialog groupId={group.groupId} />}
+          {canManageMembers && <AddUserDialog groupId={group.groupId} />}
         </Stack>
         <Box>
           <Heading level={2}>{group.name}</Heading>
@@ -100,7 +132,7 @@ const AdminGroupDetailPage = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {group.users.map((user) => (
+                  {group.users.map((user: any) => (
                     <TableRow key={user.userId}>
                       <TableCell>
                         <Avatar src={user.userIcon} sx={{ height: 40, width: 40 }}>

@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -19,10 +19,19 @@ import dayjs from "dayjs";
 import { ButtonLink } from "../../../components/Common/ButtonLink";
 import PageHead from "../../../components/Common/PageHead";
 import Pagination from "../../../components/Common/Pagination";
+import AdminPageError from "../../../components/Error/AdminPageError";
+import { requireAdminPageAccess } from "../../../utils/auth/admin";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
-import { createServerApiClient } from "../../../utils/fetch/client";
+
+import type { AdminPageGuardProps } from "../../../utils/auth/admin";
 
 const ITEMS_PER_PAGE = 10;
+type AdminBudgetIndexPageProps = AdminPageGuardProps & {
+  budgets: any[];
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+};
 
 export const getServerSideProps = async ({
   req,
@@ -31,7 +40,12 @@ export const getServerSideProps = async ({
   req: NextApiRequest;
   query: { page: string };
 }) => {
-  const client = createServerApiClient(req);
+  const accessResult = await requireAdminPageAccess(req, "/admin/budget");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
   const page = query.page ? parseInt(query.page as string, 10) : 1;
   const offset = (page - 1) * ITEMS_PER_PAGE;
 
@@ -44,17 +58,35 @@ export const getServerSideProps = async ({
       },
     });
     if (!budgetsRes.data || !budgetsRes.data.budgets) {
-      return { props: { budgets: [], currentPage: 1, hasNextPage: false, hasPreviousPage: false } };
+      return {
+        props: {
+          adminPageError: null,
+          budgets: [],
+          currentPage: 1,
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      };
     }
 
     const budgets = budgetsRes.data.budgets;
     const hasNextPage = budgets.length === ITEMS_PER_PAGE;
     const hasPreviousPage = page > 1;
 
-    return { props: { budgets, currentPage: page, hasNextPage, hasPreviousPage } };
+    return {
+      props: { adminPageError: null, budgets, currentPage: page, hasNextPage, hasPreviousPage },
+    };
   } catch (error) {
     console.error("Failed to fetch budgets:", error);
-    return { props: { budgets: [], currentPage: 1, hasNextPage: false, hasPreviousPage: false } };
+    return {
+      props: {
+        adminPageError: null,
+        budgets: [],
+        currentPage: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    };
   }
 };
 
@@ -63,8 +95,18 @@ const AdminBudgetIndexPage = ({
   currentPage,
   hasNextPage,
   hasPreviousPage,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  adminPageError,
+}: AdminBudgetIndexPageProps) => {
   const router = useRouter();
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   return (
     <>
@@ -91,7 +133,7 @@ const AdminBudgetIndexPage = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {budgets.map((budget) => (
+                  {budgets.map((budget: any) => (
                     <TableRow key={budget.budgetId}>
                       <TableCell>
                         <Link href={`/admin/budget/${budget.budgetId}`}>{budget.name}</Link>
