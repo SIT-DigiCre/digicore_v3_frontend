@@ -4,23 +4,17 @@ import { Box, Grid, Stack, Typography } from "@mui/material";
 import AdminMenuCard from "@/components/Admin/AdminMenuCard";
 import PageHead from "@/components/Common/PageHead";
 import { useAuthState } from "@/hook/useAuthState";
-import {
-  GRANT_BUDGET_ADMIN,
-  GRANT_FORCE_CHECKOUT,
-  GRANT_GROUP_ADMIN,
-  GRANT_PAYMENT_ADMIN,
-  hasGrant,
-} from "@/utils/auth/grants";
+import { GRANT_ACCOUNT, GRANT_INFRA, hasGrant } from "@/utils/auth/grants";
 
 const AdminPage = () => {
   const { authState } = useAuthState();
-  const canAccessBudgetAdmin = hasGrant(authState.grants, GRANT_BUDGET_ADMIN);
-  const canAccessForceCheckoutAdmin = hasGrant(authState.grants, GRANT_FORCE_CHECKOUT);
-  const canAccessGroupAdmin = hasGrant(authState.grants, GRANT_GROUP_ADMIN);
-  const canAccessPaymentAdmin = hasGrant(authState.grants, GRANT_PAYMENT_ADMIN);
-  const canAccessGradeUpdateAdmin = canAccessGroupAdmin;
+  const canAccessBudgetAdmin = hasGrant(authState.grants, GRANT_ACCOUNT);
+  const canAccessForceCheckoutAdmin = hasGrant(authState.grants, GRANT_INFRA);
+  const canAccessGroupAdmin = hasGrant(authState.grants, GRANT_INFRA);
+  const canAccessPaymentAdmin = hasGrant(authState.grants, GRANT_ACCOUNT);
+  const canAccessGradeUpdateAdmin = hasGrant(authState.grants, GRANT_INFRA);
   // TODO: まだバックエンドで再入部申請を許可するgrantを用意していないので、とりあえず同じようにインフラ権限が持つグループ管理者権限で管理する
-  const canAccessReentryAdmin = canAccessGroupAdmin;
+  const canAccessReentryAdmin = hasGrant(authState.grants, GRANT_INFRA);
   const hasAnyAdminMenu =
     canAccessBudgetAdmin ||
     canAccessForceCheckoutAdmin ||
