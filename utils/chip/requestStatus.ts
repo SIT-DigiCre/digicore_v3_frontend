@@ -15,8 +15,16 @@ export const getRequestStatusChipProps = (status: string): Pick<ChipProps, "labe
     };
   }
 
+  if (status === "pending") {
+    return {
+      color: "warning",
+      label: "審査中",
+    };
+  }
+
+  // 想定外の status は「不明」として扱い、仕様変更や新ステータス追加時の誤表示を防ぐ
   return {
-    color: "warning",
-    label: "審査中",
+    color: "default",
+    label: "不明",
   };
 };
