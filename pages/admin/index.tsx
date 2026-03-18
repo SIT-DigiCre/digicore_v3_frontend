@@ -13,7 +13,6 @@ const AdminPage = () => {
   const canAccessGroupAdmin = authState.grants.includes(GRANT_INFRA);
   const canAccessPaymentAdmin = authState.grants.includes(GRANT_ACCOUNT);
   const canAccessGradeUpdateAdmin = authState.grants.includes(GRANT_INFRA);
-  // TODO: まだバックエンドで再入部申請を許可するgrantを用意していないので、とりあえず同じようにインフラ権限が持つグループ管理者権限で管理する
   const canAccessReentryAdmin = authState.grants.includes(GRANT_INFRA);
   const hasAnyAdminMenu =
     canAccessBudgetAdmin ||
