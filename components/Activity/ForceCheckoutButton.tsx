@@ -28,6 +28,7 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
+  const errorName = `activity-force-checkout-fail-${userId}`;
 
   const handleForceCheckout = () => {
     if (!authState.token || isPending) return;
@@ -48,14 +49,14 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
           startTransition(() => {
             setNewError({
               message: `${username} さんの強制チェックアウトに失敗しました`,
-              name: "activity-force-checkout-fail",
+              name: errorName,
             });
           });
           return;
         }
 
         startTransition(() => {
-          removeError("activity-force-checkout-fail");
+          removeError(errorName);
           setOpen(false);
           void router.replace(router.asPath);
         });
@@ -63,7 +64,7 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
         startTransition(() => {
           setNewError({
             message: `${username} さんの強制チェックアウトに失敗しました`,
-            name: "activity-force-checkout-fail",
+            name: errorName,
           });
         });
       }

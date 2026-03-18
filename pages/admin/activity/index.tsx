@@ -36,14 +36,24 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
   try {
     const grantsRes = await client.GET("/user/me/grants", {});
 
-    if (
-      grantsRes.error &&
-      (grantsRes.response.status === 401 || grantsRes.response.status === 403)
-    ) {
+    if (grantsRes.error) {
+      const status = grantsRes.response.status;
+
+      if (status === 401 || status === 403) {
+        return {
+          redirect: {
+            destination: "/login",
+            permanent: false,
+          },
+        };
+      }
+
+      console.error("Failed to fetch grants:", grantsRes.error);
       return {
-        redirect: {
-          destination: "/login",
-          permanent: false,
+        props: {
+          error: `権限情報の取得に失敗しました (HTTP ${status})`,
+          place,
+          users: [],
         },
       };
     }
@@ -64,7 +74,29 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       },
     });
 
-    if (activityRes.error || !activityRes.data) {
+    if (activityRes.error) {
+      const status = activityRes.response.status;
+
+      if (status === 401 || status === 403) {
+        return {
+          redirect: {
+            destination: "/login",
+            permanent: false,
+          },
+        };
+      }
+
+      console.error("Failed to fetch current users:", activityRes.error);
+      return {
+        props: {
+          error: `在室情報の取得に失敗しました (HTTP ${status})`,
+          place,
+          users: [],
+        },
+      };
+    }
+
+    if (!activityRes.data) {
       return {
         props: {
           error: "在室情報の取得に失敗しました",
