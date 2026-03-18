@@ -17,7 +17,7 @@ import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import { useAuthState } from "@/hook/useAuthState";
-import { GRANT_GROUP_ADMIN } from "@/utils/auth/grants";
+import { GRANT_INFRA } from "@/utils/auth/grants";
 import { apiClient } from "@/utils/fetch/client";
 
 const AdminGroupNewPage = () => {
@@ -29,7 +29,7 @@ const AdminGroupNewPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
-  const canAccessGroupAdmin = authState.grants.includes(GRANT_GROUP_ADMIN);
+  const canAccessGroupAdmin = authState.grants.includes(GRANT_INFRA);
 
   const handleSubmit = async () => {
     if (!name.trim() || !description.trim()) {

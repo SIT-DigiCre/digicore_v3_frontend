@@ -5,12 +5,7 @@ import { Stack, Typography } from "@mui/material";
 
 import Heading from "@/components/Common/Heading";
 import { useAuthState } from "@/hook/useAuthState";
-import {
-  GRANT_BUDGET_ADMIN,
-  GRANT_FORCE_CHECKOUT,
-  GRANT_GROUP_ADMIN,
-  GRANT_PAYMENT_ADMIN,
-} from "@/utils/auth/grants";
+import { GRANT_ACCOUNT, GRANT_INFRA } from "@/utils/auth/grants";
 
 type AccessControlProps = {
   children: React.ReactNode;
@@ -18,16 +13,14 @@ type AccessControlProps = {
 
 const getRequiredAdminGrantsByPath = (pathname: string): string[] | null => {
   if (!pathname.startsWith("/admin")) return null;
-  if (pathname === "/admin") {
-    return [GRANT_BUDGET_ADMIN, GRANT_FORCE_CHECKOUT, GRANT_GROUP_ADMIN, GRANT_PAYMENT_ADMIN];
-  }
-  if (pathname.startsWith("/admin/budget")) return [GRANT_BUDGET_ADMIN];
-  if (pathname.startsWith("/admin/group")) return [GRANT_GROUP_ADMIN];
-  if (pathname.startsWith("/admin/payment")) return [GRANT_PAYMENT_ADMIN];
-  if (pathname.startsWith("/admin/grade-update")) return [GRANT_GROUP_ADMIN];
-  if (pathname.startsWith("/admin/reentry")) return [GRANT_GROUP_ADMIN];
-  if (pathname.startsWith("/admin/activity")) return [GRANT_FORCE_CHECKOUT];
-  return [GRANT_BUDGET_ADMIN, GRANT_FORCE_CHECKOUT, GRANT_GROUP_ADMIN, GRANT_PAYMENT_ADMIN];
+  if (pathname === "/admin") return [GRANT_ACCOUNT, GRANT_INFRA];
+  if (pathname.startsWith("/admin/budget")) return [GRANT_ACCOUNT];
+  if (pathname.startsWith("/admin/group")) return [GRANT_INFRA];
+  if (pathname.startsWith("/admin/payment")) return [GRANT_ACCOUNT];
+  if (pathname.startsWith("/admin/grade-update")) return [GRANT_INFRA];
+  if (pathname.startsWith("/admin/reentry")) return [GRANT_INFRA];
+  if (pathname.startsWith("/admin/activity")) return [GRANT_INFRA];
+  return [GRANT_ACCOUNT, GRANT_INFRA];
 };
 
 const AccessControl = ({ children }: AccessControlProps) => {

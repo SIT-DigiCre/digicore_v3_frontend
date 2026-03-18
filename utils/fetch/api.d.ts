@@ -940,7 +940,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get my available grants from claims */
+        /** @description Get my available grants from claims with CLAIM_ prefix */
         get: {
             parameters: {
                 query?: never;
@@ -2635,6 +2635,36 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/school-grade": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** @description school_gradeを一括更新する */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/activity/checkin": {
         parameters: {
             query?: never;
@@ -3258,7 +3288,7 @@ export interface components {
             updatedAt: string;
         };
         ResGetUserMeGrants: {
-            /** @description claim 由来の利用可能機能。infra: group_admin/force_checkout/mail_broadcast/activity_record_edit_other, account: budget_admin/payment_admin */
+            /** @description claim 一覧を CLAIM_ プレフィックス付きで返す。例: infra -> CLAIM_infra, account -> CLAIM_account */
             grants: string[];
         };
         ReqPutUserMePayment: {

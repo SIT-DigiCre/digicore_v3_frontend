@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 
 import { useAuthState } from "@/hook/useAuthState";
-import { GRANT_BUDGET_ADMIN, GRANT_GROUP_ADMIN, GRANT_PAYMENT_ADMIN } from "@/utils/auth/grants";
+import { GRANT_ACCOUNT, GRANT_INFRA } from "@/utils/auth/grants";
 
 type MenuItem = {
   href: string;
@@ -41,9 +41,7 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
   const { authState } = useAuthState();
   const router = useRouter();
   const canAccessAdminPage =
-    authState.grants.includes(GRANT_BUDGET_ADMIN) ||
-    authState.grants.includes(GRANT_GROUP_ADMIN) ||
-    authState.grants.includes(GRANT_PAYMENT_ADMIN);
+    authState.grants.includes(GRANT_ACCOUNT) || authState.grants.includes(GRANT_INFRA);
 
   const isMenuItemActive = (href: string): boolean => {
     if (href === "/") {
