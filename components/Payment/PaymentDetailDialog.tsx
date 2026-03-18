@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 import { Close, Save } from "@mui/icons-material";
 import {
@@ -30,34 +30,35 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
   const router = useRouter();
   const [checked, setChecked] = useState(payment.checked ?? false);
   const [note, setNote] = useState(payment.note);
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
 
   const handleSave = async () => {
-    startTransition(async () => {
-      try {
-        await apiClient.PUT(`/payment/{paymentId}`, {
-          body: { checked: checked, note: note },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
+    setIsLoading(true);
+    try {
+      await apiClient.PUT(`/payment/{paymentId}`, {
+        body: { checked: checked, note: note },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+        params: {
+          path: {
+            paymentId: payment.paymentId,
           },
-          params: {
-            path: {
-              paymentId: payment.paymentId,
-            },
-          },
-        });
-        removeError("payments-update-fail");
-        await router.replace(router.asPath);
-        onClose();
-      } catch {
-        setNewError({
-          message: "支払情報の更新に失敗しました",
-          name: "payments-update-fail",
-        });
-      }
-    });
+        },
+      });
+      removeError("payments-update-fail");
+      await router.replace(router.asPath);
+      onClose();
+    } catch {
+      setNewError({
+        message: "支払情報の更新に失敗しました",
+        name: "payments-update-fail",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -66,7 +67,7 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
       <IconButton
         aria-label="ダイアログを閉じる"
         onClick={onClose}
-        disabled={isPending}
+        disabled={isLoading}
         sx={{
           color: (theme) => theme.palette.grey[500],
           position: "absolute",
@@ -104,7 +105,7 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
               <Checkbox
                 checked={checked}
                 onChange={(e) => setChecked(e.target.checked)}
-                disabled={isPending}
+                disabled={isLoading}
               />
             }
             label="確認済み"
@@ -117,17 +118,17 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
             rows={4}
             value={note}
             onChange={(e) => setNote(e.target.value)}
-            disabled={isPending}
+            disabled={isLoading}
           />
 
           <Stack direction="row" justifyContent="space-between" spacing={2} sx={{ mt: 2 }}>
-            <Button variant="outlined" onClick={onClose} disabled={isPending}>
+            <Button variant="outlined" onClick={onClose} disabled={isLoading}>
               キャンセル
             </Button>
             <Button
               variant="contained"
               onClick={handleSave}
-              disabled={isPending || (payment.checked === checked && note === payment.note)}
+              disabled={isLoading || (payment.checked === checked && note === payment.note)}
               startIcon={<Save />}
             >
               保存

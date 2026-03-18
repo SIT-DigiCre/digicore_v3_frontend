@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useRef, useState, useTransition } from "react";
+import { useRef, useState } from "react";
 
 import { Close, PersonAdd } from "@mui/icons-material";
 import {
@@ -37,7 +37,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
   const [userOptions, setUserOptions] = useState<UserOption[]>([]);
   const [isLoadingUsers, setIsLoadingUsers] = useState(false);
   const [inputValue, setInputValue] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { setNewError } = useErrorState();
   const { authState } = useAuthState();
@@ -94,36 +94,36 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const response = await apiClient.POST("/group/{groupId}/user", {
-          body: {
-            userId: selectedUser.userId,
+    setIsSubmitting(true);
+    try {
+      const response = await apiClient.POST("/group/{groupId}/user", {
+        body: {
+          userId: selectedUser.userId,
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+        params: {
+          path: {
+            groupId,
           },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-          params: {
-            path: {
-              groupId,
-            },
-          },
-        });
+        },
+      });
 
-        if (response.error) {
-          const errorMessage = response.error.message || "ユーザーの追加に失敗しました";
-          setNewError({ message: errorMessage, name: "add-user-error" });
-          return;
-        }
-
-        router.replace(router.asPath);
-      } catch (error) {
-        console.error("Error adding user to group:", error);
-        setNewError({ message: "ユーザーの追加に失敗しました", name: "add-user-error" });
-      } finally {
-        handleClose();
+      if (response.error) {
+        const errorMessage = response.error.message || "ユーザーの追加に失敗しました";
+        setNewError({ message: errorMessage, name: "add-user-error" });
+        return;
       }
-    });
+
+      await router.replace(router.asPath);
+      handleClose();
+    } catch (error) {
+      console.error("Error adding user to group:", error);
+      setNewError({ message: "ユーザーの追加に失敗しました", name: "add-user-error" });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -136,7 +136,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
         <IconButton
           aria-label="メンバー追加をやめる"
           onClick={handleClose}
-          disabled={isPending}
+          disabled={isSubmitting}
           sx={{
             color: (theme) => theme.palette.grey[500],
             position: "absolute",
@@ -177,7 +177,7 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
                   setSelectedUser(newValue);
                   setInputValue(newValue?.username || "");
                 }}
-                disabled={isPending}
+                disabled={isSubmitting}
                 loadingText="ユーザー一覧を取得中..."
                 renderOption={(props, option) => (
                   <li {...props} key={option.userId}>
@@ -196,13 +196,13 @@ const AddUserDialog = ({ groupId }: AddUserDialogProps) => {
             </FormControl>
 
             <Stack direction="row" justifyContent="flex-end" spacing={2} sx={{ mt: 2 }}>
-              <Button variant="outlined" onClick={handleClose} disabled={isPending}>
+              <Button variant="outlined" onClick={handleClose} disabled={isSubmitting}>
                 キャンセル
               </Button>
               <Button
                 variant="contained"
                 onClick={handleSubmit}
-                disabled={isPending || !selectedUser}
+                disabled={isSubmitting || !selectedUser}
                 startIcon={<PersonAdd />}
               >
                 追加する

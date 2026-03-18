@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 import SchoolIcon from "@mui/icons-material/School";
 import SendIcon from "@mui/icons-material/Send";
@@ -24,14 +24,14 @@ const GraduationReportSection = () => {
   const { authState, refresh } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
 
   const schoolGrade = authState.user?.schoolGrade ?? 0;
   const isGraduated = authState.user?.isGraduated ?? false;
   const canReport = schoolGrade >= 4;
   const canSubmit = authState.isLogined && !!authState.token && !isGraduated && canReport;
 
-  const handleGraduatedReport = () => {
+  const handleGraduatedReport = async () => {
     if (isGraduated) {
       setNewError({
         message: "すでに卒業報告済みです",
@@ -53,34 +53,35 @@ const GraduationReportSection = () => {
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const response = await apiClient.PUT("/user/me/graduated", {
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-        });
+    setIsLoading(true);
+    try {
+      const response = await apiClient.PUT("/user/me/graduated", {
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
 
-        if (response.error) {
-          setNewError({
-            message: response.error.message || "卒業報告の送信に失敗しました",
-            name: "graduated-update-fail",
-          });
-          return;
-        }
-
-        removeError("graduated-update-fail");
-        setOpenConfirmDialog(false);
-
-        await refresh();
-        await router.replace(router.asPath);
-      } catch {
+      if (response.error) {
         setNewError({
-          message: "卒業報告の送信に失敗しました",
+          message: response.error.message || "卒業報告の送信に失敗しました",
           name: "graduated-update-fail",
         });
+        return;
       }
-    });
+
+      removeError("graduated-update-fail");
+      setOpenConfirmDialog(false);
+
+      await refresh();
+      await router.replace(router.asPath);
+    } catch {
+      setNewError({
+        message: "卒業報告の送信に失敗しました",
+        name: "graduated-update-fail",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -102,7 +103,7 @@ const GraduationReportSection = () => {
           variant="contained"
           color="warning"
           startIcon={<SchoolIcon />}
-          disabled={!canSubmit || isPending}
+          disabled={!canSubmit || isLoading}
           onClick={() => setOpenConfirmDialog(true)}
         >
           卒業を報告する
@@ -112,7 +113,7 @@ const GraduationReportSection = () => {
       <Dialog
         open={openConfirmDialog}
         onClose={() => {
-          if (!isPending) {
+          if (!isLoading) {
             setOpenConfirmDialog(false);
           }
         }}
@@ -130,7 +131,7 @@ const GraduationReportSection = () => {
             onClick={() => {
               setOpenConfirmDialog(false);
             }}
-            disabled={isPending}
+            disabled={isLoading}
           >
             キャンセル
           </Button>
@@ -138,8 +139,8 @@ const GraduationReportSection = () => {
             variant="contained"
             color="warning"
             onClick={handleGraduatedReport}
-            disabled={isPending}
-            startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <SendIcon />}
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <SendIcon />}
           >
             送信する
           </Button>

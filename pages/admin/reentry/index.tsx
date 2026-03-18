@@ -1,6 +1,6 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState } from "react";
 
 import { ArrowBack, Check, Close } from "@mui/icons-material";
 import {
@@ -65,7 +65,7 @@ const AdminReentryPage = ({
   const { removeError, setNewError } = useErrorState();
   const [targetReentry, setTargetReentry] = useState<AdminReentry | null>(null);
   const [note, setNote] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
 
   const dialogOpen = targetReentry !== null;
   const paymentStatus = useMemo(() => {
@@ -74,14 +74,14 @@ const AdminReentryPage = ({
   }, [targetReentry]);
 
   const handleCloseDialog = () => {
-    if (isPending) return;
+    if (isLoading) return;
     setTargetReentry(null);
     setNote("");
   };
 
   const handleReview = async (status: "approved" | "rejected") => {
     if (!targetReentry) return;
-    if (isPending) return;
+    if (isLoading) return;
     if (!authState.token) {
       setNewError({
         message: "ログイン情報が見つかりません。再度ログインしてください。",
@@ -90,48 +90,46 @@ const AdminReentryPage = ({
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const response = await apiClient.PUT("/admin/reentry/{reentryId}", {
-          body: {
-            // TODO: 本来noteは申請者が書き込むものだが、バックエンドの仕様で審査者が書き込むフィールドとして扱われてしまっているため、修正する
-            note: note.trim() === "" ? "xyz" : note.trim(),
-            status,
+    setIsLoading(true);
+    try {
+      const response = await apiClient.PUT("/admin/reentry/{reentryId}", {
+        body: {
+          // TODO: 本来noteは申請者が書き込むものだが、バックエンドの仕様で審査者が書き込むフィールドとして扱われてしまっているため、修正する
+          note: note.trim() === "" ? "xyz" : note.trim(),
+          status,
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+        params: {
+          path: {
+            reentryId: targetReentry.reentryId,
           },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-          params: {
-            path: {
-              reentryId: targetReentry.reentryId,
-            },
-          },
-        });
+        },
+      });
 
-        if (response.error) {
-          setNewError({
-            message: response.error.message || "再入部申請の更新に失敗しました",
-            name: "reentry-review-fail",
-          });
-          return;
-        }
-
-        removeError("reentry-review-fail");
-      } catch (error) {
-        const message =
-          error instanceof Error ? error.message : "再入部申請の更新中にエラーが発生しました";
+      if (response.error) {
         setNewError({
-          message,
+          message: response.error.message || "再入部申請の更新に失敗しました",
           name: "reentry-review-fail",
         });
-      } finally {
-        setTargetReentry(null);
-        setNote("");
-        startTransition(() => {
-          router.push(router.asPath);
-        });
+        return;
       }
-    });
+
+      removeError("reentry-review-fail");
+      setTargetReentry(null);
+      setNote("");
+      await router.push(router.asPath);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "再入部申請の更新中にエラーが発生しました";
+      setNewError({
+        message,
+        name: "reentry-review-fail",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -211,7 +209,7 @@ const AdminReentryPage = ({
               multiline
               minRows={3}
               inputProps={{ maxLength: 255 }}
-              disabled={isPending}
+              disabled={isLoading}
               fullWidth
             />
           </Stack>
@@ -220,16 +218,16 @@ const AdminReentryPage = ({
           <Button
             color="error"
             onClick={() => handleReview("rejected")}
-            disabled={isPending}
-            startIcon={isPending ? <CircularProgress size={18} /> : <Close />}
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={18} /> : <Close />}
           >
             却下する
           </Button>
           <Button
             variant="contained"
             onClick={() => handleReview("approved")}
-            disabled={isPending}
-            startIcon={isPending ? <CircularProgress size={18} /> : <Check />}
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={18} /> : <Check />}
           >
             承認する
           </Button>

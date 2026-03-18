@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useState } from "react";
 
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -38,7 +38,7 @@ const GradeUpdateSection = ({ gradeUpdates }: GradeUpdateSectionProps) => {
   const { setNewError, removeError } = useErrorState();
 
   const [reason, setReason] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
 
   const pendingExists = useMemo(
     () => gradeUpdates.some((gradeUpdate) => gradeUpdate.status === "pending"),
@@ -53,40 +53,41 @@ const GradeUpdateSection = ({ gradeUpdates }: GradeUpdateSectionProps) => {
   const canSubmit =
     !!authState.token && reason.trim().length > 0 && !pendingExists && approvedCount < 2;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!authState.token || !canSubmit) {
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const response = await apiClient.POST("/user/me/grade-update", {
-          body: {
-            reason: reason.trim(),
-          },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-        });
+    setIsLoading(true);
+    try {
+      const response = await apiClient.POST("/user/me/grade-update", {
+        body: {
+          reason: reason.trim(),
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+      });
 
-        if (response.error) {
-          setNewError({
-            message: response.error.message || "学年補正申請の送信に失敗しました",
-            name: "grade-update-submit-fail",
-          });
-          return;
-        }
-
-        removeError("grade-update-submit-fail");
-        setReason("");
-        await router.replace(router.asPath);
-      } catch {
+      if (response.error) {
         setNewError({
-          message: "学年補正申請の送信に失敗しました",
+          message: response.error.message || "学年補正申請の送信に失敗しました",
           name: "grade-update-submit-fail",
         });
+        return;
       }
-    });
+
+      removeError("grade-update-submit-fail");
+      setReason("");
+      await router.replace(router.asPath);
+    } catch {
+      setNewError({
+        message: "学年補正申請の送信に失敗しました",
+        name: "grade-update-submit-fail",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -124,8 +125,8 @@ const GradeUpdateSection = ({ gradeUpdates }: GradeUpdateSectionProps) => {
         <Button
           variant="contained"
           onClick={handleSubmit}
-          disabled={!canSubmit || isPending}
-          startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <SendIcon />}
+          disabled={!canSubmit || isLoading}
+          startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <SendIcon />}
         >
           申請する
         </Button>

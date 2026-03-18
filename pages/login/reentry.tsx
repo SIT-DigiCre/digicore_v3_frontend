@@ -1,4 +1,4 @@
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 import SendIcon from "@mui/icons-material/Send";
 import {
@@ -26,12 +26,12 @@ import { apiClient } from "@/utils/fetch/client";
 const ReentryPage = () => {
   const { removeError, setNewError } = useErrorState();
   const [transferName, setTransferName] = useState("");
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
   const [reentryId, setReentryId] = useState<string | null>(null);
   const [showSubmittedDialog, setShowSubmittedDialog] = useState(false);
 
   const handleSubmit = async () => {
-    if (isPending) return;
+    if (isLoading) return;
 
     if (!transferName.trim()) {
       setNewError({
@@ -50,43 +50,38 @@ const ReentryPage = () => {
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const response = await apiClient.PUT("/user/me/reentry", {
-          body: {
-            transferName: transferName.trim(),
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    setIsLoading(true);
+    try {
+      const response = await apiClient.PUT("/user/me/reentry", {
+        body: {
+          transferName: transferName.trim(),
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-        if (response.error) {
-          const message = response.error.message || "再入部申請に失敗しました";
-          startTransition(() => {
-            setNewError({
-              message,
-              name: "reentry-request-fail",
-            });
-          });
-          return;
-        }
-
-        removeError("reentry-request-fail");
-        startTransition(() => {
-          setReentryId(response.data?.reentryId ?? "");
-          setShowSubmittedDialog(true);
+      if (response.error) {
+        const message = response.error.message || "再入部申請に失敗しました";
+        setNewError({
+          message,
+          name: "reentry-request-fail",
         });
-      } catch {
-        console.error("再入部申請に失敗しました");
-        startTransition(() => {
-          setNewError({
-            message: "再入部申請に失敗しました",
-            name: "reentry-request-fail",
-          });
-        });
+        return;
       }
-    });
+
+      removeError("reentry-request-fail");
+      setReentryId(response.data?.reentryId ?? "");
+      setShowSubmittedDialog(true);
+    } catch {
+      console.error("再入部申請に失敗しました");
+      setNewError({
+        message: "再入部申請に失敗しました",
+        name: "reentry-request-fail",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -112,15 +107,15 @@ const ReentryPage = () => {
               onChange={(e) => setTransferName(e.target.value)}
               required
               fullWidth
-              disabled={isPending}
+              disabled={isLoading}
             />
             <Alert severity="warning">振込を終えたあとに申請してください。</Alert>
             <Box textAlign="end">
               <Button
                 variant="contained"
-                disabled={isPending || transferName.trim() === ""}
+                disabled={isLoading || transferName.trim() === ""}
                 onClick={handleSubmit}
-                startIcon={isPending ? <CircularProgress size={18} /> : <SendIcon />}
+                startIcon={isLoading ? <CircularProgress size={18} /> : <SendIcon />}
               >
                 再入部申請を送信する
               </Button>
