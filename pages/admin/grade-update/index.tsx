@@ -1,6 +1,6 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useRouter } from "next/router";
-import { useTransition } from "react";
+import { useState } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
 import {
@@ -52,46 +52,47 @@ const AdminGradeUpdatePage = ({
   const router = useRouter();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const updateStatus = (gradeUpdateId: string, status: "approved" | "rejected") => {
-    if (!authState.token || isPending) {
+  const updateStatus = async (gradeUpdateId: string, status: "approved" | "rejected") => {
+    if (!authState.token || isLoading) {
       return;
     }
 
-    startTransition(async () => {
-      try {
-        const response = await apiClient.PUT("/admin/grade-update/{gradeUpdateId}", {
-          body: {
-            status,
+    setIsLoading(true);
+    try {
+      const response = await apiClient.PUT("/admin/grade-update/{gradeUpdateId}", {
+        body: {
+          status,
+        },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+        params: {
+          path: {
+            gradeUpdateId,
           },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-          params: {
-            path: {
-              gradeUpdateId,
-            },
-          },
-        });
+        },
+      });
 
-        if (response.error) {
-          setNewError({
-            message: response.error.message || "学年補正申請の更新に失敗しました",
-            name: "admin-grade-update-fail",
-          });
-          return;
-        }
-
-        removeError("admin-grade-update-fail");
-        await router.replace(router.asPath);
-      } catch {
+      if (response.error) {
         setNewError({
-          message: "学年補正申請の更新に失敗しました",
+          message: response.error.message || "学年補正申請の更新に失敗しました",
           name: "admin-grade-update-fail",
         });
+        return;
       }
-    });
+
+      removeError("admin-grade-update-fail");
+      await router.replace(router.asPath);
+    } catch {
+      setNewError({
+        message: "学年補正申請の更新に失敗しました",
+        name: "admin-grade-update-fail",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -134,12 +135,12 @@ const AdminGradeUpdatePage = ({
                           size="small"
                           variant="contained"
                           color="success"
-                          disabled={isPending}
+                          disabled={isLoading}
                           onClick={() => {
                             updateStatus(request.gradeUpdateId, "approved");
                           }}
                           startIcon={
-                            isPending ? <CircularProgress size={14} color="inherit" /> : undefined
+                            isLoading ? <CircularProgress size={14} color="inherit" /> : undefined
                           }
                         >
                           承認
@@ -148,7 +149,7 @@ const AdminGradeUpdatePage = ({
                           size="small"
                           variant="outlined"
                           color="error"
-                          disabled={isPending}
+                          disabled={isLoading}
                           onClick={() => {
                             updateStatus(request.gradeUpdateId, "rejected");
                           }}

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState, useTransition } from "react";
+import { useEffect, useState } from "react";
 
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import {
@@ -42,8 +42,8 @@ const EditRecordDialog = ({
 
   const [checkIn, setCheckIn] = useState(initialCheckIn);
   const [checkOut, setCheckOut] = useState(initialCheckOut);
-  const [checkInPending, startCheckInTransition] = useTransition();
-  const [checkOutPending, startCheckOutTransition] = useTransition();
+  const [checkInLoading, setCheckInLoading] = useState(false);
+  const [checkOutLoading, setCheckOutLoading] = useState(false);
   const [validationError, setValidationError] = useState("");
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
@@ -51,7 +51,7 @@ const EditRecordDialog = ({
 
   const checkInChanged = checkIn !== initialCheckIn;
   const checkOutChanged = checkOut !== initialCheckOut;
-  const isPending = checkInPending || checkOutPending;
+  const isPending = checkInLoading || checkOutLoading;
 
   useEffect(() => {
     if (open) {
@@ -82,26 +82,63 @@ const EditRecordDialog = ({
     router.replace(router.asPath);
   };
 
-  const handleCheckInSave = () => {
-    if (checkOut && dayjs(checkOut).isBefore(dayjs(checkIn))) {
+  const handleCheckInSave = async () => {
+    const checkInTime = dayjs(checkIn);
+    const checkOutTime = checkOut ? dayjs(checkOut) : null;
+
+    if (!checkInTime.isValid()) {
+      setValidationError("チェックイン時刻を正しく入力してください");
+      return;
+    }
+
+    if (checkOutTime && !checkOutTime.isValid()) {
+      setValidationError("チェックアウト時刻を正しく入力してください");
+      return;
+    }
+
+    if (checkOutTime && checkOutTime.isBefore(checkInTime)) {
       setValidationError("チェックアウト時刻はチェックイン時刻より後にしてください");
       return;
     }
     setValidationError("");
-    startCheckInTransition(async () => {
-      await updateRecord("checkin", dayjs(checkIn).toISOString());
-    });
+    setCheckInLoading(true);
+    try {
+      await updateRecord("checkin", checkInTime.toISOString());
+    } finally {
+      setCheckInLoading(false);
+    }
   };
 
-  const handleCheckOutSave = () => {
-    if (checkOut && dayjs(checkOut).isBefore(dayjs(checkIn))) {
+  const handleCheckOutSave = async () => {
+    const checkInTime = dayjs(checkIn);
+
+    if (!checkInTime.isValid()) {
+      setValidationError("チェックイン時刻を正しく入力してください");
+      return;
+    }
+
+    if (!checkOut) {
+      setValidationError("チェックアウト時刻を入力してください");
+      return;
+    }
+
+    const checkOutTime = dayjs(checkOut);
+    if (!checkOutTime.isValid()) {
+      setValidationError("チェックアウト時刻を正しく入力してください");
+      return;
+    }
+
+    if (checkOutTime.isBefore(checkInTime)) {
       setValidationError("チェックアウト時刻はチェックイン時刻より後にしてください");
       return;
     }
     setValidationError("");
-    startCheckOutTransition(async () => {
-      await updateRecord("checkout", dayjs(checkOut).toISOString());
-    });
+    setCheckOutLoading(true);
+    try {
+      await updateRecord("checkout", checkOutTime.toISOString());
+    } finally {
+      setCheckOutLoading(false);
+    }
   };
 
   return (
@@ -132,7 +169,7 @@ const EditRecordDialog = ({
               onClick={handleCheckInSave}
               disabled={isPending || !checkInChanged}
               startIcon={
-                checkInPending ? <CircularProgress size={16} color="inherit" /> : undefined
+                checkInLoading ? <CircularProgress size={16} color="inherit" /> : undefined
               }
               sx={{ alignSelf: "flex-end" }}
             >
@@ -163,7 +200,7 @@ const EditRecordDialog = ({
               onClick={handleCheckOutSave}
               disabled={isPending || !checkOutChanged || !checkedOutAt}
               startIcon={
-                checkOutPending ? <CircularProgress size={16} color="inherit" /> : undefined
+                checkOutLoading ? <CircularProgress size={16} color="inherit" /> : undefined
               }
               sx={{ alignSelf: "flex-end" }}
             >

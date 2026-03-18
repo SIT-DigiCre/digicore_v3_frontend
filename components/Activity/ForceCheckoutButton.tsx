@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useTransition } from "react";
+import { useState } from "react";
 
 import LogoutIcon from "@mui/icons-material/Logout";
 import {
@@ -24,51 +24,46 @@ type ForceCheckoutButtonProps = {
 
 const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonProps) => {
   const [open, setOpen] = useState(false);
-  const [isPending, startTransition] = useTransition();
+  const [isLoading, setIsLoading] = useState(false);
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
   const errorName = `activity-force-checkout-fail-${userId}`;
 
-  const handleForceCheckout = () => {
-    if (!authState.token || isPending) return;
+  const handleForceCheckout = async () => {
+    if (!authState.token || isLoading) return;
 
-    startTransition(async () => {
-      try {
-        const { error } = await apiClient.POST("/activity/checkout/{userId}", {
-          body: { place },
-          headers: {
-            Authorization: `Bearer ${authState.token}`,
-          },
-          params: {
-            path: { userId },
-          },
-        });
+    setIsLoading(true);
+    try {
+      const { error } = await apiClient.POST("/activity/checkout/{userId}", {
+        body: { place },
+        headers: {
+          Authorization: `Bearer ${authState.token}`,
+        },
+        params: {
+          path: { userId },
+        },
+      });
 
-        if (error) {
-          startTransition(() => {
-            setNewError({
-              message: `${username} さんの強制チェックアウトに失敗しました`,
-              name: errorName,
-            });
-          });
-          return;
-        }
-
-        startTransition(() => {
-          removeError(errorName);
-          setOpen(false);
-          void router.replace(router.asPath);
+      if (error) {
+        setNewError({
+          message: `${username} さんの強制チェックアウトに失敗しました`,
+          name: errorName,
         });
-      } catch {
-        startTransition(() => {
-          setNewError({
-            message: `${username} さんの強制チェックアウトに失敗しました`,
-            name: errorName,
-          });
-        });
+        return;
       }
-    });
+
+      removeError(errorName);
+      setOpen(false);
+      await router.replace(router.asPath);
+    } catch {
+      setNewError({
+        message: `${username} さんの強制チェックアウトに失敗しました`,
+        name: errorName,
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -78,15 +73,15 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
         color="error"
         size="small"
         onClick={() => setOpen(true)}
-        disabled={isPending}
-        startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
+        disabled={isLoading}
+        startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
       >
         強制退室
       </Button>
       <Dialog
         open={open}
         onClose={() => {
-          if (!isPending) {
+          if (!isLoading) {
             setOpen(false);
           }
         }}
@@ -98,15 +93,15 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
           <Typography>{username} さんを強制的に退室させます。よろしいですか？</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} disabled={isPending}>
+          <Button onClick={() => setOpen(false)} disabled={isLoading}>
             キャンセル
           </Button>
           <Button
             variant="contained"
             color="error"
             onClick={handleForceCheckout}
-            disabled={isPending}
-            startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
+            disabled={isLoading}
+            startIcon={isLoading ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
           >
             強制退室する
           </Button>
