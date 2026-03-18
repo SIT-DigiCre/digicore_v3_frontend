@@ -32,10 +32,11 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
 
     const userId = meRes.data.userId;
 
-    const worksRes = await client.GET("/user/{userId}/work", {
+    const worksRes = await client.GET("/work/work", {
       params: {
-        path: {
-          userId,
+        query: {
+          authorId: userId,
+          offset,
         },
       },
     });
@@ -51,9 +52,8 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       };
     }
 
-    const allWorks = worksRes.data.works;
-    const works = allWorks.slice(offset, offset + ITEMS_PER_PAGE);
-    const hasNextPage = allWorks.length > offset + ITEMS_PER_PAGE;
+    const works = worksRes.data.works;
+    const hasNextPage = works.length === ITEMS_PER_PAGE;
     const hasPreviousPage = page > 1;
 
     return {
