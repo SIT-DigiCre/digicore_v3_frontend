@@ -1,4 +1,12 @@
-import { CurrencyYen, Groups, HowToReg, Logout, ReceiptLong, School } from "@mui/icons-material";
+import {
+  BuildCircle,
+  CurrencyYen,
+  Groups,
+  HowToReg,
+  Logout,
+  ReceiptLong,
+  School,
+} from "@mui/icons-material";
 import { Box, Grid, Stack, Typography } from "@mui/material";
 
 import AdminMenuCard from "@/components/Admin/AdminMenuCard";
@@ -14,11 +22,15 @@ const AdminPage = () => {
   const canAccessPaymentAdmin = authState.grants.includes(GRANT_ACCOUNT);
   const canAccessGradeUpdateAdmin = authState.grants.includes(GRANT_INFRA);
   const canAccessReentryAdmin = authState.grants.includes(GRANT_INFRA);
+  const canAccessInfraAdmin = authState.grants.includes(GRANT_INFRA);
   const hasAnyAdminMenu =
     canAccessBudgetAdmin ||
     canAccessForceCheckoutAdmin ||
     canAccessGroupAdmin ||
-    canAccessPaymentAdmin;
+    canAccessPaymentAdmin ||
+    canAccessGradeUpdateAdmin ||
+    canAccessReentryAdmin ||
+    canAccessInfraAdmin;
 
   return (
     <>
@@ -80,6 +92,14 @@ const AdminPage = () => {
                 icon={HowToReg}
                 title="再入部申請管理"
                 description="部員からの再入部申請を確認・承認・却下します。"
+              />
+            )}
+            {canAccessInfraAdmin && (
+              <AdminMenuCard
+                href="/admin/infra"
+                icon={BuildCircle}
+                title="インフラ管理"
+                description="inactive更新と学年更新の一括処理を実行します。"
               />
             )}
           </Grid>
