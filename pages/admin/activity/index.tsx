@@ -1,5 +1,6 @@
 import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
+import { Fragment } from "react";
 
 import { ArrowBack } from "@mui/icons-material";
 import {
@@ -24,14 +25,39 @@ import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
+import { GRANT_FORCE_CHECKOUT } from "@/utils/auth/grants";
 import { createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
   const rawPlace = typeof query.place === "string" ? query.place : DEFAULT_PLACE;
-  const place = rawPlace in ACTIVITY_PLACES ? rawPlace : DEFAULT_PLACE;
+  const place = Object.hasOwn(ACTIVITY_PLACES, rawPlace) ? rawPlace : DEFAULT_PLACE;
 
   try {
+    const grantsRes = await client.GET("/user/me/grants", {});
+
+    if (
+      grantsRes.error &&
+      (grantsRes.response.status === 401 || grantsRes.response.status === 403)
+    ) {
+      return {
+        redirect: {
+          destination: "/login",
+          permanent: false,
+        },
+      };
+    }
+
+    const grants = Array.from(
+      new Set(
+        (grantsRes.data?.grants ?? []).map((grant) => grant.trim()).filter((grant) => grant !== ""),
+      ),
+    );
+
+    if (!grants.includes(GRANT_FORCE_CHECKOUT)) {
+      return { notFound: true };
+    }
+
     const activityRes = await client.GET("/activity/place/{place}/current", {
       params: {
         path: { place },
@@ -130,9 +156,10 @@ const AdminActivityPage = ({
             <Paper variant="outlined">
               <List disablePadding>
                 {users.map((user, index) => (
-                  <Stack key={user.userId}>
+                  <Fragment key={user.userId}>
                     {index > 0 && <Divider component="li" />}
                     <ListItem
+                      component="li"
                       sx={{
                         alignItems: { sm: "center", xs: "flex-start" },
                         flexDirection: { sm: "row", xs: "column" },
@@ -179,7 +206,7 @@ const AdminActivityPage = ({
                         />
                       </Stack>
                     </ListItem>
-                  </Stack>
+                  </Fragment>
                 ))}
               </List>
             </Paper>
