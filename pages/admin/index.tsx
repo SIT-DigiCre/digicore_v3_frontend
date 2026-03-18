@@ -17,9 +17,7 @@ const AdminPage = () => {
   const hasAnyAdminMenu =
     canAccessBudgetAdmin ||
     canAccessGroupAdmin ||
-    canAccessPaymentAdmin ||
-    canAccessGradeUpdateAdmin ||
-    canAccessReentryAdmin;
+    canAccessPaymentAdmin;
 
   return (
     <>
