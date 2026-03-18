@@ -5,7 +5,7 @@ import { Stack, Typography } from "@mui/material";
 
 import Heading from "@/components/Common/Heading";
 import { useAuthState } from "@/hook/useAuthState";
-import { GRANT_ACCOUNT, GRANT_INFRA, hasAnyGrant } from "@/utils/auth/grants";
+import { GRANT_ACCOUNT, GRANT_INFRA } from "@/utils/auth/grants";
 
 type AccessControlProps = {
   children: React.ReactNode;
@@ -48,7 +48,9 @@ const AccessControl = ({ children }: AccessControlProps) => {
 
   const requiredAdminGrants = getRequiredAdminGrantsByPath(router.pathname);
   const hasAdminAccess =
-    requiredAdminGrants === null ? true : hasAnyGrant(authState.grants, requiredAdminGrants);
+    requiredAdminGrants === null
+      ? true
+      : requiredAdminGrants.some((grant) => authState.grants.includes(grant));
 
   if (!hasAdminAccess) {
     return (

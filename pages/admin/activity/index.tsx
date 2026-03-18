@@ -25,7 +25,7 @@ import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
-import { GRANT_INFRA, hasGrant, normalizeGrants } from "@/utils/auth/grants";
+import { GRANT_INFRA } from "@/utils/auth/grants";
 import { createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
@@ -58,9 +58,13 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       };
     }
 
-    const grants = normalizeGrants(grantsRes.data?.grants ?? []);
+    const grants = Array.from(
+      new Set(
+        (grantsRes.data?.grants ?? []).map((grant) => grant.trim()).filter((grant) => grant !== ""),
+      ),
+    );
 
-    if (!hasGrant(grants, GRANT_INFRA)) {
+    if (!grants.includes(GRANT_INFRA)) {
       return { notFound: true };
     }
 

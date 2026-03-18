@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import { User } from "@/interfaces/user";
-import { normalizeGrants } from "@/utils/auth/grants";
 import { getTokenFromCookie } from "@/utils/auth/token";
 import { apiClient } from "@/utils/fetch/client";
 
@@ -61,7 +60,9 @@ export const useAuthState: UseAuthState = () => {
       if (!userRes.data || userRes.error) throw new Error("Failed to fetch user");
       if (!grantsRes.data || grantsRes.error) throw new Error("Failed to fetch grants");
 
-      const grants = normalizeGrants(grantsRes.data.grants);
+      const grants = Array.from(
+        new Set(grantsRes.data.grants.map((grant) => grant.trim()).filter((grant) => grant !== "")),
+      );
 
       setAuth((prev) => {
         if (prev.isLogined && !forceRefresh) return prev;
