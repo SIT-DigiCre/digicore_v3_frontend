@@ -24,10 +24,10 @@ import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import { useAuthState } from "@/hook/useAuthState";
 import { getRequestStatusChipProps } from "@/utils/chip/requestStatus";
 import { apiClient, createServerApiClient } from "@/utils/fetch/client";
+
 import type { components } from "@/utils/fetch/api";
 
-type GradeUpdateRequest =
-  components["schemas"]["ResGetAdminGradeUpdateObjectGradeUpdate"];
+type GradeUpdateRequest = components["schemas"]["ResGetAdminGradeUpdateObjectGradeUpdate"];
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

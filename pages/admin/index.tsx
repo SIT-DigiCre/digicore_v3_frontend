@@ -14,10 +14,7 @@ const AdminPage = () => {
   const canAccessGradeUpdateAdmin = canAccessGroupAdmin;
   // TODO: まだバックエンドで再入部申請を許可するgrantを用意していないので、とりあえず同じようにインフラ権限が持つグループ管理者権限で管理する
   const canAccessReentryAdmin = canAccessGroupAdmin;
-  const hasAnyAdminMenu =
-    canAccessBudgetAdmin ||
-    canAccessGroupAdmin ||
-    canAccessPaymentAdmin;
+  const hasAnyAdminMenu = canAccessBudgetAdmin || canAccessGroupAdmin || canAccessPaymentAdmin;
 
   return (
     <>

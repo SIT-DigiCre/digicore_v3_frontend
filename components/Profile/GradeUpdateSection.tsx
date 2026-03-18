@@ -23,10 +23,10 @@ import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import { useAuthState } from "@/hook/useAuthState";
 import { getRequestStatusChipProps } from "@/utils/chip/requestStatus";
 import { apiClient } from "@/utils/fetch/client";
+
 import type { components } from "@/utils/fetch/api";
 
-type GradeUpdateRequest =
-  components["schemas"]["ResGetUserMeGradeUpdateObjectGradeUpdate"];
+type GradeUpdateRequest = components["schemas"]["ResGetUserMeGradeUpdateObjectGradeUpdate"];
 
 type GradeUpdateSectionProps = {
   gradeUpdates: GradeUpdateRequest[];
