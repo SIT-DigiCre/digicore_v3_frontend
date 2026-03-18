@@ -20,7 +20,6 @@ import VisitHistorySection from "@/components/Activity/VisitHistorySection";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
-import { GRANT_FORCE_CHECKOUT } from "@/utils/auth/grants";
 import { createServerApiClient } from "@/utils/fetch/client";
 
 const VALID_PERIODS = ["day", "week", "month"] as const;
@@ -60,7 +59,6 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
     console.error("Failed to fetch user info:", userRes.error);
     return {
       props: {
-        canForceCheckout: false,
         currentUserId: null,
         date,
         error: {
@@ -76,23 +74,6 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
   }
 
   const currentUserId = userRes.data?.userId ?? null;
-  const grantsRes = await client.GET("/user/me/grants", {});
-
-  if (grantsRes.error && (grantsRes.response.status === 401 || grantsRes.response.status === 403)) {
-    return {
-      redirect: {
-        destination: "/login",
-        permanent: false,
-      },
-    };
-  }
-
-  const grants = Array.from(
-    new Set(
-      (grantsRes.data?.grants ?? []).map((grant) => grant.trim()).filter((grant) => grant !== ""),
-    ),
-  );
-  const canForceCheckout = grants.includes(GRANT_FORCE_CHECKOUT);
 
   // APIは指定日付の1週間前/1ヶ月前のデータを返すため、URLの日付と表示を一致させるためにオフセットする
   let apiDate = date;
@@ -130,7 +111,6 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
     console.error("Failed to fetch activity:", activityRes.error);
     return {
       props: {
-        canForceCheckout,
         currentUserId,
         date,
         error: {
@@ -151,7 +131,6 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
 
   return {
     props: {
-      canForceCheckout,
       currentUserId,
       date,
       error: null,
@@ -166,7 +145,6 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
 const ActivityPage = ({
   users,
   currentUserId,
-  canForceCheckout,
   place,
   period,
   date,
@@ -224,12 +202,7 @@ const ActivityPage = ({
               variant="outlined"
             />
           </Stack>
-          <CurrentUsersList
-            users={users}
-            canForceCheckout={canForceCheckout}
-            currentUserId={currentUserId}
-            place={place}
-          />
+          <CurrentUsersList users={users} />
         </Box>
 
         <VisitHistorySection

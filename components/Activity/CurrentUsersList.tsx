@@ -13,23 +13,13 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import ForceCheckoutButton from "./ForceCheckoutButton";
-
 import type { ActivityCurrentUser } from "@/interfaces/activity";
 
 type CurrentUsersListProps = {
-  canForceCheckout: boolean;
-  currentUserId: string | null;
-  place: string;
   users: ActivityCurrentUser[];
 };
 
-const CurrentUsersList = ({
-  users,
-  canForceCheckout,
-  currentUserId,
-  place,
-}: CurrentUsersListProps) => {
+const CurrentUsersList = ({ users }: CurrentUsersListProps) => {
   if (users.length === 0) {
     return (
       <Paper variant="outlined" sx={{ p: 4, textAlign: "center" }}>
@@ -67,18 +57,9 @@ const CurrentUsersList = ({
                 }
                 secondary={user.shortIntroduction || undefined}
               />
-              <Stack direction="row" spacing={2} alignItems="center">
-                <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
-                  {dayjs(user.checkedInAt).format("HH:mm")}~
-                </Typography>
-                {canForceCheckout && user.userId !== currentUserId && (
-                  <ForceCheckoutButton
-                    place={place}
-                    userId={user.userId}
-                    username={user.username}
-                  />
-                )}
-              </Stack>
+              <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+                {dayjs(user.checkedInAt).format("HH:mm")}~
+              </Typography>
             </ListItem>
           </Stack>
         ))}
