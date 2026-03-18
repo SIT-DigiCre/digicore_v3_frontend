@@ -20,6 +20,7 @@ const getRequiredAdminGrantsByPath = (pathname: string): string[] | null => {
   if (pathname.startsWith("/admin/grade-update")) return [GRANT_INFRA];
   if (pathname.startsWith("/admin/reentry")) return [GRANT_INFRA];
   if (pathname.startsWith("/admin/activity")) return [GRANT_INFRA];
+  if (pathname.startsWith("/admin/infra")) return [GRANT_INFRA];
   return [GRANT_ACCOUNT, GRANT_INFRA];
 };
 
