@@ -25,7 +25,7 @@ import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
-import { GRANT_FORCE_CHECKOUT } from "@/utils/auth/grants";
+import { GRANT_FORCE_CHECKOUT, hasGrant, normalizeGrants } from "@/utils/auth/grants";
 import { createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
@@ -58,13 +58,9 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
       };
     }
 
-    const grants = Array.from(
-      new Set(
-        (grantsRes.data?.grants ?? []).map((grant) => grant.trim()).filter((grant) => grant !== ""),
-      ),
-    );
+    const grants = normalizeGrants(grantsRes.data?.grants ?? []);
 
-    if (!grants.includes(GRANT_FORCE_CHECKOUT)) {
+    if (!hasGrant(grants, GRANT_FORCE_CHECKOUT)) {
       return { notFound: true };
     }
 

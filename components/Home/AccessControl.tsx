@@ -10,6 +10,7 @@ import {
   GRANT_FORCE_CHECKOUT,
   GRANT_GROUP_ADMIN,
   GRANT_PAYMENT_ADMIN,
+  hasAnyGrant,
 } from "@/utils/auth/grants";
 
 type AccessControlProps = {
@@ -55,9 +56,7 @@ const AccessControl = ({ children }: AccessControlProps) => {
 
   const requiredAdminGrants = getRequiredAdminGrantsByPath(router.pathname);
   const hasAdminAccess =
-    requiredAdminGrants === null
-      ? true
-      : requiredAdminGrants.some((grant) => authState.grants.includes(grant));
+    requiredAdminGrants === null ? true : hasAnyGrant(authState.grants, requiredAdminGrants);
 
   if (!hasAdminAccess) {
     return (

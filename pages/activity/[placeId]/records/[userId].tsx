@@ -9,7 +9,7 @@ import { ButtonLink } from "@/components/Common/ButtonLink";
 import PageHead from "@/components/Common/PageHead";
 import Pagination from "@/components/Common/Pagination";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
-import { GRANT_ACTIVITY_RECORD_EDIT_OTHER } from "@/utils/auth/grants";
+import { GRANT_ACTIVITY_RECORD_EDIT_OTHER, hasGrant, normalizeGrants } from "@/utils/auth/grants";
 import { createServerApiClient } from "@/utils/fetch/client";
 
 const ITEMS_PER_PAGE = 20;
@@ -71,13 +71,9 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
     };
   }
 
-  const grants = Array.from(
-    new Set(
-      (grantsRes.data?.grants ?? []).map((grant) => grant.trim()).filter((grant) => grant !== ""),
-    ),
-  );
+  const grants = normalizeGrants(grantsRes.data?.grants ?? []);
   const canEdit =
-    currentUser?.userId === userId || grants.includes(GRANT_ACTIVITY_RECORD_EDIT_OTHER);
+    currentUser?.userId === userId || hasGrant(grants, GRANT_ACTIVITY_RECORD_EDIT_OTHER);
 
   const recordsRes = await client.GET("/activity/user/{userId}/records", {
     params: {
