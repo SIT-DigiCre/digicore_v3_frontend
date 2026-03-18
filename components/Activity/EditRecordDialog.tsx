@@ -83,28 +83,59 @@ const EditRecordDialog = ({
   };
 
   const handleCheckInSave = async () => {
-    if (checkOut && dayjs(checkOut).isBefore(dayjs(checkIn))) {
+    const checkInTime = dayjs(checkIn);
+    const checkOutTime = checkOut ? dayjs(checkOut) : null;
+
+    if (!checkInTime.isValid()) {
+      setValidationError("チェックイン時刻を正しく入力してください");
+      return;
+    }
+
+    if (checkOutTime && !checkOutTime.isValid()) {
+      setValidationError("チェックアウト時刻を正しく入力してください");
+      return;
+    }
+
+    if (checkOutTime && checkOutTime.isBefore(checkInTime)) {
       setValidationError("チェックアウト時刻はチェックイン時刻より後にしてください");
       return;
     }
     setValidationError("");
     setCheckInLoading(true);
     try {
-      await updateRecord("checkin", dayjs(checkIn).toISOString());
+      await updateRecord("checkin", checkInTime.toISOString());
     } finally {
       setCheckInLoading(false);
     }
   };
 
   const handleCheckOutSave = async () => {
-    if (checkOut && dayjs(checkOut).isBefore(dayjs(checkIn))) {
+    const checkInTime = dayjs(checkIn);
+
+    if (!checkInTime.isValid()) {
+      setValidationError("チェックイン時刻を正しく入力してください");
+      return;
+    }
+
+    if (!checkOut) {
+      setValidationError("チェックアウト時刻を入力してください");
+      return;
+    }
+
+    const checkOutTime = dayjs(checkOut);
+    if (!checkOutTime.isValid()) {
+      setValidationError("チェックアウト時刻を正しく入力してください");
+      return;
+    }
+
+    if (checkOutTime.isBefore(checkInTime)) {
       setValidationError("チェックアウト時刻はチェックイン時刻より後にしてください");
       return;
     }
     setValidationError("");
     setCheckOutLoading(true);
     try {
-      await updateRecord("checkout", dayjs(checkOut).toISOString());
+      await updateRecord("checkout", checkOutTime.toISOString());
     } finally {
       setCheckOutLoading(false);
     }

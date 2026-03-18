@@ -35,9 +35,17 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
   const { setNewError, removeError } = useErrorState();
 
   const handleSave = async () => {
+    if (!authState.token) {
+      setNewError({
+        message: "ログイン情報が見つかりません。再度ログインしてください。",
+        name: "payments-update-fail",
+      });
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await apiClient.PUT(`/payment/{paymentId}`, {
+      const response = await apiClient.PUT(`/payment/{paymentId}`, {
         body: { checked: checked, note: note },
         headers: {
           Authorization: `Bearer ${authState.token}`,
@@ -48,6 +56,15 @@ const PaymentDetailDialog = ({ payment, open, onClose }: PaymentDetailDialogProp
           },
         },
       });
+
+      if (response.error) {
+        setNewError({
+          message: response.error.message || "支払情報の更新に失敗しました",
+          name: "payments-update-fail",
+        });
+        return;
+      }
+
       removeError("payments-update-fail");
       await router.replace(router.asPath);
       onClose();
