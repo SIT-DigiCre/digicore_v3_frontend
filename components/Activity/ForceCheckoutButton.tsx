@@ -24,52 +24,50 @@ type ForceCheckoutButtonProps = {
 
 const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonProps) => {
   const [open, setOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
 
-  const handleForceCheckout = async () => {
-    if (!authState.token || isSubmitting) return;
+  const handleForceCheckout = () => {
+    if (!authState.token || isPending) return;
 
-    setIsSubmitting(true);
-    try {
-      const { error } = await apiClient.POST("/activity/checkout/{userId}", {
-        body: { place },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
-        params: {
-          path: { userId },
-        },
-      });
+    startTransition(async () => {
+      try {
+        const { error } = await apiClient.POST("/activity/checkout/{userId}", {
+          body: { place },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+          params: {
+            path: { userId },
+          },
+        });
 
-      if (error) {
+        if (error) {
+          startTransition(() => {
+            setNewError({
+              message: `${username} さんの強制チェックアウトに失敗しました`,
+              name: "activity-force-checkout-fail",
+            });
+          });
+          return;
+        }
+
+        startTransition(() => {
+          removeError("activity-force-checkout-fail");
+          setOpen(false);
+          void router.replace(router.asPath);
+        });
+      } catch {
         startTransition(() => {
           setNewError({
             message: `${username} さんの強制チェックアウトに失敗しました`,
             name: "activity-force-checkout-fail",
           });
         });
-        return;
       }
-
-      startTransition(() => {
-        removeError("activity-force-checkout-fail");
-        setOpen(false);
-        void router.replace(router.asPath);
-      });
-    } catch {
-      startTransition(() => {
-        setNewError({
-          message: `${username} さんの強制チェックアウトに失敗しました`,
-          name: "activity-force-checkout-fail",
-        });
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   return (
@@ -79,21 +77,15 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
         color="error"
         size="small"
         onClick={() => setOpen(true)}
-        disabled={isSubmitting || isPending}
-        startIcon={
-          isSubmitting || isPending ? (
-            <CircularProgress size={16} color="inherit" />
-          ) : (
-            <LogoutIcon />
-          )
-        }
+        disabled={isPending}
+        startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
       >
         強制退室
       </Button>
       <Dialog
         open={open}
         onClose={() => {
-          if (!isSubmitting && !isPending) {
+          if (!isPending) {
             setOpen(false);
           }
         }}
@@ -105,21 +97,15 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
           <Typography>{username} さんを強制的に退室させます。よろしいですか？</Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setOpen(false)} disabled={isSubmitting || isPending}>
+          <Button onClick={() => setOpen(false)} disabled={isPending}>
             キャンセル
           </Button>
           <Button
             variant="contained"
             color="error"
             onClick={handleForceCheckout}
-            disabled={isSubmitting || isPending}
-            startIcon={
-              isSubmitting || isPending ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : (
-                <LogoutIcon />
-              )
-            }
+            disabled={isPending}
+            startIcon={isPending ? <CircularProgress size={16} color="inherit" /> : <LogoutIcon />}
           >
             強制退室する
           </Button>

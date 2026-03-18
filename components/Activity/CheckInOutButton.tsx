@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
 
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
@@ -15,51 +15,49 @@ type CheckInOutButtonProps = {
 };
 
 const CheckInOutButton = ({ place, isCheckedIn }: CheckInOutButtonProps) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isPending, startTransition] = useTransition();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
 
-  const handleClick = async () => {
-    if (!authState.token || isSubmitting) return;
+  const handleClick = () => {
+    if (!authState.token || isPending) return;
 
-    setIsSubmitting(true);
-    try {
-      const endpoint = isCheckedIn ? "/activity/checkout" : "/activity/checkin";
-      const errorName = isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail";
+    startTransition(async () => {
+      try {
+        const endpoint = isCheckedIn ? "/activity/checkout" : "/activity/checkin";
+        const errorName = isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail";
 
-      const { error } = await apiClient.POST(endpoint, {
-        body: { place },
-        headers: {
-          Authorization: `Bearer ${authState.token}`,
-        },
-      });
+        const { error } = await apiClient.POST(endpoint, {
+          body: { place },
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        });
 
-      if (error) {
+        if (error) {
+          startTransition(() => {
+            setNewError({
+              message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
+              name: errorName,
+            });
+          });
+          return;
+        }
+
+        startTransition(() => {
+          removeError(errorName);
+          void router.replace(router.asPath);
+        });
+      } catch {
         startTransition(() => {
           setNewError({
             message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
-            name: errorName,
+            name: isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail",
           });
         });
-        return;
       }
-
-      startTransition(() => {
-        removeError(errorName);
-        void router.replace(router.asPath);
-      });
-    } catch {
-      startTransition(() => {
-        setNewError({
-          message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
-          name: isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail",
-        });
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   return (
@@ -67,9 +65,9 @@ const CheckInOutButton = ({ place, isCheckedIn }: CheckInOutButtonProps) => {
       variant="contained"
       size="large"
       color={isCheckedIn ? "error" : "primary"}
-      disabled={isSubmitting || isPending}
+      disabled={isPending}
       startIcon={
-        isSubmitting || isPending ? (
+        isPending ? (
           <CircularProgress size={20} color="inherit" />
         ) : isCheckedIn ? (
           <LogoutIcon />
