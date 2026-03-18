@@ -4,13 +4,13 @@ import { WorkFileView } from "./WorkFileView";
 
 type Props = {
   description: string;
-  files: WorkFile[];
+  firstFile: WorkFile | null;
 };
 
-export const WorkCardPreview = ({ description, files }: Props) => {
-  if (!files || files.length === 0) {
+export const WorkCardPreview = ({ description, firstFile }: Props) => {
+  if (!firstFile) {
     return <MarkdownView md={description.substring(0, 120)} />;
   }
 
-  return <WorkFileView fileId={files[0].fileId} />;
+  return <WorkFileView fileId={firstFile.fileId} />;
 };

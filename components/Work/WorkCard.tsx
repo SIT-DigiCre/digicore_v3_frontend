@@ -2,15 +2,19 @@ import Link from "next/link";
 
 import { Avatar, AvatarGroup, Card, CardContent, CardHeader, Grid } from "@mui/material";
 
-import { WorkDetail } from "../../interfaces/work";
+import { WorkDetail, WorkListItem } from "../../interfaces/work";
 import ChipList from "../Common/ChipList";
 import { WorkCardPreview } from "./WorkCardPreview";
 
+type WorkCardItem = WorkListItem | WorkDetail;
+
 interface WorkCardProps {
-  work: WorkDetail;
+  work: WorkCardItem;
 }
 
 export const WorkCard = ({ work }: WorkCardProps) => {
+  const firstFile = "firstFile" in work ? work.firstFile : (work.files[0] ?? null);
+
   return (
     <Grid key={work.workId} size={[12, 6, 4]} sx={{ padding: 0.5 }}>
       <Card
@@ -37,7 +41,7 @@ export const WorkCard = ({ work }: WorkCardProps) => {
           }
         ></CardHeader>
         <CardContent>
-          <WorkCardPreview description={work.description} files={work.files} />
+          <WorkCardPreview description={work.description} firstFile={firstFile} />
           {work.tags && <ChipList chipList={work.tags.map((t) => t.name)} />}
         </CardContent>
       </Card>

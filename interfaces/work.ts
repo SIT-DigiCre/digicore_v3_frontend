@@ -14,6 +14,15 @@ export type WorkFile = {
   name: string;
 };
 
+export type WorkListItem = {
+  workId: string;
+  name: string;
+  description: string;
+  authors: WorkAuthor[];
+  firstFile: WorkFile | null;
+  tags: WorkTag[];
+};
+
 export type Work = {
   workId: string;
   name: string;
