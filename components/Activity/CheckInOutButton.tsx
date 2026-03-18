@@ -21,7 +21,7 @@ const CheckInOutButton = ({ place, isCheckedIn }: CheckInOutButtonProps) => {
   const router = useRouter();
 
   const handleClick = () => {
-    if (!authState.token) return;
+    if (!authState.token || isPending) return;
 
     startTransition(async () => {
       try {
@@ -36,18 +36,25 @@ const CheckInOutButton = ({ place, isCheckedIn }: CheckInOutButtonProps) => {
         });
 
         if (error) {
+          startTransition(() => {
+            setNewError({
+              message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
+              name: errorName,
+            });
+          });
+          return;
+        }
+
+        startTransition(() => {
+          removeError(errorName);
+          void router.replace(router.asPath);
+        });
+      } catch {
+        startTransition(() => {
           setNewError({
             message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
-            name: errorName,
+            name: isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail",
           });
-        } else {
-          removeError(isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail");
-          router.replace(router.asPath);
-        }
-      } catch {
-        setNewError({
-          message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
-          name: isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail",
         });
       }
     });
