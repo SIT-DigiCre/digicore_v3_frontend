@@ -9,7 +9,6 @@ import { ButtonLink } from "../../components/Common/ButtonLink";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { WorkCard } from "../../components/Work/WorkCard";
-import { WorkDetail } from "../../interfaces/work";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 const ITEMS_PER_PAGE = 10;
@@ -57,32 +56,12 @@ export const getServerSideProps = async ({ req, query }: GetServerSidePropsConte
     const hasNextPage = works.length === ITEMS_PER_PAGE;
     const hasPreviousPage = page > 1;
 
-    const workDetails = await Promise.all(
-      works.map(async (work) => {
-        const detailRes = await client.GET("/work/work/{workId}", {
-          params: {
-            path: {
-              workId: work.workId,
-            },
-          },
-        });
-        if (detailRes.data) {
-          return detailRes.data;
-        }
-        return {
-          ...work,
-          description: "",
-          files: [],
-        } as WorkDetail;
-      }),
-    );
-
     return {
       props: {
         currentPage: page,
         hasNextPage,
         hasPreviousPage,
-        works: workDetails,
+        works,
       },
     };
   } catch {
