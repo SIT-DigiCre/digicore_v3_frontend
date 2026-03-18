@@ -44,20 +44,26 @@ const ForceCheckoutButton = ({ place, userId, username }: ForceCheckoutButtonPro
         });
 
         if (error) {
-          setNewError({
-            message: `${username} さんの強制チェックアウトに失敗しました`,
-            name: "activity-force-checkout-fail",
+          startTransition(() => {
+            setNewError({
+              message: `${username} さんの強制チェックアウトに失敗しました`,
+              name: "activity-force-checkout-fail",
+            });
           });
           return;
         }
 
-        removeError("activity-force-checkout-fail");
-        setOpen(false);
-        router.reload();
+        startTransition(() => {
+          removeError("activity-force-checkout-fail");
+          setOpen(false);
+          void router.push(router.asPath);
+        });
       } catch {
-        setNewError({
-          message: `${username} さんの強制チェックアウトに失敗しました`,
-          name: "activity-force-checkout-fail",
+        startTransition(() => {
+          setNewError({
+            message: `${username} さんの強制チェックアウトに失敗しました`,
+            name: "activity-force-checkout-fail",
+          });
         });
       }
     });

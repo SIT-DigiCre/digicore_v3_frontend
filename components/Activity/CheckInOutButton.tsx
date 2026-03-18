@@ -35,19 +35,25 @@ const CheckInOutButton = ({ place, isCheckedIn }: CheckInOutButtonProps) => {
         });
 
         if (error) {
-          setNewError({
-            message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
-            name: errorName,
+          startTransition(() => {
+            setNewError({
+              message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
+              name: errorName,
+            });
           });
           return;
         }
 
-        removeError(errorName);
-        await router.replace(router.asPath);
+        startTransition(() => {
+          removeError(errorName);
+          void router.push(router.asPath);
+        });
       } catch {
-        setNewError({
-          message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
-          name: isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail",
+        startTransition(() => {
+          setNewError({
+            message: isCheckedIn ? "退室処理に失敗しました" : "入室処理に失敗しました",
+            name: isCheckedIn ? "activity-checkout-fail" : "activity-checkin-fail",
+          });
         });
       }
     });
