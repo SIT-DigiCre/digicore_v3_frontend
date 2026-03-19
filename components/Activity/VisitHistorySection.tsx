@@ -45,11 +45,9 @@ const getMondayOfWeek = (dateStr: string) => {
   return d.subtract(day - 1, "day");
 };
 
-// TODO: バックエンドの実装が「指定日の1週間前の週を返す」ようになっていて分かりづらいので修正する
 const getPeriodLabel = (dateStr: string, period: string): string => {
   const d = dayjs(dateStr);
   if (period === "week") {
-    // URLの日付が含まれる週の月曜〜日曜を表示
     const monday = getMondayOfWeek(dateStr);
     const sunday = monday.add(6, "day");
     return `${monday.format("MM/DD")}（月）〜 ${sunday.format("MM/DD")}（日）`;
