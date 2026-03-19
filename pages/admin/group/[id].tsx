@@ -25,10 +25,14 @@ import { requireAdminPageAccess } from "../../../utils/auth/admin";
 import { GRANT_INFRA } from "../../../utils/auth/grants";
 
 import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+import type { components } from "../../../utils/fetch/api.d.ts";
+
+type GroupDetail = components["schemas"]["ResGetGroupGroupId"];
+type GroupDetailUser = components["schemas"]["ResGetGroupGroupIdObjectUser"];
 
 type AdminGroupDetailPageProps = AdminPageGuardProps & {
   canManageMembers: boolean;
-  group: any;
+  group: GroupDetail;
 };
 
 export const getServerSideProps = async ({
@@ -132,7 +136,7 @@ const AdminGroupDetailPage = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {group.users.map((user: any) => (
+                  {group.users.map((user: GroupDetailUser) => (
                     <TableRow key={user.userId}>
                       <TableCell>
                         <Avatar src={user.userIcon} sx={{ height: 40, width: 40 }}>

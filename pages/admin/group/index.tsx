@@ -21,9 +21,12 @@ import AdminPageError from "../../../components/Error/AdminPageError";
 import { requireAdminPageAccess } from "../../../utils/auth/admin";
 
 import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+import type { components } from "../../../utils/fetch/api.d.ts";
+
+type GroupListItem = components["schemas"]["ResGetGroupObjectGroup"];
 
 type AdminGroupIndexPageProps = AdminPageGuardProps & {
-  groups: any[];
+  groups: GroupListItem[];
 };
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
@@ -98,7 +101,7 @@ const AdminGroupIndexPage = ({ groups, adminPageError }: AdminGroupIndexPageProp
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {groups.map((group: any) => (
+                  {groups.map((group) => (
                     <TableRow key={group.groupId}>
                       <TableCell>
                         <Link href={`/admin/group/${group.groupId}`}>{group.name}</Link>

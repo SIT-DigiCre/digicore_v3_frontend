@@ -24,10 +24,13 @@ import { requireAdminPageAccess } from "../../../utils/auth/admin";
 import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
 
 import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+import type { components } from "../../../utils/fetch/api.d.ts";
 
 const ITEMS_PER_PAGE = 10;
+type BudgetListItem = components["schemas"]["ResGetBudgetObjectBudget"];
+
 type AdminBudgetIndexPageProps = AdminPageGuardProps & {
-  budgets: any[];
+  budgets: BudgetListItem[];
   currentPage: number;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
@@ -133,7 +136,7 @@ const AdminBudgetIndexPage = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {budgets.map((budget: any) => (
+                  {budgets.map((budget) => (
                     <TableRow key={budget.budgetId}>
                       <TableCell>
                         <Link href={`/admin/budget/${budget.budgetId}`}>{budget.name}</Link>

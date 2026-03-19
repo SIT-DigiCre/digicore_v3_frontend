@@ -28,12 +28,13 @@ import AdminPageError from "@/components/Error/AdminPageError";
 import { ACTIVITY_PLACES, DEFAULT_PLACE } from "@/interfaces/activity";
 import { requireAdminPageAccess } from "@/utils/auth/admin";
 
+import type { ActivityCurrentUser } from "@/interfaces/activity";
 import type { AdminPageGuardProps } from "@/utils/auth/admin";
 
 type AdminActivityPageProps = AdminPageGuardProps & {
   error: string | null;
   place: string;
-  users: any[];
+  users: ActivityCurrentUser[];
 };
 
 export const getServerSideProps = async ({ req, query }: GetServerSidePropsContext) => {
@@ -176,7 +177,7 @@ const AdminActivityPage = ({ users, place, error, adminPageError }: AdminActivit
           {users.length > 0 ? (
             <Paper variant="outlined">
               <List disablePadding>
-                {users.map((user: any, index: number) => (
+                {users.map((user, index: number) => (
                   <Fragment key={user.userId}>
                     {index > 0 && <Divider component="li" />}
                     <ListItem

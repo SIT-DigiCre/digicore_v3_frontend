@@ -30,9 +30,13 @@ import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/b
 import { apiClient } from "../../../utils/fetch/client";
 
 import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+import type { components } from "../../../utils/fetch/api.d.ts";
+
+type BudgetDetail = components["schemas"]["ResGetBudgetBudgetId"];
+type BudgetDetailFile = components["schemas"]["ResGetBudgetBudgetIdObjectFile"];
 
 type PageProps = AdminPageGuardProps & {
-  budget: any;
+  budget: BudgetDetail;
   budgetId: string;
 };
 
@@ -269,7 +273,7 @@ const AdminBudgetDetailPage = ({ budgetId, budget, adminPageError }: PageProps) 
                     <TableCell>
                       <Stack spacing={1} maxWidth="min(500px, 50vw)">
                         {budget.files &&
-                          budget.files.map((f: any) => (
+                          budget.files.map((f: BudgetDetailFile) => (
                             <BudgetFileView fileId={f.fileId} key={f.fileId} />
                           ))}
                         {budget.files.length === 0 && (
