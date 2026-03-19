@@ -1,0 +1,163 @@
+import type { NextApiRequest } from "next";
+
+import { ArrowBack } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  Chip,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
+import Link from "next/link";
+
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import AddUserDialog from "@/components/Group/AddUserDialog";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+import { GRANT_INFRA } from "@/utils/auth/grants";
+
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
+
+type GroupDetail = components["schemas"]["ResGetGroupGroupId"];
+type GroupDetailUser = components["schemas"]["ResGetGroupGroupIdObjectUser"];
+
+type AdminGroupDetailPageProps = AdminPageGuardProps & {
+  canManageMembers: boolean;
+  group: GroupDetail;
+};
+
+export const getServerSideProps = async ({
+  req,
+  params,
+}: {
+  req: NextApiRequest;
+  params: { id: string };
+}) => {
+  const groupId = params?.id as string;
+
+  if (!groupId) {
+    return { notFound: true };
+  }
+
+  const accessResult = await requireAdminPageAccess(req, "/admin/group");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client, grants } = accessResult;
+
+  try {
+    const groupRes = await client.GET("/group/{groupId}", {
+      params: {
+        path: {
+          groupId,
+        },
+      },
+    });
+
+    if (!groupRes.data) {
+      return { notFound: true };
+    }
+
+    return {
+      props: {
+        adminPageError: null,
+        canManageMembers: groupRes.data.joined || grants.includes(GRANT_INFRA),
+        group: groupRes.data,
+      },
+    };
+  } catch (error) {
+    console.error("Failed to fetch group:", error);
+    return { notFound: true };
+  }
+};
+
+const AdminGroupDetailPage = ({
+  group,
+  adminPageError,
+  canManageMembers,
+}: AdminGroupDetailPageProps) => {
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <PageHead title="[管理者用] グループ詳細" />
+      <Stack spacing={2} alignItems="flex-start">
+        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" width="100%">
+          <ButtonLink href="/admin/group" startIcon={<ArrowBack />} variant="text">
+            グループ一覧に戻る
+          </ButtonLink>
+          {canManageMembers && <AddUserDialog groupId={group.groupId} />}
+        </Stack>
+        <Box>
+          <Heading level={2}>{group.name}</Heading>
+          <Typography color="text.secondary" mb={2}>
+            {group.description}
+          </Typography>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Chip
+              label={group.joinable ? "参加可能" : "参加不可"}
+              color={group.joinable ? "success" : "default"}
+              size="small"
+            />
+            <Chip
+              label={group.joined ? "参加中" : "未参加"}
+              color={group.joined ? "primary" : "default"}
+              size="small"
+            />
+            <Typography color="text.secondary">{group.userCount}人が参加中</Typography>
+          </Stack>
+        </Box>
+        <Box width="100%">
+          <Heading level={2}>メンバー一覧</Heading>
+          {group.users && group.users.length > 0 ? (
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell></TableCell>
+                    <TableCell>名前</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {group.users.map((user: GroupDetailUser) => (
+                    <TableRow key={user.userId}>
+                      <TableCell>
+                        <Avatar src={user.userIcon} sx={{ height: 40, width: 40 }}>
+                          {user.name.charAt(0)}
+                        </Avatar>
+                      </TableCell>
+                      <TableCell>
+                        <Link href={`/member/${user.userId}`}>{user.name}</Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography my={2}>メンバーがいません</Typography>
+          )}
+        </Box>
+      </Stack>
+    </>
+  );
+};
+
+export default AdminGroupDetailPage;
