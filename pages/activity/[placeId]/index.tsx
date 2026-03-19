@@ -25,6 +25,32 @@ import { createServerApiClient } from "@/utils/fetch/client";
 const VALID_PERIODS = ["day", "week", "month"] as const;
 type Period = (typeof VALID_PERIODS)[number];
 
+const getHistoryRange = (date: string, period: Period) => {
+  const baseDate = dayjs(date);
+
+  if (period === "week") {
+    const dayOfWeek = baseDate.day() || 7;
+    const start = baseDate.subtract(dayOfWeek - 1, "day").startOf("day");
+    const end = start.add(6, "day").endOf("day");
+    return {
+      endAt: end.format("YYYY-MM-DDTHH:mm:ssZ"),
+      startAt: start.format("YYYY-MM-DDTHH:mm:ssZ"),
+    };
+  }
+
+  if (period === "month") {
+    return {
+      endAt: baseDate.endOf("month").format("YYYY-MM-DDTHH:mm:ssZ"),
+      startAt: baseDate.startOf("month").format("YYYY-MM-DDTHH:mm:ssZ"),
+    };
+  }
+
+  return {
+    endAt: baseDate.endOf("day").format("YYYY-MM-DDTHH:mm:ssZ"),
+    startAt: baseDate.startOf("day").format("YYYY-MM-DDTHH:mm:ssZ"),
+  };
+};
+
 export const getServerSideProps = async ({ req, query, params }: GetServerSidePropsContext) => {
   const client = createServerApiClient(req);
   const placeId = typeof params?.placeId === "string" ? params.placeId : DEFAULT_PLACE;
@@ -74,14 +100,7 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
   }
 
   const currentUserId = userRes.data?.userId ?? null;
-
-  // APIは指定日付の1週間前/1ヶ月前のデータを返すため、URLの日付と表示を一致させるためにオフセットする
-  let apiDate = date;
-  if (period === "week") {
-    apiDate = dayjs(date).add(7, "day").format("YYYY-MM-DD");
-  } else if (period === "month") {
-    apiDate = dayjs(date).add(1, "month").format("YYYY-MM-DD");
-  }
+  const { startAt, endAt } = getHistoryRange(date, period);
 
   const [activityRes, historyRes] = await Promise.all([
     client.GET("/activity/place/{place}/current", {
@@ -92,7 +111,7 @@ export const getServerSideProps = async ({ req, query, params }: GetServerSidePr
     client.GET("/activity/place/{place}/history", {
       params: {
         path: { place },
-        query: { date: apiDate, period },
+        query: { endAt, startAt },
       },
     }),
   ]);

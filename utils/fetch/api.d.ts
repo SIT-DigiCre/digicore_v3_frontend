@@ -2863,12 +2863,14 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** @description Get place visit history */
+        /** @description Get place visit history. startAt から endAt までの訪問回数を返す。単日範囲では訪問レコード数、複数日範囲では同一ユーザーの同一日の複数回訪問を1回として数える。 */
         get: {
             parameters: {
                 query: {
-                    period: "day" | "week" | "month";
-                    date: string;
+                    /** @description 集計開始日時。endAt 以下である必要がある。 */
+                    startAt: string;
+                    /** @description 集計終了日時。startAt 以上である必要がある。 */
+                    endAt: string;
                 };
                 header?: never;
                 path: {
