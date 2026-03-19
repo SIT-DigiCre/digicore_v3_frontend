@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import Link from "next/link";
 
 import { Add, ArrowBack } from "@mui/icons-material";
@@ -14,13 +14,28 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import Heading from "../../../components/Common/Heading";
-import PageHead from "../../../components/Common/PageHead";
-import { createServerApiClient } from "../../../utils/fetch/client";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
+
+type GroupListItem = components["schemas"]["ResGetGroupObjectGroup"];
+
+type AdminGroupIndexPageProps = AdminPageGuardProps & {
+  groups: GroupListItem[];
+};
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
-  const client = createServerApiClient(req);
+  const accessResult = await requireAdminPageAccess(req, "/admin/group");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
 
   try {
     const groupsRes = await client.GET("/group", {
@@ -32,19 +47,26 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     });
 
     if (!groupsRes.data || !groupsRes.data.groups) {
-      return { props: { groups: [] } };
+      return { props: { adminPageError: null, groups: [] } };
     }
 
-    return { props: { groups: groupsRes.data.groups } };
+    return { props: { adminPageError: null, groups: groupsRes.data.groups } };
   } catch (error) {
     console.error("Failed to fetch groups:", error);
-    return { props: { groups: [] } };
+    return { props: { adminPageError: null, groups: [] } };
   }
 };
 
-const AdminGroupIndexPage = ({
-  groups,
-}: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const AdminGroupIndexPage = ({ groups, adminPageError }: AdminGroupIndexPageProps) => {
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
+
   return (
     <>
       <PageHead title="[管理者用] グループ一覧" />

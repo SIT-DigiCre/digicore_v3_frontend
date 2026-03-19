@@ -1,4 +1,4 @@
-import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import type { NextApiRequest } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -16,18 +16,29 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import { AdminApproveDialog } from "../../../components/Budget/AdminApproveDialog";
-import { AdminPaidDialog } from "../../../components/Budget/AdminPaidDialog";
-import { AdminRejectDialog } from "../../../components/Budget/AdminRejectDialog";
-import { BudgetFileView } from "../../../components/Budget/BudgetFileView";
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import Heading from "../../../components/Common/Heading";
-import PageHead from "../../../components/Common/PageHead";
-import { useAuthState } from "../../../hook/useAuthState";
-import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
-import { apiClient, createServerApiClient } from "../../../utils/fetch/client";
+import { AdminApproveDialog } from "@/components/Budget/AdminApproveDialog";
+import { AdminPaidDialog } from "@/components/Budget/AdminPaidDialog";
+import { AdminRejectDialog } from "@/components/Budget/AdminRejectDialog";
+import { BudgetFileView } from "@/components/Budget/BudgetFileView";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import { useAuthState } from "@/hook/useAuthState";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+import { budgetStatusColor, classDisplay, statusDisplay } from "@/utils/budget/constants";
+import { apiClient } from "@/utils/fetch/client";
 
-type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
+
+type BudgetDetail = components["schemas"]["ResGetBudgetBudgetId"];
+type BudgetDetailFile = components["schemas"]["ResGetBudgetBudgetIdObjectFile"];
+
+type PageProps = AdminPageGuardProps & {
+  budget: BudgetDetail;
+  budgetId: string;
+};
 
 export const getServerSideProps = async ({
   params,
@@ -40,7 +51,12 @@ export const getServerSideProps = async ({
   const budgetId = typeof idParam === "string" ? idParam : "";
   if (!budgetId) return { notFound: true };
 
-  const client = createServerApiClient(req);
+  const accessResult = await requireAdminPageAccess(req, "/admin/budget");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  const { client } = accessResult;
   try {
     const budgetRes = await client.GET("/budget/{budgetId}", {
       params: {
@@ -54,6 +70,7 @@ export const getServerSideProps = async ({
     }
     return {
       props: {
+        adminPageError: null,
         budget: budgetRes.data,
         budgetId,
       },
@@ -64,13 +81,22 @@ export const getServerSideProps = async ({
   }
 };
 
-const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
+const AdminBudgetDetailPage = ({ budgetId, budget, adminPageError }: PageProps) => {
   const router = useRouter();
   const { authState } = useAuthState();
 
   const [openAdminApproveDialog, setOpenAdminApproveDialog] = useState(false);
   const [openAdminRejectDialog, setOpenAdminRejectDialog] = useState(false);
   const [openAdminPaidDialog, setOpenAdminPaidDialog] = useState(false);
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   const updateAdminBudget = (status: "approve" | "reject" | "paid") => {
     apiClient
@@ -247,7 +273,7 @@ const AdminBudgetDetailPage = ({ budgetId, budget }: PageProps) => {
                     <TableCell>
                       <Stack spacing={1} maxWidth="min(500px, 50vw)">
                         {budget.files &&
-                          budget.files.map((f) => (
+                          budget.files.map((f: BudgetDetailFile) => (
                             <BudgetFileView fileId={f.fileId} key={f.fileId} />
                           ))}
                         {budget.files.length === 0 && (

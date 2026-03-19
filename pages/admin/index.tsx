@@ -1,3 +1,5 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+
 import {
   BuildCircle,
   CurrencyYen,
@@ -11,10 +13,25 @@ import { Box, Grid, Stack, Typography } from "@mui/material";
 
 import AdminMenuCard from "@/components/Admin/AdminMenuCard";
 import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
 import { useAuthState } from "@/hook/useAuthState";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
 import { GRANT_ACCOUNT, GRANT_INFRA } from "@/utils/auth/grants";
 
-const AdminPage = () => {
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const accessResult = await requireAdminPageAccess(req, "/admin");
+  if (!accessResult.ok) {
+    return accessResult.result;
+  }
+
+  return {
+    props: {
+      adminPageError: null,
+    },
+  };
+};
+
+const AdminPage = ({ adminPageError }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const { authState } = useAuthState();
   const canAccessBudgetAdmin = authState.grants.includes(GRANT_ACCOUNT);
   const canAccessForceCheckoutAdmin = authState.grants.includes(GRANT_INFRA);
@@ -31,6 +48,15 @@ const AdminPage = () => {
     canAccessGradeUpdateAdmin ||
     canAccessReentryAdmin ||
     canAccessInfraAdmin;
+
+  if (adminPageError) {
+    return (
+      <>
+        <PageHead title="[管理者用] エラー" />
+        <AdminPageError title={adminPageError.title} message={adminPageError.message} />
+      </>
+    );
+  }
 
   return (
     <>
