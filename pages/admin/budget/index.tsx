@@ -16,15 +16,15 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import PageHead from "../../../components/Common/PageHead";
-import Pagination from "../../../components/Common/Pagination";
-import AdminPageError from "../../../components/Error/AdminPageError";
-import { requireAdminPageAccess } from "../../../utils/auth/admin";
-import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import PageHead from "@/components/Common/PageHead";
+import Pagination from "@/components/Common/Pagination";
+import AdminPageError from "@/components/Error/AdminPageError";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+import { budgetStatusColor, classDisplay, statusDisplay } from "@/utils/budget/constants";
 
-import type { AdminPageGuardProps } from "../../../utils/auth/admin";
-import type { components } from "../../../utils/fetch/api.d.ts";
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
 
 const ITEMS_PER_PAGE = 10;
 type BudgetListItem = components["schemas"]["ResGetBudgetObjectBudget"];

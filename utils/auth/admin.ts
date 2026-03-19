@@ -1,8 +1,7 @@
 import type { GetServerSidePropsContext, GetServerSidePropsResult, NextApiRequest } from "next";
 
+import { GRANT_ACCOUNT, GRANT_INFRA } from "@/utils/auth/grants";
 import { createServerApiClient } from "@/utils/fetch/client";
-
-import { GRANT_ACCOUNT, GRANT_INFRA } from "./grants";
 
 import type { components } from "@/utils/fetch/api.d.ts";
 

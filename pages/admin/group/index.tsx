@@ -14,14 +14,14 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import Heading from "../../../components/Common/Heading";
-import PageHead from "../../../components/Common/PageHead";
-import AdminPageError from "../../../components/Error/AdminPageError";
-import { requireAdminPageAccess } from "../../../utils/auth/admin";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
 
-import type { AdminPageGuardProps } from "../../../utils/auth/admin";
-import type { components } from "../../../utils/fetch/api.d.ts";
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
 
 type GroupListItem = components["schemas"]["ResGetGroupObjectGroup"];
 

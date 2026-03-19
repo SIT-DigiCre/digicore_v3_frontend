@@ -16,16 +16,16 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import Heading from "../../../components/Common/Heading";
-import PageHead from "../../../components/Common/PageHead";
-import AdminPageError from "../../../components/Error/AdminPageError";
-import AddUserDialog from "../../../components/Group/AddUserDialog";
-import { requireAdminPageAccess } from "../../../utils/auth/admin";
-import { GRANT_INFRA } from "../../../utils/auth/grants";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import AddUserDialog from "@/components/Group/AddUserDialog";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+import { GRANT_INFRA } from "@/utils/auth/grants";
 
-import type { AdminPageGuardProps } from "../../../utils/auth/admin";
-import type { components } from "../../../utils/fetch/api.d.ts";
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
 
 type GroupDetail = components["schemas"]["ResGetGroupGroupId"];
 type GroupDetailUser = components["schemas"]["ResGetGroupGroupIdObjectUser"];

@@ -15,14 +15,14 @@ import {
   Typography,
 } from "@mui/material";
 
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import PageHead from "../../../components/Common/PageHead";
-import AdminPageError from "../../../components/Error/AdminPageError";
-import PaymentDetailDialog from "../../../components/Payment/PaymentDetailDialog";
-import { Payment } from "../../../interfaces/payment";
-import { requireAdminPageAccess } from "../../../utils/auth/admin";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import PaymentDetailDialog from "@/components/Payment/PaymentDetailDialog";
+import { Payment } from "@/interfaces/payment";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
 
-import type { AdminPageGuardProps } from "../../../utils/auth/admin";
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
 
 type AdminPaymentPageProps = AdminPageGuardProps & {
   payments: Payment[];

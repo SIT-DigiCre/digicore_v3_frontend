@@ -16,21 +16,21 @@ import {
 } from "@mui/material";
 import dayjs from "dayjs";
 
-import { AdminApproveDialog } from "../../../components/Budget/AdminApproveDialog";
-import { AdminPaidDialog } from "../../../components/Budget/AdminPaidDialog";
-import { AdminRejectDialog } from "../../../components/Budget/AdminRejectDialog";
-import { BudgetFileView } from "../../../components/Budget/BudgetFileView";
-import { ButtonLink } from "../../../components/Common/ButtonLink";
-import Heading from "../../../components/Common/Heading";
-import PageHead from "../../../components/Common/PageHead";
-import AdminPageError from "../../../components/Error/AdminPageError";
-import { useAuthState } from "../../../hook/useAuthState";
-import { requireAdminPageAccess } from "../../../utils/auth/admin";
-import { budgetStatusColor, classDisplay, statusDisplay } from "../../../utils/budget/constants";
-import { apiClient } from "../../../utils/fetch/client";
+import { AdminApproveDialog } from "@/components/Budget/AdminApproveDialog";
+import { AdminPaidDialog } from "@/components/Budget/AdminPaidDialog";
+import { AdminRejectDialog } from "@/components/Budget/AdminRejectDialog";
+import { BudgetFileView } from "@/components/Budget/BudgetFileView";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import AdminPageError from "@/components/Error/AdminPageError";
+import { useAuthState } from "@/hook/useAuthState";
+import { requireAdminPageAccess } from "@/utils/auth/admin";
+import { budgetStatusColor, classDisplay, statusDisplay } from "@/utils/budget/constants";
+import { apiClient } from "@/utils/fetch/client";
 
-import type { AdminPageGuardProps } from "../../../utils/auth/admin";
-import type { components } from "../../../utils/fetch/api.d.ts";
+import type { AdminPageGuardProps } from "@/utils/auth/admin";
+import type { components } from "@/utils/fetch/api.d.ts";
 
 type BudgetDetail = components["schemas"]["ResGetBudgetBudgetId"];
 type BudgetDetailFile = components["schemas"]["ResGetBudgetBudgetIdObjectFile"];
