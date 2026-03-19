@@ -5,16 +5,16 @@
     ".next/",
     "out/",
     "build/",
-    "utils/fetch/api.d.ts",
-    "utils/fetch/bundle.gen.yml"
+    "src/utils/fetch/api.d.ts",
+    "src/utils/fetch/bundle.gen.yml"
   ],
-  "experimentalSortImports": {
+  "sortImports": {
     "groups": [
       "react",
       ["value-builtin", "value-external"],
       "value-internal",
       ["value-parent", "value-sibling", "value-index"],
-      "ts-equals-import",
+      "import",
       ["type-parent", "type-sibling", "type-index"],
       "type-internal",
       "type-import",
@@ -30,7 +30,7 @@
     "order": "asc",
     "ignoreCase": true
   },
-  "experimentalSortPackageJson": {
+  "sortPackageJson": {
     "sortScripts": true
   }
 }
