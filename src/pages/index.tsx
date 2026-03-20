@@ -1,36 +1,122 @@
-import { Box, Stack, Typography } from "@mui/material";
+import { useState } from "react";
+
+import { CheckCircle, CopyAll, CurrencyYen, MeetingRoom, ReceiptLong } from "@mui/icons-material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
-import Heading from "../components/Common/Heading";
-import PageHead from "../components/Common/PageHead";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import PageHead from "@/components/Common/PageHead";
+import HomeLinkCard from "@/components/Home/HomeLinkCard";
 
 const IndexPage = () => {
+  const [isCopied, setIsCopied] = useState(false);
+
+  const handleCopyServerUrl = async () => {
+    // クリップボード API 対応チェック
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      alert(
+        "このブラウザではクリップボードへのコピー機能がサポートされていません。URL を手動でコピーしてください。",
+      );
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText("mm.digicre.net");
+      setIsCopied(true);
+    } catch (error) {
+      // ログ出力しておくとデバッグしやすくなります
+      console.error("クリップボードへのコピーに失敗しました:", error);
+      alert("クリップボードへのコピーに失敗しました。URL を手動でコピーしてください。");
+    }
+  };
+
   return (
     <>
       <PageHead title="ホーム" />
       <Stack spacing={2}>
-        <Box>
-          <Heading level={2}>ようこそ、デジコア3.1へ</Heading>
-          <Typography>
-            デジコア3.1は開発途上のアプリケーションです。優しい気持ちで接してみてください
-          </Typography>
-        </Box>
-        <Box>
-          <Heading level={2}>使いそうな項目</Heading>
-          <Typography>
-            <Link href="/register/joined">入部完了ページ</Link>
-            ：部費の入金先やMattermost、Discordへの参加リンクがあります
-          </Typography>
-        </Box>
-        <div className="index_calender">
-          <iframe
-            title="カレンダー"
-            src="https://calendar.google.com/calendar/embed?src=sitdigicrecircle%40gmail.com&ctz=Asia%2FTokyo"
-            style={{ border: 0 }}
-            width="800"
-            height="600"
-          ></iframe>
-        </div>
+        <Heading level={2}>ようこそ、デジコア3へ</Heading>
+        <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
+          <Grid size={{ md: 6, xs: 12 }} sx={{ alignItems: "stretch", display: "flex" }}>
+            <HomeLinkCard
+              title="Mattermostへの接続"
+              action={
+                <Button
+                  variant="contained"
+                  onClick={handleCopyServerUrl}
+                  startIcon={isCopied ? <CheckCircle /> : <CopyAll />}
+                >
+                  サーバーURLをコピー
+                </Button>
+              }
+            >
+              <Typography>
+                アプリは{" "}
+                <Link href="https://mattermost.com/apps/" target="_blank" rel="noopener noreferrer">
+                  公式ダウンロードページ
+                </Link>{" "}
+                から取得できます。
+              </Typography>
+              <Typography>
+                ログイン時のサーバーURLは{" "}
+                <Link href="https://mm.digicre.net" target="_blank" rel="noopener noreferrer">
+                  mm.digicre.net
+                </Link>
+                、サーバー名は「デジクリ」です。
+              </Typography>
+            </HomeLinkCard>
+          </Grid>
+
+          <Grid size={{ md: 6, xs: 12 }} sx={{ alignItems: "stretch", display: "flex" }}>
+            <HomeLinkCard
+              title="入退室管理"
+              action={
+                <ButtonLink
+                  href="/activity/omiya-bushitsu"
+                  variant="contained"
+                  startIcon={<MeetingRoom />}
+                >
+                  部室のようすを見る
+                </ButtonLink>
+              }
+            >
+              <Typography>
+                部室への入退室を記録できます。今誰が部室にいるのかも確認することができます。
+              </Typography>
+            </HomeLinkCard>
+          </Grid>
+
+          <Grid size={{ md: 6, xs: 12 }} sx={{ alignItems: "stretch", display: "flex" }}>
+            <HomeLinkCard
+              title="部費振込報告"
+              action={
+                <ButtonLink
+                  href="/user/form/payment"
+                  variant="contained"
+                  startIcon={<CurrencyYen />}
+                >
+                  振込を報告する
+                </ButtonLink>
+              }
+            >
+              <Typography>
+                部費の振り込みが済んだらこのページから報告をしてください。振込先口座もここから確認できます。
+              </Typography>
+            </HomeLinkCard>
+          </Grid>
+
+          <Grid size={{ md: 6, xs: 12 }} sx={{ alignItems: "stretch", display: "flex" }}>
+            <HomeLinkCard
+              title="稟議"
+              action={
+                <ButtonLink href="/budget" variant="contained" startIcon={<ReceiptLong />}>
+                  稟議を見る
+                </ButtonLink>
+              }
+            >
+              <Typography>予算に関する申請や承認状況を確認できます。</Typography>
+            </HomeLinkCard>
+          </Grid>
+        </Grid>
       </Stack>
     </>
   );

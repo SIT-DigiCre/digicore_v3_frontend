@@ -13,10 +13,11 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 
-import { useMattermostRegister } from "../../hook/mattermost/useMattermostRegister";
-import { useAuthState } from "../../hook/useAuthState";
-import { MattermostRegistrationRequest } from "../../interfaces/api";
-import Heading from "../Common/Heading";
+import Heading from "@/components/Common/Heading";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import { useAuthState } from "@/hook/useAuthState";
+import { MattermostRegistrationRequest } from "@/interfaces/api";
+import { apiClient } from "@/utils/fetch/client";
 
 type Props = {
   onRegistered: () => void;
@@ -25,7 +26,7 @@ type Props = {
 export const MattermostRegister = ({ onRegistered }: Props) => {
   const { authState } = useAuthState();
   const userProfile = authState.user;
-  const { register } = useMattermostRegister();
+  const { setNewError, removeError } = useErrorState();
   const [registrationForm, setRegistrationForm] = useState<MattermostRegistrationRequest>({
     nickname: "",
     password: "",
@@ -67,7 +68,37 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     e.preventDefault();
     (async () => {
       setSending(true);
-      const res = await register(registrationForm);
+      if (!authState.token) {
+        setSending(false);
+        return;
+      }
+
+      let res: { username: string } | false = false;
+
+      try {
+        const response = await apiClient.POST("/mattermost/create_user", {
+          body: registrationForm,
+          headers: {
+            Authorization: `Bearer ${authState.token}`,
+          },
+        });
+
+        if (response.error) {
+          const apiErrorMessage =
+            (response.error as any)?.message ?? "Mattermostユーザ登録に失敗しました";
+          setNewError({
+            message: apiErrorMessage,
+            name: "mattermost-registration-error",
+          });
+        } else if (response.data) {
+          removeError("mattermost-registration-error");
+          res = response.data;
+        }
+      } catch (err: unknown) {
+        const errMsg = err instanceof Error ? err.message : "An unknown error occurred";
+        setNewError({ message: errMsg, name: "mattermost-registration-error" });
+      }
+
       setSending(false);
       if (res) {
         onRegistered();
@@ -76,13 +107,13 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
   };
   useEffect(() => {
     if (userProfile) {
-      setRegistrationForm({
-        ...registrationForm,
+      setRegistrationForm((currentForm) => ({
+        ...currentForm,
         nickname: userProfile.username,
         username: userProfile.studentNumber,
-      });
+      }));
     }
-  }, [userProfile, registrationForm]);
+  }, [userProfile]);
   return (
     <Stack spacing={4}>
       <Heading level={2}>Mattermost</Heading>
