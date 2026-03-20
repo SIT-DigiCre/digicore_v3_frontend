@@ -12,9 +12,22 @@ import HomeLinkCard from "@/components/Home/HomeLinkCard";
 const IndexPage = () => {
   const [isCopied, setIsCopied] = useState(false);
 
-  const handleCopyServerUrl = () => {
-    navigator.clipboard.writeText("mm.digicre.net");
-    setIsCopied(true);
+  const handleCopyServerUrl = async () => {
+    // クリップボード API 対応チェック
+    if (!navigator.clipboard || !navigator.clipboard.writeText) {
+      alert(
+        "このブラウザではクリップボードへのコピー機能がサポートされていません。URL を手動でコピーしてください。",
+      );
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText("mm.digicre.net");
+      setIsCopied(true);
+    } catch (error) {
+      // ログ出力しておくとデバッグしやすくなります
+      console.error("クリップボードへのコピーに失敗しました:", error);
+      alert("クリップボードへのコピーに失敗しました。URL を手動でコピーしてください。");
+    }
   };
 
   return (
@@ -85,7 +98,9 @@ const IndexPage = () => {
                 </ButtonLink>
               }
             >
-              <Typography>部員の情報を一覧から探すことができます。</Typography>
+              <Typography>
+                部費の振り込みが済んだらこのページから報告をしてください。振込先口座もここから確認できます。
+              </Typography>
             </HomeLinkCard>
           </Grid>
 

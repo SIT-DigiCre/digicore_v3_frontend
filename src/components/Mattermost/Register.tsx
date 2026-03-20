@@ -83,7 +83,14 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
           },
         });
 
-        if (response.data) {
+        if (response.error) {
+          const apiErrorMessage =
+            (response.error as any)?.message ?? "Mattermostユーザ登録に失敗しました";
+          setNewError({
+            message: apiErrorMessage,
+            name: "mattermost-registration-error",
+          });
+        } else if (response.data) {
           removeError("mattermost-registration-error");
           res = response.data;
         }
