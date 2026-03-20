@@ -7,11 +7,5 @@
     "source.fixAll.oxc": "explicit",
     "source.organizeImports": "never"
   },
-  "files.insertFinalNewline": true,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "vscode.typescript-language-features"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
-  }
+  "files.insertFinalNewline": true
 }
