@@ -1,4 +1,4 @@
-import React from "react";
+import type { ReactNode } from "react";
 
 import { Box, Card, Stack } from "@mui/material";
 
@@ -6,8 +6,8 @@ import Heading from "@/components/Common/Heading";
 
 type HomeLinkCardProps = {
   title: string;
-  children: React.ReactNode;
-  action: React.ReactNode;
+  children: ReactNode;
+  action: ReactNode;
 };
 
 const HomeLinkCard = ({ title, children, action }: HomeLinkCardProps) => {
