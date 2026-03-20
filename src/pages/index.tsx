@@ -1,16 +1,6 @@
 import { useState } from "react";
 
-import {
-  CheckCircle,
-  CopyAll,
-  CurrencyYen,
-  Event,
-  Inventory,
-  ManageAccounts,
-  MeetingRoom,
-  PeopleAlt,
-  ReceiptLong,
-} from "@mui/icons-material";
+import { CheckCircle, CopyAll, CurrencyYen, MeetingRoom, ReceiptLong } from "@mui/icons-material";
 import { Button, Grid, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
