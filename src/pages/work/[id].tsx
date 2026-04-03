@@ -153,7 +153,7 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
         },
       });
       removeError("work-put-fail");
-      router.reload();
+      router.replace(`/work/${id}`);
     } catch {
       setNewError({ message: "Workの更新に失敗しました", name: "work-put-fail" });
     }
