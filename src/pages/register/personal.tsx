@@ -1,15 +1,12 @@
-import { useEffect } from "react";
-
-import { useRouter } from "next/router";
-
 const RegisterPersonalPage = () => {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.replace("/tutorial/personal-info");
-  }, [router]);
-
   return null;
 };
+
+export const getServerSideProps = async () => ({
+  redirect: {
+    destination: "/tutorial/personal-info",
+    permanent: false,
+  },
+});
 
 export default RegisterPersonalPage;
