@@ -3,8 +3,8 @@ import { useEffect } from "react";
 
 import { useRouter } from "next/router";
 
-import { useAuthState } from "../../../hook/useAuthState";
-import { apiClient } from "../../../utils/fetch/client";
+import { useAuthState } from "@/hook/useAuthState";
+import { apiClient } from "@/utils/fetch/client";
 
 type Props = {
   code: string;
@@ -28,7 +28,7 @@ const DiscordCallbackPage = ({ code, isLoginFailed }: Props) => {
       console.error("Failed to callback discord:", error);
     }
     if (localStorage.getItem("reg_discord") === "true") {
-      router.push("/register/introduction");
+      router.push("/tutorial/discord-server");
     } else {
       router.push("/user/profile/discord");
     }
