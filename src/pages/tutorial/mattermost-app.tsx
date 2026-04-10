@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
 
 const TutorialMattermostAppPage = () => {
   const router = useRouter();

@@ -4,11 +4,11 @@ import { useState } from "react";
 import { Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
-import { useErrorState } from "../../components/contexts/ErrorStateContext";
-import MarkdownEditor from "../../components/Markdown/MarkdownEditor";
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
-import { useAuthState } from "../../hook/useAuthState";
-import { apiClient, createServerApiClient } from "../../utils/fetch/client";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
+import { useAuthState } from "@/hook/useAuthState";
+import { apiClient, createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

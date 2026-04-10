@@ -2,9 +2,9 @@ import { Box, Button, Link, Stack, Typography } from "@mui/material";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 
-import Heading from "../../components/Common/Heading";
-import TransferClubFeeView from "../../components/Register/TransferClubFeeView";
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
+import Heading from "@/components/Common/Heading";
+import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
 
 const TutorialClubFeePage = () => {
   const router = useRouter();

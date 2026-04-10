@@ -12,10 +12,10 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 
-import { ButtonLink } from "../../components/Common/ButtonLink";
-import Heading from "../../components/Common/Heading";
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
-import { createServerApiClient } from "../../utils/fetch/client";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

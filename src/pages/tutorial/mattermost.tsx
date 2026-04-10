@@ -1,8 +1,8 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
-import { MattermostRegister } from "../../components/Mattermost/Register";
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
+import { MattermostRegister } from "@/components/Mattermost/Register";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
 
 const TutorialMattermostPage = () => {
   const router = useRouter();

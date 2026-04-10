@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
 
 const TutorialJoinedWelcomePage = () => {
   const router = useRouter();

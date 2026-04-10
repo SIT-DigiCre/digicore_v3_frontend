@@ -4,16 +4,16 @@ import { useState } from "react";
 import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
-import Heading from "../../components/Common/Heading";
-import { useErrorState } from "../../components/contexts/ErrorStateContext";
-import { FileBrowserModal } from "../../components/File/FileBrowser";
-import { FileUploader } from "../../components/File/FileUploader";
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
-import { useMyFiles } from "../../hook/file/useFile";
-import { useAuthState } from "../../hook/useAuthState";
-import { FileObject } from "../../interfaces/file";
-import { DEFAULT_USER, User } from "../../interfaces/user";
-import { apiClient, createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import { FileBrowserModal } from "@/components/File/FileBrowser";
+import { FileUploader } from "@/components/File/FileUploader";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
+import { useMyFiles } from "@/hook/file/useFile";
+import { useAuthState } from "@/hook/useAuthState";
+import { FileObject } from "@/interfaces/file";
+import { DEFAULT_USER, User } from "@/interfaces/user";
+import { apiClient, createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

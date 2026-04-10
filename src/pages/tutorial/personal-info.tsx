@@ -4,14 +4,14 @@ import { useState } from "react";
 import { Box, Stack } from "@mui/material";
 import { useRouter } from "next/router";
 
-import Heading from "../../components/Common/Heading";
-import { useErrorState } from "../../components/contexts/ErrorStateContext";
-import EmergencyContactForm from "../../components/Profile/EmergencyContactForm";
-import PersonalInfoForm from "../../components/Profile/PersonalInfoForm";
-import { TutorialStepLayout } from "../../components/Register/TutorialStepLayout";
-import { useAuthState } from "../../hook/useAuthState";
-import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "../../interfaces/user";
-import { apiClient, createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import { useErrorState } from "@/components/contexts/ErrorStateContext";
+import EmergencyContactForm from "@/components/Profile/EmergencyContactForm";
+import PersonalInfoForm from "@/components/Profile/PersonalInfoForm";
+import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
+import { useAuthState } from "@/hook/useAuthState";
+import { DEFAULT_USER_PRIVATE_PROFILE, UserPrivateProfile } from "@/interfaces/user";
+import { apiClient, createServerApiClient } from "@/utils/fetch/client";
 
 export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
   const client = createServerApiClient(req);

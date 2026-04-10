@@ -14,7 +14,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import Heading from "../Common/Heading";
+import Heading from "@/components/Common/Heading";
 
 const TransferClubFeeView = () => {
   const [isCopied, setIsCopied] = useState(false);

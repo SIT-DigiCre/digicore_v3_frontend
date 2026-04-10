@@ -12,7 +12,7 @@ import {
   Stepper,
 } from "@mui/material";
 
-import PageHead from "../Common/PageHead";
+import PageHead from "@/components/Common/PageHead";
 
 type TutorialStepLayoutProps = {
   title: string;
