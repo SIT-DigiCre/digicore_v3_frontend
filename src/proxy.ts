@@ -32,6 +32,7 @@ export const proxy = async (request: NextRequest) => {
 
       if (!existingNext) {
         response.cookies.set("next", `${pathname}${search}`, {
+          httpOnly: true,
           maxAge,
           path: "/",
           sameSite: "lax",
