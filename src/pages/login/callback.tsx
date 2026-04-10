@@ -15,16 +15,8 @@ type LoginCallbackPageProps = {
   codeMissing?: boolean;
 };
 
-const normalizeNextUrl = (value: string | undefined): string => {
-  if (!value) return "/";
-  let decoded: string;
-  try {
-    decoded = decodeURIComponent(value);
-  } catch {
-    return "/";
-  }
-  if (!decoded.startsWith("/") || decoded.startsWith("//")) return "/";
-  return decoded;
+const sanitizeNextPath = (value: string | undefined): string => {
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/";
 };
 
 const isInactiveAccountError = (message?: string): boolean => {
@@ -82,8 +74,8 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
 
   if (result.data?.jwt) {
     const jwt = result.data.jwt;
-    const nextCookie = req.cookies?.next;
-    const nextUrl = normalizeNextUrl(nextCookie);
+    const nextCookieValue = req.cookies?.next;
+    const nextPath = sanitizeNextPath(nextCookieValue);
     const meResult = await client.GET("/user/me", {
       headers: {
         Authorization: `Bearer ${jwt}`,
@@ -92,7 +84,7 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
 
     if (meResult.data) {
       setAuthCookies(jwt);
-      return { redirect: { destination: nextUrl, permanent: false } };
+      return { redirect: { destination: nextPath, permanent: false } };
     }
 
     if (shouldRedirectToReentry(meResult.error?.message)) {
