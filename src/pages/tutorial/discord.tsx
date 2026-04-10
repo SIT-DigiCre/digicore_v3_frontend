@@ -43,7 +43,6 @@ const TutorialDiscordPage = ({ loginUrl }: TutorialDiscordPageProps) => {
       step={7}
       onNext={handleNext}
       onPrevious={handlePrevious}
-      showNext={!loginUrl}
     >
       <Stack spacing={3}>
         <Typography>
