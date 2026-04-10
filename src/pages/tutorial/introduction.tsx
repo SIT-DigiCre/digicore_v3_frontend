@@ -1,8 +1,7 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
-import { ArrowForward } from "@mui/icons-material";
-import { Button, CircularProgress as MuiCircularProgress, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
 import { useErrorState } from "../../components/contexts/ErrorStateContext";
@@ -55,7 +54,7 @@ const TutorialIntroductionPage = ({ initialIntroduction }: TutorialIntroductionP
       });
       setIsPending(false);
     } else {
-      router.push("/tutorial/joined-welcome");
+      router.push("/tutorial/joined");
     }
   };
 
@@ -64,7 +63,7 @@ const TutorialIntroductionPage = ({ initialIntroduction }: TutorialIntroductionP
   };
 
   const handleSkip = () => {
-    router.push("/tutorial/joined-welcome");
+    router.push("/tutorial/joined");
   };
 
   return (
@@ -73,7 +72,7 @@ const TutorialIntroductionPage = ({ initialIntroduction }: TutorialIntroductionP
       step={3}
       onNext={handleNext}
       onPrevious={handlePrevious}
-      nextLabel={isPending ? "保存中..." : "次へ"}
+      isPending={isPending}
     >
       <Stack spacing={3}>
         <Typography>
@@ -89,7 +88,7 @@ const TutorialIntroductionPage = ({ initialIntroduction }: TutorialIntroductionP
 
         <Stack direction="row" justifyContent="flex-end" spacing={2}>
           <Button variant="text" onClick={handleSkip}>
-            スキップ
+            今はスキップ
           </Button>
         </Stack>
       </Stack>

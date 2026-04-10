@@ -19,17 +19,22 @@ const TutorialWelcomePage = () => {
     >
       <Stack spacing={4} alignItems="center">
         <Box>
-          <Typography variant="h5" gutterBottom>
-            これからデジコアの登録を進めていきます
+          <Typography variant="h5" gutterBottom align="center">
+            デジクリへようこそ！
           </Typography>
-          <Typography>以下の10個のステップで、デジコアの設定が完了します。</Typography>
         </Box>
-        <Box sx={{ bgcolor: "background.paper", border: "1px solid gray", borderRadius: 1, p: 3 }}>
-          <Typography variant="body2" color="textSecondary">
-            😊 各種情報を登録することで、デジクリのコミュニティの一部になります。
+        <Box sx={{ border: 1, borderColor: "info.main", borderRadius: 1, p: 3 }}>
+          <Typography variant="body1" gutterBottom>
+            <strong>まずは、デジコアに登録しましょう。</strong>
           </Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-            📝 途中でスキップできるステップもありますので、無理のないペースで進めてください。
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            デジコアとは、デジクリが開発する独自のグループウェアです。
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            部費振込や会計処理、作品の共有などをすることができます。
+          </Typography>
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            デジコアに登録することで、デジクリへの入部が完了します！
           </Typography>
         </Box>
       </Stack>
