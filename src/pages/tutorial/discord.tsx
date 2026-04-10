@@ -1,4 +1,5 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useEffect } from "react";
 
 import { Box, Link, Stack, Typography } from "@mui/material";
 import { useRouter } from "next/router";
@@ -28,6 +29,10 @@ type TutorialDiscordPageProps = InferGetServerSidePropsType<typeof getServerSide
 
 const TutorialDiscordPage = ({ loginUrl }: TutorialDiscordPageProps) => {
   const router = useRouter();
+
+  useEffect(() => {
+    localStorage.setItem("reg_discord", "true");
+  }, []);
 
   const handleNext = () => {
     router.push("/tutorial/discord-server");
