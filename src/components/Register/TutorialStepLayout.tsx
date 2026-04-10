@@ -1,6 +1,16 @@
 import { ReactNode, useEffect, useRef } from "react";
 
-import { Box, Button, Container, Step, StepLabel, Stepper, Stack } from "@mui/material";
+import { ArrowBack, ArrowForward } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Container,
+  Stack,
+  Step,
+  StepLabel,
+  Stepper,
+} from "@mui/material";
 
 import PageHead from "../Common/PageHead";
 
@@ -14,6 +24,8 @@ type TutorialStepLayoutProps = {
   previousLabel?: string;
   showNext?: boolean;
   showPrevious?: boolean;
+  isPending?: boolean;
+  isNextDisabled?: boolean;
 };
 
 const STEPS = [
@@ -38,9 +50,11 @@ export const TutorialStepLayout = ({
   onNext,
   onPrevious,
   nextLabel = "次へ",
-  previousLabel = "戻る",
+  previousLabel = "前へ",
   showNext = true,
   showPrevious = true,
+  isPending = false,
+  isNextDisabled = false,
 }: TutorialStepLayoutProps) => {
   const stepperContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -90,8 +104,8 @@ export const TutorialStepLayout = ({
               },
               "& .MuiStepLabel-label": {
                 fontSize: {
-                  xs: "0.75rem",
                   sm: "0.875rem",
+                  xs: "0.75rem",
                 },
               },
               "& .MuiStepLabel-labelContainer": {
@@ -113,14 +127,24 @@ export const TutorialStepLayout = ({
 
         <Stack direction="row" justifyContent="space-between" sx={{ mb: 4 }}>
           {showPrevious ? (
-            <Button variant="outlined" onClick={onPrevious} disabled={step === 0}>
+            <Button
+              variant="outlined"
+              startIcon={<ArrowBack />}
+              onClick={onPrevious}
+              disabled={step === 0}
+            >
               {previousLabel}
             </Button>
           ) : (
             <Box />
           )}
           {showNext ? (
-            <Button variant="contained" onClick={onNext} disabled={step === STEPS.length - 1}>
+            <Button
+              variant="contained"
+              endIcon={!isPending ? <ArrowForward /> : <CircularProgress size={20} />}
+              onClick={onNext}
+              disabled={step === STEPS.length - 1 || isPending || isNextDisabled}
+            >
               {nextLabel}
             </Button>
           ) : (
