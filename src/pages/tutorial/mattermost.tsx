@@ -12,7 +12,7 @@ const TutorialMattermostPage = () => {
   };
 
   const handlePrevious = () => {
-    router.push("/tutorial/joined-welcome");
+    router.push("/tutorial/joined");
   };
 
   const handleSkip = () => {

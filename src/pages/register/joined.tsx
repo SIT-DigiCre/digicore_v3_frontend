@@ -6,7 +6,7 @@ const RegisterJoinedPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace("/tutorial/joined-welcome");
+    router.replace("/tutorial/joined");
   }, [router]);
 
   return null;
