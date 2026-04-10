@@ -19,6 +19,7 @@ const isValidToken = async (token: string): Promise<boolean> => {
 export const proxy = async (request: NextRequest) => {
   const { pathname, search } = request.nextUrl;
   const jwt = request.cookies.get("jwt")?.value;
+  const existingNext = request.cookies.get("next")?.value;
 
   if (!isPublicPath(pathname)) {
     const isAuthenticated = jwt != null && (await isValidToken(jwt));
@@ -29,12 +30,14 @@ export const proxy = async (request: NextRequest) => {
       const maxAge = 60 * 10; // 10分間
       const isProduction = process.env.NODE_ENV === "production";
 
-      response.cookies.set("next", encodeURIComponent(`${pathname}${search}`), {
-        maxAge,
-        path: "/",
-        sameSite: "lax",
-        secure: isProduction,
-      });
+      if (!existingNext) {
+        response.cookies.set("next", `${pathname}${search}`, {
+          maxAge,
+          path: "/",
+          sameSite: "lax",
+          secure: isProduction,
+        });
+      }
 
       // 期限切れ等の無効なトークンのCookieをクリア
       if (jwt) {
