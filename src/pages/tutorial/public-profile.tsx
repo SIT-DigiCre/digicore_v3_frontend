@@ -1,8 +1,7 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
-import { ArrowForward } from "@mui/icons-material";
-import { Avatar, Button, CircularProgress, Stack, TextField, Typography } from "@mui/material";
+import { Avatar, Button, Stack, TextField, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 
 import Heading from "../../components/Common/Heading";
@@ -85,6 +84,8 @@ const TutorialPublicProfilePage = ({ initialUserProfile }: TutorialPublicProfile
       step={1}
       onNext={handleNext}
       onPrevious={handlePrevious}
+      isPending={isPending}
+      isNextDisabled={isNextDisabled}
     >
       <Stack spacing={4}>
         <Typography>

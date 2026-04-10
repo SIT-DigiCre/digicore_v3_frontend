@@ -1,8 +1,7 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
-import { ArrowForward } from "@mui/icons-material";
-import { Box, Button, CircularProgress as MuiCircularProgress, Stack } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { useRouter } from "next/router";
 
 import Heading from "../../components/Common/Heading";
@@ -84,7 +83,8 @@ const TutorialPersonalInfoPage = ({ initialPrivateProfile }: TutorialPersonalInf
       step={2}
       onNext={handleNext}
       onPrevious={handlePrevious}
-      nextLabel={isPending ? "保存中..." : "次へ"}
+      isPending={isPending}
+      isNextDisabled={isNextDisabled}
     >
       <Stack spacing={4} mb={8}>
         <Box>
