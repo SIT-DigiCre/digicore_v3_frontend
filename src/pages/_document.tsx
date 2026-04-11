@@ -5,9 +5,9 @@ class MyDocument extends Document {
     return (
       <Html lang="ja">
         <Head>
-          <link rel="apple-touch-icon" sizes="180x180" href="/digicore_favicon.ico" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/digicore_favicon.ico" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/digicore_favicon.ico" />
+          <link rel="icon" href="/favicon.ico" sizes="32x32" />
+          <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+          <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         </Head>
         <body>
           <Main />
