@@ -2,8 +2,8 @@ import type { GetServerSideProps } from "next";
 
 import { Stack, Typography } from "@mui/material";
 
-import Heading from "../../components/Common/Heading";
-import { createServerApiClient } from "../../utils/fetch/client";
+import Heading from "@/components/Common/Heading";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 type Props = {
   codeMissing?: boolean;
@@ -24,7 +24,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
     const maxAge = 60 * 60 * 24 * 7;
     const secure = process.env.NODE_ENV === "production" ? "; Secure" : "";
     res.setHeader("Set-Cookie", `jwt=${jwt}; Path=/; Max-Age=${maxAge}; SameSite=Lax${secure}`);
-    return { redirect: { destination: "/register/public", permanent: false } };
+    return { redirect: { destination: "/tutorial/welcome", permanent: false } };
   }
 
   return { props: { signupFailed: true } };

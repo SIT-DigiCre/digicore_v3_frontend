@@ -14,14 +14,14 @@ import {
   Typography,
 } from "@mui/material";
 
-import Heading from "../Common/Heading";
+import Heading from "@/components/Common/Heading";
 
 const TransferClubFeeView = () => {
   const [isCopied, setIsCopied] = useState(false);
 
   return (
     <>
-      <Stack direction="row" justifyContent="center">
+      <Stack direction="row">
         <Button
           startIcon={isCopied ? <CheckCircle /> : <CopyAll />}
           color="primary"
@@ -68,7 +68,7 @@ const TransferClubFeeView = () => {
             </TableRow>
             <TableRow>
               <TableCell>金額</TableCell>
-              <TableCell>手数料抜2000円</TableCell>
+              <TableCell>2,000円 (手数料別)</TableCell>
             </TableRow>
           </TableBody>
         </Table>
