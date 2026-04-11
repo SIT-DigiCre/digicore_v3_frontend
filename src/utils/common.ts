@@ -1,7 +1,17 @@
-export const baseURL =
-  process.env.NODE_ENV === "production" ? "https://coreapi3.digicre.net" : "http://localhost:8000";
-export const baseURLForServerSide =
-  process.env.NODE_ENV === "production" ? "http://digicoreapi_v3:8000" : "http://localhost:8000";
+const defaultBaseURL = "http://localhost:8000";
+const defaultBaseURLForServerSide = "http://localhost:8000";
+
+const productionBaseURL = "https://coreapi3.digicre.net";
+const productionBaseURLForServerSide = "http://digicoreapi_v3:8000";
+
+const isProduction = process.env.NODE_ENV === "production";
+
+export const baseURL = isProduction
+  ? productionBaseURL
+  : (process.env.NEXT_PUBLIC_BASE_URL ?? defaultBaseURL);
+export const baseURLForServerSide = isProduction
+  ? productionBaseURLForServerSide
+  : (process.env.BASE_URL_FOR_SERVER_SIDE ?? defaultBaseURLForServerSide);
 
 const objectSort = (obj: unknown): unknown => {
   if (!obj) return obj;
