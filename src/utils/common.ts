@@ -8,10 +8,10 @@ const isProduction = process.env.NODE_ENV === "production";
 
 export const baseURL = isProduction
   ? productionBaseURL
-  : process.env.NEXT_PUBLIC_BASE_URL || defaultBaseURL;
+  : process.env.NEXT_PUBLIC_BASE_URL ?? defaultBaseURL;
 export const baseURLForServerSide = isProduction
   ? productionBaseURLForServerSide
-  : process.env.BASE_URL_FOR_SERVER_SIDE || defaultBaseURLForServerSide;
+  : process.env.BASE_URL_FOR_SERVER_SIDE ?? defaultBaseURLForServerSide;
 
 const objectSort = (obj: unknown): unknown => {
   if (!obj) return obj;
