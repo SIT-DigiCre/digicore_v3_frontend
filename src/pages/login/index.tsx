@@ -25,7 +25,7 @@ const LoginPage = ({ loginUrl }: LoginPageProps) => {
       <PageHead title="ログイン" />
       <Stack alignItems="center" mt={20}>
         <Image
-          src="/image/digicre-logo.webp"
+          src="/image/digicore_logo_type.svg"
           alt="デジクリ Digital Creation Circle"
           width={333}
           height={111}

@@ -126,7 +126,7 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
           }}
         >
           <Image
-            src="/image/digicre-logo.webp"
+            src="/image/digicore_logo_type.svg"
             alt="デジクリ Digital Creation Circle"
             width={180}
             height={60}

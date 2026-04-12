@@ -25,7 +25,7 @@ const RegisterPage = ({ registerUrl }: Props) => {
       <PageHead title="登録" />
       <Stack alignItems="center" mt={20}>
         <Image
-          src="/image/digicre-logo.webp"
+          src="/image/digicore_logo_type.svg"
           alt="デジクリ Digital Creation Circle"
           width={333}
           height={111}
