@@ -53,8 +53,8 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
   const validateNickname = (nickname: string): string | true => {
     if (nickname.length === 0) {
       return "ニックネームは必須です";
-    } else if (nickname.length < 1 || 64 < nickname.length) {
-      return "ニックネームは1文字以上64文字以下にしてください";
+    } else if (64 < nickname.length) {
+      return "ニックネームは64文字以下にしてください";
     } else {
       return true;
     }
