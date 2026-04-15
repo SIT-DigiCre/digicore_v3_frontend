@@ -41,8 +41,20 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
     const usernameRegExp = /^([a-z]|\d|\.|-|_)+$/;
     if (username.length === 0) {
       return "ユーザ名は必須です";
+    } else if (username.length < 3 || 22 < username.length) {
+      return "ユーザ名は3文字以上22文字以下にしてください";
     } else if (!usernameRegExp.test(username)) {
       return "ユーザ名に利用できない文字が入っています";
+    } else {
+      return true;
+    }
+  };
+  const [nicknameError, setNicknameError] = useState("");
+  const validateNickname = (nickname: string): string | true => {
+    if (nickname.length === 0) {
+      return "ニックネームは必須です";
+    } else if (nickname.length < 1 || 64 < nickname.length) {
+      return "ニックネームは1文字以上64文字以下にしてください";
     } else {
       return true;
     }
@@ -61,6 +73,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
 
   const readyToSend =
     validateUsername(registrationForm.username) === true &&
+    validateNickname(registrationForm.nickname) === true &&
     validatePassword(registrationForm.password) === true &&
     registrationForm.password === passwordConfirm;
 
@@ -182,7 +195,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
           />
           {0 < usernameError.length ? <FormHelperText>{usernameError}</FormHelperText> : null}
         </FormControl>
-        <FormControl fullWidth>
+        <FormControl fullWidth error={0 < nicknameError.length}>
           <TextField
             label="ニックネーム"
             variant="outlined"
@@ -190,11 +203,19 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
             margin="normal"
             fullWidth
             onChange={(e) => {
-              const form = { ...registrationForm, nickname: e.target.value };
+              const nickname = e.target.value;
+              const validate = validateNickname(nickname);
+              if (validate !== true) {
+                setNicknameError(validate);
+              } else {
+                setNicknameError("");
+              }
+              const form = { ...registrationForm, nickname: nickname };
               setRegistrationForm(form);
             }}
             value={registrationForm.nickname}
           />
+          {0 < nicknameError.length ? <FormHelperText>{nicknameError}</FormHelperText> : null}
         </FormControl>
         <FormControl fullWidth error={0 < passwordError.length}>
           <TextField
