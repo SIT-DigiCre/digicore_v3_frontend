@@ -199,6 +199,7 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
           <TextField
             label="ニックネーム"
             variant="outlined"
+            required
             helperText="メッセージの名前欄などに表示される名前です"
             margin="normal"
             fullWidth
