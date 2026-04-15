@@ -68,9 +68,6 @@ const TutorialDiscordPage = ({ loginUrl }: TutorialDiscordPageProps) => {
             <ButtonLink href={loginUrl} variant="contained">
               Discord連携
             </ButtonLink>
-            <Typography sx={{ mt: 2 }} color="textSecondary">
-              連携後、最初のページに戻って続行ボタンを押してください
-            </Typography>
           </Box>
         ) : (
           <Typography color="error">Discordの認証情報が取得できませんでした</Typography>
