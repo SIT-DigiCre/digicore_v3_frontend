@@ -7,7 +7,7 @@ import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
 const TutorialMattermostPage = () => {
   const router = useRouter();
 
-  const handleNext = () => {
+  const handleRegistered = () => {
     router.push("/tutorial/mattermost-app");
   };
 
@@ -23,7 +23,7 @@ const TutorialMattermostPage = () => {
     <TutorialStepLayout
       title="Mattermost登録"
       step={5}
-      onNext={handleNext}
+      showNext={false}
       onPrevious={handlePrevious}
     >
       <Stack spacing={3}>
@@ -37,11 +37,7 @@ const TutorialMattermostPage = () => {
           </Button>
         </Box>
 
-        <MattermostRegister
-          onRegistered={() => {
-            router.push("/tutorial/mattermost-app");
-          }}
-        />
+        <MattermostRegister onRegistered={handleRegistered} />
       </Stack>
     </TutorialStepLayout>
   );

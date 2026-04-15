@@ -1,7 +1,7 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useEffect } from "react";
 
-import { Box, Link, Stack, Typography } from "@mui/material";
+import { Box, Link, Stack, Typography, Button } from "@mui/material";
 import { useRouter } from "next/router";
 
 import { ButtonLink } from "@/components/Common/ButtonLink";
@@ -34,27 +34,29 @@ const TutorialDiscordPage = ({ loginUrl }: TutorialDiscordPageProps) => {
     localStorage.setItem("reg_discord", "true");
   }, []);
 
-  const handleNext = () => {
-    router.push("/tutorial/discord-server");
-  };
-
   const handlePrevious = () => {
     router.push("/tutorial/mattermost-app");
   };
 
+  const handleSkip = () => {
+    router.push("/tutorial/discord-server");
+  };
+
   return (
-    <TutorialStepLayout
-      title="Discord連携"
-      step={7}
-      onNext={handleNext}
-      onPrevious={handlePrevious}
-    >
+    <TutorialStepLayout title="Discord連携" step={7} showNext={false} onPrevious={handlePrevious}>
       <Stack spacing={3}>
         <Typography>
           デジクリではDiscordサーバーを所有しています。正規の部員のみがDiscordサーバーに入れるようにアカウントと連携が必要です。
         </Typography>
+
+        <Box textAlign="right" sx={{ mb: 2 }}>
+          <Button onClick={handleSkip} variant="contained" color="warning">
+            既にDiscordを連携済みのためスキップする
+          </Button>
+        </Box>
+
         <Typography>
-          Discordアカウントを持っていない方は先に
+          Discordアカウントを持っていない方は、まず
           <Link href="https://discord.com/register" target="_blank" rel="noopener noreferrer">
             Discordの登録ページ
           </Link>
@@ -66,9 +68,6 @@ const TutorialDiscordPage = ({ loginUrl }: TutorialDiscordPageProps) => {
             <ButtonLink href={loginUrl} variant="contained">
               Discord連携
             </ButtonLink>
-            <Typography sx={{ mt: 2 }} color="textSecondary">
-              連携後、最初のページに戻って続行ボタンを押してください
-            </Typography>
           </Box>
         ) : (
           <Typography color="error">Discordの認証情報が取得できませんでした</Typography>
