@@ -40,11 +40,11 @@ export const MattermostRegister = ({ onRegistered }: Props) => {
   const validateUsername = (username: string): string | true => {
     const usernameRegExp = /^([a-z]|\d|\.|-|_)+$/;
     if (username.length === 0) {
-      return "ユーザ名は必須です";
+      return "ユーザーIDは必須です";
     } else if (username.length < 3 || 22 < username.length) {
-      return "ユーザ名は3文字以上22文字以下にしてください";
+      return "ユーザーIDは3文字以上22文字以下にしてください";
     } else if (!usernameRegExp.test(username)) {
-      return "ユーザ名に利用できない文字が入っています";
+      return "ユーザーIDに利用できない文字が入っています";
     } else {
       return true;
     }
