@@ -31,6 +31,8 @@ tags:
     description: Admin system
   - name: activity
     description: Activity system
+  - name: public
+    description: Public system
   - name: grade-update
     description: Grade update request system
   - name: reentry
@@ -119,6 +121,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResPostSignupCallback'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '409':
+          $ref: '#/components/responses/Conflict'
         '500':
           $ref: '#/components/responses/InternalServer'
   /login:
@@ -832,6 +838,144 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+  '/event/{eventId}/reservation':
+    post:
+      tags:
+        - event
+      description: Create event reservation
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Create event reservation
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - startDate
+                - finishDate
+                - reservationStartDate
+                - reservationFinishDate
+                - capacity
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1,max=255'
+                    ja: 枠名
+                description:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 枠の説明
+                startDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠開始日時
+                finishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠終了日時
+                reservationStartDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約開始日時
+                reservationFinishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  minimum: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Success create event reservation
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - eventId
+                  - reservationId
+                  - name
+                  - description
+                  - startDate
+                  - finishDate
+                  - reservationStartDate
+                  - reservationFinishDate
+                  - capacity
+                properties:
+                  eventId:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: イベントID
+                  reservationId:
+                    type: string
+                    format: uuid
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠ID
+                  name:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠名
+                  description:
+                    type: string
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠の説明
+                  startDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠開始日時
+                  finishDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 枠終了日時
+                  reservationStartDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約開始日時
+                  reservationFinishDate:
+                    type: string
+                    format: date-time
+                    x-oapi-codegen-extra-tags:
+                      ja: 予約終了日時
+                  capacity:
+                    type: integer
+                    x-oapi-codegen-extra-tags:
+                      ja: 定員
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/event/{eventId}/{reservationId}':
     get:
       tags:
@@ -857,6 +1001,121 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    put:
+      tags:
+        - event
+      description: Update event reservation
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - startDate
+                - finishDate
+                - reservationStartDate
+                - reservationFinishDate
+                - capacity
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1,max=255'
+                    ja: 枠名
+                description:
+                  type: string
+                  minLength: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 枠の説明
+                startDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠開始日時
+                finishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 枠終了日時
+                reservationStartDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約開始日時
+                reservationFinishDate:
+                  type: string
+                  format: date-time
+                  x-oapi-codegen-extra-tags:
+                    validate: required
+                    ja: 予約終了日時
+                capacity:
+                  type: integer
+                  minimum: 1
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,min=1'
+                    ja: 定員
+      responses:
+        '200':
+          description: Success update event reservation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetEventEventIdReservationId'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - event
+      description: Delete event reservation
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: eventId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: reservationId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Success delete event reservation
         '403':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -1934,6 +2193,62 @@ paths:
           $ref: '#/components/responses/NotFound'
         '500':
           $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - activity
+      description: Delete activity record
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: recordId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /activity/records:
+    get:
+      tags:
+        - activity
+      description: Get activity records for admin
+      security:
+        - BearerAuth:
+            - infra
+      parameters:
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+      responses:
+        '200':
+          description: Success get activity records
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetActivityRecords'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   '/activity/place/{place}/current':
     get:
       tags:
@@ -1962,8 +2277,7 @@ paths:
     get:
       tags:
         - activity
-      description: >-
-        Get place visit history. startAt から endAt までの訪問回数を返す。単日範囲では訪問レコード数、複数日範囲では同一ユーザーの同一日の複数回訪問を1回として数える。
+      description: Get place visit history. startAt から endAt までの訪問回数を返す。単日範囲では訪問レコード数、複数日範囲では同一ユーザーの同一日の複数回訪問を1回として数える。
       security:
         - BearerAuth: []
       parameters:
@@ -2041,6 +2355,20 @@ paths:
                 $ref: '#/components/schemas/ResGetActivityUserUserIdRecords'
         '403':
           $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+  /public/member/count:
+    get:
+      tags:
+        - public
+      description: Get active member count
+      responses:
+        '200':
+          description: Get member count
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResGetPublicMemberCount'
         '500':
           $ref: '#/components/responses/InternalServer'
   /user/me/grade-update:
@@ -2928,7 +3256,7 @@ components:
         nickname:
           type: string
           x-oapi-codegen-extra-tags:
-            validate: 'required,min=3,max=22'
+            validate: 'required,min=1,max=64'
             ja: ニックネーム
         password:
           type: string
@@ -3807,6 +4135,54 @@ components:
           format: date-time
           x-oapi-codegen-extra-tags:
             ja: 更新時刻
+    ResGetActivityRecords:
+      required:
+        - records
+        - total
+        - offset
+        - limit
+      properties:
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResGetActivityRecordsObjectRecord'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    ResGetActivityRecordsObjectRecord:
+      required:
+        - recordId
+        - userId
+        - username
+        - place
+        - checkedInAt
+        - initialCheckedInAt
+      properties:
+        recordId:
+          type: string
+        userId:
+          type: string
+        username:
+          type: string
+        place:
+          type: string
+        checkedInAt:
+          type: string
+          format: date-time
+        checkedOutAt:
+          type: string
+          format: date-time
+          nullable: true
+        initialCheckedInAt:
+          type: string
+          format: date-time
+        initialCheckedOutAt:
+          type: string
+          format: date-time
+          nullable: true
     ResGetActivityPlacePlaceCurrent:
       required:
         - users
@@ -3860,6 +4236,7 @@ components:
           type: string
         checkInCount:
           type: integer
+          description: 指定期間内の訪問回数。単日範囲では訪問レコード数、複数日範囲では同一日の重複訪問を1回として数える。
     ResGetActivityUserUserIdRecords:
       required:
         - records
@@ -3902,6 +4279,12 @@ components:
           type: string
           format: date-time
           nullable: true
+    ResGetPublicMemberCount:
+      required:
+        - count
+      properties:
+        count:
+          type: integer
     ReqPostUserMeGradeUpdate:
       required:
         - reason
@@ -4070,6 +4453,12 @@ components:
   responses:
     BadRequest:
       description: 'Validation error, etc.'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Resource already exists
       content:
         application/json:
           schema:

@@ -175,6 +175,8 @@ export interface paths {
                         "application/json": components["schemas"]["ResPostSignupCallback"];
                     };
                 };
+                400: components["responses"]["BadRequest"];
+                409: components["responses"]["Conflict"];
                 500: components["responses"]["InternalServer"];
             };
         };
@@ -1304,6 +1306,80 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/event/{eventId}/reservation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Create event reservation */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                };
+                cookie?: never;
+            };
+            /** @description Create event reservation */
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        description: string;
+                        /** Format: date-time */
+                        startDate: string;
+                        /** Format: date-time */
+                        finishDate: string;
+                        /** Format: date-time */
+                        reservationStartDate: string;
+                        /** Format: date-time */
+                        reservationFinishDate: string;
+                        capacity: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success create event reservation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            /** Format: uuid */
+                            eventId: string;
+                            /** Format: uuid */
+                            reservationId: string;
+                            name: string;
+                            description: string;
+                            /** Format: date-time */
+                            startDate: string;
+                            /** Format: date-time */
+                            finishDate: string;
+                            /** Format: date-time */
+                            reservationStartDate: string;
+                            /** Format: date-time */
+                            reservationFinishDate: string;
+                            capacity: number;
+                        };
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/event/{eventId}/{reservationId}": {
         parameters: {
             query?: never;
@@ -1338,9 +1414,75 @@ export interface paths {
                 500: components["responses"]["InternalServer"];
             };
         };
-        put?: never;
+        /** @description Update event reservation */
+        put: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                    reservationId: string;
+                };
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        name: string;
+                        description: string;
+                        /** Format: date-time */
+                        startDate: string;
+                        /** Format: date-time */
+                        finishDate: string;
+                        /** Format: date-time */
+                        reservationStartDate: string;
+                        /** Format: date-time */
+                        reservationFinishDate: string;
+                        capacity: number;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success update event reservation */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetEventEventIdReservationId"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
         post?: never;
-        delete?: never;
+        /** @description Delete event reservation */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    eventId: string;
+                    reservationId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success delete event reservation */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
         options?: never;
         head?: never;
         patch?: never;
@@ -2810,6 +2952,64 @@ export interface paths {
             };
         };
         post?: never;
+        /** @description Delete activity record */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    recordId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/activity/records": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get activity records for admin */
+        get: {
+            parameters: {
+                query?: {
+                    offset?: number;
+                    limit?: number;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success get activity records */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetActivityRecords"];
+                    };
+                };
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -2935,6 +3135,43 @@ export interface paths {
                     };
                 };
                 403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/public/member/count": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get active member count */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Get member count */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ResGetPublicMemberCount"];
+                    };
+                };
                 500: components["responses"]["InternalServer"];
             };
         };
@@ -3702,6 +3939,26 @@ export interface components {
             /** Format: date-time */
             time: string;
         };
+        ResGetActivityRecords: {
+            records: components["schemas"]["ResGetActivityRecordsObjectRecord"][];
+            total: number;
+            offset: number;
+            limit: number;
+        };
+        ResGetActivityRecordsObjectRecord: {
+            recordId: string;
+            userId: string;
+            username: string;
+            place: string;
+            /** Format: date-time */
+            checkedInAt: string;
+            /** Format: date-time */
+            checkedOutAt?: string | null;
+            /** Format: date-time */
+            initialCheckedInAt: string;
+            /** Format: date-time */
+            initialCheckedOutAt?: string | null;
+        };
         ResGetActivityPlacePlaceCurrent: {
             users: components["schemas"]["ResGetActivityPlacePlaceCurrentObjectUser"][];
         };
@@ -3721,6 +3978,7 @@ export interface components {
             username: string;
             shortIntroduction: string;
             iconUrl: string;
+            /** @description 指定期間内の訪問回数。単日範囲では訪問レコード数、複数日範囲では同一日の重複訪問を1回として数える。 */
             checkInCount: number;
         };
         ResGetActivityUserUserIdRecords: {
@@ -3740,6 +3998,9 @@ export interface components {
             initialCheckedInAt: string;
             /** Format: date-time */
             initialCheckedOutAt?: string | null;
+        };
+        ResGetPublicMemberCount: {
+            count: number;
         };
         ReqPostUserMeGradeUpdate: {
             reason: string;
@@ -3804,6 +4065,15 @@ export interface components {
     responses: {
         /** @description Validation error, etc. */
         BadRequest: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description Resource already exists */
+        Conflict: {
             headers: {
                 [name: string]: unknown;
             };
