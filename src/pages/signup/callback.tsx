@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async ({ query, req
   const result = await client.POST("/signup/callback", { body: { code } });
 
   // 重複登録時にはリダイレクトを促すページを表示する
-  if (result.response.status == 409) {
+  if (result.response.status === 409) {
     return { props: { duplicatedSignup: true } };
   }
 
