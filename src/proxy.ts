@@ -11,6 +11,9 @@ const isStorableNextPath = (request: NextRequest, pathname: string): boolean => 
     return false;
   }
 
+  if (request.method !== "GET") {
+    return false;
+  }
   const fetchDest = request.headers.get("sec-fetch-dest");
   if (fetchDest && fetchDest !== "document") {
     return false;
