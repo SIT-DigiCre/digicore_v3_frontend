@@ -6,6 +6,22 @@ const isPublicPath = (pathname: string): boolean => {
   return pathname.startsWith("/login") || pathname.startsWith("/signup");
 };
 
+const isStorableNextPath = (request: NextRequest, pathname: string): boolean => {
+  if (pathname.startsWith("/.well-known")) {
+    return false;
+  }
+
+  const fetchDest = request.headers.get("sec-fetch-dest");
+  if (fetchDest && fetchDest !== "document") {
+    return false;
+  }
+
+  const isPrefetch =
+    request.headers.get("next-router-prefetch") === "1" ||
+    request.headers.get("purpose") === "prefetch";
+  return !isPrefetch;
+};
+
 const isValidToken = async (token: string): Promise<boolean> => {
   try {
     const client = createServerApiClientWithToken(token);
@@ -30,7 +46,7 @@ export const proxy = async (request: NextRequest) => {
       const maxAge = 60 * 10; // 10分間
       const isProduction = process.env.NODE_ENV === "production";
 
-      if (!existingNext) {
+      if (!existingNext && isStorableNextPath(request, pathname)) {
         response.cookies.set("next", `${pathname}${search}`, {
           httpOnly: true,
           maxAge,
