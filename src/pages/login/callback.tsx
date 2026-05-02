@@ -59,19 +59,6 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     ]);
   };
 
-  const redirectToReentry = (statusMessageRaw: string, jwt?: string) => {
-    const statusMessage = encodeURIComponent(statusMessageRaw);
-    if (jwt) {
-      setAuthCookies(jwt);
-    }
-    return {
-      redirect: {
-        destination: `/login/reentry?message=${statusMessage}`,
-        permanent: false,
-      },
-    };
-  };
-
   if (result.data?.jwt) {
     const jwt = result.data.jwt;
     const nextCookieValue = req.cookies?.next;
@@ -88,15 +75,18 @@ export const getServerSideProps: GetServerSideProps<LoginCallbackPageProps> = as
     }
 
     if (shouldRedirectToReentry(meResult.error?.message)) {
-      return redirectToReentry(meResult.error?.message ?? "", jwt);
+      setAuthCookies(jwt);
+      const statusMessage = encodeURIComponent(meResult.error?.message ?? "");
+      return {
+        redirect: {
+          destination: `/login/reentry?message=${statusMessage}`,
+          permanent: false,
+        },
+      };
     }
 
     const errorMessage = meResult.error ? JSON.stringify(meResult.error) : "";
     return { props: { errorMessage, loginFailed: true } };
-  }
-
-  if (shouldRedirectToReentry(result.error?.message)) {
-    return redirectToReentry(result.error?.message ?? "");
   }
 
   const errorMessage = result.error ? JSON.stringify(result.error) : "";
