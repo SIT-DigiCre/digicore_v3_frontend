@@ -43,8 +43,9 @@ const SignupCallbackPage = ({ codeMissing, duplicatedSignup, signupFailed }: Pro
       <Stack alignItems="center" mt={20} gap={2}>
         <Heading level={4}>既に登録済みです</Heading>
         <Typography variant="body1">ログインしてからユーザー情報登録に進んでください。</Typography>
+        {/* 未ログイン状態のためログイン画面にリダイレクト */}
         <ButtonLink href="/tutorial/welcome" variant="contained">
-          ログインへ
+          ログインしてチュートリアルへ
         </ButtonLink>
       </Stack>
     );
