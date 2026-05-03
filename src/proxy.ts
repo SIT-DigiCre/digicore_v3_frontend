@@ -60,7 +60,8 @@ export const proxy = async (request: NextRequest) => {
         });
       }
 
-      // 期限切れ等の無効なトークンのCookieをクリア
+      // 期限切れ・不正トークンなど認証継続不可の場合は JWT Cookie をクリアする。
+      // ただし 403 は、再入部申請中など一時的にアクセス不可な状態を含むため Cookie は維持する。
       if (jwt && tokenStatus !== 403) {
         response.cookies.delete("jwt");
       }
