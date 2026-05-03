@@ -25,13 +25,13 @@ const isStorableNextPath = (request: NextRequest, pathname: string): boolean => 
   return !isPrefetch;
 };
 
-const isValidToken = async (token: string): Promise<boolean> => {
+const getTokenStatus = async (token: string): Promise<number | null> => {
   try {
     const client = createServerApiClientWithToken(token);
     const res = await client.GET("/user/me");
-    return res.response.status == 200;
+    return res.response.status;
   } catch {
-    return false;
+    return null;
   }
 };
 
@@ -41,7 +41,8 @@ export const proxy = async (request: NextRequest) => {
   const existingNext = request.cookies.get("next")?.value;
 
   if (!isPublicPath(pathname)) {
-    const isAuthenticated = jwt != null && (await isValidToken(jwt));
+    const tokenStatus = jwt != null ? await getTokenStatus(jwt) : null;
+    const isAuthenticated = tokenStatus === 200;
 
     if (!isAuthenticated) {
       const loginUrl = new URL("/login", request.url);
@@ -60,7 +61,7 @@ export const proxy = async (request: NextRequest) => {
       }
 
       // 期限切れ等の無効なトークンのCookieをクリア
-      if (jwt) {
+      if (jwt && tokenStatus !== 403) {
         response.cookies.delete("jwt");
       }
 
