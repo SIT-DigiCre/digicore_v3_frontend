@@ -130,7 +130,18 @@ const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps
             部員一覧に戻る
           </ButtonLink>
         ) : (
-          <Button startIcon={<ArrowBack />} variant="text" onClick={() => router.back()}>
+          <Button
+            startIcon={<ArrowBack />}
+            variant="text"
+            onClick={() => {
+              const hasInternalReferrer = document.referrer.startsWith(window.location.origin);
+              if (hasInternalReferrer) {
+                router.back();
+                return;
+              }
+              void router.push("/member/");
+            }}
+          >
             戻る
           </Button>
         )}
