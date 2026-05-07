@@ -134,8 +134,10 @@ const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps
             startIcon={<ArrowBack />}
             variant="text"
             onClick={() => {
-              const isInternalReferrer = document.referrer.startsWith(window.location.origin);
-              if (isInternalReferrer) {
+              const canGoBack =
+                window.history.length > 1 &&
+                (!document.referrer || document.referrer.startsWith(window.location.origin));
+              if (canGoBack) {
                 router.back();
               } else {
                 void router.push("/member/");
