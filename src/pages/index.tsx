@@ -26,10 +26,19 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
 
   try {
     const profileRes = await client.GET("/user/me");
-    const profile = profileRes.data;
+
+    if (profileRes.error || profileRes.data === undefined) {
+      console.error("ユーザープロフィールの取得に失敗しました:", profileRes.error);
+      return {
+        props: {
+          profile: null,
+        },
+      };
+    }
+
     return {
       props: {
-        profile: profile,
+        profile: profileRes.data,
       },
     };
   } catch (error) {
