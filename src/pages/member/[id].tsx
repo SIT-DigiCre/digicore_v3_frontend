@@ -134,12 +134,12 @@ const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps
             startIcon={<ArrowBack />}
             variant="text"
             onClick={() => {
-              const hasInternalReferrer = document.referrer.startsWith(window.location.origin);
-              if (hasInternalReferrer) {
+              const isInternalReferrer = document.referrer.startsWith(window.location.origin);
+              if (isInternalReferrer) {
                 router.back();
-                return;
+              } else {
+                void router.push("/member/");
               }
-              void router.push("/member/");
             }}
           >
             戻る
