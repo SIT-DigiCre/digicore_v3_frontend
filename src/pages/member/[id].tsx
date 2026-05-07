@@ -120,6 +120,17 @@ const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps
   const { authState } = useAuthState();
   const backUrl = seed != null && seed !== "" && `/member/?seed=${seed}&page=${page ?? "1"}`;
 
+  const handleBackClick = () => {
+    const canGoBack =
+      window.history.length > 1 &&
+      (!document.referrer || document.referrer.startsWith(window.location.origin));
+    if (canGoBack) {
+      router.back();
+    } else {
+      router.push("/member/");
+    }
+  };
+
   return (
     <>
       <PageHead title={profile.username} />
@@ -130,20 +141,7 @@ const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps
             部員一覧に戻る
           </ButtonLink>
         ) : (
-          <Button
-            startIcon={<ArrowBack />}
-            variant="text"
-            onClick={() => {
-              const canGoBack =
-                window.history.length > 1 &&
-                (!document.referrer || document.referrer.startsWith(window.location.origin));
-              if (canGoBack) {
-                router.back();
-              } else {
-                void router.push("/member/");
-              }
-            }}
-          >
+          <Button startIcon={<ArrowBack />} variant="text" onClick={handleBackClick}>
             戻る
           </Button>
         )}
