@@ -1,15 +1,48 @@
+import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
-import { CheckCircle, CopyAll, CurrencyYen, MeetingRoom, ReceiptLong } from "@mui/icons-material";
-import { Button, Grid, Stack, Typography } from "@mui/material";
+import {
+  AccountCircle,
+  CheckCircle,
+  CopyAll,
+  CurrencyYen,
+  MeetingRoom,
+  ReceiptLong,
+  School as SchoolIcon,
+} from "@mui/icons-material";
+import { Avatar, Box, Button, Card, Chip, Grid, Stack, Typography } from "@mui/material";
 import Link from "next/link";
 
 import { ButtonLink } from "@/components/Common/ButtonLink";
 import Heading from "@/components/Common/Heading";
 import PageHead from "@/components/Common/PageHead";
 import HomeLinkCard from "@/components/Home/HomeLinkCard";
+import { createServerApiClient } from "@/utils/fetch/client";
 
-const IndexPage = () => {
+type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
+
+export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
+  const client = createServerApiClient(req);
+
+  try {
+    const profileRes = await client.GET("/user/me");
+    const profile = profileRes.data;
+    return {
+      props: {
+        profile: profile,
+      },
+    };
+  } catch (error) {
+    console.error("ユーザープロフィールの取得に失敗しました:", error);
+    return {
+      props: {
+        profile: null,
+      },
+    };
+  }
+};
+
+const IndexPage = ({ profile }: PageProps) => {
   const [isCopied, setIsCopied] = useState(false);
 
   const handleCopyServerUrl = async () => {
@@ -35,6 +68,72 @@ const IndexPage = () => {
       <PageHead title="ホーム" />
       <Stack spacing={2}>
         <Heading level={2}>ようこそ、デジコア3へ</Heading>
+        {profile && (
+          <Card
+            variant="outlined"
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              height: "100%",
+              p: 2,
+              width: "100%",
+            }}
+          >
+            <Grid container spacing={4} alignItems="center">
+              <Grid size={{ sm: 4, xs: 12 }}>
+                <Box display="flex" justifyContent="center">
+                  <Avatar
+                    src={profile.iconUrl}
+                    alt={`${profile.username}のアイコン`}
+                    sx={{
+                      border: 3,
+                      borderColor: "primary.main",
+                      height: { sm: 150, xs: 120 },
+                      width: { sm: 150, xs: 120 },
+                    }}
+                  />
+                </Box>
+              </Grid>
+
+              <Grid size={{ sm: 6, xs: 12 }}>
+                <Box textAlign={{ sm: "left", xs: "center" }}>
+                  <Heading level={2}>{profile.username}</Heading>
+
+                  {profile.shortIntroduction && (
+                    <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+                      {profile.shortIntroduction}
+                    </Typography>
+                  )}
+
+                  <Box display="flex" justifyContent={{ sm: "flex-start", xs: "center" }}>
+                    <Chip
+                      icon={<SchoolIcon />}
+                      label={`${profile.schoolGrade}年生`}
+                      color="primary"
+                      variant="outlined"
+                      size="medium"
+                      sx={{
+                        fontSize: "1rem",
+                        fontWeight: "medium",
+                        px: 1,
+                      }}
+                    />
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+
+            <Stack sx={{ alignItems: "flex-end", mt: 2 }}>
+              <ButtonLink
+                href={`/member/${profile.userId}`}
+                variant="contained"
+                startIcon={<AccountCircle />}
+              >
+                プロフィールを見る
+              </ButtonLink>
+            </Stack>
+          </Card>
+        )}
         <Grid container spacing={2} sx={{ alignItems: "stretch" }}>
           <Grid size={{ md: 6, xs: 12 }} sx={{ alignItems: "stretch", display: "flex" }}>
             <HomeLinkCard
@@ -81,6 +180,21 @@ const IndexPage = () => {
             >
               <Typography>
                 部室への入退室を記録できます。今誰が部室にいるのかも確認することができます。
+              </Typography>
+            </HomeLinkCard>
+          </Grid>
+
+          <Grid size={{ md: 6, xs: 12 }} sx={{ alignItems: "stretch", display: "flex" }}>
+            <HomeLinkCard
+              title="プロフィール"
+              action={
+                <ButtonLink href="/user/profile" variant="contained" startIcon={<AccountCircle />}>
+                  プロフィールを編集する
+                </ButtonLink>
+              }
+            >
+              <Typography>
+                公開プロフィールや自己紹介、連絡先などの情報を確認・編集できます。
               </Typography>
             </HomeLinkCard>
           </Grid>
