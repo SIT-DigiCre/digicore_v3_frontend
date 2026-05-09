@@ -1,15 +1,28 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 
-import { ArrowBack, School as SchoolIcon } from "@mui/icons-material";
-import { Avatar, Box, Chip, Container, Grid, Paper, Stack, Typography } from "@mui/material";
+import { ArrowBack, Edit, School as SchoolIcon } from "@mui/icons-material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Chip,
+  Container,
+  Grid,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material";
+import { useRouter } from "next/router";
 
-import { ButtonLink } from "../../components/Common/ButtonLink";
-import Heading from "../../components/Common/Heading";
-import PageHead from "../../components/Common/PageHead";
-import MarkdownView from "../../components/Markdown/MarkdownView";
-import { WorkCard } from "../../components/Work/WorkCard";
-import { WorkDetail } from "../../interfaces/work";
-import { createServerApiClient } from "../../utils/fetch/client";
+import { ButtonLink } from "@/components/Common/ButtonLink";
+import Heading from "@/components/Common/Heading";
+import { IconButtonLink } from "@/components/Common/IconButtonLink";
+import PageHead from "@/components/Common/PageHead";
+import MarkdownView from "@/components/Markdown/MarkdownView";
+import { WorkCard } from "@/components/Work/WorkCard";
+import { useAuthState } from "@/hook/useAuthState";
+import { WorkDetail } from "@/interfaces/work";
+import { createServerApiClient } from "@/utils/fetch/client";
 
 type PageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
@@ -103,18 +116,48 @@ export const getServerSideProps = async ({
 };
 
 const UserProfilePage = ({ profile, introduction, seed, page, works }: PageProps) => {
-  const backUrl =
-    seed != null && seed !== "" ? `/member/?seed=${seed}&page=${page ?? "1"}` : "/member/";
+  const router = useRouter();
+  const { authState } = useAuthState();
+  const backUrl = seed != null && seed !== "" && `/member/?seed=${seed}&page=${page ?? "1"}`;
+
+  const handleBackClick = () => {
+    const canGoBack =
+      window.history.length > 1 &&
+      (!document.referrer || document.referrer.startsWith(window.location.origin));
+    if (canGoBack) {
+      router.back();
+    } else {
+      router.push("/member/");
+    }
+  };
 
   return (
     <>
       <PageHead title={profile.username} />
-      <Container maxWidth="md" sx={{ py: 4 }}>
-        <Stack spacing={2}>
+
+      <Stack direction="row" spacing={2} justifyContent="space-between" alignItems="center">
+        {backUrl ? (
           <ButtonLink href={backUrl} startIcon={<ArrowBack />} variant="text">
             部員一覧に戻る
           </ButtonLink>
+        ) : (
+          <Button startIcon={<ArrowBack />} variant="text" onClick={handleBackClick}>
+            戻る
+          </Button>
+        )}
+        <Stack direction="row" spacing={1}>
+          {authState.isLogined &&
+            authState.user?.userId &&
+            authState.user.userId === profile.userId && (
+              <IconButtonLink href="/user/profile" ariaLabel="プロフィール編集">
+                <Edit />
+              </IconButtonLink>
+            )}
+        </Stack>
+      </Stack>
 
+      <Container sx={{ py: 4 }}>
+        <Stack spacing={2}>
           <Box sx={{ mb: 4 }}>
             <Grid container spacing={4} alignItems="center">
               <Grid size={{ sm: 4, xs: 12 }}>
