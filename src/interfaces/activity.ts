@@ -2,6 +2,7 @@ import type { components } from "@/utils/fetch/api.d.ts";
 
 export const ACTIVITY_PLACES: Record<string, string> = {
   "omiya-bushitsu": "大宮部室",
+  "omiya-festival-2026": "2026年度大宮祭",
 };
 
 export const DEFAULT_PLACE = "omiya-bushitsu";
