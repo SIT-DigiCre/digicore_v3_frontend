@@ -11,6 +11,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -120,7 +121,17 @@ const UserIndexPage = ({
                   {users.map((userProfile) => (
                     <TableRow key={userProfile.userId}>
                       <TableCell>
-                        <Avatar src={userProfile.iconUrl} sx={{ height: 40, width: 40 }} />
+                        <Avatar sx={{ height: 40, width: 40 }}>
+                          {userProfile.iconUrl && (
+                            <Image
+                              src={userProfile.iconUrl}
+                              alt={userProfile.username}
+                              width={40}
+                              height={40}
+                              style={{ objectFit: "cover" }}
+                            />
+                          )}
+                        </Avatar>
                       </TableCell>
                       <TableCell>
                         <Link
