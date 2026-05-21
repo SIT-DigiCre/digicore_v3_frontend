@@ -1,6 +1,10 @@
 packages:
   - ./
 
+allowBuilds:
+  lefthook: true
+  sharp: true
+
 minimumReleaseAge: 1440
 
 onlyBuiltDependencies:
