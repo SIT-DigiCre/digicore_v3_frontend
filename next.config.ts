@@ -13,6 +13,11 @@ const nextConfig: NextConfig = {
           ]
         : [
             {
+              hostname: "s3.ap-northeast-1.wasabisys.com",
+              pathname: "/**",
+              protocol: "https",
+            },
+            {
               hostname: "example.com", // デバッグ用
               pathname: "/**",
               protocol: "https",
