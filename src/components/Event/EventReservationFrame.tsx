@@ -26,6 +26,7 @@ import { useAuthState } from "../../hook/useAuthState";
 import { getTimeSpanText } from "../../utils/date-util";
 import { apiClient } from "../../utils/fetch/client";
 import { useErrorState } from "../contexts/ErrorStateContext";
+import MarkdownView from "../Markdown/MarkdownView";
 
 import type { DigicreEventReservation } from "../../interfaces/event";
 
@@ -141,7 +142,7 @@ const EventReservationFrame = ({ eventId, eventReservation }: EventReservationFr
           sx={{ pb: 0 }}
         />
         <CardContent>
-          <Typography>{eventReservation.description}</Typography>
+          <MarkdownView md={eventReservation.description} />
           {eventReservation.users.length > 0 ? (
             <List>
               {eventReservation.users.map((userReservation) => (
