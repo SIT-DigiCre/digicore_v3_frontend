@@ -57,7 +57,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
         helperText={
           error
             ? "正しい電話番号の形式で入力してください"
-            : "日本の番号、または+から始まる国際番号で入力してください"
+            : "国内番号、または+から始まる国際番号で入力してください"
         }
       />
     </Stack>
