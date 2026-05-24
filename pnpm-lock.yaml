@@ -26,6 +26,9 @@ importers:
       isomorphic-dompurify:
         specifier: 3.5.1
         version: 3.5.1
+      libphonenumber-js:
+        specifier: ^1.13.2
+        version: 1.13.2
       marked:
         specifier: 17.0.4
         version: 17.0.4
@@ -1061,6 +1064,9 @@ packages:
   lefthook@2.1.4:
     resolution: {integrity: sha512-JNfJ5gAn0KADvJ1I6/xMcx70+/6TL6U9gqGkKvPw5RNMfatC7jIg0Evl97HN846xmfz959BV70l8r3QsBJk30w==}
     hasBin: true
+
+  libphonenumber-js@1.13.2:
+    resolution: {integrity: sha512-S3kmBrptp3yRTm83NUcHy9g1vbwiWMzI8WvY22+koBJ6zkRteLnedBL2VX0MIAGwx2yiyxX4J85pceZyQ6ffgg==}
 
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
@@ -2151,6 +2157,8 @@ snapshots:
       lefthook-openbsd-x64: 2.1.4
       lefthook-windows-arm64: 2.1.4
       lefthook-windows-x64: 2.1.4
+
+  libphonenumber-js@1.13.2: {}
 
   lines-and-columns@1.2.4: {}
 

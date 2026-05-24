@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Stack, TextField } from "@mui/material";
+import { isValidPhoneNumber } from "libphonenumber-js";
 
 import Heading from "../Common/Heading";
 
@@ -17,6 +18,11 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
     setNum(initialPhoneNumber ?? "");
   }, [initialPhoneNumber]);
 
+  const checkIsValid = (value: string) => {
+    if (value === "") return true;
+    return isValidPhoneNumber(value, "JP");
+  };
+
   return (
     <Stack spacing={2}>
       <Heading level={4}>{title}</Heading>
@@ -27,7 +33,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
         value={num}
         type="tel"
         onChange={(e) => {
-          if (error && /^\d{10,11}$/.test(e.target.value)) {
+          if (error && checkIsValid(e.target.value)) {
             setError(false);
           }
           setNum(e.target.value);
@@ -35,17 +41,20 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
         }}
         onBlur={() => {
           // ハイフンを削除し、電話番号であるかをチェック
-          const cleanedNum = num.replace(/-/g, "");
-          if (!/^\d{10,11}$/.test(cleanedNum) && cleanedNum !== "") {
+          const cleanedNum = num.replace(/[-\s]/g, "");
+          if (!checkIsValid(cleanedNum)) {
             setError(true);
           } else {
+            setNum(cleanedNum);
             onChange(cleanedNum);
             setError(false);
           }
         }}
         error={error}
         helperText={
-          error ? "半角数字10桁または11桁で入力してください" : "ハイフン(-)無しで入力してください"
+          error
+            ? "正しい電話番号の形式で入力してください"
+            : "日本の番号、または+から始まる国際番号で入力してください"
         }
       />
     </Stack>
