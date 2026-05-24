@@ -20,6 +20,9 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
 
   const checkIsValid = (value: string) => {
     if (value === "") return true;
+    if (value.startsWith("+")) {
+      return isValidPhoneNumber(value);
+    }
     return isValidPhoneNumber(value, "JP");
   };
 
