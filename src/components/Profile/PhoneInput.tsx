@@ -20,7 +20,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
 
   // 電話番号の判定関数
   const checkIsValid = (value: string) => {
-    const cleaned = value.replace(/[-\s]/g, "");
+    const cleaned = value.replace(/[-\s()]/g, "");
     if (cleaned === "") return true;
 
     if (cleaned.startsWith("+")) {
@@ -49,7 +49,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
           if (!checkIsValid(num)) {
             setError(true);
           } else {
-            const cleanedNum = num.replace(/[-\s]/g, "");
+            const cleanedNum = num.replace(/[-\s()]/g, "");
             setNum(cleanedNum);
             onChange(cleanedNum);
             setError(false);
