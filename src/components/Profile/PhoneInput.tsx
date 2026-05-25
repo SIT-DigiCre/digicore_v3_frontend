@@ -18,8 +18,9 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
     setNum(initialPhoneNumber ?? "");
   }, [initialPhoneNumber]);
 
+  // 電話番号の判定関数
   const checkIsValid = (value: string) => {
-    const cleaned = value.replace(/[-\s]/g, ""); // ハイフンとスペースを削除
+    const cleaned = value.replace(/[-\s]/g, "");
     if (cleaned === "") return true;
 
     if (cleaned.startsWith("+")) {
@@ -42,14 +43,13 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
             setError(false);
           }
           setNum(e.target.value);
-          onChange(e.target.value);
         }}
+        // フォーカスが外れたときにバリデーションを行う
         onBlur={() => {
-          // ハイフンを削除し、電話番号であるかをチェック
-          const cleanedNum = num.replace(/[-\s]/g, "");
-          if (!checkIsValid(cleanedNum)) {
+          if (!checkIsValid(num)) {
             setError(true);
           } else {
+            const cleanedNum = num.replace(/[-\s]/g, "");
             setNum(cleanedNum);
             onChange(cleanedNum);
             setError(false);
@@ -59,7 +59,7 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
         helperText={
           error
             ? "正しい電話番号の形式で入力してください"
-            : "国内番号、または+から始まる国際番号で入力してください"
+            : "国内番号、または+から始まる国際番号を半角で入力してください"
         }
       />
     </Stack>
