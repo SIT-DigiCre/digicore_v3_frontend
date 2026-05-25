@@ -19,11 +19,13 @@ const PhoneInput = ({ title, onChange, initialPhoneNumber, required }: Props) =>
   }, [initialPhoneNumber]);
 
   const checkIsValid = (value: string) => {
-    if (value === "") return true;
-    if (value.startsWith("+")) {
-      return isValidPhoneNumber(value);
+    const cleaned = value.replace(/[-\s]/g, ""); // ハイフンとスペースを削除
+    if (cleaned === "") return true;
+
+    if (cleaned.startsWith("+")) {
+      return isValidPhoneNumber(cleaned);
     }
-    return isValidPhoneNumber(value, "JP");
+    return isValidPhoneNumber(cleaned, "JP");
   };
 
   return (
