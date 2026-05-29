@@ -1,7 +1,7 @@
 {
   "private": true,
   "scripts": {
-    "build": "next build --webpack",
+    "build": "next typegen && next build --webpack",
     "codecheck": "pnpm lint && pnpm format",
     "dev": "next",
     "format": "oxfmt --check",
