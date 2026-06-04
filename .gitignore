@@ -37,3 +37,7 @@ yarn-error.log*
 .vercel
 
 tsconfig.tsbuildinfo
+
+# Workbox
+sw.js
+workbox-*.js
