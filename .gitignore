@@ -39,5 +39,5 @@ yarn-error.log*
 tsconfig.tsbuildinfo
 
 # Workbox
-sw.js
-workbox-*.js
+/public/sw.js
+/public/workbox-*.js
