@@ -8,7 +8,7 @@ const withPWA = withPWAInit({
     {
       handler: "NetworkOnly",
       urlPattern: ({ url }) => {
-        return url.origin === "https://coreapi3.digicre.net";
+        return url.origin === baseURL;
       },
     },
   ],
