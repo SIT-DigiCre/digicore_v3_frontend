@@ -19,6 +19,7 @@ import { useRouter } from "next/router";
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
 import { MemberFilterForm } from "../../components/Member/MemberFilterForm";
+import { useUserSearch } from "../../hook/user/useUserSearch";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 const ITEMS_PER_PAGE = 100;
@@ -105,17 +106,21 @@ const UserIndexPage = ({
   const router = useRouter();
 
   const [keyword, setKeyword] = useState("");
-  const displayUsers = users.filter((user) => {
-    if (!keyword) return true;
+  const { searchResults, searchUsers } = useUserSearch();
 
-    const lowerKeyword = keyword.toLowerCase();
-    return user.username.toLowerCase().includes(lowerKeyword);
-  });
+  const displayUsers = keyword.length >= 1 ? searchResults : users;
+
   return (
     <>
       <PageHead title="部員一覧" />
       <Stack spacing={2}>
-        <MemberFilterForm keyword={keyword} onKeywordChange={setKeyword} />
+        <MemberFilterForm
+          keyword={keyword}
+          onKeywordChange={(value) => {
+            setKeyword(value);
+            searchUsers(value);
+          }}
+        />
         {displayUsers && displayUsers.length > 0 ? (
           <>
             <TableContainer>
@@ -156,19 +161,21 @@ const UserIndexPage = ({
                 </TableBody>
               </Table>
             </TableContainer>
-            <Stack alignItems="center">
-              <Pagination
-                page={currentPage}
-                hasPreviousPage={hasPreviousPage}
-                hasNextPage={hasNextPage}
-                onChange={(page) =>
-                  router.push({
-                    pathname: router.pathname,
-                    query: { page, seed },
-                  })
-                }
-              />
-            </Stack>
+            {keyword.length === 0 && (
+              <Stack alignItems="center">
+                <Pagination
+                  page={currentPage}
+                  hasPreviousPage={hasPreviousPage}
+                  hasNextPage={hasNextPage}
+                  onChange={(page) =>
+                    router.push({
+                      pathname: router.pathname,
+                      query: { page, seed },
+                    })
+                  }
+                />
+              </Stack>
+            )}
           </>
         ) : (
           <Typography my={2}>一致する部員がいません</Typography>
