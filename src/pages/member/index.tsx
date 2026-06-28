@@ -1,5 +1,5 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import {
   Avatar,
@@ -108,6 +108,15 @@ const UserIndexPage = ({
   const [keyword, setKeyword] = useState("");
   const { searchResults, searchUsers } = useUserSearch();
 
+  useEffect(() => {
+    if (keyword.length === 0) return;
+
+    const timer = setTimeout(() => {
+      searchUsers(keyword);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [keyword, searchUsers]);
+
   const displayUsers = keyword.length >= 1 ? searchResults : users;
 
   return (
@@ -118,7 +127,6 @@ const UserIndexPage = ({
           keyword={keyword}
           onKeywordChange={(value) => {
             setKeyword(value);
-            searchUsers(value);
           }}
         />
         {displayUsers && displayUsers.length > 0 ? (
