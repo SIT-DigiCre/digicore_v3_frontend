@@ -1,4 +1,5 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
+import { useState, useEffect, useRef } from "react";
 
 import {
   Avatar,
@@ -17,6 +18,8 @@ import { useRouter } from "next/router";
 
 import PageHead from "../../components/Common/PageHead";
 import Pagination from "../../components/Common/Pagination";
+import { MemberFilterForm } from "../../components/Member/MemberFilterForm";
+import { useUserSearch } from "../../hook/user/useUserSearch";
 import { createServerApiClient } from "../../utils/fetch/client";
 
 const ITEMS_PER_PAGE = 100;
@@ -102,11 +105,33 @@ const UserIndexPage = ({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
   const router = useRouter();
 
+  const [keyword, setKeyword] = useState("");
+  const { searchResults, searchUsers } = useUserSearch();
+  const searchUsersRef = useRef(searchUsers);
+  searchUsersRef.current = searchUsers;
+
+  useEffect(() => {
+    if (keyword.length === 0) return;
+
+    const timer = setTimeout(() => {
+      searchUsersRef.current(keyword);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [keyword]);
+
+  const displayUsers = keyword.length >= 1 ? searchResults : users;
+
   return (
     <>
       <PageHead title="部員一覧" />
       <Stack spacing={2}>
-        {users && users.length > 0 ? (
+        <MemberFilterForm
+          keyword={keyword}
+          onKeywordChange={(value) => {
+            setKeyword(value);
+          }}
+        />
+        {displayUsers && displayUsers.length > 0 ? (
           <>
             <TableContainer>
               <Table sx={{ minWidth: 650 }}>
@@ -118,7 +143,7 @@ const UserIndexPage = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {users.map((userProfile) => (
+                  {displayUsers.map((userProfile) => (
                     <TableRow key={userProfile.userId}>
                       <TableCell>
                         <Avatar sx={{ height: 40, width: 40 }}>
@@ -146,22 +171,24 @@ const UserIndexPage = ({
                 </TableBody>
               </Table>
             </TableContainer>
-            <Stack alignItems="center">
-              <Pagination
-                page={currentPage}
-                hasPreviousPage={hasPreviousPage}
-                hasNextPage={hasNextPage}
-                onChange={(page) =>
-                  router.push({
-                    pathname: router.pathname,
-                    query: { page, seed },
-                  })
-                }
-              />
-            </Stack>
+            {keyword.length === 0 && (
+              <Stack alignItems="center">
+                <Pagination
+                  page={currentPage}
+                  hasPreviousPage={hasPreviousPage}
+                  hasNextPage={hasNextPage}
+                  onChange={(page) =>
+                    router.push({
+                      pathname: router.pathname,
+                      query: { page, seed },
+                    })
+                  }
+                />
+              </Stack>
+            )}
           </>
         ) : (
-          <Typography my={2}>部員がいません</Typography>
+          <Typography my={2}>一致する部員がいません</Typography>
         )}
       </Stack>
     </>
