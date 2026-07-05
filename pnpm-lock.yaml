@@ -29,6 +29,9 @@ importers:
       isomorphic-dompurify:
         specifier: 3.5.1
         version: 3.5.1
+      libphonenumber-js:
+        specifier: ^1.13.2
+        version: 1.13.2
       marked:
         specifier: 17.0.4
         version: 17.0.4
@@ -2156,6 +2159,8 @@ packages:
   leven@3.1.0:
     resolution: {integrity: sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==}
     engines: {node: '>=6'}
+  libphonenumber-js@1.13.2:
+    resolution: {integrity: sha512-S3kmBrptp3yRTm83NUcHy9g1vbwiWMzI8WvY22+koBJ6zkRteLnedBL2VX0MIAGwx2yiyxX4J85pceZyQ6ffgg==}
 
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
@@ -5077,6 +5082,7 @@ snapshots:
       lefthook-windows-x64: 2.1.4
 
   leven@3.1.0: {}
+  libphonenumber-js@1.13.2: {}
 
   lines-and-columns@1.2.4: {}
 

@@ -114,7 +114,7 @@ const AdminReentryPage = ({ reentries, adminPageError }: AdminReentryPageProps) 
       const response = await apiClient.PUT("/admin/reentry/{reentryId}", {
         body: {
           // TODO: 本来noteは申請者が書き込むものだが、バックエンドの仕様で審査者が書き込むフィールドとして扱われてしまっているため、修正する
-          note: note.trim() === "" ? "xyz" : note.trim(),
+          note: note.trim(),
           status,
         },
         headers: {
