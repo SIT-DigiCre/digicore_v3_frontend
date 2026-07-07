@@ -116,7 +116,7 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
           content={workPublic.authors.map((a) => a.username).join(", ")}
         />
         <meta property="og:url" content={`https://core3.digicre.net/work/${workPublic.workId}`} />
-        <meta property="og:image" content="https://core3.digicre.net/image/digicore.png" />
+        <meta property="og:image" content="https://core3.digicre.net/ogp.png" />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="デジコア" />
         <meta name="twitter:title" content={workPublic.name} />
@@ -124,7 +124,7 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
           name="twitter:description"
           content={workPublic.authors.map((a) => a.username).join(", ")}
         />
-        <meta name="twitter:image" content="https://core3.digicre.net/image/digicore.png" />
+        <meta name="twitter:image" content="https://core3.digicre.net/ogp.png" />
         <meta name="twitter:card" content="summary" />
       </Head>
     );
