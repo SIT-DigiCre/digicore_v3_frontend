@@ -107,24 +107,36 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
 
-  if (!authState.isLogined && workPublic) {
+  const workOgp =
+    workPublic &&
+    (() => {
+      const authorNames = workPublic.authors.map((a) => a.username).join(", ");
+      const isImageFile = /\.(png|jpe?g|webp|gif)$/i.test(workPublic.fileName);
+      const ogpImageUrl = isImageFile ? workPublic.fileUrl : "https://core3.digicre.net/ogp.png";
+      const ogpDescription = workPublic.description
+        ? `${authorNames} / ${workPublic.description}`
+        : authorNames;
+
+      return {
+        description: ogpDescription,
+        imageUrl: ogpImageUrl,
+        title: workPublic.name,
+        url: `https://core3.digicre.net/work/${workPublic.workId}`,
+      };
+    })();
+
+  if (!authState.isLogined && workOgp) {
     return (
       <Head>
-        <meta property="og:title" content={workPublic.name} />
-        <meta
-          property="og:description"
-          content={workPublic.authors.map((a) => a.username).join(", ")}
-        />
-        <meta property="og:url" content={`https://core3.digicre.net/work/${workPublic.workId}`} />
-        <meta property="og:image" content="https://core3.digicre.net/ogp.png" />
+        <meta property="og:title" content={workOgp.title} />
+        <meta property="og:description" content={workOgp.description} />
+        <meta property="og:url" content={workOgp.url} />
+        <meta property="og:image" content={workOgp.imageUrl} />
         <meta property="og:type" content="article" />
         <meta property="og:site_name" content="デジコア" />
-        <meta name="twitter:title" content={workPublic.name} />
-        <meta
-          name="twitter:description"
-          content={workPublic.authors.map((a) => a.username).join(", ")}
-        />
-        <meta name="twitter:image" content="https://core3.digicre.net/ogp.png" />
+        <meta name="twitter:title" content={workOgp.title} />
+        <meta name="twitter:description" content={workOgp.description} />
+        <meta name="twitter:image" content={workOgp.imageUrl} />
         <meta name="twitter:card" content="summary" />
       </Head>
     );
@@ -188,7 +200,27 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
 
   return (
     <>
-      <PageHead title={workDetail.name} />
+      <PageHead
+        title={workDetail.name}
+        description={workOgp?.description}
+        imgUrl={workOgp?.imageUrl}
+      />
+
+      {workOgp && (
+        <Head>
+          <meta property="og:title" content={workOgp.title} />
+          <meta property="og:description" content={workOgp.description} />
+          <meta property="og:url" content={workOgp.url} />
+          <meta property="og:type" content="article" />
+          <meta property="og:site_name" content="デジコア" />
+
+          <meta name="twitter:title" content={workOgp.title} />
+          <meta name="twitter:description" content={workOgp.description} />
+          <meta name="twitter:image" content={workOgp.imageUrl} />
+          <meta name="twitter:card" content="summary" />
+        </Head>
+      )}
+
       <Stack direction="row" spacing={2} justifyContent="space-between">
         <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
           作品一覧に戻る
