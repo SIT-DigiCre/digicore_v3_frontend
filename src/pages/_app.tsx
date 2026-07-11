@@ -3,6 +3,7 @@ import { type ReactElement, type ReactNode, useMemo } from "react";
 
 import { ThemeProvider, createTheme } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
+import Head from "next/head";
 
 import { DarkModeProvider, useDarkModeContext } from "../components/contexts/DarkModeContext";
 import { ErrorStateProvider } from "../components/contexts/ErrorStateContext";
@@ -36,6 +37,8 @@ const App = ({ Component, pageProps, router }: AppPropsWithLayout) => {
 
 const AppRoot = ({ Component, pageProps }: AppPropsWithLayout) => {
   const { isDarkMode } = useDarkModeContext();
+  const themeColor = isDarkMode ? "#121212" : "#ffffff";
+  const statusBarStyle = isDarkMode ? "black-translucent" : "default";
   const theme = useMemo(
     () =>
       createTheme({
@@ -53,6 +56,14 @@ const AppRoot = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   return (
     <ThemeProvider theme={theme}>
+      <Head>
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover"
+        />
+        <meta name="theme-color" content={themeColor} />
+        <meta name="apple-mobile-web-app-status-bar-style" content={statusBarStyle} />
+      </Head>
       <CssBaseline />
       <AppBar>
         <AccessControl>{getLayout(<Component {...pageProps} />)}</AccessControl>

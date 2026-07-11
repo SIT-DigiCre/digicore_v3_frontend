@@ -75,6 +75,6 @@ export const proxy = async (request: NextRequest) => {
 
 export const config = {
   matcher: [
-    "/((?!_next/|favicon.ico|\\.well-known/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|txt|xml|woff|woff2|ttf|eot)$).*)",
+    "/((?!_next/|favicon.ico|manifest\\.json|sw\\.js|workbox-.*\\.js|\\.well-known/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|map|txt|xml|woff|woff2|ttf|eot)$).*)",
   ],
 };
