@@ -2,7 +2,6 @@ import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "nex
 
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Stack } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
@@ -106,39 +105,36 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
-
-  const workOgp =
-    workPublic &&
-    (() => {
-      const authorNames = workPublic.authors.map((a) => a.username).join(", ");
-      const isImageFile = /\.(png|jpe?g|webp|gif)$/i.test(workPublic.fileName);
-      const ogpImageUrl = isImageFile ? workPublic.fileUrl : "https://core3.digicre.net/ogp.png";
-      const ogpDescription = workPublic.description
-        ? `${authorNames} / ${workPublic.description}`
-        : authorNames;
-
-      return {
-        description: ogpDescription,
-        imageUrl: ogpImageUrl,
-        title: workPublic.name,
-        url: `https://core3.digicre.net/work/${workPublic.workId}`,
-      };
-    })();
+  const workOgp = workPublic
+    ? (() => {
+        const authorNames = workPublic.authors.map((a) => a.username).join(", ");
+        const isImageFile = /\.(png|jpe?g|webp|gif)$/i.test(workPublic.fileName);
+        const imageUrl =
+          isImageFile && workPublic.fileUrl
+            ? workPublic.fileUrl
+            : "https://core3.digicre.net/ogp.png";
+        const description = workPublic.description
+          ? `${authorNames} / ${workPublic.description}`
+          : authorNames;
+        return {
+          description,
+          imageUrl,
+          title: workPublic.name,
+          url: `https://core3.digicre.net/work/${workPublic.workId}`,
+        };
+      })()
+    : undefined;
 
   if (!authState.isLogined && workOgp) {
     return (
-      <Head>
-        <meta property="og:title" content={workOgp.title} />
-        <meta property="og:description" content={workOgp.description} />
-        <meta property="og:url" content={workOgp.url} />
-        <meta property="og:image" content={workOgp.imageUrl} />
-        <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="デジコア" />
-        <meta name="twitter:title" content={workOgp.title} />
-        <meta name="twitter:description" content={workOgp.description} />
-        <meta name="twitter:image" content={workOgp.imageUrl} />
-        <meta name="twitter:card" content="summary" />
-      </Head>
+      <PageHead
+        title={workOgp.title}
+        description={workOgp.description}
+        imgUrl={workOgp.imageUrl}
+        url={workOgp.url}
+        ogType="article"
+        twitterCard="summary_large_image"
+      />
     );
   }
 
@@ -201,25 +197,13 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
   return (
     <>
       <PageHead
-        title={workDetail.name}
+        title={workOgp?.title ?? workDetail.name}
         description={workOgp?.description}
         imgUrl={workOgp?.imageUrl}
+        url={workOgp?.url}
+        ogType={workOgp ? "article" : "website"}
+        twitterCard={workOgp ? "summary_large_image" : "summary"}
       />
-
-      {workOgp && (
-        <Head>
-          <meta property="og:title" content={workOgp.title} />
-          <meta property="og:description" content={workOgp.description} />
-          <meta property="og:url" content={workOgp.url} />
-          <meta property="og:type" content="article" />
-          <meta property="og:site_name" content="デジコア" />
-
-          <meta name="twitter:title" content={workOgp.title} />
-          <meta name="twitter:description" content={workOgp.description} />
-          <meta name="twitter:image" content={workOgp.imageUrl} />
-          <meta name="twitter:card" content="summary" />
-        </Head>
-      )}
 
       <Stack direction="row" spacing={2} justifyContent="space-between">
         <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
