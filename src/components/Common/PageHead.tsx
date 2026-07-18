@@ -4,45 +4,98 @@ import Head from "next/head";
 
 import { usePageTitle } from "../contexts/PageTitleContext";
 
-interface PageHeadProps {
+type OpenGraphMetadata = {
+  title?: string;
+  description?: string;
+  url: string;
+  image: string;
+  type: "website" | "article";
+  siteName?: string;
+};
+
+type TwitterMetadata = {
+  title?: string;
+  description?: string;
+  image?: string;
+  card?: "summary" | "summary_large_image";
+};
+
+type PageHeadMetadata = {
   title: string;
   description?: string;
-  imgUrl?: string;
-  url?: string;
-  ogType?: "website" | "article";
-  twitterCard?: "summary" | "summary_large_image";
-}
+  openGraph: OpenGraphMetadata;
+  twitter?: TwitterMetadata;
+};
 
-export default function PageHead({
-  title,
+type PageHeadProps =
+  | {
+      title: string;
+      description?: string;
+      metadata?: undefined;
+    }
+  | {
+      metadata: PageHeadMetadata;
+      title?: never;
+      description?: never;
+    };
+
+const createDefaultMetadata = (title: string, description?: string): PageHeadMetadata => ({
   description,
-  imgUrl,
-  url,
-  ogType = "website",
-  twitterCard = "summary",
-}: PageHeadProps) {
+  openGraph: {
+    description,
+    image: "https://core3.digicre.net/ogp.png",
+    siteName: "デジコア",
+    title,
+    type: "website",
+    url: "https://core3.digicre.net",
+  },
+  title,
+  twitter: {
+    card: "summary",
+    description,
+    image: "https://core3.digicre.net/ogp.png",
+    title,
+  },
+});
+
+export default function PageHead(props: PageHeadProps) {
   const { setTitle } = usePageTitle();
 
-  useEffect(() => {
-    setTitle(title);
-    return () => setTitle("デジクリ");
-  }, [title]);
+  const metadata =
+    props.metadata === undefined
+      ? createDefaultMetadata(props.title, props.description)
+      : props.metadata;
 
-  const ogpImageUrl = imgUrl || "https://core3.digicre.net/ogp.png";
+  useEffect(() => {
+    setTitle(metadata.title);
+    return () => setTitle("デジクリ");
+  }, [metadata.title]);
+
+  const ogTitle = metadata.openGraph.title ?? metadata.title;
+  const ogDescription = metadata.openGraph.description ?? metadata.description;
+  const ogImage = metadata.openGraph.image;
+  const ogSiteName = metadata.openGraph.siteName ?? "デジコア";
+
+  const twitterTitle = metadata.twitter?.title ?? ogTitle;
+  const twitterDescription = metadata.twitter?.description ?? ogDescription;
+  const twitterImage = metadata.twitter?.image ?? ogImage;
+  const twitterCard = metadata.twitter?.card ?? "summary";
 
   return (
     <Head>
-      <title>{title}</title>
-      {description && <meta name="description" content={description} />}
-      <meta property="og:title" content={title} />
-      {description && <meta property="og:description" content={description} />}
-      {url && <meta property="og:url" content={url} />}
-      <meta property="og:image" content={ogpImageUrl} />
-      <meta property="og:type" content={ogType} />
-      <meta property="og:site_name" content="デジコア" />
-      <meta name="twitter:title" content={title} />
-      {description && <meta name="twitter:description" content={description} />}
-      <meta name="twitter:image" content={ogpImageUrl} />
+      <title>{metadata.title}</title>
+      {metadata.description && <meta name="description" content={metadata.description} />}
+
+      <meta property="og:title" content={ogTitle} />
+      {ogDescription && <meta property="og:description" content={ogDescription} />}
+      <meta property="og:url" content={metadata.openGraph.url} />
+      <meta property="og:image" content={ogImage} />
+      <meta property="og:type" content={metadata.openGraph.type} />
+      <meta property="og:site_name" content={ogSiteName} />
+
+      <meta name="twitter:title" content={twitterTitle} />
+      {twitterDescription && <meta name="twitter:description" content={twitterDescription} />}
+      <meta name="twitter:image" content={twitterImage} />
       <meta name="twitter:card" content={twitterCard} />
     </Head>
   );

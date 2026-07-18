@@ -128,12 +128,24 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
   if (!authState.isLogined && workOgp) {
     return (
       <PageHead
-        title={workOgp.title}
-        description={workOgp.description}
-        imgUrl={workOgp.imageUrl}
-        url={workOgp.url}
-        ogType="article"
-        twitterCard="summary_large_image"
+        metadata={{
+          description: workOgp.description,
+          openGraph: {
+            description: workOgp.description,
+            image: workOgp.imageUrl,
+            siteName: "デジコア",
+            title: workOgp.title,
+            type: "article",
+            url: workOgp.url,
+          },
+          title: workOgp.title,
+          twitter: {
+            card: "summary_large_image",
+            description: workOgp.description,
+            image: workOgp.imageUrl,
+            title: workOgp.title,
+          },
+        }}
       />
     );
   }
@@ -197,12 +209,24 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
   return (
     <>
       <PageHead
-        title={workOgp?.title ?? workDetail.name}
-        description={workOgp?.description}
-        imgUrl={workOgp?.imageUrl}
-        url={workOgp?.url}
-        ogType={workOgp ? "article" : "website"}
-        twitterCard={workOgp ? "summary_large_image" : "summary"}
+        metadata={{
+          description: workOgp?.description,
+          openGraph: {
+            description: workOgp?.description,
+            image: workOgp?.imageUrl ?? "https://core3.digicre.net/ogp.png",
+            siteName: "デジコア",
+            title: workOgp?.title ?? workDetail.name,
+            type: workOgp ? "article" : "website",
+            url: workOgp?.url ?? "https://core3.digicre.net",
+          },
+          title: workOgp?.title ?? workDetail.name,
+          twitter: {
+            card: workOgp ? "summary_large_image" : "summary",
+            description: workOgp?.description,
+            image: workOgp?.imageUrl,
+            title: workOgp?.title ?? workDetail.name,
+          },
+        }}
       />
 
       <Stack direction="row" spacing={2} justifyContent="space-between">
