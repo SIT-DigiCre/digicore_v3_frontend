@@ -20,7 +20,7 @@ type TwitterMetadata = {
   card?: "summary" | "summary_large_image";
 };
 
-type PageHeadMetadata = {
+export type PageHeadMetadata = {
   title: string;
   description?: string;
   openGraph: OpenGraphMetadata;
