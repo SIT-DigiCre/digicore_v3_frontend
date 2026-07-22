@@ -2,14 +2,13 @@ import type { GetServerSidePropsContext, InferGetServerSidePropsType } from "nex
 
 import { ArrowBack, Delete, Edit } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Stack } from "@mui/material";
-import Head from "next/head";
 import { useRouter } from "next/router";
 
 import { ButtonLink } from "../../components/Common/ButtonLink";
 import ChipList from "../../components/Common/ChipList";
 import Heading from "../../components/Common/Heading";
 import { IconButtonLink } from "../../components/Common/IconButtonLink";
-import PageHead from "../../components/Common/PageHead";
+import PageHead, { type PageHeadMetadata } from "../../components/Common/PageHead";
 import { useErrorState } from "../../components/contexts/ErrorStateContext";
 import MarkdownView from "../../components/Markdown/MarkdownView";
 import WorkEditor from "../../components/Work/WorkEditor";
@@ -106,33 +105,49 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
   const router = useRouter();
+  const workOgp = workPublic
+    ? (() => {
+        const authorNames = workPublic.authors.map((a) => a.username).join(", ");
+        const isImageFile = /\.(png|jpe?g|webp|gif)$/i.test(workPublic.fileName);
+        const imageUrl =
+          isImageFile && workPublic.fileUrl
+            ? workPublic.fileUrl
+            : "https://core3.digicre.net/ogp.png";
+        const description = workPublic.description
+          ? `${authorNames} / ${workPublic.description}`
+          : authorNames;
+        return {
+          description,
+          imageUrl,
+          title: workPublic.name,
+          url: `https://core3.digicre.net/work/${workPublic.workId}`,
+        };
+      })()
+    : undefined;
+  const pageTitle = workOgp?.title ?? workDetail?.name ?? "作品詳細";
+  const pageDescription = workOgp?.description;
+  const pageImage = workOgp?.imageUrl ?? "https://core3.digicre.net/ogp.png";
+  const pageUrl = workOgp?.url ?? "https://core3.digicre.net";
+  const isWorkOgp = Boolean(workOgp);
 
-  if (!authState.isLogined && workPublic) {
-    return (
-      <Head>
-        <meta property="og:title" content={workPublic.name} />
-        <meta
-          property="og:description"
-          content={workPublic.authors.map((a) => a.username).join(", ")}
-        />
-        <meta property="og:url" content={`https://core3.digicre.net/work/${workPublic.workId}`} />
-        <meta property="og:image" content="https://core3.digicre.net/image/digicore.png" />
-        <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="デジコア" />
-        <meta name="twitter:title" content={workPublic.name} />
-        <meta
-          name="twitter:description"
-          content={workPublic.authors.map((a) => a.username).join(", ")}
-        />
-        <meta name="twitter:image" content="https://core3.digicre.net/image/digicore.png" />
-        <meta name="twitter:card" content="summary" />
-      </Head>
-    );
-  }
-
-  if (!authState.isLogined || !authState.user || !workDetail) {
-    return <p>読み込み中...</p>;
-  }
+  const pageMetadata: PageHeadMetadata = {
+    description: pageDescription,
+    openGraph: {
+      description: pageDescription,
+      image: pageImage,
+      siteName: "デジコア",
+      title: pageTitle,
+      type: isWorkOgp ? "article" : "website",
+      url: pageUrl,
+    },
+    title: pageTitle,
+    twitter: {
+      card: isWorkOgp ? "summary_large_image" : "summary",
+      description: pageDescription,
+      image: pageImage,
+      title: pageTitle,
+    },
+  };
 
   const onSubmit = async (workRequest: WorkRequest) => {
     if (!authState.token) {
@@ -165,6 +180,10 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
       return;
     }
 
+    if (!workDetail) {
+      return;
+    }
+
     const res = window.confirm(`${workDetail.name}を本当に削除しますか？`);
     if (!res) return;
 
@@ -188,68 +207,74 @@ const WorkDetailPage = ({ id, modeStr, workDetail, workPublic, tags }: WorkDetai
 
   return (
     <>
-      <PageHead title={workDetail.name} />
-      <Stack direction="row" spacing={2} justifyContent="space-between">
-        <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
-          作品一覧に戻る
-        </ButtonLink>
-        {workDetail.authors.some((a) => a.userId === authState.user?.userId) && (
-          <Stack direction="row" spacing={1}>
-            {modeStr !== "edit" && (
-              <IconButtonLink href={`/work/${id}?mode=edit`} ariaLabel="編集する">
-                <Edit />
-              </IconButtonLink>
-            )}
-            <IconButton aria-label="削除する" onClick={onClickDelete}>
-              <Delete />
-            </IconButton>
-          </Stack>
-        )}
-      </Stack>
-      {modeStr === "edit" ? (
-        <WorkEditor onSubmit={onSubmit} initWork={workDetail} workTags={tags} />
+      <PageHead metadata={pageMetadata} />
+
+      {!authState.isLogined || !authState.user || !workDetail ? (
+        <p>読み込み中...</p>
       ) : (
-        <Stack direction="column" spacing={2} my={2}>
-          <Box>
-            <Heading level={3}>作者</Heading>
-            <Stack direction="row" spacing={2} flexWrap="wrap">
-              {workDetail.authors &&
-                workDetail.authors.map((a) => (
-                  <ButtonLink
-                    startIcon={<Avatar src={a.iconUrl} className="d-inlineblock" />}
-                    href={`/member/${a.userId}`}
-                    key={a.userId}
-                    variant="text"
-                  >
-                    {a.username}
-                  </ButtonLink>
-                ))}
+        <>
+          <Stack direction="row" spacing={2} justifyContent="space-between">
+            <ButtonLink href="/work" startIcon={<ArrowBack />} variant="text">
+              作品一覧に戻る
+            </ButtonLink>
+            {workDetail.authors.some((a) => a.userId === authState.user?.userId) && (
+              <Stack direction="row" spacing={1}>
+                {modeStr !== "edit" && (
+                  <IconButtonLink href={`/work/${id}?mode=edit`} ariaLabel="編集する">
+                    <Edit />
+                  </IconButtonLink>
+                )}
+                <IconButton aria-label="削除する" onClick={onClickDelete}>
+                  <Delete />
+                </IconButton>
+              </Stack>
+            )}
+          </Stack>
+          {modeStr === "edit" ? (
+            <WorkEditor onSubmit={onSubmit} initWork={workDetail} workTags={tags} />
+          ) : (
+            <Stack direction="column" spacing={2} my={2}>
+              <Box>
+                <Heading level={3}>作者</Heading>
+                <Stack direction="row" spacing={2} flexWrap="wrap">
+                  {workDetail.authors &&
+                    workDetail.authors.map((a) => (
+                      <ButtonLink
+                        startIcon={<Avatar src={a.iconUrl} className="d-inlineblock" />}
+                        href={`/member/${a.userId}`}
+                        key={a.userId}
+                        variant="text"
+                      >
+                        {a.username}
+                      </ButtonLink>
+                    ))}
+                </Stack>
+              </Box>
+              {workDetail.tags && (
+                <Box>
+                  <Heading level={3}>タグ</Heading>
+                  <ChipList chipList={workDetail.tags.map((t) => t.name)} />
+                </Box>
+              )}
+              {workDetail.description && (
+                <Box>
+                  <Heading level={3}>作品説明</Heading>
+                  <MarkdownView md={workDetail.description} />
+                </Box>
+              )}
+              {workDetail.files && workDetail.files.length > 0 && (
+                <Box>
+                  <Heading level={3}>ファイル</Heading>
+                  {workDetail.files.map((f) => (
+                    <WorkFileView key={f.fileId} fileId={f.fileId} />
+                  ))}
+                </Box>
+              )}
             </Stack>
-          </Box>
-          {workDetail.tags && (
-            <Box>
-              <Heading level={3}>タグ</Heading>
-              <ChipList chipList={workDetail.tags.map((t) => t.name)} />
-            </Box>
           )}
-          {workDetail.description && (
-            <Box>
-              <Heading level={3}>作品説明</Heading>
-              <MarkdownView md={workDetail.description} />
-            </Box>
-          )}
-          {workDetail.files && workDetail.files.length > 0 && (
-            <Box>
-              <Heading level={3}>ファイル</Heading>
-              {workDetail.files.map((f) => (
-                <WorkFileView key={f.fileId} fileId={f.fileId} />
-              ))}
-            </Box>
-          )}
-        </Stack>
+        </>
       )}
     </>
   );
 };
-
 export default WorkDetailPage;
