@@ -17,12 +17,12 @@ import ErrorView from "../Error/ErrorView";
 import Drawer from "./Drawer";
 
 const drawerWidth = 240;
-const toolBarHeightPcPx = 64;
-const toolBarHeightPhonePx = 56;
-const SAFE_AREA_PADDING_PX = 8;
+const toolbarHeightPcPx = 64;
+const toolbarHeightPhonePx = 56;
+export const safeAreaPaddingPx = 8;
 const toolbarMinHeight = {
-  sm: `${toolBarHeightPcPx}px`,
-  xs: `calc(${toolBarHeightPhonePx}px + var(--safe-area-top))`,
+  sm: `${toolbarHeightPcPx}px`,
+  xs: `calc(${toolbarHeightPhonePx}px + var(--safe-area-top))`,
 };
 
 interface AppBarProps {
@@ -66,7 +66,7 @@ export default function AppBar({ children, window }: AppBarProps) {
         <Toolbar
           sx={{
             minHeight: toolbarMinHeight,
-            pt: { sm: 0, xs: `calc(${SAFE_AREA_PADDING_PX}px + var(--safe-area-top))` },
+            pt: { sm: 0, xs: `calc(${safeAreaPaddingPx}px + var(--safe-area-top))` },
           }}
         >
           <IconButton

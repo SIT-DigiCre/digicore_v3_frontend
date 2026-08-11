@@ -26,6 +26,8 @@ import { useRouter } from "next/router";
 import { useAuthState } from "@/hook/useAuthState";
 import { GRANT_ACCOUNT, GRANT_INFRA } from "@/utils/auth/grants";
 
+import { safeAreaPaddingPx } from "./AppBar";
+
 type MenuItem = {
   href: string;
   icon: React.ReactNode;
@@ -115,7 +117,13 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
   return (
     <Stack role="navigation" aria-label="メインメニュー" sx={{ height: "100%" }}>
       <Toolbar
-        sx={{ justifyContent: "center", pt: { sm: 0, xs: "calc(8px + var(--safe-area-top))" } }}
+        sx={{
+          justifyContent: "center",
+          pt: {
+            sm: 0,
+            xs: `calc(${safeAreaPaddingPx}px + var(--safe-area-top))`,
+          },
+        }}
       >
         <Link
           href="/"
