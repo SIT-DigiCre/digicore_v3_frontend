@@ -17,11 +17,12 @@ import ErrorView from "../Error/ErrorView";
 import Drawer from "./Drawer";
 
 const drawerWidth = 240;
-const TOOLBAR_HEIGHT_PX = 56;
+const toolBarHeightPcPx = 64;
+const toolBarHeightPhonePx = 56;
 const SAFE_AREA_PADDING_PX = 8;
 const toolbarMinHeight = {
-  sm: `${TOOLBAR_HEIGHT_PX}px`,
-  xs: `calc(${TOOLBAR_HEIGHT_PX}px + var(--safe-area-top))`,
+  sm: `${toolBarHeightPcPx}px`,
+  xs: `calc(${toolBarHeightPhonePx}px + var(--safe-area-top))`,
 };
 
 interface AppBarProps {
