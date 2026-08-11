@@ -1,3 +1,7 @@
+:root {
+  --safe-area-top: env(safe-area-inset-top, 0px);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

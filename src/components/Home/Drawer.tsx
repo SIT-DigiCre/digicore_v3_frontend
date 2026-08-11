@@ -114,7 +114,9 @@ const Drawer = ({ handleDrawerClose }: DrawerProps) => {
 
   return (
     <Stack role="navigation" aria-label="メインメニュー" sx={{ height: "100%" }}>
-      <Toolbar sx={{ justifyContent: "center" }}>
+      <Toolbar
+        sx={{ justifyContent: "center", pt: { sm: 0, xs: "calc(8px + var(--safe-area-top))" } }}
+      >
         <Link
           href="/"
           style={{
