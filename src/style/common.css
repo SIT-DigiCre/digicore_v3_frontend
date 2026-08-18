@@ -1,5 +1,5 @@
 :root {
-  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-top: env(safe-area-inset-top, 0);
 }
 
 * {
