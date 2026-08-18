@@ -17,6 +17,13 @@ import ErrorView from "../Error/ErrorView";
 import Drawer from "./Drawer";
 
 const drawerWidth = 240;
+const toolbarHeightPcPx = 64;
+const toolbarHeightPhonePx = 56;
+export const safeAreaPaddingPx = 8;
+const toolbarMinHeight = {
+  sm: `${toolbarHeightPcPx}px`,
+  xs: `calc(${toolbarHeightPhonePx}px + var(--safe-area-top))`,
+};
 
 interface AppBarProps {
   children?: React.ReactNode;
@@ -52,10 +59,16 @@ export default function AppBar({ children, window }: AppBarProps) {
         position="fixed"
         sx={{
           ml: { sm: `${drawerWidth}px` },
+          pt: { sm: 0, xs: "var(--safe-area-top)" },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            minHeight: toolbarMinHeight,
+            pt: { sm: 0, xs: `calc(${safeAreaPaddingPx}px + var(--safe-area-top))` },
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label={mobileOpen ? "メニューを閉じる" : "メニューを開く"}
@@ -113,7 +126,7 @@ export default function AppBar({ children, window }: AppBarProps) {
           width: { sm: `calc(100% - ${drawerWidth}px)` },
         }}
       >
-        <Toolbar />
+        <Toolbar sx={{ minHeight: toolbarMinHeight }} />
         <Container component="main" sx={{ minHeight: "65vh", p: 0, px: 2 }}>
           <ErrorView />
           {children}
