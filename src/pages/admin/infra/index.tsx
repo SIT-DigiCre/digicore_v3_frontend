@@ -1,7 +1,7 @@
 import type { InferGetServerSidePropsType, NextApiRequest } from "next";
 import { useState } from "react";
 
-import { ArrowBack, Autorenew, PersonOff, School } from "@mui/icons-material";
+import { ArrowBack, DeleteForever, PersonOff, School } from "@mui/icons-material";
 import {
   Alert,
   Box,
@@ -14,6 +14,7 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  TextField,
   Stack,
   Typography,
 } from "@mui/material";
@@ -27,7 +28,7 @@ import { useAuthState } from "@/hook/useAuthState";
 import { requireAdminPageAccess } from "@/utils/auth/admin";
 import { apiClient } from "@/utils/fetch/client";
 
-type InfraAction = "inactive" | "school-grade";
+type InfraAction = "inactive" | "school-grade" | "private-profile";
 
 type ActionResult = {
   message: string;
@@ -49,6 +50,14 @@ const ACTION_CONTENT: Record<
     dialogDescription:
       "非アクティブ判定の対象ユーザーに対して、一括で `is_member=false` を反映します。実行後の取り消しはできません。",
     title: "inactive一括更新",
+  },
+  "private-profile": {
+    buttonLabel: "卒業生・退部者の個人情報を削除",
+    description:
+      "active_limitから一年以上経過した卒業生と退部者(is_member=false)の個人情報を削除します。(`user_private_profile`のレコードを削除)",
+    dialogDescription:
+      "active_limitから一年以上経過した卒業生・退部者の個人情報を削除します。実行後の復元はできません。",
+    title: "卒業生・退部者の個人情報を削除",
   },
   "school-grade": {
     buttonLabel: "学年更新を実行",
@@ -80,6 +89,7 @@ const AdminInfraPage = ({
   const { removeError, setNewError } = useErrorState();
   const [pendingAction, setPendingAction] = useState<InfraAction | null>(null);
   const [runningAction, setRunningAction] = useState<InfraAction | null>(null);
+  const [privateProfileConfirmation, setPrivateProfileConfirmation] = useState("");
   const [result, setResult] = useState<ActionResult>(null);
 
   if (adminPageError) {
@@ -94,6 +104,7 @@ const AdminInfraPage = ({
   const handleCloseDialog = () => {
     if (runningAction !== null) return;
     setPendingAction(null);
+    setPrivateProfileConfirmation("");
   };
 
   const executeAction = async () => {
@@ -110,18 +121,21 @@ const AdminInfraPage = ({
     setResult(null);
 
     try {
-      const response =
-        pendingAction === "inactive"
-          ? await apiClient.PUT("/admin/inactive", {
-              headers: {
-                Authorization: `Bearer ${authState.token}`,
-              },
-            })
-          : await apiClient.PUT("/admin/school-grade", {
-              headers: {
-                Authorization: `Bearer ${authState.token}`,
-              },
-            });
+      const headers = {
+        Authorization: `Bearer ${authState.token}`,
+      };
+
+      let response;
+
+      if (pendingAction === "inactive") {
+        response = await apiClient.PUT("/admin/inactive", { headers });
+      } else if (pendingAction === "school-grade") {
+        response = await apiClient.PUT("/admin/school-grade", { headers });
+      } else {
+        response = await apiClient.DELETE("/admin/delete-expired-user-private-profiles", {
+          headers,
+        });
+      }
 
       if (response.error) {
         setNewError({
@@ -139,6 +153,7 @@ const AdminInfraPage = ({
         severity: "success",
       });
       setPendingAction(null);
+      setPrivateProfileConfirmation("");
     } catch (error) {
       const message =
         error instanceof Error
@@ -167,7 +182,7 @@ const AdminInfraPage = ({
         <Box>
           <Heading level={2}>インフラ管理</Heading>
           <Typography color="text.secondary">
-            運用向けの一括更新APIを実行します。どちらの操作も即時反映されるため、内容を確認してから実行してください。
+            運用向けの一括更新APIを実行します。いずれの操作も即時反映されるため、内容を確認してから実行してください。
           </Typography>
         </Box>
 
@@ -236,6 +251,37 @@ const AdminInfraPage = ({
               </Button>
             </CardActions>
           </Card>
+
+          <Card variant="outlined" sx={{ borderColor: "error.main" }}>
+            <CardContent>
+              <Stack spacing={2}>
+                <Stack direction="row" spacing={1.5} alignItems="center">
+                  <DeleteForever color="error" />
+                  <Typography variant="h6" fontWeight="bold">
+                    {ACTION_CONTENT["private-profile"].title}
+                  </Typography>
+                </Stack>
+                <Alert severity="warning" sx={{ alignSelf: "flex-start", maxWidth: "100%" }}>
+                  個人情報を完全に削除します。削除後は復元できません。
+                </Alert>
+                <Typography>{ACTION_CONTENT["private-profile"].description}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  バックエンドの `DELETE /admin/delete-expired-user-private-profiles`
+                  を呼び出します。
+                </Typography>
+              </Stack>
+            </CardContent>
+            <CardActions sx={{ pb: 2, px: 2 }}>
+              <Button
+                color="error"
+                variant="contained"
+                disabled={runningAction !== null}
+                onClick={() => setPendingAction("private-profile")}
+              >
+                {ACTION_CONTENT["private-profile"].buttonLabel}
+              </Button>
+            </CardActions>
+          </Card>
         </Stack>
       </Stack>
 
@@ -248,9 +294,24 @@ const AdminInfraPage = ({
             <Typography>
               {pendingAction ? ACTION_CONTENT[pendingAction].dialogDescription : ""}
             </Typography>
-            <Alert severity="warning">
-              取り消しできない操作です。実行対象とタイミングを確認してから続行してください。
-            </Alert>
+            {pendingAction === "private-profile" ? (
+              <>
+                <Alert severity="error">
+                  この操作は取り消せません。実行する場合は「削除する」と入力してください。
+                </Alert>
+                <TextField
+                  fullWidth
+                  label="確認入力"
+                  value={privateProfileConfirmation}
+                  onChange={(event) => setPrivateProfileConfirmation(event.target.value)}
+                  placeholder="削除する"
+                />
+              </>
+            ) : (
+              <Alert severity="warning">
+                取り消しできない操作です。実行対象とタイミングを確認してから続行してください。
+              </Alert>
+            )}
           </Stack>
         </DialogContent>
         <DialogActions>
@@ -259,17 +320,17 @@ const AdminInfraPage = ({
           </Button>
           <Button
             variant="contained"
-            color="error"
+            color={pendingAction === "private-profile" ? "error" : "primary"}
             onClick={() => {
               void executeAction();
             }}
-            disabled={pendingAction === null || runningAction !== null}
+            disabled={
+              pendingAction === null ||
+              runningAction !== null ||
+              (pendingAction === "private-profile" && privateProfileConfirmation !== "削除する")
+            }
             startIcon={
-              runningAction !== null ? (
-                <CircularProgress size={16} color="inherit" />
-              ) : (
-                <Autorenew />
-              )
+              runningAction !== null ? <CircularProgress size={16} color="inherit" /> : undefined
             }
           >
             実行する
