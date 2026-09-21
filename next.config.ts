@@ -21,6 +21,7 @@ const withPWA = withPWAInit({
 });
 
 const nextConfig: NextConfig = {
+  //これがないとpnpm run devでエラーを吐くので加筆しました。
   images: {
     remotePatterns:
       process.env.NODE_ENV === "production"
@@ -44,6 +45,7 @@ const nextConfig: NextConfig = {
             },
           ],
   },
+  turbopack: {},
 };
 
 export default withPWA(nextConfig);
