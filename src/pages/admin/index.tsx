@@ -125,7 +125,7 @@ const AdminPage = ({ adminPageError }: InferGetServerSidePropsType<typeof getSer
                 href="/admin/infra"
                 icon={BuildCircle}
                 title="インフラ管理"
-                description="inactive更新と学年更新の一括処理を実行します。"
+                description="inactive更新、学年更新、卒業生・退部者の個人情報削除を実行します。"
               />
             )}
           </Grid>
