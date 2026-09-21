@@ -55,7 +55,8 @@ const ACTION_CONTENT: Record<
     buttonLabel: "卒業生・退部者の個人情報を削除",
     description:
       "active_limitから一年以上経過した卒業生と退部者(is_member=false)の個人情報を削除します。(`user_private_profile`のレコードを削除)",
-    dialogDescription: "active_limitから一年以上経過した卒業生・退部者の個人情報を削除します。実行後の復元はできません。",
+    dialogDescription:
+      "active_limitから一年以上経過した卒業生・退部者の個人情報を削除します。実行後の復元はできません。",
     title: "卒業生・退部者の個人情報を削除",
   },
   "school-grade": {
