@@ -52,7 +52,7 @@ const ACTION_CONTENT: Record<
     title: "inactive一括更新",
   },
   "private-profile": {
-    buttonLabel: "卒業生・退部者の個人情報を削除",
+    buttonLabel: "卒業生・退部者の個人情報の削除を実行",
     description:
       "active_limitから一年以上経過した卒業生と退部者(is_member=false)の個人情報を削除します。(`user_private_profile`のレコードを削除)",
     dialogDescription:
@@ -89,7 +89,7 @@ const AdminInfraPage = ({
   const { removeError, setNewError } = useErrorState();
   const [pendingAction, setPendingAction] = useState<InfraAction | null>(null);
   const [runningAction, setRunningAction] = useState<InfraAction | null>(null);
-  const [privateProfileConfirmation, setPrivateProfileConfirmation] = useState("");
+  const [privateProfileConfirmation, setPrivateProfileConfirmation] = useState<boolean>(false);
   const [result, setResult] = useState<ActionResult>(null);
 
   if (adminPageError) {
@@ -104,23 +104,24 @@ const AdminInfraPage = ({
   const handleCloseDialog = () => {
     if (runningAction !== null) return;
     setPendingAction(null);
-    setPrivateProfileConfirmation("");
+    setPrivateProfileConfirmation(false);
   };
 
   const executeAction = async () => {
     if (!pendingAction || runningAction !== null) return;
-    if (!authState.token) {
-      setNewError({
-        message: "ログイン情報が見つかりません。再度ログインしてください。",
-        name: "admin-infra-auth-fail",
-      });
-      return;
-    }
 
     setRunningAction(pendingAction);
     setResult(null);
 
     try {
+      if (!authState.token) {
+        setNewError({
+          message: "ログイン情報が見つかりません。再度ログインしてください。",
+          name: "admin-infra-auth-fail",
+        });
+        return;
+      }
+
       const headers = {
         Authorization: `Bearer ${authState.token}`,
       };
@@ -152,8 +153,6 @@ const AdminInfraPage = ({
         message: `${ACTION_CONTENT[pendingAction].title}を実行しました。`,
         severity: "success",
       });
-      setPendingAction(null);
-      setPrivateProfileConfirmation("");
     } catch (error) {
       const message =
         error instanceof Error
@@ -164,6 +163,8 @@ const AdminInfraPage = ({
         name: "admin-infra-run-fail",
       });
     } finally {
+      setPendingAction(null);
+      setPrivateProfileConfirmation(false);
       setRunningAction(null);
     }
   };
@@ -302,8 +303,9 @@ const AdminInfraPage = ({
                 <TextField
                   fullWidth
                   label="確認入力"
-                  value={privateProfileConfirmation}
-                  onChange={(event) => setPrivateProfileConfirmation(event.target.value)}
+                  onChange={(event) =>
+                    setPrivateProfileConfirmation(event.target.value === "削除する")
+                  }
                   placeholder="削除する"
                 />
               </>
@@ -327,7 +329,7 @@ const AdminInfraPage = ({
             disabled={
               pendingAction === null ||
               runningAction !== null ||
-              (pendingAction === "private-profile" && privateProfileConfirmation !== "削除する")
+              (pendingAction === "private-profile" && !privateProfileConfirmation)
             }
             startIcon={
               runningAction !== null ? <CircularProgress size={16} color="inherit" /> : undefined
