@@ -713,6 +713,55 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /user/profile/links:
+    post:
+      tags:
+        - user_profile_links
+      summary: 新しいリンクを登録する
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              required:
+                - linkUrl
+              properties:
+                linkUrl:
+                  type: string
+                  x-oapi-codegen-extra-tags:
+                    validate: 'required,url,max=2048'
+                    ja: URL
+      responses:
+        '200':
+          description: Success create user_profile_links
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '500':
+          $ref: '#/components/responses/InternalServer'
+    delete:
+      tags:
+        - user_profile_links
+      summary: ユーザープロフィールリンクを削除する
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Success delete user_profile_links
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /tool:
     get:
       tags:
@@ -2082,6 +2131,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '500':
           $ref: '#/components/responses/InternalServer'
+  /admin/delete-expired-user-private-profiles:
+    delete:
+      tags:
+        - admin
+      description: active_limitから1年以上経過した卒業生と非会員の個人情報を削除する
+      security:
+        - BearerAuth:
+            - infra
+      responses:
+        '200':
+          $ref: '#/components/responses/BlankSuccess'
+        '403':
+          $ref: '#/components/responses/Unauthorized'
+        '500':
+          $ref: '#/components/responses/InternalServer'
   /activity/checkin:
     post:
       tags:
@@ -2633,6 +2697,7 @@ components:
         - discordUserId
         - shortIntroduction
         - activeLimit
+        - linkUrls
         - isGraduated
         - isMember
       properties:
@@ -2652,6 +2717,26 @@ components:
           type: string
         activeLimit:
           type: string
+        linkUrls:
+          type: array
+          items:
+            required:
+              - id
+              - linkUrl
+              - createdAt
+              - updatedAt
+            properties:
+              id:
+                type: string
+              linkUrl:
+                type: string
+                format: uri
+              createdAt:
+                type: string
+                format: date-time
+              updatedAt:
+                type: string
+                format: date-time
         isGraduated:
           type: boolean
         isMember:
@@ -3092,21 +3177,20 @@ components:
           format: date-time
           description: ユーザーの登録日時
     ReqPutEventEventIdReservationIdMe:
-      required:
-        - comment
-        - url
       properties:
         comment:
           type: string
-          minLength: 1
+          nullable: true
+          maxLength: 255
           x-oapi-codegen-extra-tags:
-            validate: 'min=1,max=255'
+            validate: 'omitempty,max=255'
             ja: コメント
         url:
           type: string
-          minLength: 1
+          nullable: true
+          maxLength: 255
           x-oapi-codegen-extra-tags:
-            validate: 'min=1,max=255'
+            validate: 'omitempty,max=255'
             ja: URL
     ReqPostEventEvent:
       required:

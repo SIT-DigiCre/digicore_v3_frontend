@@ -1129,6 +1129,71 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/user/profile/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** 新しいリンクを登録する */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        linkUrl: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Success create user_profile_links */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                400: components["responses"]["BadRequest"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        /** ユーザープロフィールリンクを削除する */
+        delete: {
+            parameters: {
+                query: {
+                    id: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Success delete user_profile_links */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["Unauthorized"];
+                404: components["responses"]["NotFound"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/tool": {
         parameters: {
             query?: never;
@@ -2807,6 +2872,36 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/admin/delete-expired-user-private-profiles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** @description active_limitから1年以上経過した卒業生と非会員の個人情報を削除する */
+        delete: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                200: components["responses"]["BlankSuccess"];
+                403: components["responses"]["Unauthorized"];
+                500: components["responses"]["InternalServer"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/activity/checkin": {
         parameters: {
             query?: never;
@@ -3458,6 +3553,15 @@ export interface components {
             discordUserId: string;
             shortIntroduction: string;
             activeLimit: string;
+            linkUrls: {
+                id: string;
+                /** Format: uri */
+                linkUrl: string;
+                /** Format: date-time */
+                createdAt: string;
+                /** Format: date-time */
+                updatedAt: string;
+            }[];
             isGraduated: boolean;
             isMember: boolean;
         };
@@ -3609,8 +3713,8 @@ export interface components {
             createdAt: string;
         };
         ReqPutEventEventIdReservationIdMe: {
-            comment: string;
-            url: string;
+            comment?: string | null;
+            url?: string | null;
         };
         ReqPostEventEvent: {
             name: string;
