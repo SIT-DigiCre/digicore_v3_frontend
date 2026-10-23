@@ -15,13 +15,7 @@ import {
 } from "@mui/material";
 
 import Heading from "@/components/Common/Heading";
-
-const getClubFeeAmount = (date: Date = new Date()) => {
-  const jstDate = new Date(date.toLocaleString("en-US", { timeZone: "Asia/Tokyo" }));
-  const month = jstDate.getMonth() + 1;
-
-  return month >= 3 && month <= 9 ? 2000 : 1000;
-};
+import { getClubFeeAmount } from "@/utils/date-util";
 
 const TransferClubFeeView = () => {
   const [isCopied, setIsCopied] = useState(false);
