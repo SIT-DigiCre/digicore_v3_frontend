@@ -31,3 +31,16 @@ export const getTimeSpanText = (start: string, end: string) => {
 // 年度を計算する（3月中の部費振込に対応するため、3月を翌年度とする）
 export const getFiscalYear = (date: Date): number =>
   date.getMonth() < 2 ? date.getFullYear() - 1 : date.getFullYear();
+
+// JST基準で月を取得する
+export const getJstMonth = (date: Date = new Date()): number =>
+  Number(
+    new Intl.DateTimeFormat("en-US", { month: "numeric", timeZone: "Asia/Tokyo" }).format(date),
+  );
+
+// 3月から9月は2000円、10月から2月は1000円の値を返す
+export const getClubFeeAmount = (date: Date = new Date()): number => {
+  const month = getJstMonth(date);
+
+  return month >= 3 && month <= 9 ? 2000 : 1000;
+};

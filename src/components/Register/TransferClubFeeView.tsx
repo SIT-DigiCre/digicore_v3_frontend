@@ -15,9 +15,12 @@ import {
 } from "@mui/material";
 
 import Heading from "@/components/Common/Heading";
+import { getClubFeeAmount } from "@/utils/date-util";
 
 const TransferClubFeeView = () => {
   const [isCopied, setIsCopied] = useState(false);
+  const clubFeeAmount = getClubFeeAmount();
+  const accountText = `銀行: ゆうちょ銀行\n記号: 10370\n番号: 81757581\n店番: 038\n口座番号: 8175758\n預金種目: 普通預金\n金額: 手数料抜で${clubFeeAmount.toLocaleString()}円`;
 
   return (
     <>
@@ -27,13 +30,9 @@ const TransferClubFeeView = () => {
           color="primary"
           variant="contained"
           onClick={() => {
-            navigator.clipboard
-              .writeText(
-                "銀行: ゆうちょ銀行\n記号: 10370\n番号: 81757581\n店番: 038\n口座番号: 8175758\n預金種目: 普通預金\n金額: 手数料抜で2000円",
-              )
-              .then(() => {
-                setIsCopied(true);
-              });
+            navigator.clipboard.writeText(accountText).then(() => {
+              setIsCopied(true);
+            });
           }}
         >
           口座情報をコピーする
@@ -68,7 +67,7 @@ const TransferClubFeeView = () => {
             </TableRow>
             <TableRow>
               <TableCell>金額</TableCell>
-              <TableCell>2,000円 (手数料別)</TableCell>
+              <TableCell>{clubFeeAmount.toLocaleString()}円 (手数料別)</TableCell>
             </TableRow>
           </TableBody>
         </Table>
