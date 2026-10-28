@@ -25,7 +25,7 @@ import StatusChip from "@/components/Payment/StatusChip";
 import TransferNameDialog from "@/components/Payment/TransferNameDialog";
 import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
 import { useAuthState } from "@/hook/useAuthState";
-import { getFiscalYear } from "@/utils/date-util";
+import { getClubFeeAmount, getFiscalYear } from "@/utils/date-util";
 import { apiClient, createServerApiClient } from "@/utils/fetch/client";
 
 import type { PaymentHistory } from "@/interfaces/form";
@@ -37,19 +37,28 @@ export const getServerSideProps = async ({ req }: { req: NextApiRequest }) => {
     const res = await client.GET("/user/me/payment");
 
     if (!res.data?.histories) {
-      return { props: { initialPaymentHistories: [] as PaymentHistory[] } };
+      return {
+        props: {
+          clubFeeAmount: getClubFeeAmount(),
+          initialPaymentHistories: [] as PaymentHistory[],
+        },
+      };
     }
 
-    return { props: { initialPaymentHistories: res.data.histories } };
+    return {
+      props: { clubFeeAmount: getClubFeeAmount(), initialPaymentHistories: res.data.histories },
+    };
   } catch (error) {
     console.error("Failed to fetch payment histories:", error);
-    return { props: { initialPaymentHistories: [] as PaymentHistory[] } };
+    return {
+      props: { clubFeeAmount: getClubFeeAmount(), initialPaymentHistories: [] as PaymentHistory[] },
+    };
   }
 };
 
 type PaymentPageProps = InferGetServerSidePropsType<typeof getServerSideProps>;
 
-const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
+const PaymentPage = ({ initialPaymentHistories, clubFeeAmount }: PaymentPageProps) => {
   const router = useRouter();
   const { authState } = useAuthState();
   const { setNewError, removeError } = useErrorState();
@@ -145,7 +154,7 @@ const PaymentPage = ({ initialPaymentHistories }: PaymentPageProps) => {
 
         <Box>
           <Heading level={2}>口座情報</Heading>
-          <TransferClubFeeView />
+          <TransferClubFeeView clubFeeAmount={clubFeeAmount} />
         </Box>
       </Stack>
 

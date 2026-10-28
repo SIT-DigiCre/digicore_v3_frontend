@@ -5,8 +5,17 @@ import { useRouter } from "next/router";
 import Heading from "@/components/Common/Heading";
 import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
 import { TutorialStepLayout } from "@/components/Register/TutorialStepLayout";
+import { getClubFeeAmount } from "@/utils/date-util";
 
-const TutorialClubFeePage = () => {
+export const getServerSideProps = async () => {
+  return {
+    props: {
+      clubFeeAmount: getClubFeeAmount(),
+    },
+  };
+};
+
+const TutorialClubFeePage = ({ clubFeeAmount }: { clubFeeAmount: number }) => {
   const router = useRouter();
 
   const handlePrevious = () => {
@@ -23,7 +32,8 @@ const TutorialClubFeePage = () => {
         <Heading level={2}>部費の振込について</Heading>
         <Box>
           <Typography>
-            部費 2,000円 を<b>3週間以内</b>に、下記の口座に振り込んでください。
+            部費 {clubFeeAmount.toLocaleString()}円 を<b>3週間以内</b>
+            に、下記の口座に振り込んでください。
           </Typography>
           <Typography sx={{ mt: 2 }}>
             振込が完了したらデジコア上の
@@ -37,7 +47,7 @@ const TutorialClubFeePage = () => {
           </Typography>
         </Box>
 
-        <TransferClubFeeView />
+        <TransferClubFeeView clubFeeAmount={clubFeeAmount} />
 
         <Box textAlign="center" sx={{ mt: 4 }}>
           <Button variant="contained" size="large" onClick={handleHome}>

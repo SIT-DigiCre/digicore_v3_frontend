@@ -1,3 +1,4 @@
+import type { GetServerSideProps } from "next";
 import { useState } from "react";
 
 import SendIcon from "@mui/icons-material/Send";
@@ -21,9 +22,18 @@ import PageHead from "@/components/Common/PageHead";
 import { useErrorState } from "@/components/contexts/ErrorStateContext";
 import TransferClubFeeView from "@/components/Register/TransferClubFeeView";
 import { getTokenFromCookie } from "@/utils/auth/token";
+import { getClubFeeAmount } from "@/utils/date-util";
 import { apiClient } from "@/utils/fetch/client";
 
-const ReentryPage = () => {
+export const getServerSideProps: GetServerSideProps = async () => ({
+  props: { clubFeeAmount: getClubFeeAmount() },
+});
+
+type ReentryPageProps = {
+  clubFeeAmount: number;
+};
+
+const ReentryPage = ({ clubFeeAmount }: ReentryPageProps) => {
   const { removeError, setNewError } = useErrorState();
   const [transferName, setTransferName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -125,7 +135,7 @@ const ReentryPage = () => {
 
         <Paper variant="outlined" sx={{ p: 3 }}>
           <Heading level={2}>部費振込先</Heading>
-          <TransferClubFeeView />
+          <TransferClubFeeView clubFeeAmount={clubFeeAmount} />
         </Paper>
       </Stack>
 

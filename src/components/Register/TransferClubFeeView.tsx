@@ -15,11 +15,13 @@ import {
 } from "@mui/material";
 
 import Heading from "@/components/Common/Heading";
-import { getClubFeeAmount } from "@/utils/date-util";
 
-const TransferClubFeeView = () => {
+type TransferClubFeeViewProps = {
+  clubFeeAmount: number;
+};
+
+const TransferClubFeeView = ({ clubFeeAmount }: TransferClubFeeViewProps) => {
   const [isCopied, setIsCopied] = useState(false);
-  const clubFeeAmount = getClubFeeAmount();
   const accountText = `銀行: ゆうちょ銀行\n記号: 10370\n番号: 81757581\n店番: 038\n口座番号: 8175758\n預金種目: 普通預金\n金額: 手数料抜で${clubFeeAmount.toLocaleString()}円`;
 
   return (
