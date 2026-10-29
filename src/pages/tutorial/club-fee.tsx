@@ -32,7 +32,7 @@ const TutorialClubFeePage = ({ clubFeeAmount }: { clubFeeAmount: number }) => {
         <Heading level={2}>部費の振込について</Heading>
         <Box>
           <Typography>
-            部費 {clubFeeAmount.toLocaleString()}円 を<b>3週間以内</b>
+            部費 {clubFeeAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" })}円 を<b>3週間以内</b>
             に、下記の口座に振り込んでください。
           </Typography>
           <Typography sx={{ mt: 2 }}>
