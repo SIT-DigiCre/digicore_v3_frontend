@@ -69,7 +69,7 @@ const TransferClubFeeView = ({ clubFeeAmount }: TransferClubFeeViewProps) => {
             </TableRow>
             <TableRow>
               <TableCell>金額</TableCell>
-              <TableCell>{clubFeeAmount.toLocaleString()}円 (手数料別)</TableCell>
+              <TableCell>{clubFeeAmount.toLocaleString("ja-JP", { style: "currency", currency: "JPY" })} (手数料別)</TableCell>
             </TableRow>
           </TableBody>
         </Table>
