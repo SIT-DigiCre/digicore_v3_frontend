@@ -44,6 +44,7 @@ const nextConfig: NextConfig = {
             },
           ],
   },
+  turbopack: {}, //pnpm run devでturbopackを有効化するための設定
 };
 
 export default withPWA(nextConfig);
